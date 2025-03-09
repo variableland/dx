@@ -8,7 +8,7 @@ export const formatCommand = createCommand("format")
   .option("-f, --fix", "format all the code")
   .option("--fix-staged", "format staged files only")
   .action(async function formatAction(options) {
-    const toolCmd = `biome format --colors=force`;
+    const toolCmd = `biome format --no-errors-on-unmatched --colors=force`;
 
     try {
       if (options.fix) {
