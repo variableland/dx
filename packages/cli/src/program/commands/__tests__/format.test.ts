@@ -12,14 +12,18 @@ test("should run format command with --check by default", async () => {
   await parseProgram(["format"]);
 
   expect(vi.mocked($)).toBeCalledTimes(1);
-  expect(vi.mocked($).mock.results[0]?.value).toMatchInlineSnapshot(`"biome format --check"`);
+  expect(vi.mocked($).mock.results[0]?.value).toMatchInlineSnapshot(
+    `"biome format --colors=force"`,
+  );
 });
 
 test("should run format command with alias", async () => {
   await parseProgram(["fmt"]);
 
   expect(vi.mocked($)).toBeCalledTimes(1);
-  expect(vi.mocked($).mock.results[0]?.value).toMatchInlineSnapshot(`"biome format --check"`);
+  expect(vi.mocked($).mock.results[0]?.value).toMatchInlineSnapshot(
+    `"biome format --colors=force"`,
+  );
 });
 
 test("should run format command with --fix flag", async () => {
@@ -27,13 +31,17 @@ test("should run format command with --fix flag", async () => {
 
   expect(vi.mocked($)).toBeCalledTimes(1);
 
-  expect(vi.mocked($).mock.results[0]?.value).toMatchInlineSnapshot(`"biome format --check"`);
+  expect(vi.mocked($).mock.results[0]?.value).toMatchInlineSnapshot(
+    `"biome format --colors=force --write"`,
+  );
 });
 
 test("should run format command with --staged flag", async () => {
-  await parseProgram(["format", "--staged"]);
+  await parseProgram(["format", "--fix-staged"]);
 
   expect(vi.mocked($)).toBeCalledTimes(1);
 
-  expect(vi.mocked($).mock.results[0]?.value).toMatchInlineSnapshot(`"biome format --staged"`);
+  expect(vi.mocked($).mock.results[0]?.value).toMatchInlineSnapshot(
+    `"biome format --colors=force --fix --staged"`,
+  );
 });

@@ -1,1 +1,2 @@
-pnpm run rr fmt --fix-staged
+pnpm run dev fmt --fix-staged
+git update-index --again
