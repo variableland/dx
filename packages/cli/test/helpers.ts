@@ -2,7 +2,6 @@ import { vi } from "vitest";
 import { exec } from "node:child_process";
 import { promisify } from "node:util";
 import { createProgram } from "~/program";
-import { DEV_CMD } from "~/utils/constants";
 
 const execAsync = promisify(exec);
 
@@ -39,5 +38,5 @@ export async function parseProgram(argv: string[]) {
 }
 
 export function execCli(cmd: string) {
-  return execAsync(`${DEV_CMD} ${cmd}`);
+  return execAsync(`node --import=tsx src/main.ts ${cmd}`);
 }

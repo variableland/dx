@@ -13,7 +13,7 @@ test("should run format command with --check by default", async () => {
 
   expect(vi.mocked($)).toBeCalledTimes(1);
   expect(vi.mocked($).mock.results[0]?.value).toMatchInlineSnapshot(
-    `"biome format --colors=force"`,
+    `"biome format --no-errors-on-unmatched --colors=force"`,
   );
 });
 
@@ -22,7 +22,7 @@ test("should run format command with alias", async () => {
 
   expect(vi.mocked($)).toBeCalledTimes(1);
   expect(vi.mocked($).mock.results[0]?.value).toMatchInlineSnapshot(
-    `"biome format --colors=force"`,
+    `"biome format --no-errors-on-unmatched --colors=force"`,
   );
 });
 
@@ -32,7 +32,7 @@ test("should run format command with --fix flag", async () => {
   expect(vi.mocked($)).toBeCalledTimes(1);
 
   expect(vi.mocked($).mock.results[0]?.value).toMatchInlineSnapshot(
-    `"biome format --colors=force --write"`,
+    `"biome format --no-errors-on-unmatched --colors=force --write"`,
   );
 });
 
@@ -42,6 +42,6 @@ test("should run format command with --staged flag", async () => {
   expect(vi.mocked($)).toBeCalledTimes(1);
 
   expect(vi.mocked($).mock.results[0]?.value).toMatchInlineSnapshot(
-    `"biome format --colors=force --fix --staged"`,
+    `"biome format --no-errors-on-unmatched --colors=force --fix --staged"`,
   );
 });
