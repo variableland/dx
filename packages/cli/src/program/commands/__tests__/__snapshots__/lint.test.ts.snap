@@ -1,0 +1,14 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`should display help message 1`] = `
+"Usage: run-run lint [options]
+
+lint the code 🧹
+
+Options:
+  -f, --fix   fix the linting issues
+  -h, --help  display help for command
+
+Under the hood, this command uses the \`eslint\` CLI to lint the code.
+"
+`;

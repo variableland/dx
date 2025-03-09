@@ -1,0 +1,1 @@
+pnpm run rr fmt --fix-staged

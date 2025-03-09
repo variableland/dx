@@ -1,0 +1,31 @@
+{
+  "name": "run-run-monorepo",
+  "private": true,
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "test": "turbo test",
+    "clean": "./scripts/clean.sh",
+    "prepare": "husky",
+    "rr": "RR_ENV=dev rr"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@total-typescript/tsconfig": "^1.0.4",
+    "@types/node": "^22.13.9",
+    "@variableland/biome-config": "^0.0.4",
+    "@variableland/run-run": "workspace:*",
+    "@vitest/coverage-v8": "^3.0.8",
+    "husky": "^9.1.7",
+    "tsx": "^4.19.3",
+    "turbo": "^2.4.4",
+    "typescript": "^5.8.2",
+    "vite-tsconfig-paths": "^5.1.4",
+    "vitest": "^3.0.8"
+  },
+  "packageManager": "pnpm@10.6.1",
+  "engines": {
+    "node": ">=20",
+    "pnpm": ">=10"
+  }
+}

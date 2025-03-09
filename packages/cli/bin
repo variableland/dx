@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if [ "$RR_ENV" = "dev" ]; then
+    CLI_PATH="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
+    cd "$CLI_PATH" && node --import=tsx src/main.ts "$@"
+else
+    ./dist/rr
+fi
