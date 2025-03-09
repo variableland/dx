@@ -1,8 +1,7 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`should display help message with --help 1`] = `
-"{ cwd: '/Users/rcrd/Developer/Me/run-run/packages/cli' }
-🦊 R U N - R U N: The CLI toolbox to fullstack common scripts in Variable Land 👊
+"🦊 R U N - R U N: The CLI toolbox to fullstack common scripts in Variable Land 👊
 
 Usage: run-run|rr [options] [command]
 
@@ -27,8 +26,7 @@ Acknowledgment:
 `;
 
 exports[`should display help message with help subcommand 1`] = `
-"{ cwd: '/Users/rcrd/Developer/Me/run-run/packages/cli' }
-🦊 R U N - R U N: The CLI toolbox to fullstack common scripts in Variable Land 👊
+"🦊 R U N - R U N: The CLI toolbox to fullstack common scripts in Variable Land 👊
 
 Usage: run-run|rr [options] [command]
 
