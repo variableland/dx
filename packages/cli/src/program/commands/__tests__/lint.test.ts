@@ -12,8 +12,8 @@ test("should run lint command", async () => {
   await parseProgram(["lint"]);
 
   expect(vi.mocked($)).toBeCalledTimes(1);
-  expect(vi.mocked($).mock.results[0].value).toBe(
-    "eslint --ignore-path .gitignore --ext .js,.jsx,.ts,.tsx .",
+  expect(vi.mocked($).mock.results[0]?.value).toMatchInlineSnapshot(
+    `"biome lint --no-errors-on-unmatched --colors=force"`,
   );
 });
 
@@ -22,7 +22,7 @@ test("should run lint command with --fix flag", async () => {
 
   expect(vi.mocked($)).toBeCalledTimes(1);
 
-  expect(vi.mocked($).mock.results[0].value).toBe(
-    "eslint --ignore-path .gitignore --ext .js,.jsx,.ts,.tsx . --fix",
+  expect(vi.mocked($).mock.results[0]?.value).toMatchInlineSnapshot(
+    `"biome lint --no-errors-on-unmatched --colors=force --fix"`,
   );
 });

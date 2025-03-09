@@ -32,7 +32,7 @@ test("should run format command with --fix flag", async () => {
   expect(vi.mocked($)).toBeCalledTimes(1);
 
   expect(vi.mocked($).mock.results[0]?.value).toMatchInlineSnapshot(
-    `"biome format --no-errors-on-unmatched --colors=force --write"`,
+    `"biome format --no-errors-on-unmatched --colors=force --fix"`,
   );
 });
 

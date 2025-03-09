@@ -6,9 +6,11 @@ exports[`should display help message 1`] = `
 lint the code 🧹
 
 Options:
-  -f, --fix   fix the linting issues
-  -h, --help  display help for command
+  -c, --check   check if the code is linted (default: true)
+  -f, --fix     fix linting issues
+  --fix-staged  fix linting issues for staged files
+  -h, --help    display help for command
 
-Under the hood, this command uses the \`eslint\` CLI to lint the code.
+Under the hood, this command uses the biome CLI to lint the code.
 "
 `;
