@@ -6,13 +6,13 @@ exports[`should display help message with --help 1`] = `
 Usage: run-run|rr [options] [command]
 
 Options:
-  -h, --help            display help for command
+  -h, --help             display help for command
 
 Commands:
-  format|fmt [options]  format the code 🎨
-  lint [options]        lint the code 🧹
-  test:static           check format and lint issues over all the code 🎨
-  help [command]        display help for command
+  format|fmt [options]   format the code 🎨
+  lint [options]         lint the code 🧹
+  test:static [options]  check format and lint issues over all the code 🎨
+  help [command]         display help for command
 
 Acknowledgment:
 - kcd-scripts: for main inspiration
@@ -29,13 +29,13 @@ exports[`should display help message with help subcommand 1`] = `
 Usage: run-run|rr [options] [command]
 
 Options:
-  -h, --help            display help for command
+  -h, --help             display help for command
 
 Commands:
-  format|fmt [options]  format the code 🎨
-  lint [options]        lint the code 🧹
-  test:static           check format and lint issues over all the code 🎨
-  help [command]        display help for command
+  format|fmt [options]   format the code 🎨
+  lint [options]         lint the code 🧹
+  test:static [options]  check format and lint issues over all the code 🎨
+  help [command]         display help for command
 
 Acknowledgment:
 - kcd-scripts: for main inspiration

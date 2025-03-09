@@ -13,7 +13,7 @@ test("should run lint command", async () => {
 
   expect(vi.mocked($)).toBeCalledTimes(1);
   expect(vi.mocked($).mock.results[0]?.value).toMatchInlineSnapshot(
-    `"biome lint --no-errors-on-unmatched --colors=force"`,
+    `"biome check --colors=force --formatter-enabled=false"`,
   );
 });
 
@@ -23,6 +23,6 @@ test("should run lint command with --fix flag", async () => {
   expect(vi.mocked($)).toBeCalledTimes(1);
 
   expect(vi.mocked($).mock.results[0]?.value).toMatchInlineSnapshot(
-    `"biome lint --no-errors-on-unmatched --colors=force --fix"`,
+    `"biome check --colors=force --formatter-enabled=false --fix --unsafe"`,
   );
 });
