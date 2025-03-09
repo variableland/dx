@@ -11,7 +11,7 @@ Options:
 Commands:
   format|fmt [options]  format the code 🎨
   lint [options]        lint the code 🧹
-  test:static           format and lint the code 🎨
+  test:static           check format and lint issues over all the code 🎨
   help [command]        display help for command
 
 Acknowledgment:
@@ -34,7 +34,7 @@ Options:
 Commands:
   format|fmt [options]  format the code 🎨
   lint [options]        lint the code 🧹
-  test:static           format and lint the code 🎨
+  test:static           check format and lint issues over all the code 🎨
   help [command]        display help for command
 
 Acknowledgment:

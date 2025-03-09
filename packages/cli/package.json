@@ -8,10 +8,7 @@
     "rr": "./bin",
     "run-run": "./bin"
   },
-  "files": [
-    "dist",
-    "bin"
-  ],
+  "files": ["dist", "bin"],
   "scripts": {
     "build": "bun build src/main.ts --compile --outfile dist/rr",
     "test:coverage": "vitest run --coverage",

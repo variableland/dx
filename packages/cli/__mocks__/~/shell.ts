@@ -1,12 +1,13 @@
 import { vi } from "vitest";
+import { isRaw } from "~/utils/is-raw";
 
-export const $ = vi.fn(function fakeShell(strs: string[], ...args: any) {
+export const $ = vi.fn(function fakeShell(strs: string[], ...args: string[]) {
   let output = "";
   let argsIndex = 0;
 
-  const stringifyArg = (arg: any) => (typeof arg.stdout === "string" ? arg.stdout : arg);
+  const stringifyArg = (arg: unknown) => (isRaw(arg) ? arg.stdout : arg);
 
-  strs.forEach((str) => {
+  for (const str of strs) {
     if (str === "") {
       if (args[argsIndex]) {
         output += stringifyArg(args[argsIndex]);
@@ -15,7 +16,7 @@ export const $ = vi.fn(function fakeShell(strs: string[], ...args: any) {
     } else {
       output += str;
     }
-  });
+  }
 
   return output;
 });

@@ -6,9 +6,9 @@ exports[`should display help message 1`] = `
 lint the code 🧹
 
 Options:
-  -c, --check   check if the code is linted (default: true)
-  -f, --fix     fix linting issues
-  --fix-staged  fix linting issues for staged files
+  -c, --check   check if the code is valid (default: true)
+  -f, --fix     try to fix all the code
+  --fix-staged  try to fix staged files only
   -h, --help    display help for command
 
 Under the hood, this command uses the biome CLI to lint the code.

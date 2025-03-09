@@ -3,9 +3,9 @@ import { $ } from "~/shell";
 
 export const lintCommand = createCommand("lint")
   .description("lint the code 🧹")
-  .option("-c, --check", "check if the code is linted", true)
-  .option("-f, --fix", "fix linting issues")
-  .option("--fix-staged", "fix linting issues for staged files")
+  .option("-c, --check", "check if the code is valid", true)
+  .option("-f, --fix", "try to fix all the code")
+  .option("--fix-staged", "try to fix staged files only")
   .action(async function lintAction(options) {
     const toolCmd = "biome lint --no-errors-on-unmatched --colors=force";
 
