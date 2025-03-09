@@ -1,7 +1,8 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`should display help message 1`] = `
-"Usage: run-run format|fmt [options]
+"{ cwd: '/Users/rcrd/Developer/Me/run-run/packages/cli' }
+Usage: run-run format|fmt [options]
 
 format the code 🎨
 

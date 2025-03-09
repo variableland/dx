@@ -3,7 +3,7 @@
 if [ "$1" = "--only-dist" ]; then
   echo "Cleaning only 'dist' folders... ⌛"
   npx --yes rimraf -g **/dist
-  echo "Done ✅"
+    echo "Done ✅"
 else
   echo "Cleaning all... ⌛"
   npx --yes rimraf -g **/.turbo

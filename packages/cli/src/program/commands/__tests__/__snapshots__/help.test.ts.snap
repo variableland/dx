@@ -1,7 +1,8 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`should display help message with --help 1`] = `
-"🦊 R U N - R U N: The CLI toolbox to fullstack common scripts in Variable Land 👊
+"{ cwd: '/Users/rcrd/Developer/Me/run-run/packages/cli' }
+🦊 R U N - R U N: The CLI toolbox to fullstack common scripts in Variable Land 👊
 
 Usage: run-run|rr [options] [command]
 
@@ -11,7 +12,9 @@ Options:
 Commands:
   format|fmt [options]   format the code 🎨
   lint [options]         lint the code 🧹
-  test:static [options]  check format and lint issues over all the code 🎨
+  test:static [options]  check format and lint issues over all the code ✅
+  clean [options]        delete dirty folders or files such as node_modules, etc
+                         🗑️
   help [command]         display help for command
 
 Acknowledgment:
@@ -24,7 +27,8 @@ Acknowledgment:
 `;
 
 exports[`should display help message with help subcommand 1`] = `
-"🦊 R U N - R U N: The CLI toolbox to fullstack common scripts in Variable Land 👊
+"{ cwd: '/Users/rcrd/Developer/Me/run-run/packages/cli' }
+🦊 R U N - R U N: The CLI toolbox to fullstack common scripts in Variable Land 👊
 
 Usage: run-run|rr [options] [command]
 
@@ -34,7 +38,9 @@ Options:
 Commands:
   format|fmt [options]   format the code 🎨
   lint [options]         lint the code 🧹
-  test:static [options]  check format and lint issues over all the code 🎨
+  test:static [options]  check format and lint issues over all the code ✅
+  clean [options]        delete dirty folders or files such as node_modules, etc
+                         🗑️
   help [command]         display help for command
 
 Acknowledgment:

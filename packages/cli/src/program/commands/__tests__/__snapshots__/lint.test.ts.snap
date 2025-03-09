@@ -1,7 +1,8 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`should display help message 1`] = `
-"Usage: run-run lint [options]
+"{ cwd: '/Users/rcrd/Developer/Me/run-run/packages/cli' }
+Usage: run-run lint [options]
 
 lint the code 🧹
 

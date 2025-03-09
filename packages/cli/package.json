@@ -12,7 +12,6 @@
   "scripts": {
     "build": "bun build src/main.ts --compile --outfile dist/rr",
     "test:coverage": "vitest run --coverage",
-    "dev": "RR_ENV=dev ./bin",
     "test": "vitest --run",
     "prepublishOnly": "pnpm run build"
   },

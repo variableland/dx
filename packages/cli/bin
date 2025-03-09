@@ -1,8 +1,9 @@
 #!/bin/bash
 
 if [ "$RR_ENV" = "dev" ]; then
+    CAPTURED_PWD="$(pwd)"
     CLI_PATH="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
-    cd "$CLI_PATH" && node --import=tsx src/main.ts "$@"
+    cd "$CLI_PATH" && PWD="$CAPTURED_PWD" node --import=tsx src/main.ts "$@"
 else
     ./dist/rr
 fi
