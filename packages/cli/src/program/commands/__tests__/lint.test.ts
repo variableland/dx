@@ -1,5 +1,5 @@
+import { execCli, parseProgram } from "test/helpers";
 import { expect, test, vi } from "vitest";
-import { parseProgram, execCli } from "test/helpers";
 import { $ } from "~/shell";
 
 test("should display help message", async () => {

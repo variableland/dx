@@ -6,14 +6,14 @@ export const testStaticCommand = createCommand("test:static")
   .description("check format and lint issues over all the code 🎨")
   .action(async function formatAction() {
     try {
-      const cmdFlags = flags(
-        "--colors=force",
-        "--formatter-enabled=true",
-        "--linter-enabled=true",
-        "--organize-imports-enabled=true",
-      );
+      // const cmdFlags = flags(
+      //   "--colors=force",
+      //   "--formatter-enabled=true",
+      //   "--linter-enabled=true",
+      //   // "--organize-imports-enabled=true",
+      // );
 
-      await $`biome ci ${cmdFlags}`;
+      await $`biome ci --colors=force`;
     } catch {
       process.exit(1);
     }

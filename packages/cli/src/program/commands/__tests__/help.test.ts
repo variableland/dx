@@ -1,5 +1,5 @@
-import { test, expect } from "vitest";
 import { execCli } from "test/helpers";
+import { expect, test } from "vitest";
 
 test("should display help message with --help", async () => {
   const { stdout } = await execCli("--help");
