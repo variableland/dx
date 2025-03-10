@@ -1,6 +1,5 @@
 import * as colors from "./colors";
 
-// prettier-ignore
 const UI_LOGO = `🦊 ${colors.logoBlue("R")} ${colors.logoRed("U")} ${colors.logoGreen("N")} - ${colors.logoBlue("R")} ${colors.logoRed("U")} ${colors.logoGreen("N")}`;
 
 const COMPANY_LOGO = `${colors.logoRed("Variable Land")} 👊`;
