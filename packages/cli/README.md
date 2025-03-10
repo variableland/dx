@@ -1,6 +1,6 @@
 # run-run
 
-```sh
+```
 🦊 R U N - R U N: The CLI toolbox to fullstack common scripts in Variable Land 👊
 
 Usage: run-run|rr [options] [command]
