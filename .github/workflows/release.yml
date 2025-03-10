@@ -3,10 +3,8 @@ name: Release
 on:
   # https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#workflow_run
   workflow_run:
-    workflows:
-      - CI
-    types:
-      - completed
+    workflows: [CI]
+    types: [completed]
     branches:
       - main
 
