@@ -7,20 +7,20 @@ export const testStaticCommand = createCommand("test:static")
   .option("-f, --fix", "try to fix issues automatically")
   .option("--fix-staged", "try to fix staged files only")
   .action(async function testStaticAction(options) {
-    try {
-      const toolCmd = `biome ${isCI ? "ci" : "check"} --colors=force`;
+    const toolCmd = (cmd = "check") => `biome ${cmd} --colors=force`;
 
+    try {
       if (options.fix) {
-        await $`${toolCmd} --fix --unsafe`;
+        await $`${toolCmd()} --fix --unsafe`;
         return;
       }
 
       if (options.fixStaged) {
-        await $`${toolCmd} --no-errors-on-unmatched --fix --unsafe --staged`;
+        await $`${toolCmd()} --no-errors-on-unmatched --fix --unsafe --staged`;
         return;
       }
 
-      await $`${toolCmd}`;
+      await $`${toolCmd(isCI ? "ci" : "check")}`;
     } catch {
       process.exit(1);
     }

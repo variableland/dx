@@ -1,7 +1,12 @@
 name: Release
 
 on:
-  push:
+  # https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#workflow_run
+  workflow_run:
+    workflows:
+      - CI
+    types:
+      - completed
     branches:
       - main
 
@@ -17,6 +22,7 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v4
@@ -42,4 +48,3 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          HUSKY: 0
