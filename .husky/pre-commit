@@ -1,3 +1,2 @@
-pnpm run dev fmt --fix-staged
-pnpm run dev lint --fix-staged
+pnpm run dev test:static --fix-staged
 git update-index --again

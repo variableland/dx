@@ -6,18 +6,12 @@ export const formatCommand = createCommand("format")
   .description("format the code 🎨")
   .option("-c, --check", "check if the code is formatted", true)
   .option("-f, --fix", "format all the code")
-  .option("--fix-staged", "format staged files only")
   .action(async function formatAction(options) {
     const toolCmd = "biome format --no-errors-on-unmatched --colors=force";
 
     try {
       if (options.fix) {
         await $`${toolCmd} --fix`;
-        return;
-      }
-
-      if (options.fixStaged) {
-        await $`${toolCmd} --fix --staged`;
         return;
       }
 

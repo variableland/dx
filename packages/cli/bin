@@ -1,8 +1,18 @@
 #!/bin/bash
 
 if [ "$RR_ENV" = "dev" ]; then
+    # this bin script is been calling from the monorepo root directory,
+    # you can see the "dev" script at run-run/packages.json
+
+    # capture current working directory (it should be monorepo root directory)
     CAPTURED_PWD="$(pwd)"
+
+    # capture the path to this bin script
     CLI_PATH="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
+
+    # we need to run the script from the CLI directory, so we change the working directory
+    # however, some commands, like "clean", needs to be run from the monorepo root directory
+    # so `PWD` is exposed in order to use it with zx shell instance
     cd "$CLI_PATH" && PWD="$CAPTURED_PWD" node --import=tsx src/main.ts "$@"
 else
     ./dist/rr

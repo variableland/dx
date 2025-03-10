@@ -8,7 +8,7 @@ test("should display help message", async () => {
   expect(stdout).toMatchSnapshot();
 });
 
-test("should run format command with --check by default", async () => {
+test("should run format command", async () => {
   await parseProgram(["format"]);
 
   expect(vi.mocked($)).toBeCalledTimes(1);
@@ -33,15 +33,5 @@ test("should run format command with --fix flag", async () => {
 
   expect(vi.mocked($).mock.results[0]?.value).toMatchInlineSnapshot(
     `"biome format --no-errors-on-unmatched --colors=force --fix"`,
-  );
-});
-
-test("should run format command with --staged flag", async () => {
-  await parseProgram(["format", "--fix-staged"]);
-
-  expect(vi.mocked($)).toBeCalledTimes(1);
-
-  expect(vi.mocked($).mock.results[0]?.value).toMatchInlineSnapshot(
-    `"biome format --no-errors-on-unmatched --colors=force --fix --staged"`,
   );
 });

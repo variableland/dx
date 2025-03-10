@@ -5,15 +5,22 @@ import { $ } from "~/shell";
 export const testStaticCommand = createCommand("test:static")
   .description("check format and lint issues over all the code ✅")
   .option("-f, --fix", "try to fix issues automatically")
+  .option("--fix-staged", "try to fix staged files only")
   .action(async function testStaticAction(options) {
     try {
       const toolCmd = `biome ${isCI ? "ci" : "check"} --colors=force`;
 
       if (options.fix) {
         await $`${toolCmd} --fix --unsafe`;
-      } else {
-        await $`${toolCmd}`;
+        return;
       }
+
+      if (options.fixStaged) {
+        await $`${toolCmd} --no-errors-on-unmatched --fix --unsafe --staged`;
+        return;
+      }
+
+      await $`${toolCmd}`;
     } catch {
       process.exit(1);
     }
