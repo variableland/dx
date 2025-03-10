@@ -57,6 +57,12 @@ jobs:
       - name: 📥 Install dependencies
         run: pnpm install
 
+      # needed to build the run-run cli
+      - name: 🥟 Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: ".bun-version"
+
       - name: 🚀 Create release PR or publish versions
         uses: changesets/action@v1
         with:
