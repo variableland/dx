@@ -1,5 +1,7 @@
 {
   "name": "@variableland/run-run",
+  "description": "The CLI toolbox to fullstack common scripts in Variable Land",
+  "author": "rcrd <rcrd@variable.land>",
   "version": "0.0.0",
   "license": "MIT",
   "type": "module",

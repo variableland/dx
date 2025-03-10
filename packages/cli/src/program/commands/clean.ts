@@ -25,4 +25,7 @@ export const cleanCommand = createCommand("clean")
       process.exit(1);
     }
   })
-  .addHelpText("afterAll", "\nUnder the hood, this command uses the biome CLI to format the code.");
+  .addHelpText(
+    "afterAll",
+    "\nUnder the hood, this command uses the rimraf CLI to delete dirty folders or files.",
+  );

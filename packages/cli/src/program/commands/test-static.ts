@@ -3,7 +3,7 @@ import isCI from "is-ci";
 import { $ } from "~/shell";
 
 export const testStaticCommand = createCommand("test:static")
-  .description("check format and lint issues over all the code ✅")
+  .description("check format and lint issues ✅")
   .option("-f, --fix", "try to fix issues automatically")
   .option("--fix-staged", "try to fix staged files only")
   .action(async function testStaticAction(options) {
@@ -25,4 +25,4 @@ export const testStaticCommand = createCommand("test:static")
       process.exit(1);
     }
   })
-  .addHelpText("afterAll", "\nUnder the hood, this command uses the biome CLI to format the code.");
+  .addHelpText("afterAll", "\nUnder the hood, this command uses the biome CLI to check the code.");
