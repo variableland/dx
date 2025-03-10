@@ -3,7 +3,7 @@ import { isRaw } from "./utils/is-raw";
 import { quote } from "./utils/quote";
 
 export const $ = make$({
-  cwd: process.env.PWD ?? process.cwd(),
+  cwd: process.env.RR_PWD ?? process.cwd(),
   verbose: true,
   quote: (arg: unknown) => {
     if (typeof arg === "string") {
