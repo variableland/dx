@@ -5,7 +5,6 @@
     "build": "turbo build",
     "dev": "RR_ENV=dev rr",
     "test": "turbo test",
-    "clean": "./scripts/clean.sh",
     "prepare": "husky"
   },
   "devDependencies": {
