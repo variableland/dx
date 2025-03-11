@@ -11,9 +11,10 @@ Options:
 Commands:
   format|fmt [options]   format the code 🎨
   lint [options]         lint the code 🧹
-  test:static [options]  check format and lint issues over all the code ✅
+  test:static [options]  check format and lint issues ✅
   clean [options]        delete dirty folders or files such as node_modules, etc
                          🗑️
+  typecheck|tsc          check if TypeScript code is well typed 🎨
   help [command]         display help for command
 
 Acknowledgment:
@@ -36,9 +37,10 @@ Options:
 Commands:
   format|fmt [options]   format the code 🎨
   lint [options]         lint the code 🧹
-  test:static [options]  check format and lint issues over all the code ✅
+  test:static [options]  check format and lint issues ✅
   clean [options]        delete dirty folders or files such as node_modules, etc
                          🗑️
+  typecheck|tsc          check if TypeScript code is well typed 🎨
   help [command]         display help for command
 
 Acknowledgment:

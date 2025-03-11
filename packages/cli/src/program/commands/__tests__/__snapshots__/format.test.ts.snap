@@ -6,10 +6,9 @@ exports[`should display help message 1`] = `
 format the code 🎨
 
 Options:
-  -c, --check   check if the code is formatted (default: true)
-  -f, --fix     format all the code
-  --fix-staged  format staged files only
-  -h, --help    display help for command
+  -c, --check  check if the code is formatted (default: true)
+  -f, --fix    format all the code
+  -h, --help   display help for command
 
 Under the hood, this command uses the biome CLI to format the code.
 "

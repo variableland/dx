@@ -1,9 +1,11 @@
 {
   "name": "run-run-monorepo",
+  "version": "0.0.0",
   "private": true,
   "scripts": {
     "build": "turbo build",
     "dev": "RR_ENV=dev rr",
+    "debug:dev": "DEBUG=run-run:* RR_ENV=dev rr",
     "test": "turbo test",
     "prepare": "husky"
   },

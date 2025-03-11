@@ -1,9 +1,10 @@
 import { $ as make$ } from "zx";
+import { cwd } from "./utils/cwd";
 import { isRaw } from "./utils/is-raw";
 import { quote } from "./utils/quote";
 
 export const $ = make$({
-  cwd: process.env.RR_PWD ?? process.cwd(),
+  cwd,
   verbose: true,
   quote: (arg: unknown) => {
     if (typeof arg === "string") {
