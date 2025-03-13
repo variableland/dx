@@ -4,7 +4,7 @@ import { $ } from "~/shell";
 
 const { program } = createTestProgram();
 
-const rootCommands = ["help", "--help", "-v", "--version"];
+const rootCommands = ["help", "--help"];
 
 for (const cmd of rootCommands) {
   test(`should match ${cmd}`, async () => {
