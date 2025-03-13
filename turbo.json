@@ -11,8 +11,7 @@
     },
     "test": {
       "persistent": true,
-      "cache": false,
-      "env": ["LOG"]
+      "cache": false
     }
   }
 }
