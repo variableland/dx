@@ -6,6 +6,7 @@
 Usage: run-run|rr [options] [command]
 
 Options:
+  -v, --version          output the version number
   -h, --help             display help for command
 
 Commands:
@@ -13,6 +14,7 @@ Commands:
   lint [options]         lint the code 🧹
   test:static [options]  check format and lint issues ✅
   clean [options]        delete dirty folders or files such as node_modules, etc 🗑️
+  typecheck|tsc          check if TypeScript code is well typed 🎨
   help [command]         display help for command
 
 Acknowledgment:

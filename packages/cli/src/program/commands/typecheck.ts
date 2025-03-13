@@ -14,7 +14,7 @@ export const typecheckCommand = createCommand("typecheck")
       if (store.hasFile("tsconfig.json")) {
         await $`tsc --noEmit`;
       } else {
-        d("No tsconfig.json found. Skipping type checking.");
+        Log.info("No tsconfig.json found. Skipping type checking.");
       }
     } catch {
       process.exit(1);
