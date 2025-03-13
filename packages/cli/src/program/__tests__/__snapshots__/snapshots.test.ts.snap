@@ -3,7 +3,7 @@
 exports[`should match --help 1`] = `
 "🦊 R U N - R U N: The CLI toolbox to fullstack common scripts in Variable Land 👊
 
-Usage: run-run|rr [options] [command]
+Usage: rr|run-run [options] [command]
 
 Options:
   -v, --version          output the version number
@@ -44,7 +44,7 @@ exports[`should match format command 1`] = `"biome format --no-errors-on-unmatch
 exports[`should match help 1`] = `
 "🦊 R U N - R U N: The CLI toolbox to fullstack common scripts in Variable Land 👊
 
-Usage: run-run|rr [options] [command]
+Usage: rr|run-run [options] [command]
 
 Options:
   -v, --version          output the version number
@@ -69,7 +69,7 @@ Acknowledgment:
 `;
 
 exports[`should match help message for clean 1`] = `
-"Usage: run-run clean [options]
+"Usage: rr clean [options]
 
 delete dirty folders or files such as node_modules, etc 🗑️
 
@@ -82,7 +82,7 @@ Under the hood, this command uses the rimraf CLI to delete dirty folders or file
 `;
 
 exports[`should match help message for format 1`] = `
-"Usage: run-run format|fmt [options]
+"Usage: rr format|fmt [options]
 
 format the code 🎨
 
@@ -96,7 +96,7 @@ Under the hood, this command uses the biome CLI to format the code.
 `;
 
 exports[`should match help message for lint 1`] = `
-"Usage: run-run lint [options]
+"Usage: rr lint [options]
 
 lint the code 🧹
 
@@ -110,7 +110,7 @@ Under the hood, this command uses the biome CLI to lint the code.
 `;
 
 exports[`should match help message for test:static 1`] = `
-"Usage: run-run test:static [options]
+"Usage: rr test:static [options]
 
 check format and lint issues ✅
 
@@ -124,7 +124,7 @@ Under the hood, this command uses the biome CLI to check the code.
 `;
 
 exports[`should match help message for typecheck 1`] = `
-"Usage: run-run typecheck|tsc [options]
+"Usage: rr typecheck|tsc [options]
 
 check if TypeScript code is well typed 🎨
 

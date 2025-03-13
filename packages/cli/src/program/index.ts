@@ -8,8 +8,8 @@ import { typecheckCommand } from "./commands/typecheck";
 import { getVersion } from "./version";
 
 export function createProgram() {
-  return new Command("run-run")
-    .alias("rr")
+  return new Command("rr")
+    .alias("run-run")
     .version(getVersion(), "-v, --version")
     .addHelpText("before", BANNER_TEXT)
     .addHelpText("after", CREDITS_TEXT)
