@@ -1,5 +1,5 @@
 import { createCommand } from "commander";
-import { Logger } from "~/logger";
+import { Log } from "~/logger";
 import { $ } from "~/shell";
 import { useStore } from "~/store";
 
@@ -7,7 +7,7 @@ export const typecheckCommand = createCommand("typecheck")
   .alias("tsc")
   .description("check if TypeScript code is well typed 🎨")
   .action(async function typecheckAction() {
-    const d = Logger.subdebug("typecheck");
+    const d = Log.subdebug("typecheck");
     const store = useStore();
 
     try {

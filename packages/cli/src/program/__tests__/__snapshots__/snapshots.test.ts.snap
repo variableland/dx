@@ -1,0 +1,142 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`should match --help 1`] = `
+"🦊 R U N - R U N: The CLI toolbox to fullstack common scripts in Variable Land 👊
+
+Usage: run-run|rr [options] [command]
+
+Options:
+  -v, --version          output the version number
+  -h, --help             display help for command
+
+Commands:
+  format|fmt [options]   format the code 🎨
+  lint [options]         lint the code 🧹
+  test:static [options]  check format and lint issues ✅
+  clean [options]        delete dirty folders or files such as node_modules, etc
+                         🗑️
+  typecheck|tsc          check if TypeScript code is well typed 🎨
+  help [command]         display help for command
+
+Acknowledgment:
+- kcd-scripts: for main inspiration
+  https://github.com/kentcdodds/kcd-scripts
+
+- peruvian news: in honor to Run Run
+  https://es.wikipedia.org/wiki/Run_Run
+"
+`;
+
+exports[`should match --version 1`] = `
+"0.1.0
+"
+`;
+
+exports[`should match -v 1`] = `
+"0.1.0
+"
+`;
+
+exports[`should match clean command 1`] = `"npx --yes rimraf -g **/.turbo **/dist **/node_modules pnpm-lock.yaml"`;
+
+exports[`should match format command 1`] = `"biome format --no-errors-on-unmatched --colors=force"`;
+
+exports[`should match help 1`] = `
+"🦊 R U N - R U N: The CLI toolbox to fullstack common scripts in Variable Land 👊
+
+Usage: run-run|rr [options] [command]
+
+Options:
+  -v, --version          output the version number
+  -h, --help             display help for command
+
+Commands:
+  format|fmt [options]   format the code 🎨
+  lint [options]         lint the code 🧹
+  test:static [options]  check format and lint issues ✅
+  clean [options]        delete dirty folders or files such as node_modules, etc
+                         🗑️
+  typecheck|tsc          check if TypeScript code is well typed 🎨
+  help [command]         display help for command
+
+Acknowledgment:
+- kcd-scripts: for main inspiration
+  https://github.com/kentcdodds/kcd-scripts
+
+- peruvian news: in honor to Run Run
+  https://es.wikipedia.org/wiki/Run_Run
+"
+`;
+
+exports[`should match help message for clean 1`] = `
+"Usage: run-run clean [options]
+
+delete dirty folders or files such as node_modules, etc 🗑️
+
+Options:
+  --only-dist  delete 'dist' folders only
+  -h, --help   display help for command
+
+Under the hood, this command uses the rimraf CLI to delete dirty folders or files.
+"
+`;
+
+exports[`should match help message for format 1`] = `
+"Usage: run-run format|fmt [options]
+
+format the code 🎨
+
+Options:
+  -c, --check  check if the code is formatted (default: true)
+  -f, --fix    format all the code
+  -h, --help   display help for command
+
+Under the hood, this command uses the biome CLI to format the code.
+"
+`;
+
+exports[`should match help message for lint 1`] = `
+"Usage: run-run lint [options]
+
+lint the code 🧹
+
+Options:
+  -c, --check  check if the code is valid (default: true)
+  -f, --fix    try to fix all the code
+  -h, --help   display help for command
+
+Under the hood, this command uses the biome CLI to lint the code.
+"
+`;
+
+exports[`should match help message for test:static 1`] = `
+"Usage: run-run test:static [options]
+
+check format and lint issues ✅
+
+Options:
+  -f, --fix     try to fix issues automatically
+  --fix-staged  try to fix staged files only
+  -h, --help    display help for command
+
+Under the hood, this command uses the biome CLI to check the code.
+"
+`;
+
+exports[`should match help message for typecheck 1`] = `
+"Usage: run-run typecheck|tsc [options]
+
+check if TypeScript code is well typed 🎨
+
+Options:
+  -h, --help  display help for command
+
+Under the hood, this command uses the TSC CLI to check the code.
+"
+`;
+
+exports[`should match lint command 1`] = `"biome check --colors=force --formatter-enabled=false"`;
+
+exports[`should match test:static command 1`] = `"biome check --colors=force"`;
+
+exports[`should match typecheck command 1`] = `"tsc --noEmit"`;

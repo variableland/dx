@@ -1,11 +1,11 @@
 import path from "node:path";
 import { readPackageUp } from "read-package-up";
-import { Logger } from "~/logger";
+import { Log } from "~/logger";
 import { cwd } from "~/utils/cwd";
 import { Store } from "./store";
 
 export async function createStore() {
-  const d = Logger.subdebug("create-store");
+  const d = Log.subdebug("create-store");
 
   d("RR_PWD %s", process.env.RR_PWD);
   d("process cwd %s", process.cwd());

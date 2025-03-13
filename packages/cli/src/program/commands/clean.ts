@@ -1,4 +1,5 @@
 import { createCommand } from "commander";
+import { Log } from "~/logger";
 import { $ } from "~/shell";
 
 export const cleanCommand = createCommand("clean")
@@ -7,20 +8,20 @@ export const cleanCommand = createCommand("clean")
   .action(async function cleanCommandAction(options) {
     try {
       if (options.onlyDist) {
-        console.log("Cleaning only 'dist' folders... ⌛");
+        Log.info("Cleaning only 'dist' folders... ⌛");
         await $`npx --yes rimraf -g **/dist`;
-        console.log("Done ✅");
+        Log.info("Done ✅");
         return;
       }
 
-      console.log("Cleaning all... ⌛");
+      Log.info("Cleaning all... ⌛");
 
       const dirtyPaths = ["**/.turbo", "**/dist", "**/node_modules", "pnpm-lock.yaml"];
 
-      console.log(dirtyPaths.join("\n"));
+      Log.info(dirtyPaths.join("\n"));
 
       await $`npx --yes rimraf -g ${dirtyPaths.join(" ")}`;
-      console.log("Done ✅");
+      Log.info("Done ✅");
     } catch {
       process.exit(1);
     }

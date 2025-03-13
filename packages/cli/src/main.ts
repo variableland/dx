@@ -7,7 +7,7 @@ async function main(argv = process.argv) {
 
     const store = await createStore();
 
-    runContext(store, async () => {
+    await runContext(store, async () => {
       await program.parseAsync(argv);
     });
   } catch (error) {

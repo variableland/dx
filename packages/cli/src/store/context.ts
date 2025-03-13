@@ -4,7 +4,7 @@ import type { Store } from "./store";
 const asyncLocalStorage = new AsyncLocalStorage<Store>();
 
 export function runContext(store: Store, callback: () => Promise<void>) {
-  asyncLocalStorage.run(store, callback);
+  return asyncLocalStorage.run(store, callback);
 }
 
 export function useStore() {

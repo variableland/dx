@@ -11,6 +11,7 @@ export default defineConfig({
     setupFiles: ["./test/setup.ts"],
     alias: {
       "~/shell": "<rootDir>/__mocks__/~/shell.ts",
+      "~/logger": "<rootDir>/__mocks__/~/logger.ts",
     },
   },
 });
