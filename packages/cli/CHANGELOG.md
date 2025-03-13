@@ -1,5 +1,13 @@
 # @variableland/run-run
 
+## 0.1.1
+
+### Patch Changes
+
+- [#7](https://github.com/variableland/run-run/pull/7) [`e772ed8`](https://github.com/variableland/run-run/commit/e772ed815efecee20a8f415fac4b858358a01679) Thanks [@rqbazan](https://github.com/rqbazan)! - Fix executable bin
+
+- [#9](https://github.com/variableland/run-run/pull/9) [`3f9e72f`](https://github.com/variableland/run-run/commit/3f9e72fd1c5fc4455a216c30bbb7defde89d9c76) Thanks [@rqbazan](https://github.com/rqbazan)! - Prefer rr name over run-run
+
 ## 0.1.0
 
 ### Minor Changes
