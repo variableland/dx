@@ -1,5 +1,13 @@
 # @variableland/run-run
 
+## 0.1.4
+
+### Patch Changes
+
+- [`fafd2bc`](https://github.com/variableland/run-run/commit/fafd2bcf0a7efd764a7764f1f7eddd7992c5c86b) Thanks [@rqbazan](https://github.com/rqbazan)! - Publish bundle cli.mjs instead of binary
+
+- [`bd1406b`](https://github.com/variableland/run-run/commit/bd1406bcf436d5e26a3526433616b805bd1f860e) Thanks [@rqbazan](https://github.com/rqbazan)! - Fix conditional permission apply
+
 ## 0.1.3
 
 ### Patch Changes
