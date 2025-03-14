@@ -23,7 +23,9 @@
     "debug": "^4.4.0",
     "is-ci": "^4.1.0",
     "read-package-up": "^11.0.0",
-    "supports-color": "^10.0.0",
+    "supports-color": "^10.0.0"
+  },
+  "dependencies": {
     "zx": "^8.4.0"
   },
   "publishConfig": {
