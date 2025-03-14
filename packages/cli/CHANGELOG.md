@@ -1,5 +1,11 @@
 # @variableland/run-run
 
+## 0.1.6
+
+### Patch Changes
+
+- [`93a086c`](https://github.com/variableland/run-run/commit/93a086ce1ebd1ee20cbd357f2aaf6130336256c0) Thanks [@rqbazan](https://github.com/rqbazan)! - Add zx as external instead of bundle
+
 ## 0.1.5
 
 ### Patch Changes
