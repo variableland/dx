@@ -15,5 +15,11 @@ if [ "$RR_ENV" = "dev" ]; then
     # so `RR_PWD` is exposed in order to use it with zx shell instance
     cd "$SCRIPT_DIR" && RR_PWD="$CAPTURED_PWD" node --import=tsx src/main.ts "$@"
 else
-    "$SCRIPT_DIR/dist/rr" "$@"
+    EXE_PATH="$SCRIPT_DIR/dist/rr"
+
+    if [ -x "$EXE_PATH" ]; then
+        chmod +x "$EXE_PATH"
+    fi
+
+    "$EXE_PATH" "$@"
 fi

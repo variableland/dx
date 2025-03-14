@@ -15,8 +15,7 @@
     "build": "bun build src/main.ts --compile --outfile dist/rr",
     "test:coverage": "vitest run --coverage",
     "test": "vitest --run",
-    "prepublishOnly": "pnpm run build",
-    "postinstall": "[ -f ./dist/rr ] && chmod +x ./dist/rr || exit 0"
+    "prepublishOnly": "pnpm run build"
   },
   "dependencies": {
     "chalk": "^5.4.1",
