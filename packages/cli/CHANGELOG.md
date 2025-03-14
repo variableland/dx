@@ -1,5 +1,11 @@
 # @variableland/run-run
 
+## 0.1.5
+
+### Patch Changes
+
+- [`5308bb0`](https://github.com/variableland/run-run/commit/5308bb03a2f4448b5915392cecceceb8205c28cf) Thanks [@rqbazan](https://github.com/rqbazan)! - Add zx as dependency to read some file from it
+
 ## 0.1.4
 
 ### Patch Changes
