@@ -12,7 +12,7 @@
   },
   "files": ["dist", "bin"],
   "scripts": {
-    "build": "bun build src/main.ts --outfile=dist/rr.mjs --target=node",
+    "build": "bun build src/main.ts --outfile=dist/rr.mjs --target=node --external=zx",
     "test:coverage": "vitest run --coverage",
     "test": "vitest --run",
     "prepublishOnly": "pnpm run build"
