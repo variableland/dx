@@ -17,7 +17,7 @@ if [ "$RR_ENV" = "dev" ]; then
 else
     EXE_PATH="$SCRIPT_DIR/dist/rr"
 
-    if [ -x "$EXE_PATH" ]; then
+    if [ ! -x "$EXE_PATH" ]; then
         chmod +x "$EXE_PATH"
     fi
 
