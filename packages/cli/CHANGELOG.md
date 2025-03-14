@@ -1,5 +1,11 @@
 # @variableland/run-run
 
+## 0.1.2
+
+### Patch Changes
+
+- [#12](https://github.com/variableland/run-run/pull/12) [`ac0cf5e`](https://github.com/variableland/run-run/commit/ac0cf5ed59523113cb08c4ec8a15cced5c82d57b) Thanks [@rqbazan](https://github.com/rqbazan)! - Fix rr permission after publish
+
 ## 0.1.1
 
 ### Patch Changes
