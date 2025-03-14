@@ -1,5 +1,11 @@
 # @variableland/run-run
 
+## 0.1.3
+
+### Patch Changes
+
+- [`0d94fb0`](https://github.com/variableland/run-run/commit/0d94fb0d4e4c96c178a0273265ec8230b361799e) Thanks [@rqbazan](https://github.com/rqbazan)! - Add explicit permission in bin
+
 ## 0.1.2
 
 ### Patch Changes
