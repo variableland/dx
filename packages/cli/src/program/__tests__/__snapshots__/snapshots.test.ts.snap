@@ -16,6 +16,7 @@ Commands:
   clean [options]        delete dirty folders or files such as node_modules, etc
                          🗑️
   typecheck|tsc          check if TypeScript code is well typed 🎨
+  init [options]         init a project 👷‍♂️
   help [command]         display help for command
 
 Acknowledgment:
@@ -27,17 +28,7 @@ Acknowledgment:
 "
 `;
 
-exports[`should match --version 1`] = `
-"0.1.0
-"
-`;
-
-exports[`should match -v 1`] = `
-"0.1.0
-"
-`;
-
-exports[`should match clean command 1`] = `"npx --yes rimraf -g **/.turbo **/dist **/node_modules pnpm-lock.yaml"`;
+exports[`should match clean command 1`] = `"rm -rf **/.turbo **/dist **/node_modules pnpm-lock.yaml"`;
 
 exports[`should match format command 1`] = `"biome format --no-errors-on-unmatched --colors=force"`;
 
@@ -57,6 +48,7 @@ Commands:
   clean [options]        delete dirty folders or files such as node_modules, etc
                          🗑️
   typecheck|tsc          check if TypeScript code is well typed 🎨
+  init [options]         init a project 👷‍♂️
   help [command]         display help for command
 
 Acknowledgment:

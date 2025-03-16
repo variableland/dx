@@ -10,7 +10,7 @@
     "rr": "./bin",
     "run-run": "./bin"
   },
-  "files": ["dist", "bin"],
+  "files": ["dist", "plopfiles", "bin"],
   "scripts": {
     "build": "bun build src/main.ts --outfile=dist/rr.mjs --target=node --external=zx",
     "test:coverage": "vitest run --coverage",
@@ -22,11 +22,15 @@
     "commander": "^13.1.0",
     "debug": "^4.4.0",
     "is-ci": "^4.1.0",
+    "plop": "^4.0.1",
     "read-package-up": "^11.0.0",
     "supports-color": "^10.0.0"
   },
   "dependencies": {
     "zx": "^8.4.0"
+  },
+  "peerDependencies": {
+    "@biomejs/biome": "1.9.4"
   },
   "publishConfig": {
     "access": "public"

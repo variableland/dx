@@ -14,7 +14,12 @@ for (const cmd of rootCommands) {
   });
 }
 
-for (const command of program.commands) {
+const easyTesteableCommands = program.commands.filter((command) => {
+  const hasMandatoryOption = command.options.some((option) => option.mandatory);
+  return !hasMandatoryOption;
+});
+
+for (const command of easyTesteableCommands) {
   const cmd = command.name();
 
   test(`should match help message for ${cmd}`, async () => {

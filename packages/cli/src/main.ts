@@ -1,3 +1,4 @@
+import { Log } from "./logger";
 import { createProgram } from "./program";
 import { createStore, runContext } from "./store";
 
@@ -11,7 +12,7 @@ async function main(argv = process.argv) {
       await program.parseAsync(argv);
     });
   } catch (error) {
-    console.error("Cannot run main successfully", error);
+    Log.error("Cannot run main successfully", error);
     process.exit(1);
   }
 }

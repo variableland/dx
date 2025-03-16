@@ -12,6 +12,10 @@
     "test": {
       "persistent": true,
       "cache": false
+    },
+    "test:coverage": {
+      "persistent": true,
+      "cache": false
     }
   }
 }

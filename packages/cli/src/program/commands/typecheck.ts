@@ -7,7 +7,6 @@ export const typecheckCommand = createCommand("typecheck")
   .alias("tsc")
   .description("check if TypeScript code is well typed 🎨")
   .action(async function typecheckAction() {
-    const d = Log.subdebug("typecheck");
     const store = useStore();
 
     try {

@@ -9,7 +9,7 @@ export const cleanCommand = createCommand("clean")
     try {
       if (options.onlyDist) {
         Log.info("Cleaning only 'dist' folders... ⌛");
-        await $`npx --yes rimraf -g **/dist`;
+        await $`rm -rf -g **/dist`;
         Log.info("Done ✅");
         return;
       }
@@ -20,7 +20,7 @@ export const cleanCommand = createCommand("clean")
 
       Log.info(dirtyPaths.join("\n"));
 
-      await $`npx --yes rimraf -g ${dirtyPaths.join(" ")}`;
+      await $`rm -rf ${dirtyPaths.join(" ")}`;
       Log.info("Done ✅");
     } catch {
       process.exit(1);
