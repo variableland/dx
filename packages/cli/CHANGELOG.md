@@ -1,5 +1,11 @@
 # @variableland/run-run
 
+## 0.3.1
+
+### Patch Changes
+
+- [#27](https://github.com/variableland/run-run/pull/27) [`e1f7433`](https://github.com/variableland/run-run/commit/e1f743349436b0ba767c8be415e6fe0669cec101) Thanks [@rqbazan](https://github.com/rqbazan)! - Fix global installation
+
 ## 0.3.0
 
 ### Minor Changes
