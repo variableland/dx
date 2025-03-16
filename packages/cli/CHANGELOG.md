@@ -1,5 +1,11 @@
 # @variableland/run-run
 
+## 0.2.1
+
+### Patch Changes
+
+- [#21](https://github.com/variableland/run-run/pull/21) [`e97b65d`](https://github.com/variableland/run-run/commit/e97b65d852f302d8c65af7bbaeb29d7c93d4912b) Thanks [@rqbazan](https://github.com/rqbazan)! - Fix required app package
+
 ## 0.2.0
 
 ### Minor Changes
