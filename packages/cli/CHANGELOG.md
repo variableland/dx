@@ -1,5 +1,11 @@
 # @variableland/run-run
 
+## 0.2.0
+
+### Minor Changes
+
+- [#18](https://github.com/variableland/run-run/pull/18) [`51472d8`](https://github.com/variableland/run-run/commit/51472d802fcc6461a441f11e71a86f6e6fe34890) Thanks [@rqbazan](https://github.com/rqbazan)! - Add init command
+
 ## 0.1.6
 
 ### Patch Changes
