@@ -31,10 +31,16 @@ Run the help command:
 rr help
 ```
 
-# Troubleshooting
+## Troubleshooting
 
 To enable debug mode, set the `DEBUG` environment variable to `run-run:*` before running *any* command.
 
 ```sh
 DEBUG=run-run:* rr help
+```
+
+Additionally, there is an special command to display package information:
+
+```sh
+rr info:pkg --help
 ```
