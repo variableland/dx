@@ -1,3 +1,3 @@
 export { useStore, runContext } from "./context";
-export { createStore } from "./app";
-export type { Store } from "./store";
+export { createStore } from "./wire";
+export type { Store } from "./type";

@@ -42,6 +42,9 @@ export default function configPlop(plop) {
         destination: "{{name}}",
         base: "templates/{{template}}",
         templateFiles: "templates/{{template}}/**",
+        globOptions: {
+          dot: true,
+        },
       },
     ],
   });

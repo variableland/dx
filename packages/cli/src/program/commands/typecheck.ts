@@ -10,7 +10,7 @@ export const typecheckCommand = createCommand("typecheck")
     const store = useStore();
 
     try {
-      if (store.hasFile("tsconfig.json")) {
+      if (store.appPkg?.hasFile("tsconfig.json")) {
         await $`tsc --noEmit`;
       } else {
         Log.info("No tsconfig.json found. Skipping type checking.");

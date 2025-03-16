@@ -1,5 +1,5 @@
 import { AsyncLocalStorage } from "node:async_hooks";
-import type { Store } from "./store";
+import type { Store } from "./type";
 
 const asyncLocalStorage = new AsyncLocalStorage<Store>();
 

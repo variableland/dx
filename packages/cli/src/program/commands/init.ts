@@ -1,6 +1,8 @@
 import { Option, createCommand } from "commander";
 import { Log } from "~/logger";
+import { $ } from "~/shell";
 import { useStore } from "~/store";
+import { cwd } from "~/utils/cwd";
 
 export const initCommand = createCommand("init")
   .description("init a project 👷‍♂️")
@@ -23,8 +25,8 @@ export const initCommand = createCommand("init")
       const { runPlop } = await import("~/utils/plop");
 
       await runPlop({
-        rrPath: store.rrPath,
-        dest: store.appPath,
+        rrPath: store.rrPkg.dirPath,
+        dest: cwd,
       });
     } catch (error) {
       Log.error("Failed to run init", error);
