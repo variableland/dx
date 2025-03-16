@@ -1,5 +1,11 @@
 # @variableland/run-run
 
+## 0.3.0
+
+### Minor Changes
+
+- [#25](https://github.com/variableland/run-run/pull/25) [`f74cb0e`](https://github.com/variableland/run-run/commit/f74cb0e5d11039bc16033be2a03b1b86736f8afe) Thanks [@rqbazan](https://github.com/rqbazan)! - Add info:pkg command
+
 ## 0.2.2
 
 ### Patch Changes
