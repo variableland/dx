@@ -32,11 +32,27 @@ export default function configPlop(plop) {
         path: "{{name}}/.github/workflows/ci.yml",
         templateFile: "templates/#common/ci.yml.hbs",
       },
+      // Add husky config folder
       {
-        type: "add",
-        path: "{{name}}/.husky/pre-commit",
-        templateFile: "templates/#common/pre-commit.hbs",
+        type: "addMany",
+        destination: "{{name}}",
+        base: "templates/#common",
+        templateFiles: ["templates/#common/.husky"],
+        globOptions: {
+          dot: true,
+        },
       },
+      // Add changeset config folder
+      {
+        type: "addMany",
+        destination: "{{name}}",
+        base: "templates/#common",
+        templateFiles: ["templates/#common/.changeset"],
+        globOptions: {
+          dot: true,
+        },
+      },
+      // Add template specific files
       {
         type: "addMany",
         destination: "{{name}}",
