@@ -27,6 +27,9 @@
     "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
+    "@biomejs/biome": "1.9.4",
+    "rimraf": "^6.0.1",
+    "typescript": "5.8.2",
     "zx": "^8.4.0"
   },
   "devDependencies": {
@@ -37,9 +40,6 @@
     "plop": "^4.0.1",
     "read-package-up": "^11.0.0",
     "supports-color": "^10.0.0"
-  },
-  "peerDependencies": {
-    "@biomejs/biome": "1.9.4"
   },
   "engines": {
     "node": ">=20"

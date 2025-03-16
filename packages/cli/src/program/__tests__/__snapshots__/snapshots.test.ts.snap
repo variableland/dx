@@ -29,7 +29,7 @@ Acknowledgment:
 "
 `;
 
-exports[`should match clean command 1`] = `"rm -rf **/.turbo **/dist **/node_modules pnpm-lock.yaml"`;
+exports[`should match clean command 1`] = `"rimraf -g **/.turbo **/dist **/node_modules pnpm-lock.yaml"`;
 
 exports[`should match format command 1`] = `"biome format --no-errors-on-unmatched --colors=force"`;
 
