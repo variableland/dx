@@ -1,5 +1,11 @@
 # @variableland/run-run
 
+## 0.2.2
+
+### Patch Changes
+
+- [#23](https://github.com/variableland/run-run/pull/23) [`e84f483`](https://github.com/variableland/run-run/commit/e84f4830f043eba5c5312a70d807a0923a087ef0) Thanks [@rqbazan](https://github.com/rqbazan)! - Add changeset folder to lib template
+
 ## 0.2.1
 
 ### Patch Changes
