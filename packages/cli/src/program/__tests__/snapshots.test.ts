@@ -14,9 +14,11 @@ for (const cmd of rootCommands) {
   });
 }
 
+const hardCommands = ["init", "info:pkg"];
+
 const easyTesteableCommands = program.commands.filter((command) => {
-  const hasMandatoryOption = command.options.some((option) => option.mandatory);
-  return !hasMandatoryOption;
+  const isHard = hardCommands.some((cmd) => command.name() === cmd);
+  return !isHard;
 });
 
 for (const command of easyTesteableCommands) {

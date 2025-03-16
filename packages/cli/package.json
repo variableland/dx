@@ -1,9 +1,17 @@
 {
   "name": "@variableland/run-run",
-  "description": "The CLI toolbox to fullstack common scripts in Variable Land",
-  "author": "rcrd <rcrd@variable.land>",
   "version": "0.2.2",
+  "description": "The CLI toolbox to fullstack common scripts in Variable Land",
+  "homepage": "https://github.com/variableland/run-run#readme",
+  "bugs": {
+    "url": "https://github.com/variableland/run-run/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/variableland/run-run.git"
+  },
   "license": "MIT",
+  "author": "rcrd <rcrd@variable.land>",
   "type": "module",
   "module": "src/main.ts",
   "bin": {
@@ -13,10 +21,13 @@
   "files": ["dist", "plopfiles", "bin"],
   "scripts": {
     "build": "bun build src/main.ts --outfile=dist/rr.mjs --target=node --external=zx",
-    "test:coverage": "vitest run --coverage",
-    "test": "vitest --run",
     "prepublishOnly": "pnpm run build",
-    "preview:release": "./scripts/preview-release"
+    "preview:release": "./scripts/preview-release",
+    "test": "vitest --run",
+    "test:coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "zx": "^8.4.0"
   },
   "devDependencies": {
     "chalk": "^5.4.1",
@@ -27,16 +38,13 @@
     "read-package-up": "^11.0.0",
     "supports-color": "^10.0.0"
   },
-  "dependencies": {
-    "zx": "^8.4.0"
-  },
   "peerDependencies": {
     "@biomejs/biome": "1.9.4"
   },
-  "publishConfig": {
-    "access": "public"
-  },
   "engines": {
     "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
