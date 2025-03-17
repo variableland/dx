@@ -56,15 +56,6 @@ export default function configPlop(plop) {
       {
         type: "addMany",
         destination: "{{name}}",
-        base: "templates/#common",
-        templateFiles: ["templates/#common/.changeset"],
-        globOptions: {
-          dot: true,
-        },
-      },
-      {
-        type: "addMany",
-        destination: "{{name}}",
         base: "templates/{{template}}",
         templateFiles: ["templates/{{template}}/**"],
         globOptions: {
