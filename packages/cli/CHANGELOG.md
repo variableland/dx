@@ -1,5 +1,11 @@
 # @variableland/run-run
 
+## 0.3.3
+
+### Patch Changes
+
+- [`bebd228`](https://github.com/variableland/run-run/commit/bebd2287780d969e8262c38afce29d02904edea4) Thanks [@rqbazan](https://github.com/rqbazan)! - Fix package.json.hbs
+
 ## 0.3.2
 
 ### Patch Changes
