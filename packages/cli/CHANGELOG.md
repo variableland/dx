@@ -1,5 +1,11 @@
 # @variableland/run-run
 
+## 0.3.2
+
+### Patch Changes
+
+- [#29](https://github.com/variableland/run-run/pull/29) [`5adaf46`](https://github.com/variableland/run-run/commit/5adaf468c9f0fe3d6f98be4667bf5d98a8cbf97b) Thanks [@rqbazan](https://github.com/rqbazan)! - Fix template generation from init command
+
 ## 0.3.1
 
 ### Patch Changes
