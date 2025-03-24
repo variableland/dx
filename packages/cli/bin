@@ -13,7 +13,7 @@ if [ "$RR_ENV" = "dev" ]; then
     # we need to run the script from the CLI directory, so we change the working directory
     # however, some commands, like "clean", needs to be run from the monorepo root directory
     # so `RR_PWD` is exposed in order to use it with zx shell instance
-    cd "$SCRIPT_DIR" && RR_BIN_PATH="$SCRIPT_DIR" RR_PWD="$CAPTURED_PWD" node --import=tsx src/main.ts "$@"
+    cd "$SCRIPT_DIR" && RR_BIN_PATH="$SCRIPT_DIR" RR_PWD="$CAPTURED_PWD" bun src/main.ts "$@"
 else
     RR_BIN_PATH="$SCRIPT_DIR" bun "$SCRIPT_DIR/dist/rr.mjs" "$@"
 fi
