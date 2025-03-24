@@ -1,6 +1,6 @@
 {
   "name": "@variableland/biome-config",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Biome configuration file for @variableland",
   "homepage": "https://github.com/variableland/run-run#readme",
   "bugs": {
