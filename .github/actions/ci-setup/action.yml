@@ -1,0 +1,21 @@
+name: Setup CI
+
+runs:
+  using: composite
+  steps:
+    - name: 🔁 Cache dependencies
+      uses: actions/cache@v4
+      with:
+        path: ~/.bun/install/cache
+        key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}
+        restore-keys: |
+          ${{ runner.os }}-bun-
+
+    - name: 🥟 Setup Bun
+      uses: oven-sh/setup-bun@v2
+      with:
+        bun-version-file: ".bun-version"
+
+    - name: 📥 Install dependencies
+      run: bun i
+      shell: bash # required for composite actions

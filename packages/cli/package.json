@@ -21,30 +21,28 @@
   "files": ["dist", "plopfiles", "bin"],
   "scripts": {
     "build": "bun build src/main.ts --outfile=dist/rr.mjs --target=node --external=zx",
-    "prepublishOnly": "pnpm run build",
-    "preview:release": "./scripts/preview-release",
+    "prepublishOnly": "bun run build",
     "test": "vitest --run",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "./bin tsc"
   },
   "dependencies": {
     "@biomejs/biome": "1.9.4",
-    "rimraf": "^6.0.1",
+    "rimraf": "6.0.1",
     "typescript": "5.8.2",
-    "zx": "^8.4.0"
-  },
-  "devDependencies": {
-    "chalk": "^5.4.1",
-    "commander": "^13.1.0",
-    "debug": "^4.4.0",
-    "is-ci": "^4.1.0",
-    "plop": "^4.0.1",
-    "read-package-up": "^11.0.0",
-    "supports-color": "^10.0.0"
-  },
-  "engines": {
-    "node": ">=20"
+    "zx": "8.4.0",
+    "chalk": "5.4.1",
+    "commander": "13.1.0",
+    "debug": "4.4.0",
+    "is-ci": "4.1.0",
+    "plop": "4.0.1",
+    "read-package-up": "11.0.0",
+    "supports-color": "10.0.0"
   },
   "publishConfig": {
     "access": "public"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }

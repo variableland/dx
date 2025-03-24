@@ -1,9 +1,0 @@
-#!/bin/bash
-if [ -z "$PR_NUMBER" ]; then
-  echo "PR_NUMBER is required set the prerelease version"
-  exit 1
-fi
-
-SHORT_GIT_SHA=$(git rev-parse --short HEAD)
-pnpm version prerelease --preid="git-$SHORT_GIT_SHA" --no-git-tag-version
-pnpm publish --tag="pr-$PR_NUMBER" --no-git-checks

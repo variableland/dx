@@ -18,24 +18,15 @@ jobs:
     steps:
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v4
+      
+      - name: ⌛ Setup CI
+        uses: ./.github/actions/ci-setup
 
-      - name: 📦 Setup pnpm
-        uses: pnpm/action-setup@v4
+      - name: 💅 Test static
+        run: bun dev test:static
 
-      - name: ⎔ Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: ".nvmrc"
-          cache: "pnpm"
-
-      - name: 📥 Install dependencies
-        run: pnpm install
-
-      - name: 💅 Test Static
-        run: pnpm run dev test:static
-
-      - name: 🧪 Test Unit
-        run: pnpm test
+      - name: 🧪 Test unit
+        run: bun run test
 
   release:
     runs-on: ubuntu-latest
@@ -49,30 +40,15 @@ jobs:
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v4
 
-      - name: 📦 Setup pnpm
-        uses: pnpm/action-setup@v4
-
-      - name: ⎔ Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: ".nvmrc"
-          cache: "pnpm"
-
-      - name: 📥 Install dependencies
-        run: pnpm install
-
-      # needed to build the run-run cli
-      - name: 🥟 Setup Bun
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version-file: ".bun-version"
+      - name: ⌛ Setup CI
+        uses: ./.github/actions/ci-setup
 
       - name: 🚀 Create release PR or publish versions
         uses: changesets/action@v1
         with:
           commit: "chore: update versions"
           title: "chore: update versions"
-          publish: npx changeset publish
+          publish: bunx changeset publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

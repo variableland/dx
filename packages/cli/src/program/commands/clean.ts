@@ -16,7 +16,7 @@ export const cleanCommand = createCommand("clean")
 
       Log.info("Cleaning all... ⌛");
 
-      const dirtyPaths = ["**/.turbo", "**/dist", "**/node_modules", "pnpm-lock.yaml"];
+      const dirtyPaths = ["**/.turbo", "**/dist", "**/node_modules", "pnpm-lock.yaml", "bun.lock"];
 
       Log.info(dirtyPaths.join("\n"));
 

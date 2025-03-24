@@ -43,5 +43,5 @@ export async function parseProgram(argv: string[]) {
 }
 
 export function execCli(cmd: string) {
-  return execAsync(`node --import=tsx src/main.ts ${cmd}`);
+  return execAsync(`bun run src/main.ts ${cmd}`);
 }
