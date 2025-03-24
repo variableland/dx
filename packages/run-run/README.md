@@ -4,7 +4,7 @@ CLI toolbox to fullstack common scripts in Variable Land 👊
 
 ## Prerequisites
 
-- Node.js >= 20
+- Bun >= 1.2.4
 
 ## Toolbox
 
@@ -15,10 +15,10 @@ CLI toolbox to fullstack common scripts in Variable Land 👊
 ## Installation
 
 ```sh
-pnpm add -g @variableland/run-run
+pnpm add @variableland/run-run
 ```
 
-It will adds the `rr` and `run-run` command to your system path.
+It will adds the `rr` and `run-run` command to your project
 
 ## Usage
 
@@ -39,7 +39,7 @@ To enable debug mode, set the `DEBUG` environment variable to `run-run:*` before
 DEBUG=run-run:* rr help
 ```
 
-Additionally, there is an special command to display package information:
+Additionally, there is an special command to display `package.json` information:
 
 ```sh
 rr info:pkg --help

@@ -1,0 +1,23 @@
+{
+  "name": "@variableland/biome-config",
+  "version": "0.0.4",
+  "description": "Biome configuration file for @variableland",
+  "homepage": "https://github.com/variableland/run-run#readme",
+  "bugs": {
+    "url": "https://github.com/variableland/run-run/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/variableland/run-run.git"
+  },
+  "author": "rcrd <rcrd@variable.land>",
+  "keywords": ["biome"],
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./src/biome.json"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
