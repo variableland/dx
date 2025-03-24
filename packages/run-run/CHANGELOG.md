@@ -1,5 +1,11 @@
 # @variableland/run-run
 
+## 0.4.2
+
+### Patch Changes
+
+- [#36](https://github.com/variableland/dx/pull/36) [`801a210`](https://github.com/variableland/dx/commit/801a210f1f1651f9a17087b4a6cd3ce92628357b) Thanks [@rqbazan](https://github.com/rqbazan)! - Publish version with new homepage
+
 ## 0.4.1
 
 ### Patch Changes
