@@ -2,13 +2,13 @@
   "name": "@variableland/run-run",
   "version": "0.4.1",
   "description": "The CLI toolbox to fullstack common scripts in Variable Land",
-  "homepage": "https://github.com/variableland/run-run#readme",
+  "homepage": "https://github.com/variableland/dx/tree/main/packages/run-run#readme",
   "bugs": {
-    "url": "https://github.com/variableland/run-run/issues"
+    "url": "https://github.com/variableland/dx/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/variableland/run-run.git"
+    "url": "git+https://github.com/variableland/dx.git"
   },
   "license": "MIT",
   "author": "rcrd <rcrd@variable.land>",
