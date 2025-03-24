@@ -1,5 +1,11 @@
 # @variableland/run-run
 
+## 0.4.0
+
+### Minor Changes
+
+- [#32](https://github.com/variableland/run-run/pull/32) [`f6ce7f8`](https://github.com/variableland/run-run/commit/f6ce7f8cc3795b4c14229a77f6f45f88c9dd5b9e) Thanks [@rqbazan](https://github.com/rqbazan)! - Move to Bun
+
 ## 0.3.3
 
 ### Patch Changes
