@@ -1,5 +1,11 @@
 # @variableland/starter
 
+## 0.0.2
+
+### Patch Changes
+
+- [#40](https://github.com/variableland/dx/pull/40) [`d175254`](https://github.com/variableland/dx/commit/d17525490df7651ad46a1fc276d86fbbd7728c32) Thanks [@rqbazan](https://github.com/rqbazan)! - Fix bin path
+
 ## 0.0.1
 
 ### Patch Changes
