@@ -3,9 +3,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./src/*"],
-      "test/*": ["./test/*"],
-      "@variableland/*": ["../../packages/*/src"]
+      "@variableland/console": ["packages/console/src"]
     }
   }
 }

@@ -1,5 +1,5 @@
 import { vi } from "vitest";
-import { isRaw } from "~/utils/is-raw";
+import { isRaw } from "../../src/utils/is-raw";
 
 export const $ = vi.fn(function fakeShell(strs: string[], ...args: string[]) {
   let output = "";

@@ -33,7 +33,8 @@
     "is-ci": "4.1.0",
     "plop": "4.0.1",
     "read-package-up": "11.0.0",
-    "supports-color": "10.0.0"
+    "supports-color": "10.0.0",
+    "@variableland/console": "workspace:*"
   },
   "dependencies": {
     "@biomejs/biome": "1.9.4",

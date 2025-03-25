@@ -1,4 +1,4 @@
-import { Log } from "./logger";
+import { Log } from "@variableland/console";
 import { createProgram } from "./program";
 import { createStore, runContext } from "./store";
 

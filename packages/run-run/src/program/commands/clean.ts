@@ -1,5 +1,5 @@
+import { Log } from "@variableland/console";
 import { createCommand } from "commander";
-import { Log } from "~/logger";
 import { $ } from "~/shell";
 
 export const cleanCommand = createCommand("clean")

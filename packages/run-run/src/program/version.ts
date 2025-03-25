@@ -1,4 +1,4 @@
-import { Log } from "~/logger";
+import { Log } from "@variableland/console";
 import pkg from "../../package.json";
 
 export function getVersion() {

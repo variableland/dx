@@ -1,8 +1,7 @@
 import { beforeEach, vi } from "vitest";
 
-vi.mock("~/shell");
-vi.mock("~/logger");
 vi.mock("is-ci");
+vi.mock("~/shell");
 
 beforeEach(() => {
   vi.clearAllMocks();

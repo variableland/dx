@@ -1,0 +1,34 @@
+{
+  "name": "@variableland/starter",
+  "version": "0.0.0",
+  "description": "The CLI to init a new project in Variable Land",
+  "homepage": "https://github.com/variableland/dx/tree/main/packages/starter#readme",
+  "bugs": {
+    "url": "https://github.com/variableland/dx/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/variableland/dx.git"
+  },
+  "license": "MIT",
+  "author": "rcrd <rcrd@variable.land>",
+  "type": "module",
+  "module": "src/main.ts",
+  "bin": "./bin",
+  "files": ["dist"],
+  "scripts": {
+    "build": "bun build src/main.ts --outfile=dist/main.mjs --target=node",
+    "prepublishOnly": "bun run build",
+    "typecheck": "./bin tsc"
+  },
+  "devDependencies": {
+    "plop": "4.0.1",
+    "@variableland/console": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "bun": ">=1.0.0"
+  }
+}

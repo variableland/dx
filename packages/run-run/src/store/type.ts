@@ -1,4 +1,4 @@
-import type { PkgService } from "~/services/pkg";
+import type { PkgService } from "../services/pkg";
 
 export interface Store {
   rrPkg: PkgService;

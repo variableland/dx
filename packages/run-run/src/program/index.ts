@@ -3,7 +3,6 @@ import { BANNER_TEXT, CREDITS_TEXT } from "../ui";
 import { cleanCommand } from "./commands/clean";
 import { formatCommand } from "./commands/format";
 import { infoPkgCommand } from "./commands/info-pkg";
-import { initCommand } from "./commands/init";
 import { lintCommand } from "./commands/lint";
 import { testStaticCommand } from "./commands/test-static";
 import { typecheckCommand } from "./commands/typecheck";
@@ -20,6 +19,5 @@ export function createProgram() {
     .addCommand(testStaticCommand)
     .addCommand(cleanCommand)
     .addCommand(typecheckCommand)
-    .addCommand(initCommand)
     .addCommand(infoPkgCommand);
 }

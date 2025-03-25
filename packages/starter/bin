@@ -1,0 +1,4 @@
+#!/bin/bash
+# capture the path to this bin script
+SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
+BIN_PATH="$SCRIPT_DIR" bun "$SCRIPT_DIR/dist/main.mjs" "$@"

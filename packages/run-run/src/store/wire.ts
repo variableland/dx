@@ -1,19 +1,19 @@
 import fs from "node:fs";
-import { Log } from "~/logger";
-import { createPkgService } from "~/services/pkg";
-import { cwd } from "~/utils/cwd";
+import { Log } from "@variableland/console";
+import { createPkgService } from "../services/pkg";
+import { cwd } from "../utils/cwd";
 import type { Store } from "./type";
 
 export async function createStore(): Promise<Store> {
   const d = Log.subdebug("create-store");
 
-  if (!process.env.RR_BIN_PATH) {
-    throw new Error("Required RR_BIN_PATH env var");
+  if (!process.env.BIN_PATH) {
+    throw new Error("Required BIN_PATH env var");
   }
 
-  const rrBinPath = fs.realpathSync(process.env.RR_BIN_PATH);
+  const binPath = fs.realpathSync(process.env.BIN_PATH);
 
-  d("rr bin path %s", rrBinPath);
+  d("bin path %s", binPath);
   d("process cwd %s", process.cwd());
 
   if (process.env.RR_PWD) {
@@ -22,7 +22,7 @@ export async function createStore(): Promise<Store> {
 
   const [appPkg, rrPkg] = await Promise.all([
     createPkgService({ cwd }),
-    createPkgService({ cwd: rrBinPath }),
+    createPkgService({ cwd: binPath }),
   ]);
 
   if (!rrPkg) {

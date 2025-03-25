@@ -1,8 +1,8 @@
 import { exec } from "node:child_process";
 import { promisify } from "node:util";
 import { vi } from "vitest";
-import { createProgram } from "~/program";
-import { createStore, runContext } from "~/store";
+import { createProgram } from "../src/program";
+import { createStore, runContext } from "../src/store";
 
 const execAsync = promisify(exec);
 

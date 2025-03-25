@@ -16,7 +16,6 @@ Commands:
   clean [options]        delete dirty folders or files such as node_modules, etc
                          🗑️
   typecheck|tsc          check if TypeScript code is well typed 🎨
-  init [options]         init a project 👷‍♂️
   info:pkg [options]     display run-run package.json ℹ️
   help [command]         display help for command
 
@@ -49,7 +48,6 @@ Commands:
   clean [options]        delete dirty folders or files such as node_modules, etc
                          🗑️
   typecheck|tsc          check if TypeScript code is well typed 🎨
-  init [options]         init a project 👷‍♂️
   info:pkg [options]     display run-run package.json ℹ️
   help [command]         display help for command
 
