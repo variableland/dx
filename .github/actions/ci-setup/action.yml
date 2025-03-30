@@ -39,5 +39,3 @@ runs:
     - name: 📥 Install dependencies
       run: pnpm install --frozen-lockfile --prefer-offline
       shell: bash # required for composite actions
-      env:
-        HUSKY: 0
