@@ -50,7 +50,7 @@ jobs:
         with:
           commit: "chore: update versions"
           title: "chore: update versions"
-          publish: bunx changeset publish
+          publish: ./scripts/publish.sh
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
