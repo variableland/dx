@@ -11,9 +11,7 @@
     "url": "git+https://github.com/variableland/dx.git"
   },
   "author": "rcrd <rcrd@variable.land>",
-  "keywords": [
-    "biome"
-  ],
+  "keywords": ["biome"],
   "license": "MIT",
   "type": "module",
   "exports": {
