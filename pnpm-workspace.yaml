@@ -1,0 +1,7 @@
+packages:
+  - packages/*
+  - dotfiles/*
+onlyBuiltDependencies:
+  - '@biomejs/biome'
+ignoredBuiltDependencies:
+  - esbuild
