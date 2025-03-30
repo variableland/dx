@@ -1,5 +1,11 @@
 # @variableland/starter
 
+## 0.0.5
+
+### Patch Changes
+
+- [#49](https://github.com/variableland/dx/pull/49) [`76bffa8`](https://github.com/variableland/dx/commit/76bffa832f431cfc23d4a61ee61f485b3813c454) Thanks [@rqbazan](https://github.com/rqbazan)! - Fix files in package.json
+
 ## 0.0.4
 
 ### Patch Changes
