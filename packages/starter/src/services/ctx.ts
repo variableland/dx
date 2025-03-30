@@ -9,7 +9,7 @@ export interface ContextValue {
 export const ctx = createContextService<ContextValue>();
 
 export async function createContextValue(): Promise<ContextValue> {
-  const d = Logger.subdebug("create-context-value");
+  const debug = Logger.subdebug("create-context-value");
 
   if (!process.env.BIN_PATH) {
     throw new Error("Required BIN_PATH env var");
@@ -17,7 +17,7 @@ export async function createContextValue(): Promise<ContextValue> {
 
   const binPath = fs.realpathSync(process.env.BIN_PATH);
 
-  d("bin path %s", binPath);
+  debug("bin path %s", binPath);
 
   const binPkg = await createPkgService(binPath);
 
@@ -25,7 +25,7 @@ export async function createContextValue(): Promise<ContextValue> {
     throw new Error("Could not find bin package.json");
   }
 
-  d("bin pkg info %O", binPkg.info());
+  debug("bin pkg info %O", binPkg.info());
 
   return {
     binPkg,

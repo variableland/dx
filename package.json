@@ -28,7 +28,8 @@
     "turbo": "^2.4.4",
     "typescript": "5.8.2",
     "vite-tsconfig-paths": "^5.1.4",
-    "vitest": "^3.0.8"
+    "vitest": "^3.0.8",
+    "yaml": "^2.7.1"
   },
   "packageManager": "pnpm@10.6.4"
 }

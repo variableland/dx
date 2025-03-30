@@ -1,3 +1,4 @@
+import fs from "node:fs";
 import { join } from "node:path";
 import { $, cwd } from "@variableland/clibuddy";
 import { Argument, Option, createCommand } from "commander";
@@ -27,30 +28,44 @@ export const initCommand = createCommand("init")
   .addOption(new Option("--no-git", "skip to create a git repository").default(true))
   .action(async function initAction(template: string, folder: string, options: InitOptions) {
     try {
-      const d = Logger.subdebug("init");
+      const debug = Logger.subdebug("init");
 
-      d("template:", template);
-      d("folder:", folder);
-      d("options: %O", options);
+      debug("template:", template);
+      debug("options: %O", options);
 
       const configPath = join(ctx.value.binPkg.dirPath, META.PLOP_CONFIG_PATH);
+      const dest = fs.realpathSync(options.dest);
+      const folderPath = join(dest, folder);
+
+      debug("plop config path:", folderPath);
+      debug("dest folder path:", folderPath);
 
       const plop = await nodePlop(configPath, {
         force: false,
-        destBasePath: options.dest,
+        destBasePath: dest,
       });
 
       const templateService = new PlopTemplateService(plop);
 
+      Logger.start("Generating project");
+
       await templateService.generate({
-        generatorId: META.GENERATOR_ID,
         template,
         folder,
+        generatorId: META.GENERATOR_ID,
       });
+
+      Logger.success("Project generated");
+
+      const $$ = $.quiet({ cwd: folderPath });
 
       if (options.git) {
         Logger.start("Creating git repository");
-        await $.quiet`cd ${folder} && git init`;
+
+        await $$`git init`;
+        // NOTE: git commit -am failed, not sure why
+        await $$`git add . && git commit -m "initial commit"`;
+
         Logger.success("Git repository created");
       }
     } catch (error) {

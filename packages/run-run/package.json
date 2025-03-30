@@ -24,7 +24,7 @@
     "prepublishOnly": "bun run build",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
-    "typecheck": "./bin tsc"
+    "typecheck": "rr tsc"
   },
   "dependencies": {
     "@biomejs/biome": "1.9.4",

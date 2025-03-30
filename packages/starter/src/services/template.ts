@@ -17,7 +17,7 @@ export class PlopTemplateService {
   async generate(options: GenerateOptions) {
     const { generatorId, template, folder } = options;
 
-    const d = Logger.subdebug("generate");
+    const debug = Logger.subdebug("generate");
 
     const generator = this.#plop.getGenerator(generatorId);
 
@@ -28,8 +28,10 @@ export class PlopTemplateService {
       template,
     });
 
-    d("plop results: %O", results);
+    debug("plop results: %O", results);
 
-    // TODO: handle results, print them, fail if any errors
+    if (results.failures.length > 0) {
+      throw new Error("Can't generate files");
+    }
   }
 }
