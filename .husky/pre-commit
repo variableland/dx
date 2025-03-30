@@ -1,2 +1,2 @@
-RR_ENV=dev bun rr test:static --fix-staged
+bun run rr test:static --fix-staged
 git update-index --again

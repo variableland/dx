@@ -15,6 +15,8 @@ export default defineConfig({
     env: {
       // required to look the cli package.json up
       BIN_PATH: "./bin",
+      // required to make the version command work independently of the package.json version
+      VERSION: "0.0.0-test",
     },
   },
 });

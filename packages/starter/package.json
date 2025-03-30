@@ -17,15 +17,17 @@
   "bin": {
     "vland": "./bin"
   },
-  "files": ["dist", "bin", "src", "plopfiles"],
+  "files": ["bin", "src", "plopfiles"],
   "scripts": {
-    "build": "bun build src/main.ts --outfile=dist/main.mjs --target=node",
+    "build": "bun build src/main.ts --outfile=dist/main.mjs --target=node --external=zx",
     "prepublishOnly": "bun run build",
-    "typecheck": "./bin tsc"
+    "typecheck": "rr tsc"
   },
-  "devDependencies": {
-    "plop": "4.0.1",
-    "@variableland/console": "workspace:*"
+  "dependencies": {
+    "@variableland/console": "workspace:*",
+    "@variableland/clibuddy": "workspace:*",
+    "commander": "13.1.0",
+    "node-plop": "0.32.0"
   },
   "publishConfig": {
     "access": "public"

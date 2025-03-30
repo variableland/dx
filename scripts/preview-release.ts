@@ -20,9 +20,9 @@ function getWorkspacesPackages(workspaces: string[]) {
 
     const pattern = workspace.replace("*", "**/package.json");
     const glob = new Glob(pattern);
-    const files = Array.from(glob.scanSync());
+    const pkgJsonPaths = Array.from(glob.scanSync());
 
-    return files.map((file) => dirname(file));
+    return pkgJsonPaths.map((pkgJsonPath) => dirname(pkgJsonPath));
   };
 
   return workspaces.flatMap(collect);
@@ -51,20 +51,23 @@ async function getChangedPackages() {
 }
 
 /**
- * Publish a preview release package
+ * Bump the package version
  *
- * @param pkg - The package to publish.
+ * @param pkg - The package directory to bump.
  * @param shortGitSha - The short git sha.
+ */
+async function bumpPackage(pkg: string, shortGitSha: string) {
+  await $`cd ${pkg} && bunx bumpp prerelease --preid="git-${shortGitSha}" --no-tag --no-commit --no-push --yes`;
+}
+
+/**
+ * Publish the package
+ *
+ * @param pkg - The package directory to publish.
  * @param prNumber - The pull request number.
  */
-async function publishPreviewReleasePackage(pkg: string, shortGitSha: string, prNumber: string) {
-  try {
-    await $`cd ${pkg} && bunx bumpp prerelease --preid="git-${shortGitSha}" --no-tag --no-commit --no-push --yes`;
-    await $`cd ${pkg} && bun publish --tag="pr-${prNumber}"`;
-  } catch (error) {
-    console.error(`Failed to publish package ${pkg}:`, error);
-    throw error;
-  }
+async function publishPackage(pkg: string, prNumber: string) {
+  await $`cd ${pkg} && bun publish --tag="pr-${prNumber}"`;
 }
 
 async function main() {
@@ -76,14 +79,26 @@ async function main() {
     throw new Error("NPM_TOKEN environment variable is required");
   }
 
-  const prNumber = Bun.env.PR_NUMBER;
-  const shortGitSha = (await $`git rev-parse --short HEAD`.text()).trim();
   const changedPackages = await getChangedPackages();
+
+  const shortGitSha = (await $`git rev-parse --short HEAD`.text()).trim();
+
+  try {
+    for await (const pkg of changedPackages) {
+      await bumpPackage(pkg, shortGitSha);
+    }
+  } catch (error) {
+    throw new Error("Failed to bump packages", { cause: error });
+  }
 
   await Bun.write(".npmrc", `//registry.npmjs.org/:_authToken=${Bun.env.NPM_TOKEN}`);
 
-  for await (const pkg of changedPackages) {
-    await publishPreviewReleasePackage(pkg, shortGitSha, prNumber);
+  try {
+    for await (const pkg of changedPackages) {
+      await publishPackage(pkg, Bun.env.PR_NUMBER);
+    }
+  } catch (error) {
+    throw new Error("Failed to publish packages", { cause: error });
   }
 }
 

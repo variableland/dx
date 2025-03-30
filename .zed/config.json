@@ -1,7 +1,0 @@
-{
-  "languages": {
-    "JavaScript": {
-      "language_servers": ["biome", "..."]
-    }
-  }
-}

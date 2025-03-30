@@ -1,10 +1,10 @@
+import { $ } from "@variableland/clibuddy";
 import { createTestProgram, execCli, parseProgram } from "test/helpers";
 import { expect, test, vi } from "vitest";
-import { $ } from "~/shell";
 
 const { program } = createTestProgram();
 
-const rootCommands = ["help", "--help"];
+const rootCommands = ["help", "--help", "--version", "-v"];
 
 for (const cmd of rootCommands) {
   test(`should match ${cmd}`, async () => {
@@ -14,7 +14,18 @@ for (const cmd of rootCommands) {
   });
 }
 
-const hardCommands = ["init", "info:pkg"];
+for (const command of program.commands) {
+  const cmd = command.name();
+
+  test(`should match help message for ${cmd}`, async () => {
+    const { stdout } = await execCli(`${cmd} --help`);
+
+    expect(stdout).toMatchSnapshot();
+  });
+}
+
+// these command don't use shell ($) instance
+const hardCommands = ["info:pkg", "clean"];
 
 const easyTesteableCommands = program.commands.filter((command) => {
   const isHard = hardCommands.some((cmd) => command.name() === cmd);
@@ -23,12 +34,6 @@ const easyTesteableCommands = program.commands.filter((command) => {
 
 for (const command of easyTesteableCommands) {
   const cmd = command.name();
-
-  test(`should match help message for ${cmd}`, async () => {
-    const { stdout } = await execCli(`${cmd} --help`);
-
-    expect(stdout).toMatchSnapshot();
-  });
 
   test(`should match ${cmd} command`, async () => {
     await parseProgram([cmd]);

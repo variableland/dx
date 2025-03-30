@@ -1,21 +1,17 @@
-import fs from "node:fs";
-import { Log } from "@variableland/console";
-import { runPlop } from "./run-plop";
+import { createProgram } from "./program";
+import { createContextValue, ctx } from "./services/ctx";
+import { Logger } from "./services/logger";
 
-async function main() {
-  if (!process.env.BIN_PATH) {
-    throw new Error("Required BIN_PATH env var");
-  }
-
+async function main(argv = process.argv) {
   try {
-    const binPath = fs.realpathSync(process.env.BIN_PATH);
+    const ctxValue = await createContextValue();
 
-    await runPlop({
-      cwd: binPath,
-      dest: process.cwd(),
+    await ctx.runContext(ctxValue, async () => {
+      const program = createProgram();
+      await program.parseAsync(argv);
     });
   } catch (error) {
-    Log.error("Failed to run plop", error);
+    Logger.error("Cannot run main successfully", error);
     process.exit(1);
   }
 }

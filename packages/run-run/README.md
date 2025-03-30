@@ -36,7 +36,7 @@ rr help
 To enable debug mode, set the `DEBUG` environment variable to `vland:*` before running *any* command.
 
 ```sh
-DEBUG=vland:* rr help
+DEBUG=run-run:* rr help
 ```
 
 Additionally, there is an special command to display `package.json` information:

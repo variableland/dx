@@ -35,11 +35,7 @@ export class PkgService {
   }
 }
 
-export async function createPkgService({
-  cwd,
-}: {
-  cwd: string;
-}): Promise<PkgService | null> {
+export async function createPkgService(cwd: string): Promise<PkgService | null> {
   const searchResult = await readPackageUp({ cwd });
 
   if (!searchResult) {

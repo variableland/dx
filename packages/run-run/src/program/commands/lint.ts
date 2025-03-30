@@ -1,5 +1,6 @@
+import { $ } from "@variableland/clibuddy";
 import { createCommand } from "commander";
-import { $ } from "~/shell";
+import { Logger } from "~/services/logger";
 
 export const lintCommand = createCommand("lint")
   .description("lint the code 🧹")
@@ -17,7 +18,8 @@ export const lintCommand = createCommand("lint")
       if (options.check) {
         await $`${toolCmd}`;
       }
-    } catch {
+    } catch (error) {
+      Logger.error(error);
       process.exit(1);
     }
   })

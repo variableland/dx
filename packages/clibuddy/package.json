@@ -1,8 +1,8 @@
 {
-  "name": "@variableland/console",
-  "version": "0.0.1",
-  "description": "Console wrapper to make logging fun again",
-  "homepage": "https://github.com/variableland/dx/tree/main/packages/console#readme",
+  "name": "@variableland/clibuddy",
+  "version": "0.0.0",
+  "description": "A helper library to create CLIs in Variable Land",
+  "homepage": "https://github.com/variableland/dx/tree/main/packages/clibuddy#readme",
   "bugs": {
     "url": "https://github.com/variableland/dx/issues"
   },
@@ -30,17 +30,16 @@
     "prepublishOnly": "bun run build",
     "typecheck": "rr tsc"
   },
+  "dependencies": {
+    "chalk": "5.4.1",
+    "read-package-up": "11.0.0",
+    "supports-color": "10.0.0",
+    "zx": "8.4.0"
+  },
   "publishConfig": {
     "access": "public"
   },
   "engines": {
     "bun": ">=1.0.0"
-  },
-  "dependencies": {
-    "consola": "^3.4.2",
-    "debug": "^4.4.0"
-  },
-  "devDependencies": {
-    "@types/debug": "^4.1.12"
   }
 }

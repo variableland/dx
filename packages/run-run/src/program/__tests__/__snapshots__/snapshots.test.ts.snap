@@ -28,7 +28,15 @@ Acknowledgment:
 "
 `;
 
-exports[`should match clean command 1`] = `"rimraf -g **/.turbo **/dist **/node_modules pnpm-lock.yaml bun.lock"`;
+exports[`should match --version 1`] = `
+"0.0.0-test
+"
+`;
+
+exports[`should match -v 1`] = `
+"0.0.0-test
+"
+`;
 
 exports[`should match format command 1`] = `"biome format --no-errors-on-unmatched --colors=force"`;
 
@@ -69,7 +77,7 @@ Options:
   --only-dist  delete 'dist' folders only
   -h, --help   display help for command
 
-Under the hood, this command uses the rimraf CLI to delete dirty folders or files.
+Under the hood, this command uses the rimraf.js to delete dirty folders or files.
 "
 `;
 
@@ -84,6 +92,18 @@ Options:
   -h, --help   display help for command
 
 Under the hood, this command uses the biome CLI to format the code.
+"
+`;
+
+exports[`should match help message for info:pkg 1`] = `
+"Usage: rr info:pkg [options]
+
+display run-run package.json ℹ️
+
+Options:
+  -f, --filter <filter>  lodash get id like to filter info by
+  -c, --current          display package.json where run-run will be executed
+  -h, --help             display help for command
 "
 `;
 

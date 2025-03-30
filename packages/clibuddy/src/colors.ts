@@ -7,6 +7,8 @@ const colorIsSupported = () => supportsColor.stdout && !process.env.NO_COLOR;
 const identity = <T>(x: T) => x;
 const safe = (style: ChalkInstance) => (colorIsSupported() ? style : identity);
 
-export const logoBlue = safe(chalk.blueBright);
-export const logoRed = safe(chalk.redBright);
-export const logoGreen = safe(chalk.greenBright);
+export const colors = {
+  blueBright: safe(chalk.blueBright),
+  redBright: safe(chalk.redBright),
+  greenBright: safe(chalk.greenBright),
+};

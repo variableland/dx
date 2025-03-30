@@ -1,5 +1,5 @@
 import { Command } from "commander";
-import { BANNER_TEXT, CREDITS_TEXT } from "../ui";
+import { BANNER_TEXT, CREDITS_TEXT } from "../services/ui";
 import { cleanCommand } from "./commands/clean";
 import { formatCommand } from "./commands/format";
 import { infoPkgCommand } from "./commands/info-pkg";

@@ -1,19 +1,12 @@
 #!/bin/bash
+# This bin script is intended to be used from the monorepo root directory
+# as well as from the installed /bin directory
 
-# capture the path to this bin script
 SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 
-if [ "$RR_ENV" = "dev" ]; then
-    # this bin script is been calling from the monorepo root directory,
-    # you can see the "dev" script at run-run/packages.json
-
-    # capture current working directory (it should be monorepo root directory)
+if [ "$ENV" = "dev" ]; then
     CAPTURED_PWD="$(pwd)"
-
-    # we need to run the script from the CLI directory, so we change the working directory
-    # however, some commands, like "clean", needs to be run from the monorepo root directory
-    # so `RR_PWD` is exposed in order to use it with zx shell instance
-    cd "$SCRIPT_DIR" && BIN_PATH="$SCRIPT_DIR" RR_PWD="$CAPTURED_PWD" bun src/main.ts "$@"
+    cd "$SCRIPT_DIR" && BIN_PATH="$SCRIPT_DIR" PWD="$CAPTURED_PWD" bun src/main.ts "$@"
 else
-    BIN_PATH="$SCRIPT_DIR" bun "$SCRIPT_DIR/dist/rr.mjs" "$@"
+    BIN_PATH="$SCRIPT_DIR" bun "$SCRIPT_DIR/dist/main.mjs" "$@"
 fi

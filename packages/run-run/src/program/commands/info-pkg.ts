@@ -1,6 +1,6 @@
-import { Log } from "@variableland/console";
 import { createCommand } from "commander";
-import { useStore } from "~/store";
+import { ctx } from "~/services/ctx";
+import { Logger } from "~/services/logger";
 import { get } from "~/utils/get";
 
 export const infoPkgCommand = createCommand("info:pkg")
@@ -8,18 +8,13 @@ export const infoPkgCommand = createCommand("info:pkg")
   .option("-f, --filter <filter>", "lodash get id like to filter info by")
   .option("-c, --current", "display package.json where run-run will be executed")
   .action(async function pkgAction(options) {
-    const store = useStore();
-
     try {
-      const infoObject = options.current ? store.appPkg?.info() : store.rrPkg.info();
+      const { appPkg, binPkg } = ctx.value;
 
-      if (!infoObject) {
-        Log.error("No information found");
-        return;
-      }
+      const infoObject = options.current ? appPkg.info() : binPkg.info();
 
       if (!options.filter) {
-        Log.info("%O", infoObject);
+        Logger.info("%O", infoObject);
         return;
       }
 
@@ -27,12 +22,13 @@ export const infoPkgCommand = createCommand("info:pkg")
       const subInfoObject = get(infoObject.packageJson, filter);
 
       if (!subInfoObject) {
-        Log.info("No info found");
+        Logger.info("No info found");
         return;
       }
 
-      Log.info("%O", { [filter]: subInfoObject });
-    } catch {
+      Logger.info("%O", { [filter]: subInfoObject });
+    } catch (error) {
+      Logger.error(error);
       process.exit(1);
     }
   });

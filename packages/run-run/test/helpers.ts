@@ -2,7 +2,7 @@ import { exec } from "node:child_process";
 import { promisify } from "node:util";
 import { vi } from "vitest";
 import { createProgram } from "../src/program";
-import { createStore, runContext } from "../src/store";
+import { createContextValue, ctx } from "../src/services/ctx";
 
 const execAsync = promisify(exec);
 
@@ -31,9 +31,9 @@ export function createTestProgram() {
 export async function parseProgram(argv: string[]) {
   const { program, ...other } = createTestProgram();
 
-  const store = await createStore();
+  const store = await createContextValue();
 
-  await runContext(store, async () => {
+  await ctx.runContext(store, async () => {
     await program.parseAsync(argv, {
       from: "user",
     });

@@ -1,5 +1,6 @@
+import { $ } from "@variableland/clibuddy";
 import { createCommand } from "commander";
-import { $ } from "~/shell";
+import { Logger } from "~/services/logger";
 
 export const formatCommand = createCommand("format")
   .alias("fmt")
@@ -18,7 +19,8 @@ export const formatCommand = createCommand("format")
       if (options.check) {
         await $`${toolCmd}`;
       }
-    } catch {
+    } catch (error) {
+      Logger.error(error);
       process.exit(1);
     }
   })

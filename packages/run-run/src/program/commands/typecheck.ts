@@ -1,21 +1,22 @@
-import { Log } from "@variableland/console";
+import { $ } from "@variableland/clibuddy";
 import { createCommand } from "commander";
-import { $ } from "~/shell";
-import { useStore } from "~/store";
+import { ctx } from "~/services/ctx";
+import { Logger } from "~/services/logger";
 
 export const typecheckCommand = createCommand("typecheck")
   .alias("tsc")
   .description("check if TypeScript code is well typed 🎨")
   .action(async function typecheckAction() {
-    const store = useStore();
+    const { appPkg } = ctx.value;
 
     try {
-      if (store.appPkg?.hasFile("tsconfig.json")) {
+      if (appPkg?.hasFile("tsconfig.json")) {
         await $`tsc --noEmit`;
       } else {
-        Log.info("No tsconfig.json found. Skipping type checking.");
+        Logger.info("No tsconfig.json found. Skipping type checking.");
       }
-    } catch {
+    } catch (error) {
+      Logger.error(error);
       process.exit(1);
     }
   })

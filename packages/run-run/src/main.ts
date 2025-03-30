@@ -1,18 +1,17 @@
-import { Log } from "@variableland/console";
 import { createProgram } from "./program";
-import { createStore, runContext } from "./store";
+import { createContextValue, ctx } from "./services/ctx";
+import { Logger } from "./services/logger";
 
 async function main(argv = process.argv) {
   try {
-    const program = createProgram();
+    const ctxValue = await createContextValue();
 
-    const store = await createStore();
-
-    await runContext(store, async () => {
+    await ctx.runContext(ctxValue, async () => {
+      const program = createProgram();
       await program.parseAsync(argv);
     });
   } catch (error) {
-    Log.error("Cannot run main successfully", error);
+    Logger.error("Cannot run main successfully", error);
     process.exit(1);
   }
 }

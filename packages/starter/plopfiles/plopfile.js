@@ -7,35 +7,41 @@ export default function configPlop(plop) {
     prompts: [
       {
         type: "input",
+        name: "template",
+        message: "Template:",
+      },
+      {
+        type: "input",
+        name: "folder",
+        message: "Template:",
+      },
+      {
+        type: "input",
         name: "name",
         message: "Name:",
+        default: (answers) => answers.folder,
       },
       {
         type: "input",
         name: "description",
         message: "Description:",
       },
-      {
-        type: "input",
-        name: "template",
-        message: "Template:",
-      },
     ],
     actions: [
       {
         type: "add",
-        path: "{{name}}/biome.json",
+        path: "{{folder}}/biome.json",
         templateFile: "templates/#common/biome.json.hbs",
       },
       {
         type: "add",
-        path: "{{name}}/.github/workflows/ci.yml",
+        path: "{{folder}}/.github/workflows/ci.yml",
         templateFile: "templates/#common/ci.yml.hbs",
       },
       // Add husky config folder
       {
         type: "addMany",
-        destination: "{{name}}",
+        destination: "{{folder}}",
         base: "templates/#common",
         templateFiles: ["templates/#common/.husky"],
         globOptions: {
@@ -45,7 +51,7 @@ export default function configPlop(plop) {
       // Add changeset config folder
       {
         type: "addMany",
-        destination: "{{name}}",
+        destination: "{{folder}}",
         base: "templates/#common",
         templateFiles: ["templates/#common/.changeset"],
         globOptions: {
@@ -55,7 +61,7 @@ export default function configPlop(plop) {
       // Add template specific files
       {
         type: "addMany",
-        destination: "{{name}}",
+        destination: "{{folder}}",
         base: "templates/{{template}}",
         templateFiles: ["templates/{{template}}/**"],
         globOptions: {

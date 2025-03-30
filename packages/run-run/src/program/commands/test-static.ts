@@ -1,6 +1,7 @@
+import { $ } from "@variableland/clibuddy";
 import { createCommand } from "commander";
 import isCI from "is-ci";
-import { $ } from "~/shell";
+import { Logger } from "~/services/logger";
 
 export const testStaticCommand = createCommand("test:static")
   .description("check format and lint issues ✅")
@@ -21,7 +22,8 @@ export const testStaticCommand = createCommand("test:static")
       }
 
       await $`${toolCmd(isCI ? "ci" : "check")}`;
-    } catch {
+    } catch (error) {
+      Logger.error(error);
       process.exit(1);
     }
   })

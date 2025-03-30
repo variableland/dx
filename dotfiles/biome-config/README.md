@@ -1,4 +1,4 @@
-# @variableland/biome-config
+# Biome Config
 
 ## Installation
 
