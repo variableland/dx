@@ -1,6 +1,6 @@
 {
   "name": "@variableland/starter",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "The CLI to init a new project in Variable Land",
   "homepage": "https://github.com/variableland/dx/tree/main/packages/starter#readme",
   "bugs": {
@@ -17,7 +17,11 @@
   "bin": {
     "vland": "./bin"
   },
-  "files": ["bin", "src", "plopfiles"],
+  "files": [
+    "bin",
+    "src",
+    "plopfiles"
+  ],
   "scripts": {
     "build": "bun build src/main.ts --outfile=dist/main.mjs --target=node --external=zx",
     "prepublishOnly": "bun run build",

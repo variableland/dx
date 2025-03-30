@@ -1,5 +1,11 @@
 # @variableland/clibuddy
 
+## 0.0.2
+
+### Patch Changes
+
+- [#47](https://github.com/variableland/dx/pull/47) [`1cb9b0f`](https://github.com/variableland/dx/commit/1cb9b0f919254d7022e87a766746b053a0603a60) Thanks [@rqbazan](https://github.com/rqbazan)! - Move from bun to fix publish script using pnpm
+
 ## 0.0.1
 
 ### Patch Changes
