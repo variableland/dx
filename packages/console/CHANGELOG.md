@@ -1,5 +1,11 @@
 # @variableland/console
 
+## 0.0.4
+
+### Patch Changes
+
+- [#54](https://github.com/variableland/dx/pull/54) [`ce1dfd2`](https://github.com/variableland/dx/commit/ce1dfd26e7f4ce66929054c2eb4aefaadeb761f0) Thanks [@rqbazan](https://github.com/rqbazan)! - Refactor name logger to console
+
 ## 0.0.3
 
 ### Patch Changes

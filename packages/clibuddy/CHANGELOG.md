@@ -1,5 +1,11 @@
 # @variableland/clibuddy
 
+## 0.0.3
+
+### Patch Changes
+
+- [#56](https://github.com/variableland/dx/pull/56) [`a0a50ae`](https://github.com/variableland/dx/commit/a0a50ae1ebdc205b41cab3c36043be1e41833d35) Thanks [@rqbazan](https://github.com/rqbazan)! - Move bin script to TS
+
 ## 0.0.2
 
 ### Patch Changes

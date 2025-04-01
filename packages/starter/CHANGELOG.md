@@ -1,5 +1,17 @@
 # @variableland/starter
 
+## 0.0.7
+
+### Patch Changes
+
+- [#54](https://github.com/variableland/dx/pull/54) [`ce1dfd2`](https://github.com/variableland/dx/commit/ce1dfd26e7f4ce66929054c2eb4aefaadeb761f0) Thanks [@rqbazan](https://github.com/rqbazan)! - Refactor name logger to console
+
+- [#56](https://github.com/variableland/dx/pull/56) [`a0a50ae`](https://github.com/variableland/dx/commit/a0a50ae1ebdc205b41cab3c36043be1e41833d35) Thanks [@rqbazan](https://github.com/rqbazan)! - Move bin script to TS
+
+- Updated dependencies [[`ce1dfd2`](https://github.com/variableland/dx/commit/ce1dfd26e7f4ce66929054c2eb4aefaadeb761f0), [`a0a50ae`](https://github.com/variableland/dx/commit/a0a50ae1ebdc205b41cab3c36043be1e41833d35)]:
+  - @variableland/console@0.0.4
+  - @variableland/clibuddy@0.0.3
+
 ## 0.0.6
 
 ### Patch Changes
