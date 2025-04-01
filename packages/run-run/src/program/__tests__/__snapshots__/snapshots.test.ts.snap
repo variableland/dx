@@ -1,6 +1,6 @@
-// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+// Bun Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`should match --help 1`] = `
+exports[`should match command: "help" 1`] = `
 "🦊 R U N - R U N: The CLI toolbox to fullstack common scripts in Variable Land 👊
 
 Usage: rr|run-run [options] [command]
@@ -28,19 +28,7 @@ Acknowledgment:
 "
 `;
 
-exports[`should match --version 1`] = `
-"0.0.0-test
-"
-`;
-
-exports[`should match -v 1`] = `
-"0.0.0-test
-"
-`;
-
-exports[`should match format command 1`] = `"biome format --no-errors-on-unmatched --colors=force"`;
-
-exports[`should match help 1`] = `
+exports[`should match command: "--help" 1`] = `
 "🦊 R U N - R U N: The CLI toolbox to fullstack common scripts in Variable Land 👊
 
 Usage: rr|run-run [options] [command]
@@ -68,20 +56,17 @@ Acknowledgment:
 "
 `;
 
-exports[`should match help message for clean 1`] = `
-"Usage: rr clean [options]
-
-delete dirty folders or files such as node_modules, etc 🗑️
-
-Options:
-  --only-dist  delete 'dist' folders only
-  -h, --help   display help for command
-
-Under the hood, this command uses the rimraf.js to delete dirty folders or files.
+exports[`should match command: "--version" 1`] = `
+"0.0.0-test
 "
 `;
 
-exports[`should match help message for format 1`] = `
+exports[`should match command: "-v" 1`] = `
+"0.0.0-test
+"
+`;
+
+exports[`should match help message for command "format" 1`] = `
 "Usage: rr format|fmt [options]
 
 format the code 🎨
@@ -95,19 +80,7 @@ Under the hood, this command uses the biome CLI to format the code.
 "
 `;
 
-exports[`should match help message for info:pkg 1`] = `
-"Usage: rr info:pkg [options]
-
-display run-run package.json ℹ️
-
-Options:
-  -f, --filter <filter>  lodash get id like to filter info by
-  -c, --current          display package.json where run-run will be executed
-  -h, --help             display help for command
-"
-`;
-
-exports[`should match help message for lint 1`] = `
+exports[`should match help message for command "lint" 1`] = `
 "Usage: rr lint [options]
 
 lint the code 🧹
@@ -121,7 +94,7 @@ Under the hood, this command uses the biome CLI to lint the code.
 "
 `;
 
-exports[`should match help message for test:static 1`] = `
+exports[`should match help message for command "test:static" 1`] = `
 "Usage: rr test:static [options]
 
 check format and lint issues ✅
@@ -135,7 +108,20 @@ Under the hood, this command uses the biome CLI to check the code.
 "
 `;
 
-exports[`should match help message for typecheck 1`] = `
+exports[`should match help message for command "clean" 1`] = `
+"Usage: rr clean [options]
+
+delete dirty folders or files such as node_modules, etc 🗑️
+
+Options:
+  --only-dist  delete 'dist' folders only
+  -h, --help   display help for command
+
+Under the hood, this command uses the rimraf.js to delete dirty folders or files.
+"
+`;
+
+exports[`should match help message for command "typecheck" 1`] = `
 "Usage: rr typecheck|tsc [options]
 
 check if TypeScript code is well typed 🎨
@@ -147,8 +133,22 @@ Under the hood, this command uses the TSC CLI to check the code.
 "
 `;
 
-exports[`should match lint command 1`] = `"biome check --colors=force --formatter-enabled=false"`;
+exports[`should match help message for command "info:pkg" 1`] = `
+"Usage: rr info:pkg [options]
 
-exports[`should match test:static command 1`] = `"biome check --colors=force"`;
+display run-run package.json ℹ️
 
-exports[`should match typecheck command 1`] = `"tsc --noEmit"`;
+Options:
+  -f, --filter <filter>  lodash get id like to filter info by
+  -c, --current          display package.json where run-run will be executed
+  -h, --help             display help for command
+"
+`;
+
+exports[`should match "format" command 1`] = `"biome format --no-errors-on-unmatched --colors=force"`;
+
+exports[`should match "lint" command 1`] = `"biome check --colors=force --formatter-enabled=false"`;
+
+exports[`should match "test:static" command 1`] = `"biome check --colors=force"`;
+
+exports[`should match "typecheck" command 1`] = `"tsc --noEmit"`;

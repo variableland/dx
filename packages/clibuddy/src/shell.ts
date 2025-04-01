@@ -4,7 +4,7 @@ import { $ as make$ } from "zx";
 export const isRaw = (arg: unknown): arg is { stdout: string } =>
   typeof arg === "object" && arg !== null && "stdout" in arg && typeof arg.stdout === "string";
 
-export const cwd = fs.realpathSync(process.env.PWD ?? process.cwd());
+export const cwd = fs.realpathSync(process.cwd());
 
 // Inspired by https://dub.sh/6tiHVgn
 export function quote(arg: string) {

@@ -1,15 +1,19 @@
-import { beforeEach, vi } from "vitest";
+import { mock } from "bun:test";
+import * as clibuddy from "@variableland/clibuddy";
 
-vi.mock("is-ci", () => ({ default: false }));
+// required to look the cli package.json up
+Bun.env.BIN_PATH = ".";
+// required to make the version command work independently of the package.json version
+Bun.env.VERSION = "0.0.0-test";
 
-vi.mock("@variableland/clibuddy", async (importActual) => {
-  const actual = await importActual<typeof import("@variableland/clibuddy")>();
+mock.module("is-ci", () => ({ default: false }));
 
-  const $ = vi.fn(function fakeShell(strs: string[], ...args: string[]) {
+mock.module("@variableland/clibuddy", async () => {
+  const $ = mock(function fakeShell(strs: string[], ...args: string[]) {
     let output = "";
     let argsIndex = 0;
 
-    const stringifyArg = (arg: unknown) => (actual.isRaw(arg) ? arg.stdout : arg);
+    const stringifyArg = (arg: unknown) => (clibuddy.isRaw(arg) ? arg.stdout : arg);
 
     for (const str of strs) {
       if (str === "") {
@@ -26,25 +30,7 @@ vi.mock("@variableland/clibuddy", async (importActual) => {
   });
 
   return {
-    ...actual,
+    ...clibuddy,
     $,
   };
-});
-
-vi.mock("@variableland/console", async (importActual) => {
-  const actual = await importActual<typeof import("@variableland/console")>();
-
-  return {
-    ...actual,
-    createLogger: vi.fn(() => ({
-      info: vi.fn(),
-      error: vi.fn(),
-      debug: vi.fn(),
-      subdebug: vi.fn(() => vi.fn()),
-    })),
-  };
-});
-
-beforeEach(() => {
-  vi.clearAllMocks();
 });

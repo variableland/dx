@@ -15,15 +15,14 @@
   "type": "module",
   "module": "src/main.ts",
   "bin": {
-    "rr": "./bin",
-    "run-run": "./bin"
+    "rr": "./bin.ts",
+    "run-run": "./bin.ts"
   },
   "files": ["dist", "plopfiles", "bin"],
   "scripts": {
     "build": "bun build src/main.ts --outfile=dist/main.mjs --target=node --external=zx",
     "prepublishOnly": "bun run build",
-    "test": "vitest run",
-    "test:coverage": "vitest run --coverage",
+    "test": "bun test",
     "typecheck": "rr tsc"
   },
   "dependencies": {

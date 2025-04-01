@@ -1,4 +1,4 @@
-import { expect, it } from "vitest";
+import { expect, it } from "bun:test";
 import { get } from "../get";
 
 it("should get the value when the key is found", () => {

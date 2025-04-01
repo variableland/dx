@@ -11,11 +11,11 @@ export const ctx = createContextService<ContextValue>();
 export async function createContextValue(): Promise<ContextValue> {
   const debug = console.subdebug("create-context-value");
 
-  if (!process.env.BIN_PATH) {
+  if (!Bun.env.BIN_PATH) {
     throw new Error("Required BIN_PATH env var");
   }
 
-  const binPath = fs.realpathSync(process.env.BIN_PATH);
+  const binPath = fs.realpathSync(Bun.env.BIN_PATH);
 
   debug("bin path %s", binPath);
 

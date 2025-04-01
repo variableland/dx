@@ -1,13 +1,17 @@
+import { afterEach, expect, test } from "bun:test";
 import { $ } from "@variableland/clibuddy";
-import { createTestProgram, execCli, parseProgram } from "test/helpers";
-import { expect, test, vi } from "vitest";
+import { createTestProgram, execCli, mocked, parseProgram } from "test/helpers";
 
 const { program } = createTestProgram();
 
 const rootCommands = ["help", "--help", "--version", "-v"];
 
+afterEach(() => {
+  mocked($).mockClear();
+});
+
 for (const cmd of rootCommands) {
-  test(`should match ${cmd}`, async () => {
+  test(`should match command: "${cmd}"`, async () => {
     const { stdout } = await execCli(cmd);
 
     expect(stdout).toMatchSnapshot();
@@ -17,7 +21,7 @@ for (const cmd of rootCommands) {
 for (const command of program.commands) {
   const cmd = command.name();
 
-  test(`should match help message for ${cmd}`, async () => {
+  test(`should match help message for command "${cmd}"`, async () => {
     const { stdout } = await execCli(`${cmd} --help`);
 
     expect(stdout).toMatchSnapshot();
@@ -35,10 +39,10 @@ const easyTesteableCommands = program.commands.filter((command) => {
 for (const command of easyTesteableCommands) {
   const cmd = command.name();
 
-  test(`should match ${cmd} command`, async () => {
+  test(`should match "${cmd}" command`, async () => {
     await parseProgram([cmd]);
 
-    expect(vi.mocked($)).toBeCalledTimes(1);
-    expect(vi.mocked($).mock.results[0]?.value).toMatchSnapshot();
+    expect($).toHaveBeenCalledTimes(1);
+    expect(mocked($).mock.results[0]?.value).toMatchSnapshot();
   });
 }
