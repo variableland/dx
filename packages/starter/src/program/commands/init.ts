@@ -3,8 +3,8 @@ import { join } from "node:path";
 import { $, cwd } from "@variableland/clibuddy";
 import { Argument, Option, createCommand } from "commander";
 import nodePlop from "node-plop";
+import { console } from "~/services/console";
 import { ctx } from "~/services/ctx";
-import { Logger } from "~/services/logger";
 import { PlopTemplateService } from "~/services/template";
 
 type InitOptions = {
@@ -28,7 +28,7 @@ export const initCommand = createCommand("init")
   .addOption(new Option("--no-git", "skip to create a git repository").default(true))
   .action(async function initAction(template: string, folder: string, options: InitOptions) {
     try {
-      const debug = Logger.subdebug("init");
+      const debug = console.subdebug("init");
 
       debug("template:", template);
       debug("options: %O", options);
@@ -47,7 +47,7 @@ export const initCommand = createCommand("init")
 
       const templateService = new PlopTemplateService(plop);
 
-      Logger.start("Generating project");
+      console.start("Generating project");
 
       await templateService.generate({
         template,
@@ -55,21 +55,21 @@ export const initCommand = createCommand("init")
         generatorId: META.GENERATOR_ID,
       });
 
-      Logger.success("Project generated");
+      console.success("Project generated");
 
       const $$ = $.quiet({ cwd: folderPath });
 
       if (options.git) {
-        Logger.start("Creating git repository");
+        console.start("Creating git repository");
 
         await $$`git init`;
         // NOTE: git commit -am failed, not sure why
         await $$`git add . && git commit -m "initial commit"`;
 
-        Logger.success("Git repository created");
+        console.success("Git repository created");
       }
     } catch (error) {
-      Logger.error(error);
+      console.error(error);
       process.exit(1);
     }
   })

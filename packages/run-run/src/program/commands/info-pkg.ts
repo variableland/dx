@@ -1,6 +1,6 @@
 import { createCommand } from "commander";
+import { console } from "~/services/console";
 import { ctx } from "~/services/ctx";
-import { Logger } from "~/services/logger";
 import { get } from "~/utils/get";
 
 export const infoPkgCommand = createCommand("info:pkg")
@@ -14,7 +14,7 @@ export const infoPkgCommand = createCommand("info:pkg")
       const infoObject = options.current ? appPkg.info() : binPkg.info();
 
       if (!options.filter) {
-        Logger.info("%O", infoObject);
+        console.info("%O", infoObject);
         return;
       }
 
@@ -22,13 +22,13 @@ export const infoPkgCommand = createCommand("info:pkg")
       const subInfoObject = get(infoObject.packageJson, filter);
 
       if (!subInfoObject) {
-        Logger.info("No info found");
+        console.info("No info found");
         return;
       }
 
-      Logger.info("%O", { [filter]: subInfoObject });
+      console.info("%O", { [filter]: subInfoObject });
     } catch (error) {
-      Logger.error(error);
+      console.error(error);
       process.exit(1);
     }
   });

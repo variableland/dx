@@ -1,5 +1,5 @@
 import type { NodePlopAPI } from "node-plop";
-import { Logger } from "./logger";
+import { console } from "./console";
 
 type GenerateOptions = {
   generatorId: string;
@@ -17,7 +17,7 @@ export class PlopTemplateService {
   async generate(options: GenerateOptions) {
     const { generatorId, template, folder } = options;
 
-    const debug = Logger.subdebug("generate");
+    const debug = console.subdebug("generate");
 
     const generator = this.#plop.getGenerator(generatorId);
 

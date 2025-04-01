@@ -5,7 +5,7 @@ import {
   createPkgService,
   cwd,
 } from "@variableland/clibuddy";
-import { Logger } from "./logger";
+import { console } from "./console";
 
 export type ContextValue = {
   binPkg: PkgService;
@@ -15,7 +15,7 @@ export type ContextValue = {
 export const ctx = createContextService<ContextValue>();
 
 export async function createContextValue(): Promise<ContextValue> {
-  const debug = Logger.subdebug("create-context-value");
+  const debug = console.subdebug("create-context-value");
 
   if (!process.env.BIN_PATH) {
     throw new Error("Required BIN_PATH env var");

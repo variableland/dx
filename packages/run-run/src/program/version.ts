@@ -1,8 +1,8 @@
 import pkg from "../../package.json";
-import { Logger } from "../services/logger";
+import { console } from "../services/console";
 
 export function getVersion() {
-  const debug = Logger.subdebug("get-version");
+  const debug = console.subdebug("get-version");
 
   const version = process.env.VERSION || pkg.version;
 
