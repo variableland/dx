@@ -1,5 +1,11 @@
 # @variableland/starter
 
+## 0.0.6
+
+### Patch Changes
+
+- [#51](https://github.com/variableland/dx/pull/51) [`17c3819`](https://github.com/variableland/dx/commit/17c3819b2d9f14357678dff95a5d88373e0a5883) Thanks [@rqbazan](https://github.com/rqbazan)! - Add initial commit
+
 ## 0.0.5
 
 ### Patch Changes

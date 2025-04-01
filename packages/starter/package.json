@@ -1,6 +1,6 @@
 {
   "name": "@variableland/starter",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "The CLI to init a new project in Variable Land",
   "homepage": "https://github.com/variableland/dx/tree/main/packages/starter#readme",
   "bugs": {
