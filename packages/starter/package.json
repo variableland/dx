@@ -15,7 +15,7 @@
   "type": "module",
   "module": "src/main.ts",
   "bin": {
-    "vland": "./bin"
+    "vland": "./bin.ts"
   },
   "files": ["dist", "bin", "src", "plopfiles"],
   "scripts": {
