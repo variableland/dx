@@ -7,7 +7,7 @@ export class ContextService<T> {
     this.#asyncLocalStorage = storage;
   }
 
-  runContext(store: T, callback: () => Promise<void>) {
+  runContext<R>(store: T, callback: () => Promise<R>) {
     return this.#asyncLocalStorage.run(store, callback);
   }
 

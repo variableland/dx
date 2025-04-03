@@ -1,12 +1,13 @@
 import { type Mock, mock } from "bun:test";
 import { exec } from "node:child_process";
 import { promisify } from "node:util";
-import { createProgram } from "../src/program";
 import { createContextValue, ctx } from "../src/services/ctx";
 
 const execAsync = promisify(exec);
 
-export function createTestProgram() {
+async function createProgram() {
+  const { createProgram } = await import("../src/program");
+
   const program = createProgram();
 
   const exitFn = mock();
@@ -28,18 +29,23 @@ export function createTestProgram() {
   };
 }
 
-export async function parseProgram(argv: string[]) {
-  const { program, ...other } = createTestProgram();
+export async function createTestProgram() {
+  const store = await createContextValue();
+  return ctx.runContext(store, createProgram);
+}
 
+export async function parseProgram(argv: string[]) {
   const store = await createContextValue();
 
-  await ctx.runContext(store, async () => {
-    await program.parseAsync(argv, {
+  return ctx.runContext(store, async () => {
+    const result = await createProgram();
+
+    await result.program.parseAsync(argv, {
       from: "user",
     });
-  });
 
-  return { program, ...other };
+    return result;
+  });
 }
 
 export function execCli(cmd: string) {

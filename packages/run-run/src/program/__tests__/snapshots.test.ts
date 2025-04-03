@@ -2,7 +2,7 @@ import { afterEach, expect, test } from "bun:test";
 import { $ } from "@variableland/clibuddy";
 import { createTestProgram, execCli, mocked, parseProgram } from "test/helpers";
 
-const { program } = createTestProgram();
+const { program } = await createTestProgram();
 
 const rootCommands = ["help", "--help", "--version", "-v"];
 

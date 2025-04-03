@@ -9,25 +9,11 @@ export class Console implements AnyConsole {
   #debug: DebugInstance;
   #consola: ConsolaInstance;
 
-  private constructor(options: ConsoleOptions) {
+  constructor(options: ConsoleOptions) {
     this.#options = options;
     this.#debug = createDebug(`${options.debugLabel}:root`);
     this.#consola = createConsola({
       formatOptions: options.formatOptions,
-    });
-  }
-
-  static create(options: CreateOptions) {
-    return new Console({
-      debugLabel: options.debugLabel,
-      formatOptions: {
-        ...DEFAULT_FORMAT_OPTIONS,
-        ...options.formatOptions,
-      },
-      formatters: {
-        ...DEFAULT_FORMATTERS,
-        ...options.formatters,
-      },
     });
   }
 
@@ -100,4 +86,18 @@ export class Console implements AnyConsole {
 
     return util.formatWithOptions(this.#options.formatOptions, formattedMessage, ...replacements);
   }
+}
+
+export function createConsole(options: CreateOptions) {
+  return new Console({
+    debugLabel: options.debugLabel,
+    formatOptions: {
+      ...DEFAULT_FORMAT_OPTIONS,
+      ...options.formatOptions,
+    },
+    formatters: {
+      ...DEFAULT_FORMATTERS,
+      ...options.formatters,
+    },
+  });
 }

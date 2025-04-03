@@ -1,5 +1,5 @@
-import { Console } from "@variableland/console";
+import { createConsole } from "@variableland/console";
 
-export const console = Console.create({
+export const console = createConsole({
   debugLabel: "run-run",
 });
