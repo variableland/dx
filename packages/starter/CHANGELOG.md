@@ -1,5 +1,15 @@
 # @variableland/starter
 
+## 0.0.9
+
+### Patch Changes
+
+- [#59](https://github.com/variableland/dx/pull/59) [`8a09c24`](https://github.com/variableland/dx/commit/8a09c24f3565aa03d6b884491b9ad7a639e5418b) Thanks [@rqbazan](https://github.com/rqbazan)! - Add `add` command to vland cli
+
+- Updated dependencies [[`8a09c24`](https://github.com/variableland/dx/commit/8a09c24f3565aa03d6b884491b9ad7a639e5418b)]:
+  - @variableland/clibuddy@0.0.4
+  - @variableland/console@0.0.5
+
 ## 0.0.8
 
 ### Patch Changes

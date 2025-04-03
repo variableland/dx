@@ -1,5 +1,11 @@
 # @variableland/clibuddy
 
+## 0.0.4
+
+### Patch Changes
+
+- [#59](https://github.com/variableland/dx/pull/59) [`8a09c24`](https://github.com/variableland/dx/commit/8a09c24f3565aa03d6b884491b9ad7a639e5418b) Thanks [@rqbazan](https://github.com/rqbazan)! - Add `add` command to vland cli
+
 ## 0.0.3
 
 ### Patch Changes
