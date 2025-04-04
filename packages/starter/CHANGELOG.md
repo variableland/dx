@@ -1,5 +1,11 @@
 # @variableland/starter
 
+## 0.0.10
+
+### Patch Changes
+
+- [#61](https://github.com/variableland/dx/pull/61) [`3e8eaad`](https://github.com/variableland/dx/commit/3e8eaad35b69d69303cb65839d3b7277d0a1c506) Thanks [@rqbazan](https://github.com/rqbazan)! - Support to add multiple configs at once
+
 ## 0.0.9
 
 ### Patch Changes
