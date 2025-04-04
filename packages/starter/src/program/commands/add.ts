@@ -20,9 +20,9 @@ function getConfigIdChoices() {
 
 export const addCommand = createCommand("add")
   .description("add config files to a project 📁")
-  .addArgument(new Argument("<configId>", "the config id to pick").choices(getConfigIdChoices()))
+  .addArgument(new Argument("<slug...>", "the config slugs to pick").choices(getConfigIdChoices()))
   .addOption(new Option("-d, --dest <string>", "destination path to create folder").default(cwd))
-  .action(async function addAction(configId: string, options: AddOptions) {
+  .action(async function addAction(slugs: string[], options: AddOptions) {
     try {
       const templateService = await createPlopTemplateService({
         destBasePath: options.dest,
@@ -32,7 +32,9 @@ export const addCommand = createCommand("add")
         templateService,
       });
 
-      await initAction.execute({ configId });
+      for (const configSlug of slugs) {
+        await initAction.execute({ configSlug });
+      }
     } catch (error) {
       console.error(error);
       process.exit(1);

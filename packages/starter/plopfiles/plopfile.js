@@ -48,16 +48,16 @@ export default function configPlop(plop) {
       // Intended to be completed by the program
       {
         type: "input",
-        name: "id",
-        message: "Id:",
+        name: "slug",
+        message: "Config slug:",
       },
     ],
     actions: [
       {
         type: "addMany",
         destination: ".",
-        base: "templates/plugins/{{id}}",
-        templateFiles: ["templates/plugins/{{id}}/**"],
+        base: "templates/plugins/{{slug}}",
+        templateFiles: ["templates/plugins/{{slug}}/**"],
         globOptions: {
           dot: true,
         },

@@ -10,20 +10,26 @@ type InitOptions = {
   git: boolean;
 };
 
+const DEFAULT_DEST = ".";
+
 export const initCommand = createCommand("init")
   .description("init a new project 🚀")
   .addArgument(new Argument("<template>", "the template to use").choices(["basic", "lib"]))
   .addArgument(
     new Argument("<folder>", "folder name where the project will be created. i.e: my-new-lib"),
   )
-  .addOption(new Option("-d, --dest <string>", "destination path to create folder").default(cwd))
+  .addOption(
+    new Option("-d, --dest <string>", "destination path to create folder").default(DEFAULT_DEST),
+  )
   .addOption(new Option("--no-git", "skip to create a git repository").default(true))
   .action(async function initAction(template: string, folder: string, options: InitOptions) {
     try {
-      const folderPath = join(options.dest, folder);
+      const destBasePath = options.dest === DEFAULT_DEST ? cwd : options.dest;
+
+      const folderPath = join(destBasePath, folder);
 
       const templateService = await createPlopTemplateService({
-        destBasePath: options.dest,
+        destBasePath,
       });
 
       const initAction = new InitAction({

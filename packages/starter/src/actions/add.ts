@@ -8,7 +8,7 @@ type CreateOptions = {
 };
 
 type ExecuteOptions = {
-  configId: string;
+  configSlug: string;
 };
 
 const GENERATOR_ID = "add";
@@ -23,17 +23,17 @@ export class AddAction implements AnyAction<ExecuteOptions> {
   }
 
   async execute(options: ExecuteOptions) {
-    const { configId } = options;
+    const { configSlug } = options;
 
     this.#debug("execute options: %O", options);
 
-    console.start("Adding config");
+    console.start(`Adding '${configSlug}' config`);
 
     await this.#templateService.generate({
       generatorId: GENERATOR_ID,
-      bypassArr: [configId],
+      bypassArr: [configSlug],
     });
 
-    console.success(`Added '${configId}' successfully`);
+    console.success(`Added '${configSlug}' successfully`);
   }
 }
