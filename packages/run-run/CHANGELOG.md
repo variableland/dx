@@ -1,5 +1,14 @@
 # @variableland/run-run
 
+## 0.4.9
+
+### Patch Changes
+
+- [#65](https://github.com/variableland/dx/pull/65) [`cf44a5b`](https://github.com/variableland/dx/commit/cf44a5b70b6e42f7378c53433c4372a1b469ac7d) Thanks [@rqbazan](https://github.com/rqbazan)! - Fix biome bin discover
+
+- Updated dependencies [[`cf44a5b`](https://github.com/variableland/dx/commit/cf44a5b70b6e42f7378c53433c4372a1b469ac7d)]:
+  - @variableland/clibuddy@0.0.5
+
 ## 0.4.8
 
 ### Patch Changes

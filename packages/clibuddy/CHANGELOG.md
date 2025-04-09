@@ -1,5 +1,11 @@
 # @variableland/clibuddy
 
+## 0.0.5
+
+### Patch Changes
+
+- [#65](https://github.com/variableland/dx/pull/65) [`cf44a5b`](https://github.com/variableland/dx/commit/cf44a5b70b6e42f7378c53433c4372a1b469ac7d) Thanks [@rqbazan](https://github.com/rqbazan)! - Add shell service
+
 ## 0.0.4
 
 ### Patch Changes
