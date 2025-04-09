@@ -12,7 +12,7 @@ The CLI to init a new project in Variable Land 👊
 pnpm add -g @variableland/starter
 ```
 
-It will adds the `vland` to your workspace
+It will adds the `vland` to your global workspace
 
 ## Usage
 

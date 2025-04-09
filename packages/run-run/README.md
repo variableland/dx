@@ -10,7 +10,7 @@ CLI toolbox to fullstack common scripts in Variable Land 👊
 
 - [Biome](https://biomejs.dev)
 - [TSC](https://www.typescriptlang.org)
-- [Plop.js](https://plopjs.com)
+- [rimraf](https://www.npmjs.com/package/rimraf)
 
 ## Installation
 
@@ -33,7 +33,7 @@ rr help
 
 ## Troubleshooting
 
-To enable debug mode, set the `DEBUG` environment variable to `vland:*` before running *any* command.
+To enable debug mode, set the `DEBUG` environment variable to `run-run:*` before running *any* command.
 
 ```sh
 DEBUG=run-run:* rr help
