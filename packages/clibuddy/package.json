@@ -19,6 +19,9 @@
       "import": "./dist/index.js",
       "require": "./dist/index.cjs",
       "default": "./dist/index.js"
+    },
+    "./test-helpers": {
+      "bun": "./test-helpers/index.ts"
     }
   },
   "main": "./dist/index.cjs",

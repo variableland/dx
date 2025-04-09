@@ -1,8 +1,8 @@
 import fs from "node:fs";
 import { basename } from "node:path";
-import { $ } from "@variableland/clibuddy";
 import type { DebugInstance } from "@variableland/console";
 import { console } from "~/services/console";
+import { $ } from "~/services/shell";
 import type { TemplateService } from "~/services/types";
 import type { AnyAction } from "./types";
 

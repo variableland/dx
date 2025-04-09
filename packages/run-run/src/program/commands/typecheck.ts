@@ -1,7 +1,7 @@
-import { $ } from "@variableland/clibuddy";
 import { createCommand } from "commander";
 import { console } from "~/services/console";
 import { ctx } from "~/services/ctx";
+import { $ } from "~/services/shell";
 
 export const typecheckCommand = createCommand("typecheck")
   .alias("tsc")

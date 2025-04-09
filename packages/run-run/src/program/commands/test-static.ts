@@ -1,7 +1,7 @@
-import { $ } from "@variableland/clibuddy";
 import { createCommand } from "commander";
 import isCI from "is-ci";
 import { console } from "~/services/console";
+import { $ } from "~/services/shell";
 
 export const testStaticCommand = createCommand("test:static")
   .description("check format and lint issues ✅")

@@ -1,6 +1,6 @@
-import { $ } from "@variableland/clibuddy";
 import { createCommand } from "commander";
 import { console } from "~/services/console";
+import { $ } from "~/services/shell";
 
 export const formatCommand = createCommand("format")
   .alias("fmt")
