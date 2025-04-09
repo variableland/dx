@@ -1,6 +1,6 @@
 # DX
 
-Monorepo to hold tools made for DX in Variable Land 👊
+Monorepo to hold tools made for DX ⚡
 
 ## Packages
 

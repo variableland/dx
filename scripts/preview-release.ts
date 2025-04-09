@@ -77,8 +77,8 @@ async function main() {
     throw new Error("PR_NUMBER environment variable is required");
   }
 
-  if (!Bun.env.NPM_TOKEN) {
-    throw new Error("NPM_TOKEN environment variable is required");
+  if (!Bun.env.AUTH_TOKEN) {
+    throw new Error("AUTH_TOKEN environment variable is required");
   }
 
   const changedPackages = await getChangedPackages();
@@ -96,11 +96,12 @@ async function main() {
       await bumpPackage(pkg, preid);
     }
   } catch (error) {
-    throw new Error("Failed to bump packages", { cause: error });
+    throw new Error("Failed to bump packages");
   }
 
   try {
-    await Bun.write(".npmrc", `//registry.npmjs.org/:_authToken=${Bun.env.NPM_TOKEN}`);
+    // Don't interpolate AUTH_TOKEN for security reasons
+    await Bun.write(".npmrc", "//registry.npmjs.org/:_authToken=${AUTH_TOKEN}");
 
     const tag = `pr-${Bun.env.PR_NUMBER}`;
 
@@ -108,7 +109,7 @@ async function main() {
       await publishPackage(pkg, tag);
     }
   } catch (error) {
-    throw new Error("Failed to publish packages", { cause: error });
+    throw new Error("Failed to publish packages");
   }
 }
 

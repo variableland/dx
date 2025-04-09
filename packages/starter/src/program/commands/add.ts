@@ -15,7 +15,7 @@ export const PLUGINS_PATH = join("plopfiles", "templates", "plugins");
 
 function getConfigIdChoices() {
   const pluginPath = join(ctx.value.binPkg.dirPath, PLUGINS_PATH);
-  return fs.readdirSync(pluginPath);
+  return fs.readdirSync(pluginPath).sort();
 }
 
 export const addCommand = createCommand("add")
