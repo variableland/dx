@@ -1,5 +1,11 @@
 # @variableland/starter
 
+## 0.0.11
+
+### Patch Changes
+
+- [#63](https://github.com/variableland/dx/pull/63) [`1744271`](https://github.com/variableland/dx/commit/17442716eb2b4f272a078e11f9a6665cceb992bb) Thanks [@rqbazan](https://github.com/rqbazan)! - Fix mise template
+
 ## 0.0.10
 
 ### Patch Changes
