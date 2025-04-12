@@ -1,5 +1,15 @@
 # @variableland/run-run
 
+## 0.4.11
+
+### Patch Changes
+
+- [#69](https://github.com/variableland/dx/pull/69) [`76b3bcd`](https://github.com/variableland/dx/commit/76b3bcd20ac29668f9eadbac18dbe57b63ef30fa) Thanks [@rqbazan](https://github.com/rqbazan)! - Refactor to integrate optional arguments with inquirer
+
+- Updated dependencies [[`76b3bcd`](https://github.com/variableland/dx/commit/76b3bcd20ac29668f9eadbac18dbe57b63ef30fa)]:
+  - @variableland/clibuddy@0.0.7
+  - @variableland/console@0.0.7
+
 ## 0.4.10
 
 ### Patch Changes

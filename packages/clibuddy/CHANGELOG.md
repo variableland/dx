@@ -1,5 +1,11 @@
 # @variableland/clibuddy
 
+## 0.0.7
+
+### Patch Changes
+
+- [#69](https://github.com/variableland/dx/pull/69) [`76b3bcd`](https://github.com/variableland/dx/commit/76b3bcd20ac29668f9eadbac18dbe57b63ef30fa) Thanks [@rqbazan](https://github.com/rqbazan)! - Refactor to integrate optional arguments with inquirer
+
 ## 0.0.6
 
 ### Patch Changes

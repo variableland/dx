@@ -1,6 +1,6 @@
 {
   "name": "@variableland/run-run",
-  "version": "0.4.10",
+  "version": "0.4.11",
   "description": "The CLI toolbox to fullstack common scripts in Variable Land",
   "homepage": "https://github.com/variableland/dx/tree/main/packages/run-run#readme",
   "bugs": {
