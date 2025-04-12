@@ -1,5 +1,11 @@
 # @variableland/console
 
+## 0.0.6
+
+### Patch Changes
+
+- [`31fd686`](https://github.com/variableland/dx/commit/31fd686ea5f4b90e6685bfcd486d910ba622a7c8) Thanks [@rqbazan](https://github.com/rqbazan)! - Change tsconfig.json
+
 ## 0.0.5
 
 ### Patch Changes

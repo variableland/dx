@@ -1,5 +1,13 @@
 # @variableland/run-run
 
+## 0.4.10
+
+### Patch Changes
+
+- Updated dependencies [[`31fd686`](https://github.com/variableland/dx/commit/31fd686ea5f4b90e6685bfcd486d910ba622a7c8)]:
+  - @variableland/clibuddy@0.0.6
+  - @variableland/console@0.0.6
+
 ## 0.4.9
 
 ### Patch Changes
