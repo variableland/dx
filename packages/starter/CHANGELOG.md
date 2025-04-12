@@ -1,5 +1,11 @@
 # @variableland/starter
 
+## 0.0.16
+
+### Patch Changes
+
+- [#73](https://github.com/variableland/dx/pull/73) [`e53c65c`](https://github.com/variableland/dx/commit/e53c65cbb2eca4a8191a4cc63f5ce4a072a9bdb3) Thanks [@rqbazan](https://github.com/rqbazan)! - Fix git init
+
 ## 0.0.15
 
 ### Patch Changes
