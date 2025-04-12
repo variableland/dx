@@ -17,24 +17,24 @@ export class Console implements AnyConsole {
     });
   }
 
-  info(message: string, ...args: unknown[]) {
-    this.#consola.info(this.#format(message, ...args));
+  info(...args: unknown[]) {
+    this.#consola.info(this.#format(...args));
   }
 
-  start(message: string, ...args: unknown[]) {
-    this.#consola.start(this.#format(message, ...args));
+  start(...args: unknown[]) {
+    this.#consola.start(this.#format(...args));
   }
 
-  success(message: string, ...args: unknown[]) {
-    this.#consola.success(this.#format(message, ...args));
+  success(...args: unknown[]) {
+    this.#consola.success(this.#format(...args));
   }
 
   error(messageOrError: string | unknown, ...args: unknown[]) {
     this.#consola.error(messageOrError, ...args);
   }
 
-  warn(message: string, ...args: unknown[]) {
-    this.#consola.warn(this.#format(message, ...args));
+  warn(...args: unknown[]) {
+    this.#consola.warn(this.#format(...args));
   }
 
   subdebug(label: string) {

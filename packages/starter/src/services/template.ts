@@ -8,6 +8,7 @@ import type { GenerateOptions, TemplateService } from "./types";
 
 type CreateOptions = {
   destBasePath: string;
+  force: boolean;
 };
 
 export class PlopTemplateService implements TemplateService {
@@ -37,13 +38,15 @@ export class PlopTemplateService implements TemplateService {
     if (results.failures.length > 0) {
       throw new Error("Can't generate files");
     }
+
+    return { answers };
   }
 }
 
-const PLOP_CONFIG_PATH = join("plopfiles", "plopfile.js");
+const PLOP_CONFIG_PATH = join("plopfiles", "plopfile.ts");
 
 export async function createPlopTemplateService(options: CreateOptions) {
-  const { destBasePath } = options;
+  const { force, destBasePath } = options;
 
   const debug = console.subdebug("create-plop-template-service");
 
@@ -54,8 +57,8 @@ export async function createPlopTemplateService(options: CreateOptions) {
   debug("plop config path:", configPath);
 
   const plop = await nodePlop(configPath, {
-    force: false,
-    destBasePath: destBasePath,
+    force,
+    destBasePath,
   });
 
   return new PlopTemplateService(plop);

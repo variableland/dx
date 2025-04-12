@@ -22,8 +22,6 @@ export class ContextService<T> {
   }
 }
 
-export function createContextService<T>(
-  storage: AsyncLocalStorage<T> = new AsyncLocalStorage<T>(),
-): ContextService<T> {
+export function createContextService<T>(storage: AsyncLocalStorage<T> = new AsyncLocalStorage<T>()): ContextService<T> {
   return new ContextService<T>(storage);
 }

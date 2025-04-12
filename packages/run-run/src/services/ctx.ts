@@ -1,10 +1,5 @@
 import fs from "node:fs";
-import {
-  type PkgService,
-  createContextService,
-  createPkgService,
-  cwd,
-} from "@variableland/clibuddy";
+import { type PkgService, createContextService, createPkgService, cwd } from "@variableland/clibuddy";
 import { console } from "./console";
 
 export type ContextValue = {

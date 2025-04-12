@@ -1,27 +1,20 @@
-/**
- * @param {import("node-plop").NodePlopAPI} plop
- */
-export default function configPlop(plop) {
+import type { NodePlopAPI } from "node-plop";
+import { configService } from "~/services/config";
+
+export default function configPlop(plop: NodePlopAPI) {
   plop.setGenerator("init", {
     description: "Initialize a project based on a predefined template",
     prompts: [
-      // Intended to be completed by the program
       {
-        type: "input",
+        type: "list",
         name: "template",
         message: "Template:",
+        choices: configService.getTemplateChoices(),
       },
-      {
-        type: "input",
-        name: "folder",
-        message: "Folder:",
-      },
-      // Intended to be completed by the user
       {
         type: "input",
         name: "name",
         message: "Name:",
-        default: (answers) => answers.folder,
       },
       {
         type: "input",
@@ -32,7 +25,16 @@ export default function configPlop(plop) {
     actions: [
       {
         type: "addMany",
-        destination: "{{folder}}",
+        destination: ".",
+        base: "templates/#common",
+        templateFiles: ["templates/#common/**"],
+        globOptions: {
+          dot: true,
+        },
+      },
+      {
+        type: "addMany",
+        destination: ".",
         base: "templates/{{template}}",
         templateFiles: ["templates/{{template}}/**"],
         globOptions: {
@@ -45,23 +47,24 @@ export default function configPlop(plop) {
   plop.setGenerator("add", {
     description: "Add config file(s) to a project",
     prompts: [
-      // Intended to be completed by the program
       {
-        type: "input",
-        name: "slug",
-        message: "Config slug:",
+        type: "checkbox",
+        name: "slugs",
+        message: "Select configs:",
+        choices: configService.getPluginChoices(),
       },
     ],
-    actions: [
-      {
+    actions: (answers: unknown) => {
+      // @ts-expect-error
+      return answers.slugs.map((slug) => ({
         type: "addMany",
         destination: ".",
-        base: "templates/plugins/{{slug}}",
-        templateFiles: ["templates/plugins/{{slug}}/**"],
+        base: `plugins/${slug}`,
+        templateFiles: [`plugins/${slug}/**`],
         globOptions: {
           dot: true,
         },
-      },
-    ],
+      }));
+    },
   });
 }

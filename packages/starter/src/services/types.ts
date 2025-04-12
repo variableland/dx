@@ -3,6 +3,10 @@ export type GenerateOptions = {
   bypassArr?: string[];
 };
 
+export type GenerateResult<T> = {
+  answers: T;
+};
+
 export type TemplateService = {
-  generate: (options: GenerateOptions) => Promise<void>;
+  generate: <R>(options: GenerateOptions) => Promise<GenerateResult<R>>;
 };

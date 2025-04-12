@@ -24,8 +24,8 @@
     "typecheck": "rr tsc"
   },
   "dependencies": {
-    "@variableland/console": "workspace:*",
     "@variableland/clibuddy": "workspace:*",
+    "@variableland/console": "workspace:*",
     "commander": "13.1.0",
     "node-plop": "0.32.0"
   },

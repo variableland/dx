@@ -1,5 +1,3 @@
-import fs from "node:fs";
-import { basename } from "node:path";
 import type { DebugInstance } from "@variableland/console";
 import { console } from "~/services/console";
 import { $ } from "~/services/shell";
@@ -7,9 +5,9 @@ import type { TemplateService } from "~/services/types";
 import type { AnyAction } from "./types";
 
 type ExecuteOptions = {
-  template: string;
-  folderPath: string;
+  template?: string;
   git: boolean;
+  destBasePath: string;
 };
 
 type CreateOptions = {
@@ -28,33 +26,39 @@ export class InitAction implements AnyAction<ExecuteOptions> {
   }
 
   async execute(options: ExecuteOptions) {
-    const { template, folderPath, git } = options;
+    const { destBasePath, git } = options;
 
     this.#debug("execute options: %O", options);
 
-    if (!(await Bun.file(folderPath).exists())) {
-      await fs.promises.mkdir(folderPath, { recursive: true });
-    }
-
-    console.start("Generating project");
+    const bypassArr = this.#getBypassArr(options);
 
     await this.#templateService.generate({
+      bypassArr,
       generatorId: GENERATOR_ID,
-      bypassArr: [template, basename(folderPath)],
     });
 
-    console.success("Project generated");
-
-    const $$ = $.quiet({ cwd: folderPath });
+    console.success("Project generated 🎉");
 
     if (git) {
       console.start("Creating git repository");
 
-      await $$`git init`;
+      await $.quiet`git init`;
       // NOTE: git commit -am failed, not sure why
-      await $$`git add . && git commit -m "initial commit"`;
+      await $.quiet`git add . && git commit -m "initial commit"`;
 
       console.success("Git repository created");
     }
+  }
+
+  #getBypassArr(options: ExecuteOptions) {
+    const { template } = options;
+
+    const bypassArr: string[] = [];
+
+    if (template) {
+      bypassArr[0] = template;
+    }
+
+    return bypassArr;
   }
 }

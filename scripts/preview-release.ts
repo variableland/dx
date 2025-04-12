@@ -45,9 +45,7 @@ async function getChangedPackages() {
 
   const packages = getWorkspacesPackages(pnpmWorkspace.packages);
 
-  const changedPaths = (await $`git fetch origin main && git diff --name-only origin/main`.text())
-    .trim()
-    .split("\n");
+  const changedPaths = (await $`git fetch origin main && git diff --name-only origin/main`.text()).trim().split("\n");
 
   return packages.filter((pkg) => changedPaths.some((file) => file.startsWith(pkg)));
 }

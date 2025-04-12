@@ -1,34 +1,29 @@
-import { join } from "node:path";
+import path from "node:path";
 import { cwd } from "@variableland/clibuddy";
 import { Argument, Option, createCommand } from "commander";
 import { InitAction } from "~/actions/init";
+import { configService } from "~/services/config";
 import { console } from "~/services/console";
 import { createPlopTemplateService } from "~/services/template";
 
 type InitOptions = {
   dest: string;
   git: boolean;
+  force: boolean;
 };
-
-const DEFAULT_DEST = ".";
 
 export const initCommand = createCommand("init")
   .description("init a new project 🚀")
-  .addArgument(new Argument("<template>", "the template to use").choices(["basic", "lib"]))
-  .addArgument(
-    new Argument("<folder>", "folder name where the project will be created. i.e: my-new-lib"),
-  )
-  .addOption(
-    new Option("-d, --dest <string>", "destination path to create folder").default(DEFAULT_DEST),
-  )
+  .addArgument(new Argument("[template]", "the template to use").choices(configService.getTemplateChoices()))
+  .addOption(new Option("-d, --dest [string]", "destination path to create folder (default: cwd)"))
   .addOption(new Option("--no-git", "skip to create a git repository").default(true))
-  .action(async function initAction(template: string, folder: string, options: InitOptions) {
+  .addOption(new Option("-f, --force", "override existing files").default(false))
+  .action(async function initAction(template: string | undefined, options: InitOptions) {
     try {
-      const destBasePath = options.dest === DEFAULT_DEST ? cwd : options.dest;
-
-      const folderPath = join(destBasePath, folder);
+      const { dest: destBasePath = cwd, force } = options;
 
       const templateService = await createPlopTemplateService({
+        force,
         destBasePath,
       });
 
@@ -38,7 +33,7 @@ export const initCommand = createCommand("init")
 
       await initAction.execute({
         template,
-        folderPath,
+        destBasePath,
         ...options,
       });
     } catch (error) {

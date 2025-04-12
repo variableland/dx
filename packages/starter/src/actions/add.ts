@@ -8,7 +8,7 @@ type CreateOptions = {
 };
 
 type ExecuteOptions = {
-  configSlug: string;
+  slugs: string[];
 };
 
 const GENERATOR_ID = "add";
@@ -23,17 +23,27 @@ export class AddAction implements AnyAction<ExecuteOptions> {
   }
 
   async execute(options: ExecuteOptions) {
-    const { configSlug } = options;
-
     this.#debug("execute options: %O", options);
 
-    console.start(`Adding '${configSlug}' config`);
+    const bypassArr = this.#getBypassArr(options);
 
     await this.#templateService.generate({
+      bypassArr,
       generatorId: GENERATOR_ID,
-      bypassArr: [configSlug],
     });
 
-    console.success(`Added '${configSlug}' successfully`);
+    console.success("Added successfully 🎉");
+  }
+
+  #getBypassArr(options: ExecuteOptions) {
+    const { slugs } = options;
+
+    const bypassArr: string[] = [];
+
+    if (slugs.length) {
+      bypassArr[0] = slugs.join(",");
+    }
+
+    return bypassArr;
   }
 }

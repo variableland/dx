@@ -41,7 +41,4 @@ export const cleanCommand = createCommand("clean")
       process.exit(1);
     }
   })
-  .addHelpText(
-    "afterAll",
-    "\nUnder the hood, this command uses the rimraf.js to delete dirty folders or files.",
-  );
+  .addHelpText("afterAll", "\nUnder the hood, this command uses the rimraf.js to delete dirty folders or files.");
