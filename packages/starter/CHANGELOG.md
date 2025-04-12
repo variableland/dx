@@ -1,5 +1,11 @@
 # @variableland/starter
 
+## 0.0.15
+
+### Patch Changes
+
+- [#71](https://github.com/variableland/dx/pull/71) [`fbd0ad3`](https://github.com/variableland/dx/commit/fbd0ad3372f3ad76920aa3b0a5288d358611ee39) Thanks [@rqbazan](https://github.com/rqbazan)! - Move fully to TS
+
 ## 0.0.14
 
 ### Patch Changes
