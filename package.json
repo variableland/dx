@@ -4,13 +4,13 @@
   "private": true,
   "scripts": {
     "build": "turbo build",
-    "rr": "ENV=dev rr",
-    "vland": "ENV=dev vland",
+    "rr": "rr",
+    "vland": "vland",
     "prepare": "husky",
     "preview:release": "./scripts/preview-release.ts",
     "test": "turbo test",
     "test:coverage": "turbo test:coverage",
-    "typecheck": "ENV=dev turbo typecheck"
+    "typecheck": "turbo typecheck"
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.5.1",
