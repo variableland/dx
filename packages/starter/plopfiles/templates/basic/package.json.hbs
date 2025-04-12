@@ -17,11 +17,16 @@
   "devDependencies": {
     "@total-typescript/tsconfig": "1.0.4",
     "@types/bun": "1.2.9",
-    "@variableland/run-run": "latest",
-    "@variableland/biome-config": "latest"
+    "@variableland/biome-config": "latest",
+    "@variableland/run-run": "latest"
   },
   "engines": {
     "bun": ">=1.0.0"
   },
-  "packageManager": "pnpm@10.6.4"
+  "packageManager": "pnpm@10.6.4",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@biomejs/biome"
+    ]
+  }
 }
