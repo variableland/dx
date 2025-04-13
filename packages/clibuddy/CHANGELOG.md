@@ -1,5 +1,13 @@
 # @variableland/clibuddy
 
+## 0.0.8
+
+### Patch Changes
+
+- [#79](https://github.com/variableland/dx/pull/79) [`a874cd4`](https://github.com/variableland/dx/commit/a874cd4829db6609d8d4811055110b6a26920d37) Thanks [@rqbazan](https://github.com/rqbazan)! - Don't use async context
+
+- [#82](https://github.com/variableland/dx/pull/82) [`16461dd`](https://github.com/variableland/dx/commit/16461dd806b253db70fb7cce71def39d56d0feb1) Thanks [@rqbazan](https://github.com/rqbazan)! - Don't use async context in run-run
+
 ## 0.0.7
 
 ### Patch Changes

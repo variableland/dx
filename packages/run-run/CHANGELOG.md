@@ -1,5 +1,17 @@
 # @variableland/run-run
 
+## 0.4.13
+
+### Patch Changes
+
+- [#81](https://github.com/variableland/dx/pull/81) [`21d16b1`](https://github.com/variableland/dx/commit/21d16b166391181ae9d40f3effe2daf4583b776a) Thanks [@rqbazan](https://github.com/rqbazan)! - Add @variableland/loggy
+
+- [#82](https://github.com/variableland/dx/pull/82) [`16461dd`](https://github.com/variableland/dx/commit/16461dd806b253db70fb7cce71def39d56d0feb1) Thanks [@rqbazan](https://github.com/rqbazan)! - Don't use async context in run-run
+
+- Updated dependencies [[`a874cd4`](https://github.com/variableland/dx/commit/a874cd4829db6609d8d4811055110b6a26920d37), [`21d16b1`](https://github.com/variableland/dx/commit/21d16b166391181ae9d40f3effe2daf4583b776a), [`16461dd`](https://github.com/variableland/dx/commit/16461dd806b253db70fb7cce71def39d56d0feb1)]:
+  - @variableland/clibuddy@0.0.8
+  - @variableland/loggy@0.0.1
+
 ## 0.4.12
 
 ### Patch Changes
