@@ -1,5 +1,11 @@
 # @variableland/starter
 
+## 0.0.18
+
+### Patch Changes
+
+- [#77](https://github.com/variableland/dx/pull/77) [`55c0048`](https://github.com/variableland/dx/commit/55c00486a0b35d435a6f33f1bf652fff134b7cac) Thanks [@rqbazan](https://github.com/rqbazan)! - Add validation to select at least one option
+
 ## 0.0.17
 
 ### Patch Changes
