@@ -1,5 +1,11 @@
 # @variableland/starter
 
+## 0.0.17
+
+### Patch Changes
+
+- [#75](https://github.com/variableland/dx/pull/75) [`83ebdb1`](https://github.com/variableland/dx/commit/83ebdb1679d2042296d29c61b1cab398210e68ae) Thanks [@rqbazan](https://github.com/rqbazan)! - Improve templates
+
 ## 0.0.16
 
 ### Patch Changes
