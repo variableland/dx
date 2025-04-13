@@ -1,6 +1,6 @@
+import type { ShellService } from "@variableland/clibuddy";
 import type { DebugInstance } from "@variableland/console";
 import { console } from "~/services/console";
-import { $ } from "~/services/shell";
 import type { TemplateService } from "~/services/types";
 import type { AnyAction } from "./types";
 
@@ -12,16 +12,19 @@ type ExecuteOptions = {
 
 type CreateOptions = {
   templateService: TemplateService;
+  shellService: ShellService;
 };
 
 const GENERATOR_ID = "init";
 
 export class InitAction implements AnyAction<ExecuteOptions> {
-  #templateService: TemplateService;
   #debug: DebugInstance;
+  #templateService: TemplateService;
+  #shellService: ShellService;
 
-  constructor({ templateService }: CreateOptions) {
+  constructor({ templateService, shellService }: CreateOptions) {
     this.#templateService = templateService;
+    this.#shellService = shellService;
     this.#debug = console.subdebug("init-action");
   }
 
@@ -39,6 +42,7 @@ export class InitAction implements AnyAction<ExecuteOptions> {
 
     console.success("Project generated 🎉");
 
+    const $ = this.#shellService.$;
     const $$ = $.quiet({ cwd: destBasePath });
 
     if (git) {

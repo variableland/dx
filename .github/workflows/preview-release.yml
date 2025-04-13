@@ -12,7 +12,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  release:
+  preview-release:
     runs-on: ubuntu-latest
 
     if: ${{ startsWith(github.head_ref, 'feat') || startsWith(github.head_ref, 'fix') }}

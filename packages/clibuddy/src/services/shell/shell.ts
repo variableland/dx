@@ -1,9 +1,11 @@
-import { type Options, type Shell, $ as make$ } from "zx";
+import { type Options as ZxOptions, type Shell as ZxShell, $ as make$ } from "zx";
 
-type ShellOptions = Partial<Options>;
+type ShellOptions = Partial<ZxOptions>;
+
+export type Shell = ZxShell & { quiet: ZxShell };
 
 export class ShellService {
-  #shell: Shell & { quiet: Shell };
+  #shell: Shell;
 
   constructor(options: ShellOptions) {
     this.#shell = Object.assign(make$(options), {

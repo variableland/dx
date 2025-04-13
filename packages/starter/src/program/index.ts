@@ -1,16 +1,20 @@
 import { getVersion } from "@variableland/clibuddy";
 import { Command } from "commander";
-import { ctx } from "~/services/ctx";
-import { addCommand } from "./commands/add";
-import { initCommand } from "./commands/init";
+import { createContext } from "~/services/ctx";
+import { createAddCommand } from "./commands/add";
+import { createInitCommand } from "./commands/init";
 import { BANNER_TEXT } from "./ui";
 
-export function createProgram() {
-  const version = getVersion(ctx.value.binPkg);
+export type Options = {
+  binDir: string;
+};
+
+export async function createProgram(options: Options) {
+  const ctx = await createContext(options.binDir);
 
   return new Command("vland")
-    .version(version, "-v, --version")
+    .version(getVersion(ctx.binPkg), "-v, --version")
     .addHelpText("before", BANNER_TEXT)
-    .addCommand(initCommand)
-    .addCommand(addCommand);
+    .addCommand(createInitCommand(ctx))
+    .addCommand(createAddCommand(ctx));
 }

@@ -3,10 +3,10 @@ import type { DebugInstance } from "@variableland/console";
 import type { NodePlopAPI } from "node-plop";
 import nodePlop from "node-plop";
 import { console } from "./console";
-import { ctx } from "./ctx";
 import type { GenerateOptions, TemplateService } from "./types";
 
 type CreateOptions = {
+  basePath: string;
   destBasePath: string;
   force: boolean;
 };
@@ -52,7 +52,7 @@ export async function createPlopTemplateService(options: CreateOptions) {
 
   debug("options: %O", options);
 
-  const configPath = join(ctx.value.binPkg.dirPath, PLOP_CONFIG_PATH);
+  const configPath = join(options.basePath, PLOP_CONFIG_PATH);
 
   debug("plop config path:", configPath);
 

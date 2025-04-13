@@ -1,8 +1,13 @@
 import fs from "node:fs";
 import { join } from "node:path";
-import { ctx } from "~/services/ctx";
 
 export class ConfigService {
+  #baseDir: string;
+
+  constructor(baseDir = "") {
+    this.#baseDir = baseDir;
+  }
+
   getPluginChoices() {
     const folderPath = this.#getPlopFolderDir("plugins");
     return fs.readdirSync(folderPath).sort();
@@ -18,8 +23,6 @@ export class ConfigService {
   }
 
   #getPlopFolderDir(folder: string) {
-    return join(ctx.value.binPkg.dirPath, join("plopfiles", folder));
+    return join(this.#baseDir, join("plopfiles", folder));
   }
 }
-
-export const configService = new ConfigService();
