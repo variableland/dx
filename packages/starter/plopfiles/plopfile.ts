@@ -2,6 +2,14 @@ import type { NodePlopAPI } from "node-plop";
 import { configService } from "~/services/config";
 
 export default function configPlop(plop: NodePlopAPI) {
+  function atLeastOne(answer: string[]) {
+    if (answer.length === 0) {
+      return "At least one option must be selected";
+    }
+
+    return true;
+  }
+
   plop.setGenerator("init", {
     description: "Initialize a project based on a predefined template",
     prompts: [
@@ -10,6 +18,7 @@ export default function configPlop(plop: NodePlopAPI) {
         name: "template",
         message: "Template:",
         choices: configService.getTemplateChoices(),
+        validate: atLeastOne,
       },
       {
         type: "input",
@@ -52,6 +61,7 @@ export default function configPlop(plop: NodePlopAPI) {
         name: "slugs",
         message: "Select configs:",
         choices: configService.getPluginChoices(),
+        validate: atLeastOne,
       },
     ],
     actions: (answers: unknown) => {
