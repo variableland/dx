@@ -1,5 +1,11 @@
 # @variableland/starter
 
+## 0.0.20
+
+### Patch Changes
+
+- [#83](https://github.com/variableland/dx/pull/83) [`53d3595`](https://github.com/variableland/dx/commit/53d359541b97a41d59e632fd2ccb4ad15f99399b) Thanks [@rqbazan](https://github.com/rqbazan)! - Fix husky generated file names
+
 ## 0.0.19
 
 ### Patch Changes
