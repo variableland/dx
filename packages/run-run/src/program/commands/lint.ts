@@ -1,5 +1,5 @@
 import { createCommand } from "commander";
-import { console } from "~/services/console";
+import { logger } from "~/services/logger";
 import { $ } from "~/services/shell";
 
 export const lintCommand = createCommand("lint")
@@ -19,7 +19,7 @@ export const lintCommand = createCommand("lint")
         await $`${toolCmd}`;
       }
     } catch (error) {
-      console.error(error);
+      logger.error(error);
       process.exit(1);
     }
   })

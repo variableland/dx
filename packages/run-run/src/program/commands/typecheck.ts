@@ -1,6 +1,6 @@
 import { createCommand } from "commander";
-import { console } from "~/services/console";
 import { ctx } from "~/services/ctx";
+import { logger } from "~/services/logger";
 import { $ } from "~/services/shell";
 
 export const typecheckCommand = createCommand("typecheck")
@@ -13,10 +13,10 @@ export const typecheckCommand = createCommand("typecheck")
       if (appPkg?.hasFile("tsconfig.json")) {
         await $`tsc --noEmit`;
       } else {
-        console.info("No tsconfig.json found. Skipping type checking.");
+        logger.info("No tsconfig.json found. Skipping type checking.");
       }
     } catch (error) {
-      console.error(error);
+      logger.error(error);
       process.exit(1);
     }
   })

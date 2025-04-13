@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@variableland/clibuddy": "workspace:*",
-    "@variableland/console": "workspace:*",
+    "@variableland/loggy": "workspace:*",
     "commander": "13.1.0",
     "node-plop": "0.32.0"
   },

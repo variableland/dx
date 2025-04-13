@@ -1,6 +1,6 @@
 import { createCommand } from "commander";
 import isCI from "is-ci";
-import { console } from "~/services/console";
+import { logger } from "~/services/logger";
 import { $ } from "~/services/shell";
 
 export const testStaticCommand = createCommand("test:static")
@@ -23,7 +23,7 @@ export const testStaticCommand = createCommand("test:static")
 
       await $`${toolCmd(isCI ? "ci" : "check")}`;
     } catch (error) {
-      console.error(error);
+      logger.error(error);
       process.exit(1);
     }
   })

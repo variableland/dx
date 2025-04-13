@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import { type PkgService, createContextService, createPkgService, cwd } from "@variableland/clibuddy";
-import { console } from "./console";
+import { logger } from "./logger";
 
 export type ContextValue = {
   binPkg: PkgService;
@@ -10,7 +10,7 @@ export type ContextValue = {
 export const ctx = createContextService<ContextValue>();
 
 export async function createContextValue(): Promise<ContextValue> {
-  const debug = console.subdebug("create-context-value");
+  const debug = logger.subdebug("create-context-value");
 
   if (!Bun.env.BIN_PATH) {
     throw new Error("Required BIN_PATH env var");

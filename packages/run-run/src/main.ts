@@ -1,5 +1,5 @@
-import { console } from "./services/console";
 import { createContextValue, ctx } from "./services/ctx";
+import { logger } from "./services/logger";
 
 async function main(argv = process.argv) {
   try {
@@ -11,7 +11,7 @@ async function main(argv = process.argv) {
       await program.parseAsync(argv);
     });
   } catch (error) {
-    console.error("Cannot run main successfully", error);
+    logger.error("Cannot run main successfully", error);
     process.exit(1);
   }
 }

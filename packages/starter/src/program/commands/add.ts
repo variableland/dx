@@ -1,8 +1,8 @@
 import { cwd } from "@variableland/clibuddy";
 import { Argument, Option, createCommand } from "commander";
 import { AddAction } from "~/actions/add";
-import { console } from "~/services/console";
 import type { ContextValue } from "~/services/ctx";
+import { logger } from "~/services/logger";
 import { createPlopTemplateService } from "~/services/template";
 
 type AddOptions = {
@@ -32,7 +32,7 @@ export function createAddCommand(ctx: ContextValue) {
 
         await addAction.execute({ slugs });
       } catch (error) {
-        console.error(error);
+        logger.error(error);
         process.exit(1);
       }
     })

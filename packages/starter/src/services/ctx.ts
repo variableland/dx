@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import { type PkgService, type ShellService, createPkgService, createShellService } from "@variableland/clibuddy";
 import { ConfigService } from "./config";
-import { console } from "./console";
+import { logger } from "./logger";
 
 export type ContextValue = {
   binPkg: PkgService;
@@ -10,7 +10,7 @@ export type ContextValue = {
 };
 
 export async function createContext(binDir: string): Promise<ContextValue> {
-  const debug = console.subdebug("create-context-value");
+  const debug = logger.subdebug("create-context-value");
 
   const binPath = fs.realpathSync(binDir);
 

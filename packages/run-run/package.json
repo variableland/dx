@@ -26,7 +26,7 @@
   "dependencies": {
     "@biomejs/biome": "1.9.4",
     "@variableland/clibuddy": "workspace:*",
-    "@variableland/console": "workspace:*",
+    "@variableland/loggy": "workspace:*",
     "commander": "13.1.0",
     "is-ci": "4.1.0",
     "rimraf": "6.0.1",

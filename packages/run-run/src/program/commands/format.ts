@@ -1,5 +1,5 @@
 import { createCommand } from "commander";
-import { console } from "~/services/console";
+import { logger } from "~/services/logger";
 import { $ } from "~/services/shell";
 
 export const formatCommand = createCommand("format")
@@ -20,7 +20,7 @@ export const formatCommand = createCommand("format")
         await $`${toolCmd}`;
       }
     } catch (error) {
-      console.error(error);
+      logger.error(error);
       process.exit(1);
     }
   })

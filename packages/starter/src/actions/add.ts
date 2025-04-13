@@ -1,5 +1,4 @@
-import type { DebugInstance } from "@variableland/console";
-import { console } from "~/services/console";
+import { logger } from "~/services/logger";
 import type { TemplateService } from "~/services/types";
 import type { AnyAction } from "./types";
 
@@ -15,15 +14,15 @@ const GENERATOR_ID = "add";
 
 export class AddAction implements AnyAction<ExecuteOptions> {
   #templateService: TemplateService;
-  #debug: DebugInstance;
 
   constructor({ templateService }: CreateOptions) {
     this.#templateService = templateService;
-    this.#debug = console.subdebug("add-action");
   }
 
   async execute(options: ExecuteOptions) {
-    this.#debug("execute options: %O", options);
+    const debug = logger.subdebug("add-action");
+
+    debug("execute options: %O", options);
 
     const bypassArr = this.#getBypassArr(options);
 
@@ -32,7 +31,7 @@ export class AddAction implements AnyAction<ExecuteOptions> {
       generatorId: GENERATOR_ID,
     });
 
-    console.success("Added successfully 🎉");
+    logger.success("Added successfully 🎉");
   }
 
   #getBypassArr(options: ExecuteOptions) {

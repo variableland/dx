@@ -2,23 +2,51 @@ import util from "node:util";
 import { type ConsolaInstance, createConsola } from "consola";
 import createDebug from "debug";
 import { DEFAULT_FORMATTERS, DEFAULT_FORMAT_OPTIONS } from "./const";
-import type { AnyConsole, ConsoleOptions, CreateOptions, DebugInstance } from "./types";
+import type { AnyLogger, CreateOptions, LoggerOptions } from "./types";
 
-export class Console implements AnyConsole {
-  #options: ConsoleOptions;
-  #debug: DebugInstance;
+export class Loggy implements AnyLogger {
+  #options: LoggerOptions;
+  #debug: ReturnType<typeof createDebug>;
   #consola: ConsolaInstance;
 
-  constructor(options: ConsoleOptions) {
+  constructor(options: LoggerOptions) {
     this.#options = options;
-    this.#debug = createDebug(`${options.debugLabel}:root`);
+    this.#debug = createDebug(`${options.namespace}:root`);
     this.#consola = createConsola({
       formatOptions: options.formatOptions,
     });
   }
 
+  get namespace() {
+    return this.#options.namespace;
+  }
+
+  debug(...args: unknown[]) {
+    // @ts-expect-error - it really accepts this signature
+    this.#debug(...args);
+  }
+
+  error(messageOrError: string | unknown, ...args: unknown[]) {
+    this.#consola.error(messageOrError, ...args);
+  }
+
   info(...args: unknown[]) {
     this.#consola.info(this.#format(...args));
+  }
+
+  trace(...args: unknown[]) {
+    this.#consola.trace(this.#format(...args));
+  }
+
+  warn(...args: unknown[]) {
+    this.#consola.warn(this.#format(...args));
+  }
+
+  child(namespace: string) {
+    return new Loggy({
+      ...this.#options,
+      namespace: `${this.#options.namespace}:${namespace}`,
+    });
   }
 
   start(...args: unknown[]) {
@@ -29,20 +57,8 @@ export class Console implements AnyConsole {
     this.#consola.success(this.#format(...args));
   }
 
-  error(messageOrError: string | unknown, ...args: unknown[]) {
-    this.#consola.error(messageOrError, ...args);
-  }
-
-  warn(...args: unknown[]) {
-    this.#consola.warn(this.#format(...args));
-  }
-
-  subdebug(label: string) {
-    return createDebug(`${this.#options.debugLabel}:${label}`);
-  }
-
-  get debug() {
-    return this.#debug;
+  subdebug(namespace: string) {
+    return createDebug(`${this.#options.namespace}:${namespace}`);
   }
 
   #format(...args: unknown[]) {
@@ -88,9 +104,9 @@ export class Console implements AnyConsole {
   }
 }
 
-export function createConsole(options: CreateOptions) {
-  return new Console({
-    debugLabel: options.debugLabel,
+export function createLoggy(options: CreateOptions) {
+  return new Loggy({
+    namespace: options.namespace,
     formatOptions: {
       ...DEFAULT_FORMAT_OPTIONS,
       ...options.formatOptions,

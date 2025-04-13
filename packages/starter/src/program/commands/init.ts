@@ -1,8 +1,8 @@
 import { cwd } from "@variableland/clibuddy";
 import { Argument, Option, createCommand } from "commander";
 import { InitAction } from "~/actions/init";
-import { console } from "~/services/console";
 import type { ContextValue } from "~/services/ctx";
+import { logger } from "~/services/logger";
 import { createPlopTemplateService } from "~/services/template";
 
 type InitOptions = {
@@ -39,7 +39,7 @@ export function createInitCommand(ctx: ContextValue) {
           ...options,
         });
       } catch (error) {
-        console.error(error);
+        logger.error(error);
         process.exit(1);
       }
     })

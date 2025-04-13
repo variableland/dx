@@ -1,6 +1,5 @@
 import type { ShellService } from "@variableland/clibuddy";
-import type { DebugInstance } from "@variableland/console";
-import { console } from "~/services/console";
+import { logger } from "~/services/logger";
 import type { TemplateService } from "~/services/types";
 import type { AnyAction } from "./types";
 
@@ -18,20 +17,20 @@ type CreateOptions = {
 const GENERATOR_ID = "init";
 
 export class InitAction implements AnyAction<ExecuteOptions> {
-  #debug: DebugInstance;
   #templateService: TemplateService;
   #shellService: ShellService;
 
   constructor({ templateService, shellService }: CreateOptions) {
     this.#templateService = templateService;
     this.#shellService = shellService;
-    this.#debug = console.subdebug("init-action");
   }
 
   async execute(options: ExecuteOptions) {
     const { destBasePath, git } = options;
 
-    this.#debug("execute options: %O", options);
+    const debug = logger.subdebug("init-action");
+
+    debug("execute options: %O", options);
 
     const bypassArr = this.#getBypassArr(options);
 
@@ -40,19 +39,19 @@ export class InitAction implements AnyAction<ExecuteOptions> {
       generatorId: GENERATOR_ID,
     });
 
-    console.success("Project generated 🎉");
+    logger.success("Project generated 🎉");
 
     const $ = this.#shellService.$;
     const $$ = $.quiet({ cwd: destBasePath });
 
     if (git) {
-      console.start("Creating git repository");
+      logger.start("Creating git repository");
 
       await $$`git init`;
       // NOTE: git commit -am failed, not sure why
       await $$`git add . && git commit -m "initial commit"`;
 
-      console.success("Git repository created");
+      logger.success("Git repository created");
     }
   }
 
