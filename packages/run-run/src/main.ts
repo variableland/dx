@@ -1,19 +1,12 @@
-import { createContextValue, ctx } from "./services/ctx";
+import { type Options, createProgram } from "./program";
 import { logger } from "./services/logger";
 
-async function main(argv = process.argv) {
+export async function main(options: Options) {
   try {
-    const ctxValue = await createContextValue();
-
-    await ctx.runContext(ctxValue, async () => {
-      const { createProgram } = await import("./program");
-      const program = createProgram();
-      await program.parseAsync(argv);
-    });
+    const { cmd } = await createProgram(options);
+    await cmd.parseAsync();
   } catch (error) {
     logger.error("Cannot run main successfully", error);
     process.exit(1);
   }
 }
-
-main();

@@ -1,26 +1,32 @@
 import { getVersion } from "@variableland/clibuddy";
 import { Command } from "commander";
-import { ctx } from "~/services/ctx";
-import { cleanCommand } from "./commands/clean";
-import { formatCommand } from "./commands/format";
-import { infoPkgCommand } from "./commands/info-pkg";
-import { lintCommand } from "./commands/lint";
-import { testStaticCommand } from "./commands/test-static";
-import { typecheckCommand } from "./commands/typecheck";
+import { createContext } from "~/services/ctx";
+import { createCleanCommand } from "./commands/clean";
+import { createFormatCommand } from "./commands/format";
+import { createInfoPkgCommand } from "./commands/info-pkg";
+import { createLintCommand } from "./commands/lint";
+import { createTestStaticCommand } from "./commands/test-static";
+import { createTypecheckCommand } from "./commands/typecheck";
 import { BANNER_TEXT, CREDITS_TEXT } from "./ui";
 
-export function createProgram() {
-  const version = getVersion(ctx.value.binPkg);
+export type Options = {
+  binDir: string;
+};
 
-  return new Command("rr")
+export async function createProgram(options: Options) {
+  const ctx = await createContext(options.binDir);
+
+  const cmd = new Command("rr")
     .alias("run-run")
-    .version(version, "-v, --version")
+    .version(getVersion(ctx.binPkg), "-v, --version")
     .addHelpText("before", BANNER_TEXT)
     .addHelpText("after", CREDITS_TEXT)
-    .addCommand(formatCommand)
-    .addCommand(lintCommand)
-    .addCommand(testStaticCommand)
-    .addCommand(cleanCommand)
-    .addCommand(typecheckCommand)
-    .addCommand(infoPkgCommand);
+    .addCommand(createFormatCommand(ctx))
+    .addCommand(createLintCommand(ctx))
+    .addCommand(createTestStaticCommand(ctx))
+    .addCommand(createCleanCommand())
+    .addCommand(createTypecheckCommand(ctx))
+    .addCommand(createInfoPkgCommand(ctx));
+
+  return { cmd, ctx };
 }

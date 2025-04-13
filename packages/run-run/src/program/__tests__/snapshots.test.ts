@@ -1,7 +1,8 @@
 import { afterEach, expect, test } from "bun:test";
 import { createTestProgram, execCli, mocked, parseProgram } from "test/helpers";
 
-const { program, $ } = await createTestProgram();
+const { cmd, ctx } = await createTestProgram();
+const $ = ctx.shell.$;
 
 const rootCommands = ["help", "--help", "--version", "-v"];
 
@@ -17,7 +18,7 @@ for (const cmd of rootCommands) {
   });
 }
 
-for (const command of program.commands) {
+for (const command of cmd.commands) {
   const cmd = command.name();
 
   test(`should match help message for command "${cmd}"`, async () => {
@@ -30,7 +31,7 @@ for (const command of program.commands) {
 // these command don't use shell ($) instance
 const hardCommands = ["info:pkg", "clean"];
 
-const easyTesteableCommands = program.commands.filter((command) => {
+const easyTesteableCommands = cmd.commands.filter((command) => {
   const isHard = hardCommands.some((cmd) => command.name() === cmd);
   return !isHard;
 });

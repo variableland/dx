@@ -1,22 +1,17 @@
 import fs from "node:fs";
-import { type PkgService, createContextService, createPkgService, cwd } from "@variableland/clibuddy";
+import { type PkgService, type ShellService, createPkgService, createShellService, cwd } from "@variableland/clibuddy";
 import { logger } from "./logger";
 
-export type ContextValue = {
+export type Context = {
   binPkg: PkgService;
   appPkg: PkgService;
+  shell: ShellService;
 };
 
-export const ctx = createContextService<ContextValue>();
-
-export async function createContextValue(): Promise<ContextValue> {
+export async function createContext(binDir: string): Promise<Context> {
   const debug = logger.subdebug("create-context-value");
 
-  if (!Bun.env.BIN_PATH) {
-    throw new Error("Required BIN_PATH env var");
-  }
-
-  const binPath = fs.realpathSync(Bun.env.BIN_PATH);
+  const binPath = fs.realpathSync(binDir);
 
   debug("bin path:", binPath);
   debug("process cwd:", process.cwd());
@@ -34,8 +29,13 @@ export async function createContextValue(): Promise<ContextValue> {
   debug("app pkg info: %O", appPkg.info());
   debug("bin pkg info: %O", binPkg.info());
 
+  const shell = createShellService({
+    localBaseBinPath: [binDir],
+  });
+
   return {
     appPkg,
     binPkg,
+    shell,
   };
 }

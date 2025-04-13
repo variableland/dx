@@ -1,57 +1,45 @@
 import { type Mock, mock } from "bun:test";
 import { exec } from "node:child_process";
 import { promisify } from "node:util";
-import { createContextValue, ctx } from "../src/services/ctx";
+import { createProgram } from "../src/program";
 
 const execAsync = promisify(exec);
 
-async function createProgram() {
-  const { createProgram } = await import("../src/program");
-  const { $ } = await import("../src/services/shell");
-
-  const program = createProgram();
+export async function createTestProgram() {
+  const { cmd, ctx } = await createProgram({
+    binDir: ".", // mocked value
+  });
 
   const exitFn = mock();
   const writeOutFn = mock();
   const writeErrFn = mock();
 
-  program.exitOverride(exitFn);
+  cmd.exitOverride(exitFn);
 
-  program.configureOutput({
+  cmd.configureOutput({
     writeOut: writeOutFn,
     writeErr: writeErrFn,
   });
 
   return {
-    $,
-    program,
+    cmd,
+    ctx,
     exitFn,
     writeOutFn,
     writeErrFn,
   };
 }
 
-export async function createTestProgram() {
-  const store = await createContextValue();
-  return ctx.runContext(store, createProgram);
-}
-
 export async function parseProgram(argv: string[]) {
-  const store = await createContextValue();
+  const { cmd } = await createTestProgram();
 
-  return ctx.runContext(store, async () => {
-    const result = await createProgram();
-
-    await result.program.parseAsync(argv, {
-      from: "user",
-    });
-
-    return result;
+  await cmd.parseAsync(argv, {
+    from: "user",
   });
 }
 
 export function execCli(cmd: string) {
-  return execAsync(`bun run src/main.ts ${cmd}`);
+  return execAsync(`bun ./bin.ts ${cmd}`);
 }
 
 // @ts-expect-error bun:test doesn't have a mocked helper function
