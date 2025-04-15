@@ -15,8 +15,7 @@
     },
     "typecheck": {
       "persistent": true,
-      "cache": false,
-      "env": ["ENV"]
+      "cache": false
     }
   }
 }
