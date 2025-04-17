@@ -3,7 +3,7 @@
 ## Installation
 
 ```bash
-pnpm add -D @variableland/biome-config
+pnpm add -D @vlandoss/biome-config
 ```
 
 ## Usage
@@ -14,6 +14,6 @@ pnpm add -D @variableland/biome-config
 
   ```json
   {
-    "extends": ["@variableland/biome-config"]
+    "extends": ["@vlandoss/biome-config"]
   }
   ```

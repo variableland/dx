@@ -1,4 +1,4 @@
-import { cwd } from "@variableland/clibuddy";
+import { cwd } from "@vlandoss/clibuddy";
 import { Argument, Option, createCommand } from "commander";
 import { AddAction } from "~/actions/add";
 import type { ContextValue } from "~/services/ctx";

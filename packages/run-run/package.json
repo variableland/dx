@@ -1,6 +1,6 @@
 {
-  "name": "@variableland/run-run",
-  "version": "0.4.13",
+  "name": "@vlandoss/run-run",
+  "version": "0.0.0",
   "description": "The CLI toolbox to fullstack common scripts in Variable Land",
   "homepage": "https://github.com/variableland/dx/tree/main/packages/run-run#readme",
   "bugs": {
@@ -25,8 +25,8 @@
   },
   "dependencies": {
     "@biomejs/biome": "1.9.4",
-    "@variableland/clibuddy": "workspace:*",
-    "@variableland/loggy": "workspace:*",
+    "@vlandoss/clibuddy": "workspace:*",
+    "@vlandoss/loggy": "workspace:*",
     "commander": "13.1.0",
     "is-ci": "4.1.0",
     "rimraf": "6.0.1",

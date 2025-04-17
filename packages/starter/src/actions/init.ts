@@ -1,4 +1,4 @@
-import type { ShellService } from "@variableland/clibuddy";
+import type { ShellService } from "@vlandoss/clibuddy";
 import { logger } from "~/services/logger";
 import type { TemplateService } from "~/services/types";
 import type { AnyAction } from "./types";

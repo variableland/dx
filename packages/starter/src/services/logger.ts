@@ -1,4 +1,4 @@
-import { createLoggy } from "@variableland/loggy";
+import { createLoggy } from "@vlandoss/loggy";
 
 export const logger = createLoggy({
   namespace: "vland",

@@ -15,7 +15,7 @@ CLI toolbox to fullstack common scripts in Variable Land 👊
 ## Installation
 
 ```sh
-pnpm add @variableland/run-run
+pnpm add @vlandoss/run-run
 ```
 
 It will adds the `rr` and `run-run` command to your project

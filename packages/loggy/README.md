@@ -5,5 +5,5 @@ Console wrapper to make logging fun again
 ## Installation
 
 ```sh
-pnpm add @variableland/loggy
+pnpm add @vlandoss/loggy
 ```

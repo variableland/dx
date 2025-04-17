@@ -1,4 +1,4 @@
-import { colors } from "@variableland/clibuddy";
+import { colors } from "@vlandoss/clibuddy";
 
 const UI_LOGO = `🦊 ${colors.blueBright("R")} ${colors.redBright("U")} ${colors.greenBright("N")} - ${colors.blueBright("R")} ${colors.redBright("U")} ${colors.greenBright("N")}`;
 

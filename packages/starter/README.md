@@ -9,7 +9,7 @@ The CLI to init a new project in Variable Land 👊
 ## Installation
 
 ```sh
-pnpm add -g @variableland/starter
+pnpm add -g @vlandoss/starter
 ```
 
 It will adds the `vland` to your global workspace

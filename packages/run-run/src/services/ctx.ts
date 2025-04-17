@@ -1,5 +1,5 @@
 import fs from "node:fs";
-import { type PkgService, type ShellService, createPkgService, createShellService, cwd } from "@variableland/clibuddy";
+import { type PkgService, type ShellService, createPkgService, createShellService, cwd } from "@vlandoss/clibuddy";
 import { logger } from "./logger";
 
 export type Context = {

@@ -1,4 +1,4 @@
-import { getVersion } from "@variableland/clibuddy";
+import { getVersion } from "@vlandoss/clibuddy";
 import { Command } from "commander";
 import { createContext } from "~/services/ctx";
 import { createAddCommand } from "./commands/add";

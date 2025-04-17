@@ -37,7 +37,7 @@ To use this monorepo, you need to have the following tools installed:
 3. Run tests:
 
    ```bash
-   pnpm run test:static
+   pnpm rr test:static
    pnpm run typecheck
    pnpm run test
    ```
@@ -70,5 +70,5 @@ This monorepo uses [Changesets](https://github.com/changesets/changesets) to man
 To preview changes in any package, create a pull request using the branch pattern `feat/*` or `fix/*`. This triggers a special GitHub workflow that publishes the package with the changes to the npm registry under the tag `pr-<PR_NUMBER>`. To preview your changes, install the package with the corresponding tag:
 
 ```bash
-pnpm install @variableland/<package>@pr-123
+pnpm install @vlandoss/<package>@pr-123
 ```

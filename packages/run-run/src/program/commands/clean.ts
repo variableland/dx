@@ -1,4 +1,4 @@
-import { cwd } from "@variableland/clibuddy";
+import { cwd } from "@vlandoss/clibuddy";
 import { createCommand } from "commander";
 import { rimraf } from "rimraf";
 import { logger } from "~/services/logger";

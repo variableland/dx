@@ -1,5 +1,5 @@
 {
-  "name": "@variableland/dx",
+  "name": "dx",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -17,9 +17,9 @@
     "@changesets/cli": "^2.28.1",
     "@total-typescript/tsconfig": "^1.0.4",
     "@types/bun": "latest",
-    "@variableland/biome-config": "workspace:*",
-    "@variableland/run-run": "workspace:*",
-    "@variableland/starter": "workspace:*",
+    "@vlandoss/biome-config": "workspace:*",
+    "@vlandoss/run-run": "workspace:*",
+    "@vlandoss/starter": "workspace:*",
     "husky": "^9.1.7",
     "tsup": "^8.4.0",
     "turbo": "^2.4.4",
