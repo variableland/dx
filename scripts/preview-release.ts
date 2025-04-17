@@ -1,32 +1,60 @@
 #!/usr/bin/env bun
-import { dirname } from "node:path";
-import { $, Glob } from "bun";
-import { parse as parseYaml } from "yaml";
+import { relative } from "node:path";
+import { $ } from "bun";
 
-/**
- * @param workspaces - The workspaces to get the packages from.
- * @returns The packages directories in the workspaces.
- *
- * @example
- * ```ts
- * const packages = getWorkspacesPackages(['packages/*'])
- * console.log(packages) // ['packages/package-1', 'packages/package-2']
- * ```
- */
-function getWorkspacesPackages(workspaces: string[]) {
-  const collect = (workspace: string) => {
-    if (!workspace.includes("*")) {
-      return [workspace];
-    }
+type PackageOutput = {
+  name: string;
+  version: string;
+  path: string;
+  // biome-ignore lint:
+  [key: string]: any;
+};
 
-    const pattern = workspace.replace("*", "**/package.json");
-    const glob = new Glob(pattern);
-    const pkgJsonPaths = Array.from(glob.scanSync());
+type PackageDep = {
+  from: string;
+  version: string;
+  resolved?: string;
+  path: string;
+};
 
-    return pkgJsonPaths.map((pkgJsonPath) => dirname(pkgJsonPath));
+async function getWorkspacesPackages(): Promise<Array<PackageOutput>> {
+  return $`pnpm list -r --json`.json();
+}
+
+async function getDependenciesPackages(pkg: PackageOutput, packages: Array<PackageOutput>) {
+  const isLinked = (version: string) => version.startsWith("link:");
+
+  const dependenciesObj: Record<string, PackageDep> = {
+    ...(pkg.dependencies ?? {}),
+    ...(pkg.devDependencies ?? {}),
   };
 
-  return workspaces.flatMap(collect);
+  const depPackages: Array<PackageOutput> = [];
+
+  for (const [name, dep] of Object.entries(dependenciesObj)) {
+    if (isLinked(dep.version)) {
+      const depPackage = packages.find((pkg) => pkg.name === name);
+
+      if (depPackage) {
+        const nestedDepPackages = await getDependenciesPackages(depPackage, packages);
+        depPackages.push(depPackage, ...nestedDepPackages);
+      }
+    }
+  }
+
+  return depPackages;
+}
+
+/**
+ * @example
+ * ```ts
+ * const relativePath = getRelativeFolderPath('/path/to/the/repository/packages/package-1')
+ * console.log(relativePath) // 'packages/package-1'
+ * ```
+ */
+function getRelativeFolderPath(absPath: string) {
+  const relativePath = relative(process.cwd(), absPath);
+  return relativePath.length > 0 ? relativePath : null;
 }
 
 /**
@@ -40,14 +68,32 @@ function getWorkspacesPackages(workspaces: string[]) {
  * console.log(changedPackages) // ['packages/package-1', 'packages/package-2']
  * ```
  */
-async function getChangedPackages() {
-  const pnpmWorkspace = parseYaml(await Bun.file("pnpm-workspace.yaml").text());
-
-  const packages = getWorkspacesPackages(pnpmWorkspace.packages);
+async function getChangedPackages(): Promise<Array<string>> {
+  const packages = await getWorkspacesPackages();
 
   const changedPaths = (await $`git fetch origin main && git diff --name-only origin/main`.text()).trim().split("\n");
 
-  return packages.filter((pkg) => changedPaths.some((file) => file.startsWith(pkg)));
+  const changedPackages = new Map<string, PackageOutput>();
+
+  for (const pkg of packages) {
+    const relativePath = getRelativeFolderPath(pkg.path);
+    const hasChanged = changedPaths.some((file) => relativePath && file.startsWith(relativePath));
+
+    if (hasChanged) {
+      changedPackages.set(pkg.name, pkg);
+
+      const depPackages = await getDependenciesPackages(pkg, packages);
+
+      for (const depPackage of depPackages) {
+        changedPackages.set(depPackage.name, depPackage);
+      }
+    }
+  }
+
+  // @ts-expect-error the filter remove possible null values
+  return Array.from(changedPackages.values())
+    .map((pkg) => getRelativeFolderPath(pkg.path))
+    .filter(Boolean);
 }
 
 /**
@@ -75,10 +121,6 @@ async function main() {
     throw new Error("PR_NUMBER environment variable is required");
   }
 
-  if (!Bun.env.AUTH_TOKEN) {
-    throw new Error("AUTH_TOKEN environment variable is required");
-  }
-
   const changedPackages = await getChangedPackages();
 
   if (!changedPackages.length) {
@@ -98,8 +140,14 @@ async function main() {
   }
 
   try {
-    // Don't interpolate AUTH_TOKEN for security reasons
-    await Bun.write(".npmrc", "//registry.npmjs.org/:_authToken=${AUTH_TOKEN}");
+    if (!(await Bun.file(".npmrc").exists())) {
+      if (!Bun.env.AUTH_TOKEN) {
+        throw new Error("AUTH_TOKEN environment variable is required");
+      }
+
+      // Don't interpolate AUTH_TOKEN for security reasons
+      await Bun.write(".npmrc", "//registry.npmjs.org/:_authToken=${AUTH_TOKEN}");
+    }
 
     const tag = `pr-${Bun.env.PR_NUMBER}`;
 

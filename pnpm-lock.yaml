@@ -38,9 +38,6 @@ importers:
       turbo:
         specifier: ^2.4.4
         version: 2.5.0
-      yaml:
-        specifier: ^2.7.1
-        version: 2.7.1
 
   dotfiles/biome-config: {}
 
@@ -3104,7 +3101,8 @@ snapshots:
 
   wrappy@1.0.2: {}
 
-  yaml@2.7.1: {}
+  yaml@2.7.1:
+    optional: true
 
   yoctocolors-cjs@2.1.2: {}
 
