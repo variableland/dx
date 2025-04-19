@@ -41,3 +41,4 @@ jobs:
         uses: variableland/gh-actions/actions/monorepo-preview-release@main
         with:
           auth_token: ${{ secrets.NPM_TOKEN }}
+          pr_number: ${{ github.event.pull_request.number }}
