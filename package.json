@@ -7,7 +7,6 @@
     "rr": "rr",
     "vland": "vland",
     "prepare": "husky",
-    "preview:release": "./scripts/preview-release.ts",
     "test": "turbo test",
     "test:coverage": "turbo test:coverage",
     "typecheck": "turbo typecheck"
