@@ -3,10 +3,12 @@ name: CI
 on:
   push:
     branches:
-      - main
+      # - main
+      - skiped
   pull_request:
     branches:
-      - main
+      # - main
+      - skiped
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
