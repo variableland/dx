@@ -10,6 +10,10 @@ type ExecuteOptions = {
   slugs: string[];
 };
 
+type GeneratorAnswers = {
+  slugs: string[];
+};
+
 const GENERATOR_ID = "add";
 
 export class AddAction implements AnyAction<ExecuteOptions> {
@@ -26,7 +30,7 @@ export class AddAction implements AnyAction<ExecuteOptions> {
 
     const bypassArr = this.#getBypassArr(options);
 
-    await this.#templateService.generate({
+    await this.#templateService.generate<GeneratorAnswers>({
       bypassArr,
       generatorId: GENERATOR_ID,
     });

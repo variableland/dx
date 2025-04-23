@@ -1,18 +1,25 @@
 import path from "node:path";
 import type { NodePlopAPI } from "node-plop";
 import { ConfigService } from "~/services/config";
+import { tsconfigPrompts } from "./prompts/tsconfig";
 
-export default function configPlop(plop: NodePlopAPI) {
-  const baseDir = path.dirname(plop.getPlopfilePath());
-  const configService = new ConfigService(baseDir);
-
-  function atLeastOne(answer: string[]) {
+const validators = {
+  atLeastOne: (answer: string[]) => {
     if (answer.length === 0) {
       return "At least one option must be selected";
     }
 
     return true;
-  }
+  },
+};
+
+export default function configPlop(plop: NodePlopAPI) {
+  const baseDir = path.dirname(plop.getPlopfilePath());
+  const configService = new ConfigService(baseDir);
+
+  plop.setHelper("ternary", (condition, trueValue, falseValue) => {
+    return condition ? trueValue : falseValue;
+  });
 
   plop.setGenerator("init", {
     description: "Initialize a project based on a predefined template",
@@ -22,7 +29,7 @@ export default function configPlop(plop: NodePlopAPI) {
         name: "template",
         message: "Template:",
         choices: configService.getTemplateChoices(),
-        validate: atLeastOne,
+        validate: validators.atLeastOne,
       },
       {
         type: "input",
@@ -65,8 +72,10 @@ export default function configPlop(plop: NodePlopAPI) {
         name: "slugs",
         message: "Select configs:",
         choices: configService.getPluginChoices(),
-        validate: atLeastOne,
+        validate: validators.atLeastOne,
       },
+      // @ts-expect-error
+      ...tsconfigPrompts,
     ],
     actions: (answers: unknown) => {
       // @ts-expect-error
