@@ -1,5 +1,11 @@
 # @vlandoss/starter
 
+## 0.0.2
+
+### Patch Changes
+
+- [#91](https://github.com/variableland/dx/pull/91) [`711da54`](https://github.com/variableland/dx/commit/711da549bf79f6117e9f26752da01271726e7100) Thanks [@rqbazan](https://github.com/rqbazan)! - Add `tsconfig` generator to add command
+
 ## 0.0.1
 
 ### Patch Changes
