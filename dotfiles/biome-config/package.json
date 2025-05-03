@@ -1,6 +1,6 @@
 {
   "name": "@vlandoss/biome-config",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Biome configuration file for @variableland",
   "homepage": "https://github.com/variableland/dx/tree/main/dotfiles/biome-config#readme",
   "bugs": {

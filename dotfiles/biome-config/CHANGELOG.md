@@ -1,5 +1,11 @@
 # @vlandoss/biome-config
 
+## 0.0.2
+
+### Patch Changes
+
+- [#93](https://github.com/variableland/dx/pull/93) [`0a8b49d`](https://github.com/variableland/dx/commit/0a8b49de50115ab70283854b21688649c79a85f4) Thanks [@rqbazan](https://github.com/rqbazan)! - Add schema to biome config
+
 ## 0.0.1
 
 ### Patch Changes

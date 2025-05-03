@@ -1,5 +1,11 @@
 # @vlandoss/loggy
 
+## 0.0.2
+
+### Patch Changes
+
+- [#95](https://github.com/variableland/dx/pull/95) [`0c198e4`](https://github.com/variableland/dx/commit/0c198e46f159edfad14f6b2337e41e05f97172bb) Thanks [@rqbazan](https://github.com/rqbazan)! - Add multi typecheck
+
 ## 0.0.1
 
 ### Patch Changes
