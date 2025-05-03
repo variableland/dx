@@ -115,6 +115,7 @@ delete dirty folders or files such as node_modules, etc 🗑️
 
 Options:
   --only-dist  delete 'dist' folders only
+  --dry-run    outputs the paths that would be deleted
   -h, --help   display help for command
 
 Under the hood, this command uses the rimraf.js to delete dirty folders or files.

@@ -28,6 +28,7 @@
     "@vlandoss/clibuddy": "workspace:*",
     "@vlandoss/loggy": "workspace:*",
     "commander": "13.1.0",
+    "glob": "^11.0.2",
     "is-ci": "4.1.0",
     "rimraf": "6.0.1",
     "typescript": "5.8.2"

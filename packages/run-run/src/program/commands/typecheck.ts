@@ -1,4 +1,4 @@
-import type { Project } from "@vlandoss/clibuddy";
+import { type Project, isProcessOutput } from "@vlandoss/clibuddy";
 import { createCommand } from "commander";
 import type { Context } from "~/services/ctx";
 import { logger } from "~/services/logger";
@@ -12,7 +12,7 @@ export function createTypecheckCommand(ctx: Context) {
 
       async function singleTypecheck(dir?: string): Promise<boolean | undefined> {
         if (!appPkg.hasFile("tsconfig.json", dir)) {
-          logger.info("No tsconfig.json found. Skipping type checking.");
+          logger.info("No tsconfig.json found, skipping typecheck");
           return;
         }
 
@@ -32,16 +32,16 @@ export function createTypecheckCommand(ctx: Context) {
         });
 
         try {
-          childLogger.start("Type checking...");
+          childLogger.start("Type checking started");
 
           const success = await singleTypecheck(project.rootDir);
 
           if (success) {
-            childLogger.success("Typecheck completed successfully");
+            childLogger.success("Typecheck completed");
           }
-        } catch {
+        } catch (error) {
           childLogger.error("Typecheck failed");
-          process.exit(1);
+          throw error;
         }
       }
 
@@ -49,19 +49,15 @@ export function createTypecheckCommand(ctx: Context) {
         try {
           await singleTypecheck();
         } catch (error) {
-          logger.error(error);
-          process.exit(1);
+          logger.error("Typecheck failed");
+          throw error;
         }
       }
 
-      try {
-        const projects = await appPkg.getWorkspaceProjects();
-        for (const project of projects) {
-          await typecheckAtProject(project);
-        }
-      } catch (error) {
-        logger.error(error);
-        process.exit(1);
+      const projects = await appPkg.getWorkspaceProjects();
+
+      for (const project of projects) {
+        await typecheckAtProject(project);
       }
     })
     .addHelpText("afterAll", "\nUnder the hood, this command uses the TypeScript CLI to check the code.");

@@ -9,28 +9,23 @@ export function createInfoPkgCommand(ctx: Context) {
     .option("-f, --filter <filter>", "lodash get id like to filter info by")
     .option("-c, --current", "display package.json where run-run will be executed")
     .action(async function pkgAction(options) {
-      try {
-        const { appPkg, binPkg } = ctx;
+      const { appPkg, binPkg } = ctx;
 
-        const infoObject = options.current ? appPkg.info() : binPkg.info();
+      const infoObject = options.current ? appPkg.info() : binPkg.info();
 
-        if (!options.filter) {
-          logger.info("%O", infoObject);
-          return;
-        }
-
-        const { filter } = options;
-        const subInfoObject = get(infoObject.packageJson, filter);
-
-        if (!subInfoObject) {
-          logger.info("No info found");
-          return;
-        }
-
-        logger.info("%O", { [filter]: subInfoObject });
-      } catch (error) {
-        logger.error(error);
-        process.exit(1);
+      if (!options.filter) {
+        logger.info("%O", infoObject);
+        return;
       }
+
+      const { filter } = options;
+      const subInfoObject = get(infoObject.packageJson, filter);
+
+      if (!subInfoObject) {
+        logger.info("No info found");
+        return;
+      }
+
+      logger.info("%O", { [filter]: subInfoObject });
     });
 }

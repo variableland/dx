@@ -12,18 +12,13 @@ export function createFormatCommand(ctx: Context) {
       const $ = ctx.shell.$;
       const toolCmd = "biome format --no-errors-on-unmatched --colors=force";
 
-      try {
-        if (options.fix) {
-          await $`${toolCmd} --fix`;
-          return;
-        }
+      if (options.fix) {
+        await $`${toolCmd} --fix`;
+        return;
+      }
 
-        if (options.check) {
-          await $`${toolCmd}`;
-        }
-      } catch (error) {
-        logger.error(error);
-        process.exit(1);
+      if (options.check) {
+        await $`${toolCmd}`;
       }
     })
     .addHelpText("afterAll", "\nUnder the hood, this command uses the biome CLI to format the code.");

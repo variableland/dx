@@ -11,18 +11,13 @@ export function createLintCommand(ctx: Context) {
       const $ = ctx.shell.$;
       const toolCmd = "biome check --colors=force --formatter-enabled=false";
 
-      try {
-        if (options.fix) {
-          await $`${toolCmd} --fix --unsafe`;
-          return;
-        }
+      if (options.fix) {
+        await $`${toolCmd} --fix --unsafe`;
+        return;
+      }
 
-        if (options.check) {
-          await $`${toolCmd}`;
-        }
-      } catch (error) {
-        logger.error(error);
-        process.exit(1);
+      if (options.check) {
+        await $`${toolCmd}`;
       }
     })
     .addHelpText("afterAll", "\nUnder the hood, this command uses the biome CLI to lint the code.");
