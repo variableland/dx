@@ -31,6 +31,7 @@ export async function createContext(binDir: string): Promise<Context> {
 
   const shell = createShellService({
     localBaseBinPath: [binDir],
+    stdio: "inherit",
   });
 
   return {

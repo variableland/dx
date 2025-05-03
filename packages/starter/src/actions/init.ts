@@ -41,15 +41,14 @@ export class InitAction implements AnyAction<ExecuteOptions> {
 
     logger.success("Project generated 🎉");
 
-    const $ = this.#shellService.$;
-    const $$ = $.quiet({ cwd: destBasePath });
+    const shell = this.#shellService.at(destBasePath).quiet();
 
     if (git) {
       logger.start("Creating git repository");
 
-      await $$`git init`;
+      await shell.$`git init`;
       // NOTE: git commit -am failed, not sure why
-      await $$`git add . && git commit -m "initial commit"`;
+      await shell.$`git add . && git commit -m "initial commit"`;
 
       logger.success("Git repository created");
     }

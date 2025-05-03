@@ -11,7 +11,7 @@ export type AnyLogger = {
   info: AnyLogFn;
   trace: AnyLogFn;
   warn: AnyLogFn;
-  child: (namespace: string) => AnyLogger;
+  child: (options: CreateOptions) => AnyLogger;
   // { extras
   subdebug: (namespace: string) => AnyLogFn;
   start: AnyLogFn;
@@ -21,14 +21,21 @@ export type AnyLogger = {
 
 export type CreateOptions = {
   namespace: string;
+  tag?: string;
   formatOptions?: FormatOptions;
   formatters?: Formatters;
 };
 
 export type LoggerOptions = {
+  tag?: string;
   namespace: string;
   formatOptions: FormatOptions;
   formatters: Formatters;
+};
+
+export type LogFnOptions = {
+  tag: string;
+  message: string;
 };
 
 export type { FormatOptions };

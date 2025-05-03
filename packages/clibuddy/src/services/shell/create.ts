@@ -1,10 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { ShellService } from "./shell";
-
-type CreateOptions = {
-  localBaseBinPath?: string | Array<string>;
-};
+import type { CreateOptions } from "./types";
 
 export const cwd = fs.realpathSync(process.cwd());
 

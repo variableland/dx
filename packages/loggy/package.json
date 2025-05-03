@@ -27,8 +27,7 @@
   "files": ["dist", "src"],
   "scripts": {
     "build": "tsup",
-    "prepublishOnly": "bun run build",
-    "typecheck": "rr tsc"
+    "prepublishOnly": "bun run build"
   },
   "publishConfig": {
     "access": "public"

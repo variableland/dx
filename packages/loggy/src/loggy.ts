@@ -1,8 +1,18 @@
 import util from "node:util";
 import { type ConsolaInstance, createConsola } from "consola";
+import { colors } from "consola/utils";
 import createDebug from "debug";
 import { DEFAULT_FORMATTERS, DEFAULT_FORMAT_OPTIONS } from "./const";
-import type { AnyLogger, CreateOptions, LoggerOptions } from "./types";
+import type { AnyLogger, CreateOptions, LogFnOptions, LoggerOptions } from "./types";
+
+function isLogFnOptions(arg: unknown): arg is LogFnOptions {
+  try {
+    // @ts-expect-error
+    return typeof arg.message === "string" && typeof arg.tag === "string";
+  } catch {
+    return false;
+  }
+}
 
 export class Loggy implements AnyLogger {
   #options: LoggerOptions;
@@ -26,35 +36,36 @@ export class Loggy implements AnyLogger {
     this.#debug(...args);
   }
 
-  error(messageOrError: string | unknown, ...args: unknown[]) {
-    this.#consola.error(messageOrError, ...args);
+  error(...args: unknown[]) {
+    this.#consola.error(this.#format(...args));
   }
 
-  info(...args: unknown[]) {
-    this.#consola.info(this.#format(...args));
+  info(opts: LogFnOptions | unknown, ...args: unknown[]) {
+    this.#consola.info(this.#format(opts, ...args));
   }
 
-  trace(...args: unknown[]) {
-    this.#consola.trace(this.#format(...args));
+  trace(opts: LogFnOptions | unknown, ...args: unknown[]) {
+    this.#consola.trace(this.#format(opts, ...args));
   }
 
-  warn(...args: unknown[]) {
-    this.#consola.warn(this.#format(...args));
+  warn(opts: LogFnOptions | unknown, ...args: unknown[]) {
+    this.#consola.warn(this.#format(opts, ...args));
   }
 
-  child(namespace: string) {
+  child(options: CreateOptions) {
     return new Loggy({
       ...this.#options,
-      namespace: `${this.#options.namespace}:${namespace}`,
+      ...options,
+      namespace: `${this.#options.namespace}:${options.namespace}`,
     });
   }
 
-  start(...args: unknown[]) {
-    this.#consola.start(this.#format(...args));
+  start(opts: LogFnOptions | unknown, ...args: unknown[]) {
+    this.#consola.start(this.#format(opts, ...args));
   }
 
-  success(...args: unknown[]) {
-    this.#consola.success(this.#format(...args));
+  success(opts: LogFnOptions | unknown, ...args: unknown[]) {
+    this.#consola.success(this.#format(opts, ...args));
   }
 
   subdebug(namespace: string) {
@@ -62,7 +73,10 @@ export class Loggy implements AnyLogger {
   }
 
   #format(...args: unknown[]) {
-    const formattedArgs = [...args];
+    const [firstArg, ...restArgs] = args;
+
+    const tag = isLogFnOptions(firstArg) ? firstArg.tag : this.#options.tag;
+    const formattedArgs = isLogFnOptions(firstArg) ? [firstArg.message, ...restArgs] : args;
 
     if (typeof formattedArgs[0] !== "string") {
       formattedArgs.unshift("%O");
@@ -71,8 +85,11 @@ export class Loggy implements AnyLogger {
     const [message, ...replacements] = formattedArgs;
     let replacementIndex = -1;
 
-    // @ts-expect-error - we're sure that message is a string due to the above check
-    const formattedMessage = message
+    if (typeof message !== "string") {
+      throw new TypeError("message must be a string");
+    }
+
+    let formattedMessage = message
       .replace(
         /%([a-zA-Z%])/g, // matches %o, %O, %%, etc.
         (match: string, formatKey: string) => {
@@ -100,6 +117,8 @@ export class Loggy implements AnyLogger {
       .split("\n")
       .join(`\n${" ".repeat(2)}`);
 
+    formattedMessage = !tag ? formattedMessage : `${colors.cyan(`[${tag}]`)} ${formattedMessage}`;
+
     return util.formatWithOptions(this.#options.formatOptions, formattedMessage, ...replacements);
   }
 }
@@ -107,6 +126,7 @@ export class Loggy implements AnyLogger {
 export function createLoggy(options: CreateOptions) {
   return new Loggy({
     namespace: options.namespace,
+    tag: options.tag,
     formatOptions: {
       ...DEFAULT_FORMAT_OPTIONS,
       ...options.formatOptions,

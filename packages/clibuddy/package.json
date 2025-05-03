@@ -34,6 +34,8 @@
     "typecheck": "rr tsc"
   },
   "dependencies": {
+    "@pnpm/workspace.find-packages": "^1000.0.23",
+    "@pnpm/workspace.read-manifest": "^1000.1.4",
     "chalk": "5.4.1",
     "read-package-up": "11.0.0",
     "supports-color": "10.0.0",

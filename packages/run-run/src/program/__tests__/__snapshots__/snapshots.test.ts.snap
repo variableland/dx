@@ -129,7 +129,7 @@ check if TypeScript code is well typed 🎨
 Options:
   -h, --help  display help for command
 
-Under the hood, this command uses the TSC CLI to check the code.
+Under the hood, this command uses the TypeScript CLI to check the code.
 "
 `;
 
