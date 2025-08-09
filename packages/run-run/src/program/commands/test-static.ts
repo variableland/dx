@@ -1,5 +1,6 @@
 import { createCommand } from "commander";
 import isCI from "is-ci";
+import { BiomeService } from "~/services/biome";
 import type { Context } from "~/services/ctx";
 
 export function createTestStaticCommand(ctx: Context) {
@@ -9,7 +10,7 @@ export function createTestStaticCommand(ctx: Context) {
     .option("-f, --fix", "try to fix issues automatically")
     .option("--fix-staged", "try to fix staged files only")
     .action(async function testStaticAction(options) {
-      const $ = ctx.shell.$;
+      const { $ } = new BiomeService(ctx.shell);
       const toolCmd = (cmd = "check") => `biome ${cmd} --colors=force`;
 
       if (options.fix) {

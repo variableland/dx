@@ -6,8 +6,12 @@ export class ShellService {
   #options: ShellOptions;
 
   constructor(options: ShellOptions) {
-    this.#options = options;
+    this.#options = Object.freeze(options);
     this.#shell = make$(options);
+  }
+
+  get options() {
+    return this.#options;
   }
 
   get $() {

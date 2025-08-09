@@ -1,25 +1,23 @@
 import { createCommand } from "commander";
+import { BiomeService } from "~/services/biome";
 import type { Context } from "~/services/ctx";
 
+function createToolCommand(toolBin: string) {
+  // biome-ignore format: I prefer multi-line
+  return createCommand(toolBin)
+    .helpCommand(false)
+    .helpOption(false)
+    .allowExcessArguments(true)
+    .allowUnknownOption(true);
+}
+
 export function createToolsCommand(ctx: Context) {
-  function createToolCommandAction(toolBin: string) {
-    return async function toolAction(_: unknown, { args }: { args: string[] }) {
-      await ctx.shell.$`${toolBin} ${args.join(" ")}`;
-    };
-  }
-
-  function createToolCommand(toolBin: string) {
-    return createCommand(toolBin)
-      .helpCommand(false)
-      .helpOption(false)
-      .allowExcessArguments(true)
-      .allowUnknownOption(true)
-      .action(createToolCommandAction(toolBin));
-  }
-
   return createCommand("tools")
     .description("expose the internal tools 🛠️")
-    .addCommand(createToolCommand("biome"))
-    .addCommand(createToolCommand("tsc"))
-    .addCommand(createToolCommand("rimraf"));
+    .addCommand(
+      createToolCommand("biome").action((_: unknown, { args }: { args: string[] }) => {
+        const biomeService = new BiomeService(ctx.shell);
+        biomeService.execute(args);
+      }),
+    );
 }
