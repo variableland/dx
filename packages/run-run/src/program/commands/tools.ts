@@ -1,14 +1,18 @@
 import { createCommand } from "commander";
+import { UI_LOGO } from "~/program/ui";
 import { BiomeService } from "~/services/biome";
 import type { Context } from "~/services/ctx";
+import { logger } from "~/services/logger";
 
 function createToolCommand(toolBin: string) {
-  // biome-ignore format: I prefer multi-line
   return createCommand(toolBin)
     .helpCommand(false)
     .helpOption(false)
     .allowExcessArguments(true)
-    .allowUnknownOption(true);
+    .allowUnknownOption(true)
+    .hook("preAction", (command) => {
+      logger.info(`Running ${UI_LOGO} tool: ${command.name()}`);
+    });
 }
 
 export function createToolsCommand(ctx: Context) {
