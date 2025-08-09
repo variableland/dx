@@ -17,7 +17,12 @@
   "bin": {
     "vland": "./bin.ts"
   },
-  "files": ["bin", "src", "plopfiles", "tsconfig.json"],
+  "files": [
+    "bin",
+    "src",
+    "plopfiles",
+    "tsconfig.json"
+  ],
   "scripts": {
     "typecheck": "rr tsc"
   },

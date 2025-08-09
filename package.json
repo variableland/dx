@@ -4,12 +4,10 @@
   "private": true,
   "scripts": {
     "build": "turbo build",
-    "rr": "rr",
-    "vland": "vland",
-    "prepare": "husky",
     "test": "turbo test",
     "test:coverage": "turbo test:coverage",
-    "typecheck": "turbo typecheck"
+    "typecheck": "turbo typecheck",
+    "prepare": "husky"
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.5.1",
