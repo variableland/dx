@@ -17,7 +17,7 @@
   "bin": {
     "rr": "./bin.ts",
     "run-run": "./bin.ts",
-    "biome": "./tools/biome"
+    "rr:biome": "./tools/biome"
   },
   "files": [
     "bin",
