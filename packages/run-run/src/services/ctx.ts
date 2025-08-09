@@ -34,6 +34,8 @@ export async function createContext(binDir: string): Promise<Context> {
     stdio: "inherit",
   });
 
+  debug("shell service options: %O", shell.options);
+
   return {
     appPkg,
     binPkg,
