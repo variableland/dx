@@ -2,7 +2,7 @@ import util from "node:util";
 import { type ConsolaInstance, createConsola } from "consola";
 import { colors } from "consola/utils";
 import createDebug from "debug";
-import { DEFAULT_FORMATTERS, DEFAULT_FORMAT_OPTIONS } from "./const";
+import { DEFAULT_FORMAT_OPTIONS, DEFAULT_FORMATTERS } from "./const";
 import type { AnyLogger, CreateOptions, LogFnOptions, LoggerOptions } from "./types";
 
 function isLogFnOptions(arg: unknown): arg is LogFnOptions {

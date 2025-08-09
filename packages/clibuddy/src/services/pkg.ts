@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import { type Project, findWorkspacePackages } from "@pnpm/workspace.find-packages";
+import { findWorkspacePackages, type Project } from "@pnpm/workspace.find-packages";
 import { readWorkspaceManifest } from "@pnpm/workspace.read-manifest";
 import { type NormalizedPackageJson, readPackageUp } from "read-package-up";
 

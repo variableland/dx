@@ -1,8 +1,6 @@
-import { isProcessOutput } from "@vlandoss/clibuddy";
 import { createCommand } from "commander";
 import isCI from "is-ci";
 import type { Context } from "~/services/ctx";
-import { logger } from "~/services/logger";
 
 export function createTestStaticCommand(ctx: Context) {
   return createCommand("test:static")

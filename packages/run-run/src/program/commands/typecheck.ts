@@ -1,4 +1,4 @@
-import { type Project, isProcessOutput } from "@vlandoss/clibuddy";
+import type { Project } from "@vlandoss/clibuddy";
 import { createCommand } from "commander";
 import type { Context } from "~/services/ctx";
 import { logger } from "~/services/logger";

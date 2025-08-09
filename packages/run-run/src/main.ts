@@ -1,5 +1,5 @@
 import { isProcessOutput } from "@vlandoss/clibuddy";
-import { type Options, createProgram } from "./program";
+import { createProgram, type Options } from "./program";
 import { logger } from "./services/logger";
 
 export async function main(options: Options) {

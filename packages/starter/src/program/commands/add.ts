@@ -1,5 +1,5 @@
 import { cwd } from "@vlandoss/clibuddy";
-import { Argument, Option, createCommand } from "commander";
+import { Argument, createCommand, Option } from "commander";
 import { AddAction } from "~/actions/add";
 import type { ContextValue } from "~/services/ctx";
 import { logger } from "~/services/logger";
