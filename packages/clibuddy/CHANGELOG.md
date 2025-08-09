@@ -1,5 +1,11 @@
 # @vlandoss/clibuddy
 
+## 0.0.3
+
+### Patch Changes
+
+- [#97](https://github.com/variableland/dx/pull/97) [`813cfcb`](https://github.com/variableland/dx/commit/813cfcb88e9f273b7f75cf2e2275904c25810130) Thanks [@rqbazan](https://github.com/rqbazan)! - Move to Biome v2
+
 ## 0.0.2
 
 ### Patch Changes
