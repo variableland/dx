@@ -1,4 +1,5 @@
 import { createCommand } from "commander";
+import { BiomeService } from "~/services/biome";
 import type { Context } from "~/services/ctx";
 
 export function createFormatCommand(ctx: Context) {
@@ -8,7 +9,7 @@ export function createFormatCommand(ctx: Context) {
     .option("-c, --check", "check if the code is formatted", true)
     .option("-f, --fix", "format all the code")
     .action(async function formatAction(options) {
-      const $ = ctx.shell.$;
+      const { $ } = new BiomeService(ctx.shell);
       const toolCmd = "biome format --no-errors-on-unmatched --colors=force";
 
       if (options.fix) {

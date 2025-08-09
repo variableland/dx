@@ -9,12 +9,14 @@ export class BiomeService implements ToolService {
     this.#shellService = shellService;
   }
 
-  async execute(args: string[]): Promise<void> {
-    const { $ } = this.#shellService.child({
+  get $() {
+    return this.#shellService.child({
       preferLocal: this.#getBinDir(),
-    });
+    }).$;
+  }
 
-    $`biome ${args.join(" ")}`;
+  async execute(args: string[]): Promise<void> {
+    this.$`biome ${args.join(" ")}`;
   }
 
   #getBinDir() {
