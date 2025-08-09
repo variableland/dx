@@ -2,4 +2,4 @@
 "@vlandoss/run-run": patch
 ---
 
-Expose biome binary as command
+Expose internal tools as the following command: `rr tools biome`
