@@ -4,8 +4,8 @@ import type { Context } from "~/services/ctx";
 import { logger } from "~/services/logger";
 
 export function createTypecheckCommand(ctx: Context) {
-  return createCommand("typecheck")
-    .alias("tsc")
+  return createCommand("tsc")
+    .alias("typecheck")
     .description("check if TypeScript code is well typed 🎨")
     .action(async function typecheckAction() {
       const { appPkg, shell } = ctx;
