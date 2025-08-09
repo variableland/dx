@@ -1,12 +1,12 @@
 import { getVersion } from "@vlandoss/clibuddy";
 import { Command } from "commander";
 import { createContext } from "~/services/ctx";
-import { createBiomeCommand } from "./commands/biome";
 import { createCleanCommand } from "./commands/clean";
 import { createFormatCommand } from "./commands/format";
 import { createInfoPkgCommand } from "./commands/info-pkg";
 import { createLintCommand } from "./commands/lint";
 import { createTestStaticCommand } from "./commands/test-static";
+import { createToolsCommand } from "./commands/tools";
 import { createTypecheckCommand } from "./commands/typecheck";
 import { BANNER_TEXT, CREDITS_TEXT } from "./ui";
 
@@ -28,7 +28,7 @@ export async function createProgram(options: Options) {
     .addCommand(createCleanCommand())
     .addCommand(createTypecheckCommand(ctx))
     .addCommand(createInfoPkgCommand(ctx))
-    .addCommand(createBiomeCommand(ctx), {
+    .addCommand(createToolsCommand(ctx), {
       hidden: true,
     });
 

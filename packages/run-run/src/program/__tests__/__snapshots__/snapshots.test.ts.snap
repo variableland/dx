@@ -184,3 +184,19 @@ Available commands:
 `;
 
 exports[`should match "biome" command 1`] = `"biome "`;
+
+exports[`should match help message for command "tools" 1`] = `
+"Usage: rr tools [options] [command]
+
+expose the internal tools 🛠️
+
+Options:
+  -h, --help      display help for command
+
+Commands:
+  biome
+  tsc
+  rimraf
+  help [command]  display help for command
+"
+`;

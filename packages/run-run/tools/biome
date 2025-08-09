@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-exec rr biome "$@"
+exec rr tools biome "$@"
