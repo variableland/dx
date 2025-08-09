@@ -11,13 +11,18 @@
     "url": "git+https://github.com/variableland/dx.git"
   },
   "author": "rcrd <rcrd@variable.land>",
-  "keywords": ["biome"],
+  "keywords": [
+    "biome"
+  ],
   "license": "MIT",
   "type": "module",
   "exports": {
-    ".": "./src/biome.json"
+    ".": "./src/config.json"
   },
   "publishConfig": {
     "access": "public"
+  },
+  "peerDependencies": {
+    "@biomejs/biome": "2.1.4"
   }
 }

@@ -1,6 +1,5 @@
 import { createCommand } from "commander";
 import type { Context } from "~/services/ctx";
-import { logger } from "~/services/logger";
 
 export function createFormatCommand(ctx: Context) {
   return createCommand("format")

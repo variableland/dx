@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.1.4/schema.json",
   "files": {
     "ignoreUnknown": true
   },
@@ -9,8 +9,12 @@
     "useIgnoreFile": true,
     "defaultBranch": "main"
   },
-  "organizeImports": {
-    "enabled": true
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
   },
   "linter": {
     "enabled": true,
@@ -21,7 +25,8 @@
   "formatter": {
     "enabled": true,
     "indentStyle": "space",
-    "lineWidth": 130
+    "lineWidth": 130,
+    "formatWithErrors": true
   },
   "javascript": {
     "formatter": {

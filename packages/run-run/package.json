@@ -18,13 +18,18 @@
     "rr": "./bin.ts",
     "run-run": "./bin.ts"
   },
-  "files": ["bin", "src", "plopfiles", "tsconfig.json"],
+  "files": [
+    "bin",
+    "src",
+    "plopfiles",
+    "tsconfig.json"
+  ],
   "scripts": {
     "test": "bun test",
     "typecheck": "rr tsc"
   },
   "dependencies": {
-    "@biomejs/biome": "1.9.4",
+    "@biomejs/biome": "2.1.4",
     "@vlandoss/clibuddy": "workspace:*",
     "@vlandoss/loggy": "workspace:*",
     "commander": "13.1.0",
