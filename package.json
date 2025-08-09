@@ -11,15 +11,15 @@
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.5.1",
-    "@changesets/cli": "^2.28.1",
+    "@changesets/cli": "^2.29.5",
     "@total-typescript/tsconfig": "^1.0.4",
     "@types/bun": "latest",
     "@vlandoss/biome-config": "workspace:*",
     "@vlandoss/run-run": "workspace:*",
     "@vlandoss/starter": "workspace:*",
     "husky": "^9.1.7",
-    "tsup": "^8.4.0",
-    "turbo": "^2.4.4"
+    "tsup": "^8.5.0",
+    "turbo": "^2.5.5"
   },
   "packageManager": "pnpm@10.6.4"
 }
