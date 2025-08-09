@@ -1,5 +1,11 @@
 # @vlandoss/run-run
 
+## 0.0.5
+
+### Patch Changes
+
+- [#101](https://github.com/variableland/dx/pull/101) [`7443fc2`](https://github.com/variableland/dx/commit/7443fc2019bd55b466c01df468daf5776525f8d4) Thanks [@rqbazan](https://github.com/rqbazan)! - Add check command name
+
 ## 0.0.4
 
 ### Patch Changes
