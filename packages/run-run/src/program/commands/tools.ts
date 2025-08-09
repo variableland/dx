@@ -4,11 +4,7 @@ import type { Context } from "~/services/ctx";
 export function createToolsCommand(ctx: Context) {
   function createToolCommandAction(toolBin: string) {
     return async function toolAction(_: unknown, { args }: { args: string[] }) {
-      const { $ } = ctx.shell.child({
-        preferLocal: false,
-      });
-
-      await $`${toolBin} ${args.join(" ")}`;
+      await ctx.shell.$`${toolBin} ${args.join(" ")}`;
     };
   }
 
