@@ -3,7 +3,8 @@ import isCI from "is-ci";
 import type { Context } from "~/services/ctx";
 
 export function createTestStaticCommand(ctx: Context) {
-  return createCommand("test:static")
+  return createCommand("check")
+    .alias("test:static")
     .description("check format and lint issues ✅")
     .option("-f, --fix", "try to fix issues automatically")
     .option("--fix-staged", "try to fix staged files only")
