@@ -6,18 +6,18 @@ exports[`should match command: "help" 1`] = `
 Usage: rr|run-run [options] [command]
 
 Options:
-  -v, --version          output the version number
-  -h, --help             display help for command
+  -v, --version                output the version number
+  -h, --help                   display help for command
 
 Commands:
-  format|fmt [options]   format the code 🎨
-  lint [options]         lint the code 🧹
-  test:static [options]  check format and lint issues ✅
-  clean [options]        delete dirty folders or files such as node_modules, etc
-                         🗑️
-  typecheck|tsc          check if TypeScript code is well typed 🎨
-  info:pkg [options]     display run-run package.json ℹ️
-  help [command]         display help for command
+  format|fmt [options]         format the code 🎨
+  lint [options]               lint the code 🧹
+  check|test:static [options]  check format and lint issues ✅
+  clean [options]              delete dirty folders or files such as
+                               node_modules, etc 🗑️
+  typecheck|tsc                check if TypeScript code is well typed 🎨
+  info:pkg [options]           display run-run package.json ℹ️
+  help [command]               display help for command
 
 Acknowledgment:
 - kcd-scripts: for main inspiration
@@ -34,18 +34,18 @@ exports[`should match command: "--help" 1`] = `
 Usage: rr|run-run [options] [command]
 
 Options:
-  -v, --version          output the version number
-  -h, --help             display help for command
+  -v, --version                output the version number
+  -h, --help                   display help for command
 
 Commands:
-  format|fmt [options]   format the code 🎨
-  lint [options]         lint the code 🧹
-  test:static [options]  check format and lint issues ✅
-  clean [options]        delete dirty folders or files such as node_modules, etc
-                         🗑️
-  typecheck|tsc          check if TypeScript code is well typed 🎨
-  info:pkg [options]     display run-run package.json ℹ️
-  help [command]         display help for command
+  format|fmt [options]         format the code 🎨
+  lint [options]               lint the code 🧹
+  check|test:static [options]  check format and lint issues ✅
+  clean [options]              delete dirty folders or files such as
+                               node_modules, etc 🗑️
+  typecheck|tsc                check if TypeScript code is well typed 🎨
+  info:pkg [options]           display run-run package.json ℹ️
+  help [command]               display help for command
 
 Acknowledgment:
 - kcd-scripts: for main inspiration
@@ -94,8 +94,8 @@ Under the hood, this command uses the biome CLI to lint the code.
 "
 `;
 
-exports[`should match help message for command "test:static" 1`] = `
-"Usage: rr test:static [options]
+exports[`should match help message for command "check" 1`] = `
+"Usage: rr check|test:static [options]
 
 check format and lint issues ✅
 
@@ -146,14 +146,6 @@ Options:
 "
 `;
 
-exports[`should match "format" command 1`] = `"biome format --no-errors-on-unmatched --colors=force"`;
-
-exports[`should match "lint" command 1`] = `"biome check --colors=force --formatter-enabled=false"`;
-
-exports[`should match "test:static" command 1`] = `"biome check --colors=force"`;
-
-exports[`should match "typecheck" command 1`] = `"tsc --noEmit"`;
-
 exports[`should match help message for command "tools" 1`] = `
 "Usage: rr tools [options] [command]
 
@@ -169,3 +161,11 @@ Commands:
   help [command]  display help for command
 "
 `;
+
+exports[`should match "format" command 1`] = `"biome format --no-errors-on-unmatched --colors=force"`;
+
+exports[`should match "lint" command 1`] = `"biome check --colors=force --formatter-enabled=false"`;
+
+exports[`should match "check" command 1`] = `"biome check --colors=force"`;
+
+exports[`should match "typecheck" command 1`] = `"tsc --noEmit"`;
