@@ -1,5 +1,12 @@
 # @vlandoss/starter
 
+## 0.0.5
+
+### Patch Changes
+
+- Updated dependencies [[`9557335`](https://github.com/variableland/dx/commit/95573357150d5de9c756b250748686e49ae5ced3)]:
+  - @vlandoss/clibuddy@0.0.4
+
 ## 0.0.4
 
 ### Patch Changes

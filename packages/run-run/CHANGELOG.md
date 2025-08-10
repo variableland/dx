@@ -1,5 +1,18 @@
 # @vlandoss/run-run
 
+## 0.0.6
+
+### Patch Changes
+
+- [#105](https://github.com/variableland/dx/pull/105) [`a5ef3f4`](https://github.com/variableland/dx/commit/a5ef3f4f6ee676a61aa97f13044711a8cba2d9a0) Thanks [@rqbazan](https://github.com/rqbazan)! - Refactor order and commands aliases
+
+- [#105](https://github.com/variableland/dx/pull/105) [`a5ef3f4`](https://github.com/variableland/dx/commit/a5ef3f4f6ee676a61aa97f13044711a8cba2d9a0) Thanks [@rqbazan](https://github.com/rqbazan)! - Remove info:pkg command
+
+- [#103](https://github.com/variableland/dx/pull/103) [`9557335`](https://github.com/variableland/dx/commit/95573357150d5de9c756b250748686e49ae5ced3) Thanks [@rqbazan](https://github.com/rqbazan)! - Fix biome tool script
+
+- Updated dependencies [[`9557335`](https://github.com/variableland/dx/commit/95573357150d5de9c756b250748686e49ae5ced3)]:
+  - @vlandoss/clibuddy@0.0.4
+
 ## 0.0.5
 
 ### Patch Changes

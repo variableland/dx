@@ -1,5 +1,11 @@
 # @vlandoss/clibuddy
 
+## 0.0.4
+
+### Patch Changes
+
+- [#103](https://github.com/variableland/dx/pull/103) [`9557335`](https://github.com/variableland/dx/commit/95573357150d5de9c756b250748686e49ae5ced3) Thanks [@rqbazan](https://github.com/rqbazan)! - Export Shell type
+
 ## 0.0.3
 
 ### Patch Changes
