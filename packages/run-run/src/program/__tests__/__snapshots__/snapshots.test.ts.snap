@@ -153,3 +153,19 @@ exports[`should match "lint" command 1`] = `"biome check --colors=force --format
 exports[`should match "test:static" command 1`] = `"biome check --colors=force"`;
 
 exports[`should match "typecheck" command 1`] = `"tsc --noEmit"`;
+
+exports[`should match help message for command "tools" 1`] = `
+"Usage: rr tools [options] [command]
+
+expose the internal tools 🛠️
+
+Options:
+  -h, --help      display help for command
+
+Commands:
+  biome
+  tsc
+  rimraf
+  help [command]  display help for command
+"
+`;

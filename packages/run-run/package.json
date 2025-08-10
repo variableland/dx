@@ -16,11 +16,13 @@
   "module": "src/main.ts",
   "bin": {
     "rr": "./bin.ts",
-    "run-run": "./bin.ts"
+    "run-run": "./bin.ts",
+    "biome": "./tools/biome"
   },
   "files": [
     "bin",
     "src",
+    "tools",
     "plopfiles",
     "tsconfig.json"
   ],

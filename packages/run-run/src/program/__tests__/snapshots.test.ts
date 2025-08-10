@@ -28,8 +28,7 @@ for (const command of cmd.commands) {
   });
 }
 
-// these command don't use shell ($) instance
-const hardCommands = ["info:pkg", "clean"];
+const hardCommands = ["info:pkg", "clean", "tools"];
 
 const easyTesteableCommands = cmd.commands.filter((command) => {
   const isHard = hardCommands.some((cmd) => command.name() === cmd);

@@ -6,6 +6,7 @@ import { createFormatCommand } from "./commands/format";
 import { createInfoPkgCommand } from "./commands/info-pkg";
 import { createLintCommand } from "./commands/lint";
 import { createTestStaticCommand } from "./commands/test-static";
+import { createToolsCommand } from "./commands/tools";
 import { createTypecheckCommand } from "./commands/typecheck";
 import { BANNER_TEXT, CREDITS_TEXT } from "./ui";
 
@@ -26,7 +27,10 @@ export async function createProgram(options: Options) {
     .addCommand(createTestStaticCommand(ctx))
     .addCommand(createCleanCommand())
     .addCommand(createTypecheckCommand(ctx))
-    .addCommand(createInfoPkgCommand(ctx));
+    .addCommand(createInfoPkgCommand(ctx))
+    .addCommand(createToolsCommand(ctx), {
+      hidden: true,
+    });
 
   return { cmd, ctx };
 }
