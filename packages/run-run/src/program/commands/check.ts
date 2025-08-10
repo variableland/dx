@@ -3,13 +3,13 @@ import isCI from "is-ci";
 import { BiomeService } from "~/services/biome";
 import type { Context } from "~/services/ctx";
 
-export function createTestStaticCommand(ctx: Context) {
+export function createCheckCommand(ctx: Context) {
   return createCommand("check")
     .alias("test:static")
-    .description("check format and lint issues ✅")
+    .description("check format and lint issues 🔍")
     .option("-f, --fix", "try to fix issues automatically")
     .option("--fix-staged", "try to fix staged files only")
-    .action(async function testStaticAction(options) {
+    .action(async function checkAction(options) {
       const { $ } = new BiomeService(ctx.shell);
       const toolCmd = (cmd = "check") => `biome ${cmd} --colors=force`;
 

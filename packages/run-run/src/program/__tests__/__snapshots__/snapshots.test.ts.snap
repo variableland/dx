@@ -10,13 +10,12 @@ Options:
   -h, --help                   display help for command
 
 Commands:
-  format|fmt [options]         format the code 🎨
+  check|test:static [options]  check format and lint issues 🔍
   lint [options]               lint the code 🧹
-  check|test:static [options]  check format and lint issues ✅
+  fmt|format [options]         format the code 🎨
+  tsc|typecheck                check if TypeScript code is well typed 🎨
   clean [options]              delete dirty folders or files such as
                                node_modules, etc 🗑️
-  typecheck|tsc                check if TypeScript code is well typed 🎨
-  info:pkg [options]           display run-run package.json ℹ️
   help [command]               display help for command
 
 Acknowledgment:
@@ -38,13 +37,12 @@ Options:
   -h, --help                   display help for command
 
 Commands:
-  format|fmt [options]         format the code 🎨
+  check|test:static [options]  check format and lint issues 🔍
   lint [options]               lint the code 🧹
-  check|test:static [options]  check format and lint issues ✅
+  fmt|format [options]         format the code 🎨
+  tsc|typecheck                check if TypeScript code is well typed 🎨
   clean [options]              delete dirty folders or files such as
                                node_modules, etc 🗑️
-  typecheck|tsc                check if TypeScript code is well typed 🎨
-  info:pkg [options]           display run-run package.json ℹ️
   help [command]               display help for command
 
 Acknowledgment:
@@ -66,17 +64,17 @@ exports[`should match command: "-v" 1`] = `
 "
 `;
 
-exports[`should match help message for command "format" 1`] = `
-"Usage: rr format|fmt [options]
+exports[`should match help message for command "check" 1`] = `
+"Usage: rr check|test:static [options]
 
-format the code 🎨
+check format and lint issues 🔍
 
 Options:
-  -c, --check  check if the code is formatted (default: true)
-  -f, --fix    format all the code
-  -h, --help   display help for command
+  -f, --fix     try to fix issues automatically
+  --fix-staged  try to fix staged files only
+  -h, --help    display help for command
 
-Under the hood, this command uses the biome CLI to format the code.
+Under the hood, this command uses the biome CLI to check the code.
 "
 `;
 
@@ -94,17 +92,29 @@ Under the hood, this command uses the biome CLI to lint the code.
 "
 `;
 
-exports[`should match help message for command "check" 1`] = `
-"Usage: rr check|test:static [options]
+exports[`should match help message for command "fmt" 1`] = `
+"Usage: rr fmt|format [options]
 
-check format and lint issues ✅
+format the code 🎨
 
 Options:
-  -f, --fix     try to fix issues automatically
-  --fix-staged  try to fix staged files only
-  -h, --help    display help for command
+  -c, --check  check if the code is formatted (default: true)
+  -f, --fix    format all the code
+  -h, --help   display help for command
 
-Under the hood, this command uses the biome CLI to check the code.
+Under the hood, this command uses the biome CLI to format the code.
+"
+`;
+
+exports[`should match help message for command "tsc" 1`] = `
+"Usage: rr tsc|typecheck [options]
+
+check if TypeScript code is well typed 🎨
+
+Options:
+  -h, --help  display help for command
+
+Under the hood, this command uses the TypeScript CLI to check the code.
 "
 `;
 
@@ -122,30 +132,6 @@ Under the hood, this command uses the rimraf.js to delete dirty folders or files
 "
 `;
 
-exports[`should match help message for command "typecheck" 1`] = `
-"Usage: rr typecheck|tsc [options]
-
-check if TypeScript code is well typed 🎨
-
-Options:
-  -h, --help  display help for command
-
-Under the hood, this command uses the TypeScript CLI to check the code.
-"
-`;
-
-exports[`should match help message for command "info:pkg" 1`] = `
-"Usage: rr info:pkg [options]
-
-display run-run package.json ℹ️
-
-Options:
-  -f, --filter <filter>  lodash get id like to filter info by
-  -c, --current          display package.json where run-run will be executed
-  -h, --help             display help for command
-"
-`;
-
 exports[`should match help message for command "tools" 1`] = `
 "Usage: rr tools [options] [command]
 
@@ -160,10 +146,10 @@ Commands:
 "
 `;
 
-exports[`should match "format" command 1`] = `"biome format --no-errors-on-unmatched --colors=force"`;
+exports[`should match "check" command 1`] = `"biome check --colors=force"`;
 
 exports[`should match "lint" command 1`] = `"biome check --colors=force --formatter-enabled=false"`;
 
-exports[`should match "check" command 1`] = `"biome check --colors=force"`;
+exports[`should match "fmt" command 1`] = `"biome format --no-errors-on-unmatched --colors=force"`;
 
-exports[`should match "typecheck" command 1`] = `"tsc --noEmit"`;
+exports[`should match "tsc" command 1`] = `"tsc --noEmit"`;
