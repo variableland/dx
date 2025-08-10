@@ -1,5 +1,11 @@
 # @vlandoss/starter
 
+## 0.0.6
+
+### Patch Changes
+
+- [#109](https://github.com/variableland/dx/pull/109) [`d633196`](https://github.com/variableland/dx/commit/d63319692b93fcfd45acd0e05ccdb1f31ec928d6) Thanks [@rqbazan](https://github.com/rqbazan)! - Fix biome config file template
+
 ## 0.0.5
 
 ### Patch Changes

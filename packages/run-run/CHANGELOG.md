@@ -1,5 +1,13 @@
 # @vlandoss/run-run
 
+## 0.0.7
+
+### Patch Changes
+
+- [#109](https://github.com/variableland/dx/pull/109) [`d633196`](https://github.com/variableland/dx/commit/d63319692b93fcfd45acd0e05ccdb1f31ec928d6) Thanks [@rqbazan](https://github.com/rqbazan)! - Fix biome lsp
+
+- [#107](https://github.com/variableland/dx/pull/107) [`dcb6ee2`](https://github.com/variableland/dx/commit/dcb6ee20283ebaf80aa1f60b6fec1d3abc05422b) Thanks [@rqbazan](https://github.com/rqbazan)! - Add mark for tools cmd
+
 ## 0.0.6
 
 ### Patch Changes
