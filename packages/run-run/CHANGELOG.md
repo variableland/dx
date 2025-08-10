@@ -1,5 +1,11 @@
 # @vlandoss/run-run
 
+## 0.0.4
+
+### Patch Changes
+
+- [#99](https://github.com/variableland/dx/pull/99) [`faa1b3e`](https://github.com/variableland/dx/commit/faa1b3e9b615d5102099fd43db0fc657caa19d01) Thanks [@rqbazan](https://github.com/rqbazan)! - Expose internal tools as the following command: `rr tools biome`
+
 ## 0.0.3
 
 ### Patch Changes
