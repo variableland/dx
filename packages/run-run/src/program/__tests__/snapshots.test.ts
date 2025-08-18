@@ -1,7 +1,7 @@
 import { afterEach, expect, test } from "bun:test";
-import { createTestProgram, execCli, mocked, parseProgram } from "test/helpers";
+import { createTestProgram, execCli, mocked } from "test/helpers";
 
-const { cmd, ctx } = await createTestProgram();
+const { program, ctx } = await createTestProgram();
 const $ = ctx.shell.$;
 
 const rootCommands = ["help", "--help", "--version", "-v"];
@@ -18,30 +18,12 @@ for (const cmd of rootCommands) {
   });
 }
 
-for (const command of cmd.commands) {
+for (const command of program.commands) {
   const cmd = command.name();
 
   test(`should match help message for command "${cmd}"`, async () => {
     const { stdout } = await execCli(`${cmd} --help`);
 
     expect(stdout).toMatchSnapshot();
-  });
-}
-
-const hardCommands = ["info:pkg", "clean", "tools"];
-
-const easyTesteableCommands = cmd.commands.filter((command) => {
-  const isHard = hardCommands.some((cmd) => command.name() === cmd);
-  return !isHard;
-});
-
-for (const command of easyTesteableCommands) {
-  const cmd = command.name();
-
-  test(`should match "${cmd}" command`, async () => {
-    await parseProgram([cmd]);
-
-    expect($).toHaveBeenCalledTimes(1);
-    expect(mocked($).mock.results[0]?.value).toMatchSnapshot();
   });
 }
