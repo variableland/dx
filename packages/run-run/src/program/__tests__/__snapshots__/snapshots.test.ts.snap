@@ -3,7 +3,7 @@
 exports[`should match command: "help" 1`] = `
 "🦊 R U N - R U N: The CLI toolbox to fullstack common scripts in Variable Land 👊
 
-Usage: rr|run-run [options] [command]
+Usage: rr|run-run [options] <command...>
 
 Options:
   -v, --version                output the version number
@@ -30,7 +30,7 @@ Acknowledgment:
 exports[`should match command: "--help" 1`] = `
 "🦊 R U N - R U N: The CLI toolbox to fullstack common scripts in Variable Land 👊
 
-Usage: rr|run-run [options] [command]
+Usage: rr|run-run [options] <command...>
 
 Options:
   -v, --version                output the version number
@@ -61,6 +61,17 @@ exports[`should match command: "--version" 1`] = `
 
 exports[`should match command: "-v" 1`] = `
 "0.0.0-test
+"
+`;
+
+exports[`should match help message for command "run" 1`] = `
+"Usage: rr run [options] <cmds...>
+
+Arguments:
+  cmds        commands to execute in sequence (e.g. 'check tsc')
+
+Options:
+  -h, --help  display help for command
 "
 `;
 
@@ -145,11 +156,3 @@ Commands:
   help [command]  display help for command
 "
 `;
-
-exports[`should match "check" command 1`] = `"biome check --colors=force"`;
-
-exports[`should match "lint" command 1`] = `"biome check --colors=force --formatter-enabled=false"`;
-
-exports[`should match "fmt" command 1`] = `"biome format --no-errors-on-unmatched --colors=force"`;
-
-exports[`should match "tsc" command 1`] = `"tsc --noEmit"`;
