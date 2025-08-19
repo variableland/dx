@@ -1,5 +1,11 @@
 # @vlandoss/run-run
 
+## 0.0.8
+
+### Patch Changes
+
+- [#110](https://github.com/variableland/dx/pull/110) [`4d9c358`](https://github.com/variableland/dx/commit/4d9c35853dc56277554f211d06add78b2400570e) Thanks [@rqbazan](https://github.com/rqbazan)! - Allow run multiple commands
+
 ## 0.0.7
 
 ### Patch Changes
