@@ -6,7 +6,7 @@ import { createProgram } from "../src/program";
 const execAsync = promisify(exec);
 
 export async function createTestProgram() {
-  const { cmd, ctx } = await createProgram({
+  const { program, ctx } = await createProgram({
     binDir: ".", // mocked value
   });
 
@@ -14,15 +14,15 @@ export async function createTestProgram() {
   const writeOutFn = mock();
   const writeErrFn = mock();
 
-  cmd.exitOverride(exitFn);
+  program.exitOverride(exitFn);
 
-  cmd.configureOutput({
+  program.configureOutput({
     writeOut: writeOutFn,
     writeErr: writeErrFn,
   });
 
   return {
-    cmd,
+    program,
     ctx,
     exitFn,
     writeOutFn,
@@ -31,9 +31,9 @@ export async function createTestProgram() {
 }
 
 export async function parseProgram(argv: string[]) {
-  const { cmd } = await createTestProgram();
+  const { program } = await createTestProgram();
 
-  await cmd.parseAsync(argv, {
+  await program.parseAsync(argv, {
     from: "user",
   });
 }

@@ -10,9 +10,11 @@ export function createTypecheckCommand(ctx: Context) {
     .action(async function typecheckAction() {
       const { appPkg, shell } = ctx;
 
-      async function singleTypecheck(dir?: string): Promise<boolean | undefined> {
+      async function singleTypecheck(dir?: string, options?: { logger?: typeof logger }): Promise<boolean | undefined> {
+        const log = options?.logger ?? logger;
+
         if (!appPkg.hasFile("tsconfig.json", dir)) {
-          logger.info("No tsconfig.json found, skipping typecheck");
+          log.info("No tsconfig.json found, skipping typecheck");
           return;
         }
 
@@ -34,7 +36,9 @@ export function createTypecheckCommand(ctx: Context) {
         try {
           childLogger.start("Type checking started");
 
-          const success = await singleTypecheck(project.rootDir);
+          const success = await singleTypecheck(project.rootDir, {
+            logger: childLogger,
+          });
 
           if (success) {
             childLogger.success("Typecheck completed");
