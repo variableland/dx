@@ -4,8 +4,7 @@
 
 ### Patch Changes
 
-- [#112](https://github.com/variableland/dx/pull/112) [`838e75a`](https://github.com/variableland/dx/commit/838e75a15bcb58ff3d5d53e8e2ec803d12e1c98c) Thanks [@rqbazan](https://github.com/rqbazan)! - - Fix parse args
-  - Stop using `--unsafe` flag
+- [#112](https://github.com/variableland/dx/pull/112) [`838e75a`](https://github.com/variableland/dx/commit/838e75a15bcb58ff3d5d53e8e2ec803d12e1c98c) Thanks [@rqbazan](https://github.com/rqbazan)! - Fix parse args & stop using `--unsafe` flag
 
 ## 0.0.8
 
