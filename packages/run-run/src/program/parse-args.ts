@@ -1,8 +1,15 @@
+import { logger } from "../services/logger";
+
+const debug = logger.subdebug("parseArgs");
+
 export function parseArgs(argv = process.argv) {
   const args = argv.slice(2);
-  const allArgsAreCommands = args.every((arg) => !arg.startsWith("-"));
+  const allArgsAreValidCommands = args.every((arg) => !arg.startsWith("-")) && args.length > 1 && args[0] !== "tools";
 
-  if (allArgsAreCommands && args.length > 1) {
+  debug("args %O", args);
+
+  if (allArgsAreValidCommands) {
+    debug("multiple commands detected, adding 'run' command");
     return ["run", ...args];
   }
 

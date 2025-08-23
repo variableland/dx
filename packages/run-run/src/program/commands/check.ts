@@ -14,12 +14,12 @@ export function createCheckCommand(ctx: Context) {
       const toolCmd = (cmd = "check") => `biome ${cmd} --colors=force`;
 
       if (options.fix) {
-        await $`${toolCmd()} --fix --unsafe`;
+        await $`${toolCmd()} --fix`;
         return;
       }
 
       if (options.fixStaged) {
-        await $`${toolCmd()} --no-errors-on-unmatched --fix --unsafe --staged`;
+        await $`${toolCmd()} --no-errors-on-unmatched --fix --staged`;
         return;
       }
 
