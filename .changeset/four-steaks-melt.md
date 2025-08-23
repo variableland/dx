@@ -2,4 +2,5 @@
 "@vlandoss/run-run": patch
 ---
 
-Fix parse args
+- Fix parse args
+- Stop using `--unsafe` flag
