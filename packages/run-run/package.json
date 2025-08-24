@@ -27,8 +27,7 @@
     "tsconfig.json"
   ],
   "scripts": {
-    "test": "bun test",
-    "typecheck": "rr tsc"
+    "test": "bun test"
   },
   "dependencies": {
     "@biomejs/biome": "2.1.4",

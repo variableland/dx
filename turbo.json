@@ -13,10 +13,6 @@
     "test:coverage": {
       "persistent": true,
       "cache": false
-    },
-    "typecheck": {
-      "persistent": true,
-      "cache": false
     }
   }
 }
