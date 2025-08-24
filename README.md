@@ -37,24 +37,22 @@ To use this monorepo, you need to have the following tools installed:
 3. Run tests:
 
    ```bash
-   pnpm rr test:static
-   pnpm run typecheck
-   pnpm run test
+   pnpm rr check tsc
+   pnpm test
    ```
 
 ### Commands
 
 This monorepo uses [Turborepo](https://turbo.build/repo/docs) to manage tasks. Here are some useful commands:
 
-- `pnpm run build` - Build all packages
-- `pnpm run typecheck` - Run type checking for all packages
-- `pnpm run test` - Run tests for all packages
-- `pnpm run test:coverage` - Run tests with coverage for all packages
+- `pnpm build` - Build all packages
+- `pnpm test` - Run tests for all packages
+- `pnpm test:coverage` - Run tests with coverage for all packages
 
 Additionally, the monorepo itself uses the CLIs [`run-run`](./packages/run-run/README.md) and [`starter`](./packages/starter/README.md):
 
-- `pnpm run rr` - Run the `run-run` CLI in development mode
-- `pnpm run vland` - Run the `starter` CLI in development mode
+- `pnpm rr` - Run the `run-run` CLI in development mode
+- `pnpm vland` - Run the `starter` CLI in development mode
 
 If you have [mise](https://mise.jdx.dev) installed, you can use the following commands directly:
 
@@ -70,5 +68,5 @@ This monorepo uses [Changesets](https://github.com/changesets/changesets) to man
 To preview changes in any package, create a pull request using the branch pattern `feat/*` or `fix/*`. This triggers a special GitHub workflow that publishes the package with the changes to the npm registry under the tag `pr-<PR_NUMBER>`. To preview your changes, install the package with the corresponding tag:
 
 ```bash
-pnpm install @vlandoss/<package>@pr-123
+pnpm add @vlandoss/<package>@pr-123
 ```
