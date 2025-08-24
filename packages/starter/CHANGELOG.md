@@ -1,5 +1,11 @@
 # @vlandoss/starter
 
+## 0.0.7
+
+### Patch Changes
+
+- [#115](https://github.com/variableland/dx/pull/115) [`e64d35c`](https://github.com/variableland/dx/commit/e64d35c10e0cb63ba35011986cdd54cedec71e5d) Thanks [@rqbazan](https://github.com/rqbazan)! - Change husky pre-commit template
+
 ## 0.0.6
 
 ### Patch Changes
