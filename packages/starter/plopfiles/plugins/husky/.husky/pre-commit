@@ -5,5 +5,5 @@ if [ "$branch" = "main" ]; then
   exit 1
 fi
 
-rr test:static --fix-staged
+pnpm rr check --fix-staged
 git update-index --again
