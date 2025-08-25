@@ -1,0 +1,36 @@
+{
+  "name": "@vlandoss/localproxy",
+  "version": "0.0.0",
+  "description": "Simple local development proxy automation",
+  "homepage": "https://github.com/variableland/dx/tree/main/packages/localproxy#readme",
+  "bugs": {
+    "url": "https://github.com/variableland/dx/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/variableland/dx.git"
+  },
+  "license": "MIT",
+  "author": "rcrd <rcrd@variable.land>",
+  "type": "module",
+  "bin": {
+    "localproxy": "./bin.ts"
+  },
+  "files": [
+    "bin",
+    "src",
+    "config"
+  ],
+  "dependencies": {
+    "@inquirer/prompts": "^7.8.4",
+    "@vlandoss/clibuddy": "workspace:*",
+    "@vlandoss/loggy": "workspace:*",
+    "commander": "13.1.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "bun": ">=1.0.0"
+  }
+}

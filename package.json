@@ -16,6 +16,7 @@
     "@vlandoss/biome-config": "workspace:*",
     "@vlandoss/run-run": "workspace:*",
     "@vlandoss/starter": "workspace:*",
+    "@vlandoss/localproxy": "workspace:*",
     "husky": "^9.1.7",
     "tsup": "^8.5.0",
     "turbo": "^2.5.5"

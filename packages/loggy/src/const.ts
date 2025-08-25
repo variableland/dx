@@ -6,6 +6,7 @@ export const DEFAULT_FORMAT_OPTIONS: FormatOptions = {
   depth: 3,
   maxArrayLength: 50,
   breakLength: 80,
+  date: false,
 };
 
 export const DEFAULT_FORMATTERS: Formatters = {
