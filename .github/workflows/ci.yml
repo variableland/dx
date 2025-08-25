@@ -23,12 +23,10 @@ jobs:
         uses: variableland/gh-actions/actions/setup-pnpm-bun@main
 
       - name: 💅 Test static
-        run: |
-          bun run rr test:static
-          bun run typecheck
+        run: pnpm rr check tsc
 
       - name: 🧪 Test unit
-        run: bun run test
+        run: pnpm test
 
   release:
     runs-on: ubuntu-latest

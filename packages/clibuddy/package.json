@@ -33,8 +33,7 @@
   ],
   "scripts": {
     "build": "tsup",
-    "prepublishOnly": "bun run build",
-    "typecheck": "rr tsc"
+    "prepublishOnly": "pnpm build"
   },
   "dependencies": {
     "@pnpm/workspace.find-packages": "^1000.0.23",
