@@ -1,5 +1,11 @@
 # @vlandoss/loggy
 
+## 0.0.4
+
+### Patch Changes
+
+- [#117](https://github.com/variableland/dx/pull/117) [`3c05da4`](https://github.com/variableland/dx/commit/3c05da44e93bc66433cd222e1f1466a7e2048cec) Thanks [@rqbazan](https://github.com/rqbazan)! - Remove the default time
+
 ## 0.0.3
 
 ### Patch Changes
