@@ -6,3 +6,4 @@
 | loggy | Console wrapper to make logging fun again | [loggy](../packages/loggy/README.md) |
 | run-run | The CLI toolbox to fullstack common scripts in Variable Land | [run-run](../packages/run-run/README.md) |
 | starter | The CLI to init a new project in Variable Land | [starter](../packages/starter/README.md) |
+| localproxy | Simple local development proxy automation | [localproxy](../packages/localproxy/README.md) |

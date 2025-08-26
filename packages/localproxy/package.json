@@ -14,7 +14,8 @@
   "author": "rcrd <rcrd@variable.land>",
   "type": "module",
   "bin": {
-    "localproxy": "./bin.ts"
+    "localproxy": "./bin.ts",
+    "localp": "./bin.ts"
   },
   "files": [
     "bin",

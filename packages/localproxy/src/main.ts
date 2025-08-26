@@ -29,6 +29,7 @@ async function createProgram(options: ProgramOptions) {
   const ctx = await createContext(options);
 
   return createCommand("localproxy")
+    .alias("localp")
     .version(getVersion(ctx.binPkg), "-v, --version")
     .addHelpText("before", BANNER_TEXT)
     .addHelpText("after", CREDITS_TEXT)
