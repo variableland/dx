@@ -20,7 +20,8 @@
   "files": [
     "bin",
     "src",
-    "config"
+    "config",
+    "tsconfig.json"
   ],
   "dependencies": {
     "@inquirer/prompts": "^7.8.4",
