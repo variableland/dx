@@ -19,7 +19,7 @@ export class HostsService {
   }
 
   async setup(options: SetupOptions) {
-    verboseShell.$`sudo hosts backups create`;
+    await verboseShell.$`sudo hosts backups create`;
 
     for (const host of this.#hosts) {
       await this.addHost(host, options);

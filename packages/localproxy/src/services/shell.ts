@@ -12,4 +12,5 @@ export const silentShell = quietShell.child({
 export const verboseShell = quietShell.child({
   quiet: false,
   verbose: true,
+  stdio: ["inherit", "inherit", "inherit"],
 });
