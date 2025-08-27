@@ -1,6 +1,6 @@
 import * as fs from "node:fs/promises";
 import path from "node:path";
-import { editor } from "@inquirer/prompts";
+import { editor as editorPrompt, password as passwordPrompt } from "@inquirer/prompts";
 import { createCommand } from "commander";
 import { CaddyService } from "~/services/caddy";
 import { HostsService } from "~/services/hosts";
@@ -65,7 +65,7 @@ export function createSetupCommand({ binDir, installDir, caddyfilePath }: Contex
         ? await fs.readFile(caddyfilePath, "utf-8")
         : await fs.readFile(exampleCaddyFilePath, "utf-8");
 
-      const fileContent = await editor({
+      const fileContent = await editorPrompt({
         message: "Caddyfile",
         default: defaultContent,
       });
@@ -80,8 +80,12 @@ export function createSetupCommand({ binDir, installDir, caddyfilePath }: Contex
       const localDomains = caddyService.getLocalDomains();
       const hosts = localDomains.map((d) => d.host);
 
+      const password = await passwordPrompt({
+        message: "sudo password to manage hosts",
+      });
+
       const hostsService = new HostsService(hosts);
-      await hostsService.setup(options);
+      await hostsService.setup({ ...options, password });
 
       logger.success("localproxy setup completed");
     });

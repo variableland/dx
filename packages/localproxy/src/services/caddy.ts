@@ -56,11 +56,11 @@ export class CaddyService {
     const { $ } = this.#shell({ verbose });
 
     try {
-      debug("Starting Caddy...");
+      logger.start("Starting Caddy");
 
       await $`caddy start -c ${this.#configPath} --pidfile ${this.#pidFilePath} > /dev/null 2>&1`;
 
-      debug("Caddy started");
+      logger.success("Caddy started");
     } catch {
       logger.error("Can't start Caddy");
       process.exit(1);
@@ -71,12 +71,12 @@ export class CaddyService {
     const { $ } = this.#shell({ verbose });
 
     try {
-      debug("Stopping Caddy...");
+      logger.start("Stopping Caddy");
 
       await $`caddy stop -c ${this.#configPath}`;
       this.#deleteCaddyPid();
 
-      debug("Caddy stopped");
+      logger.success("Caddy stopped");
     } catch {
       logger.error("Can't stop Caddy");
       process.exit(1);

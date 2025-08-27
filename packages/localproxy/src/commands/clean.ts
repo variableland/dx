@@ -1,3 +1,4 @@
+import { password as passwordPrompt } from "@inquirer/prompts";
 import { createCommand } from "commander";
 import { CaddyService } from "~/services/caddy";
 import { HostsService } from "~/services/hosts";
@@ -19,8 +20,12 @@ export function createCleanCommand({ caddyfilePath }: Context) {
       const localDomains = caddyService.getLocalDomains();
       const hosts = localDomains.map((d) => d.host);
 
+      const password = await passwordPrompt({
+        message: "sudo password to manage hosts",
+      });
+
       const hostsService = new HostsService(hosts);
-      await hostsService.clean(options);
+      await hostsService.clean({ ...options, password });
 
       logger.success("localproxy clean completed");
     });
