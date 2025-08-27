@@ -1,5 +1,15 @@
 # @vlandoss/run-run
 
+## 0.0.10
+
+### Patch Changes
+
+- [#117](https://github.com/variableland/dx/pull/117) [`3c05da4`](https://github.com/variableland/dx/commit/3c05da44e93bc66433cd222e1f1466a7e2048cec) Thanks [@rqbazan](https://github.com/rqbazan)! - Update readme
+
+- Updated dependencies [[`3c05da4`](https://github.com/variableland/dx/commit/3c05da44e93bc66433cd222e1f1466a7e2048cec), [`3c05da4`](https://github.com/variableland/dx/commit/3c05da44e93bc66433cd222e1f1466a7e2048cec)]:
+  - @vlandoss/clibuddy@0.0.5
+  - @vlandoss/loggy@0.0.4
+
 ## 0.0.9
 
 ### Patch Changes
