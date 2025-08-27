@@ -1,0 +1,3 @@
+my-app.localhost {
+    reverse_proxy localhost:3000
+}

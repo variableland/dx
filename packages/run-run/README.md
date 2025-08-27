@@ -36,7 +36,7 @@ rr help
 To enable debug mode, set the `DEBUG` environment variable to `run-run:*` before running *any* command.
 
 ```sh
-DEBUG=run-run:* rr help
+DEBUG=run-run:* rr <command>
 ```
 
 Additionally, there is an special command to display `package.json` information:
