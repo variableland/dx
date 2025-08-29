@@ -11,10 +11,10 @@ export function createStopCommand({ caddyfilePath }: Context) {
   return createCommand("stop")
     .description("stop caddy server")
     .option("--verbose", "verbose mode, show background output", false)
-    .action(async (options: CommandOptions) => {
+    .action(async function stopAction(options: CommandOptions) {
       const caddyService = new CaddyService(caddyfilePath);
       await caddyService.stop(options);
 
-      logger.success("localproxy stop completed");
+      logger.success("Stop completed!");
     });
 }

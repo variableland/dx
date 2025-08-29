@@ -44,6 +44,10 @@ export class CaddyService {
     return verbose ? verboseShell : silentShell;
   }
 
+  #getPID() {
+    return this.#hasCaddyPid() ? fs.readFileSync(this.#pidFilePath, "utf-8").trim() : null;
+  }
+
   async reboot(options: ExecOption) {
     const isRunning = await this.isRunning();
     if (isRunning) {
@@ -53,6 +57,11 @@ export class CaddyService {
   }
 
   async start({ verbose }: ExecOption) {
+    if (await this.isRunning()) {
+      logger.warn("Caddy is already running. PID: %d", this.#getPID());
+      return;
+    }
+
     const { $ } = this.#shell({ verbose });
 
     try {
@@ -88,14 +97,14 @@ export class CaddyService {
       return false;
     }
 
-    const pid = (await quietShell.$`cat ${this.#pidFilePath}`.text()).trim();
+    const pid = this.#getPID();
 
-    debug("Caddy PID: %d", pid);
+    debug("caddy PID: %d", pid);
 
     const { exitCode } = await quietShell.$`kill -0 ${pid}`.nothrow();
     const isRunning = exitCode === 0;
 
-    debug("Caddy is %s", isRunning ? "running" : "stopped");
+    debug("caddy is %s", isRunning ? "running" : "stopped");
 
     return isRunning;
   }

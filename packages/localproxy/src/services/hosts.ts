@@ -1,50 +1,44 @@
 import { logger } from "./logger";
 import { quietShell, silentShell, verboseShell } from "./shell";
+import { SudoService } from "./sudo";
 
 type SetupOptions = {
   verbose: boolean;
-  password: string;
 };
 
 const debug = logger.subdebug("hosts");
 
 export class HostsService {
   #hosts: string[];
+  #sudo: SudoService;
 
   constructor(domains: string[]) {
     this.#hosts = domains;
+    this.#sudo = new SudoService();
   }
 
   #shell({ verbose }: SetupOptions) {
     return verbose ? verboseShell : silentShell;
   }
 
-  async #auth(password: string) {
-    if (!password) {
-      throw new Error("Password is required");
-    }
-
-    // Asking sudo directly in JS is unreliable,
-    // so we do it through a shell command
-    await silentShell.child({
-      stdio: ["ignore", "ignore", "pipe"],
-    }).$`echo "${password}" | sudo -S -v`;
-  }
-
   async setup(options: SetupOptions) {
-    await this.#auth(options.password);
+    logger.start("Setting up hosts");
 
-    const { stdout } = await verboseShell.$`sudo hosts backups create`;
-    const backupPath = stdout.match(/(\/[^\s]+)/)?.[1];
-    debug("Backup created at %s", backupPath);
+    await this.#sudo.auth();
+
+    const { $ } = this.#shell(options);
+
+    await $`sudo hosts backups create`;
 
     for (const host of this.#hosts) {
       await this.addHost(host, options);
     }
+
+    logger.success("Hosts ready");
   }
 
   async clean(options: SetupOptions) {
-    await this.#auth(options.password);
+    await this.#sudo.auth();
 
     for (const host of this.#hosts) {
       await this.removeHost(host, options);
@@ -53,8 +47,9 @@ export class HostsService {
 
   async findHost(host: string) {
     const { exitCode } = await quietShell.$`hosts show "${host}"`.nothrow();
-    debug("Host %s is %s", host, !exitCode ? "present" : "absent");
-    return !exitCode;
+    const found = exitCode === 0;
+    debug("Host %s is %s", host, found ? "present" : "absent");
+    return found;
   }
 
   async addHost(host: string, options: SetupOptions) {

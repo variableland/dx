@@ -1,6 +1,6 @@
 import * as fs from "node:fs/promises";
 import path from "node:path";
-import { editor as editorPrompt, password as passwordPrompt } from "@inquirer/prompts";
+import { editor as editorPrompt } from "@inquirer/prompts";
 import { createCommand } from "commander";
 import { CaddyService } from "~/services/caddy";
 import { HostsService } from "~/services/hosts";
@@ -33,7 +33,7 @@ async function checkInternalTools() {
     process.exit(1);
   }
 
-  debug("Caddy version: %s", caddyVersion.stdout.trim());
+  debug("caddy version: %s", caddyVersion.stdout.trim());
 
   const hostsVersion = await $`hosts --version`.nothrow();
 
@@ -51,7 +51,7 @@ export function createSetupCommand({ binDir, installDir, caddyfilePath }: Contex
   return createCommand("setup")
     .description("setup config files")
     .option("--verbose", "verbose mode, show background output", false)
-    .action(async (options: CommandOptions) => {
+    .action(async function setupAction(options: CommandOptions) {
       debug("setup command options %o", options);
 
       await checkInternalTools();
@@ -80,13 +80,9 @@ export function createSetupCommand({ binDir, installDir, caddyfilePath }: Contex
       const localDomains = caddyService.getLocalDomains();
       const hosts = localDomains.map((d) => d.host);
 
-      const password = await passwordPrompt({
-        message: "sudo password to manage hosts",
-      });
-
       const hostsService = new HostsService(hosts);
-      await hostsService.setup({ ...options, password });
+      await hostsService.setup(options);
 
-      logger.success("localproxy setup completed");
+      logger.success("Setup completed!");
     });
 }
