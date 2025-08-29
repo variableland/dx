@@ -90,7 +90,7 @@ importers:
         specifier: ^3.4.2
         version: 3.4.2
       debug:
-        specifier: ^4.4.0
+        specifier: ^4.4.1
         version: 4.4.1(supports-color@10.0.0)
     devDependencies:
       '@types/debug':

@@ -12,7 +12,7 @@ export function createCleanCommand({ caddyfilePath }: Context) {
   return createCommand("clean")
     .description("clean up config files")
     .option("--verbose", "verbose mode, show background output", false)
-    .action(async (options: CommandOptions) => {
+    .action(async function cleanAction(options: CommandOptions) {
       const caddyService = new CaddyService(caddyfilePath);
       await caddyService.stop(options);
 
@@ -22,6 +22,6 @@ export function createCleanCommand({ caddyfilePath }: Context) {
       const hostsService = new HostsService(hosts);
       await hostsService.clean(options);
 
-      logger.success("localproxy clean completed");
+      logger.success("Clean completed!");
     });
 }

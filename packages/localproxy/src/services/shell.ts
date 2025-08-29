@@ -6,11 +6,11 @@ export const quietShell = createShellService({
 });
 
 export const silentShell = quietShell.child({
-  stdio: ["ignore", "ignore", "ignore"],
+  stdio: "ignore",
 });
 
 export const verboseShell = quietShell.child({
   quiet: false,
   verbose: true,
-  stdio: ["inherit", "inherit", "inherit"],
+  stdio: "inherit",
 });
