@@ -1,5 +1,12 @@
 # @vlandoss/starter
 
+## 0.0.9
+
+### Patch Changes
+
+- Updated dependencies [[`462d5b4`](https://github.com/variableland/dx/commit/462d5b493bb1adaa2ed428d2b428fcaaa3001575)]:
+  - @vlandoss/loggy@0.0.5
+
 ## 0.0.8
 
 ### Patch Changes

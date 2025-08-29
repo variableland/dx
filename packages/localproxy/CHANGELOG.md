@@ -1,5 +1,14 @@
 # @vlandoss/localproxy
 
+## 0.0.2
+
+### Patch Changes
+
+- [#120](https://github.com/variableland/dx/pull/120) [`462d5b4`](https://github.com/variableland/dx/commit/462d5b493bb1adaa2ed428d2b428fcaaa3001575) Thanks [@rqbazan](https://github.com/rqbazan)! - Fix find host and ask sudo password
+
+- Updated dependencies [[`462d5b4`](https://github.com/variableland/dx/commit/462d5b493bb1adaa2ed428d2b428fcaaa3001575)]:
+  - @vlandoss/loggy@0.0.5
+
 ## 0.0.1
 
 ### Patch Changes
