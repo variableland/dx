@@ -1,5 +1,11 @@
 # @vlandoss/loggy
 
+## 0.0.5
+
+### Patch Changes
+
+- [#120](https://github.com/variableland/dx/pull/120) [`462d5b4`](https://github.com/variableland/dx/commit/462d5b493bb1adaa2ed428d2b428fcaaa3001575) Thanks [@rqbazan](https://github.com/rqbazan)! - Update debug dependency
+
 ## 0.0.4
 
 ### Patch Changes
