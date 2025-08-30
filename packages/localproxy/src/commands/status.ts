@@ -7,14 +7,13 @@ import type { Context } from "~/types";
 export function createStatusCommand({ caddyfilePath }: Context) {
   return createCommand("status")
     .description("show configured localhosts")
-    .option("--verbose", "verbose mode, show background output", false)
-    .action(async () => {
+    .action(async function statusAction() {
       const caddyService = new CaddyService(caddyfilePath);
 
       if (await caddyService.isRunning()) {
         logger.info("Caddy is running");
       } else {
-        logger.warn("Caddy is not running");
+        logger.warn("Caddy is not running. Use `localp start` to start it.");
       }
 
       const localDomains = caddyService.getLocalDomains();
@@ -27,9 +26,9 @@ export function createStatusCommand({ caddyfilePath }: Context) {
         const found = await hostsService.findHost(host);
 
         if (found) {
-          logger.success("%s is configured -> :%s", host, port);
+          logger.success("`%s` is configured -> :%s", host, port);
         } else {
-          logger.warn("%s is not configured -> :%s", host, port);
+          logger.warn("`%s` is not configured -> :%s", host, port);
         }
       }
     });
