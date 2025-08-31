@@ -1,6 +1,6 @@
 {
   "name": "@vlandoss/localproxy",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Simple local development proxy automation",
   "homepage": "https://github.com/variableland/dx/tree/main/packages/localproxy#readme",
   "bugs": {
