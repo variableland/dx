@@ -23,6 +23,9 @@
     "config",
     "tsconfig.json"
   ],
+  "scripts": {
+    "test": "vitest run"
+  },
   "dependencies": {
     "@inquirer/prompts": "^7.8.4",
     "@vlandoss/clibuddy": "workspace:*",

@@ -14,12 +14,14 @@
     "@total-typescript/tsconfig": "^1.0.4",
     "@types/bun": "latest",
     "@vlandoss/biome-config": "workspace:*",
+    "@vlandoss/localproxy": "workspace:*",
     "@vlandoss/run-run": "workspace:*",
     "@vlandoss/starter": "workspace:*",
-    "@vlandoss/localproxy": "workspace:*",
     "husky": "^9.1.7",
     "tsup": "^8.5.0",
-    "turbo": "^2.5.5"
+    "turbo": "^2.5.5",
+    "vite-tsconfig-paths": "^5.1.4",
+    "vitest": "^3.2.4"
   },
   "packageManager": "pnpm@10.6.4"
 }
