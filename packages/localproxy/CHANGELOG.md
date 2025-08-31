@@ -1,5 +1,11 @@
 # @vlandoss/localproxy
 
+## 0.0.3
+
+### Patch Changes
+
+- [#123](https://github.com/variableland/dx/pull/123) [`70e3674`](https://github.com/variableland/dx/commit/70e3674b76bd15c4817d68a6d3a1e9374027ea72) Thanks [@rqbazan](https://github.com/rqbazan)! - Support multple ports for same host
+
 ## 0.0.2
 
 ### Patch Changes
