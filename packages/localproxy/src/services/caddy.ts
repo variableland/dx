@@ -9,11 +9,6 @@ type ExecOption = {
   verbose: boolean;
 };
 
-export type LocalDomain = {
-  host: string;
-  port: string;
-};
-
 export class CaddyService {
   #configPath: string;
   #pidFilePath: string;
@@ -107,24 +102,5 @@ export class CaddyService {
     debug("caddy is %s", isRunning ? "running" : "stopped");
 
     return isRunning;
-  }
-
-  getLocalDomains(): LocalDomain[] {
-    const caddyfileContent = fs.readFileSync(this.#configPath, "utf-8");
-
-    const REGEX = /^(.+)\.localhost/gm;
-    const matches = caddyfileContent.matchAll(REGEX);
-
-    const hosts = Array.from(matches, (m) => m[0]).filter(Boolean) as string[];
-
-    const localDomains: LocalDomain[] = hosts.map((host) => {
-      const index = caddyfileContent.indexOf(host);
-      const port = caddyfileContent.slice(index).match(/localhost:(\d+)/)?.[1] || "80";
-      return { host, port };
-    });
-
-    debug("detected domains: %o", localDomains);
-
-    return localDomains;
   }
 }

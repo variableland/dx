@@ -1,0 +1,12 @@
+app-1.localhost, app-2.localhost {
+    reverse_proxy localhost:3000
+}
+
+app-3.localhost app-4.localhost {
+    reverse_proxy localhost:3001
+}
+
+app-5.localhost,
+app-6.localhost {
+    reverse_proxy localhost:3002
+}

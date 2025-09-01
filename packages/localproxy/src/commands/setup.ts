@@ -3,6 +3,8 @@ import path from "node:path";
 import { editor as editorPrompt } from "@inquirer/prompts";
 import { createCommand } from "commander";
 import { CaddyService } from "~/services/caddy";
+import { CaddyfileService } from "~/services/caddyfile";
+import { FileService } from "~/services/file";
 import { HostsService } from "~/services/hosts";
 import { logger } from "~/services/logger";
 import { quietShell } from "~/services/shell";
@@ -13,13 +15,6 @@ type CommandOptions = {
 };
 
 const debug = logger.subdebug("setup");
-
-async function printFile(filePath: string) {
-  const fileContent = (await fs.readFile(filePath)).toString();
-
-  console.log(`${filePath}:\n`);
-  console.log(fileContent.trim());
-}
 
 async function checkInternalTools() {
   const { $ } = quietShell;
@@ -72,12 +67,15 @@ export function createSetupCommand({ binDir, installDir, caddyfilePath }: Contex
 
       await fs.writeFile(caddyfilePath, fileContent);
 
-      await printFile(caddyfilePath);
+      const fileService = new FileService(caddyfilePath);
+      await fileService.print();
 
       const caddyService = new CaddyService(caddyfilePath);
       await caddyService.reboot(options);
 
-      const localDomains = caddyService.getLocalDomains();
+      const caddyfileService = new CaddyfileService(caddyfilePath);
+
+      const localDomains = await caddyfileService.getLocalDomains();
       const hosts = localDomains.map((d) => d.host);
 
       const hostsService = new HostsService(hosts);

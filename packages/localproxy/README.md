@@ -28,7 +28,7 @@ http://admin.localhost
 pnpm add -g @vlandoss/localproxy
 ```
 
-It will adds the `localproxy` to your global workspace
+It will adds the `localp` CLI to your global workspace
 
 ## Usage
 
@@ -38,7 +38,7 @@ It will adds the `localproxy` to your global workspace
 Run the help command:
 
 ```sh
-localproxy help
+localp help
 ```
 
 ## Troubleshooting
@@ -46,5 +46,5 @@ localproxy help
 To enable debug mode, set the `DEBUG` environment variable to `localproxy:*` before running *any* command.
 
 ```sh
-DEBUG=localproxy:* localproxy <command>
+DEBUG=localproxy:* localp <command>
 ```
