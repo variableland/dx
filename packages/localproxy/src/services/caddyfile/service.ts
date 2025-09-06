@@ -5,7 +5,7 @@ import { CaddyfileParser } from "./parser";
 const debug = logger.subdebug("caddyfile-service");
 
 export type LocalDomain = {
-  host: string;
+  hostname: string;
   ports: string[];
 };
 
@@ -33,7 +33,7 @@ export class CaddyfileService {
         .map((arg) => arg.split(":")[1] as string);
 
       return block.sites.map((site) => {
-        return { host: site, ports };
+        return { hostname: site, ports };
       });
     });
 

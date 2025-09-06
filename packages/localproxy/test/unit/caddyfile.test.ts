@@ -31,7 +31,7 @@ describe("caddyfile service", () => {
       fixture: "Caddyfile.simple",
       expected: [
         {
-          host: "app.localhost",
+          hostname: "app.localhost",
           ports: ["3000"],
         },
       ],
@@ -44,27 +44,27 @@ describe("caddyfile service", () => {
       fixture: "Caddyfile.with-multiple-sites",
       expected: [
         {
-          host: "app-1.localhost",
+          hostname: "app-1.localhost",
           ports: ["3000"],
         },
         {
-          host: "app-2.localhost",
+          hostname: "app-2.localhost",
           ports: ["3000"],
         },
         {
-          host: "app-3.localhost",
+          hostname: "app-3.localhost",
           ports: ["3001"],
         },
         {
-          host: "app-4.localhost",
+          hostname: "app-4.localhost",
           ports: ["3001"],
         },
         {
-          host: "app-5.localhost",
+          hostname: "app-5.localhost",
           ports: ["3002"],
         },
         {
-          host: "app-6.localhost",
+          hostname: "app-6.localhost",
           ports: ["3002"],
         },
       ],
@@ -77,7 +77,7 @@ describe("caddyfile service", () => {
       fixture: "Caddyfile.with-multiple-directives",
       expected: [
         {
-          host: "app.localhost",
+          hostname: "app.localhost",
           ports: ["3001", "3000"],
         },
       ],

@@ -23,21 +23,19 @@ export function createStatusCommand({ caddyfilePath }: Context) {
 
       const caddyfileService = new CaddyfileService(caddyfilePath);
       const localDomains = await caddyfileService.getLocalDomains();
-      const hosts = localDomains.map((d) => d.host);
 
-      const hostsService = new HostsService(hosts);
+      const hostsService = new HostsService();
+      const enabledHosts = await hostsService.getEnabledHosts();
 
-      for (const domain of localDomains) {
-        const { host, ports } = domain;
-
-        const found = await hostsService.findHost(host);
+      localDomains.forEach(({ hostname, ports }) => {
+        const enabled = enabledHosts.some((h) => h.hostname === hostname);
         const formattedPorts = ports.map((p) => `:${p}`).join(", ");
 
-        if (found) {
-          logger.success("`%s` is configured -> %s", host, formattedPorts);
+        if (enabled) {
+          logger.success("`%s` is configured -> %s", hostname, formattedPorts);
         } else {
-          logger.warn("`%s` is not configured -> %s", host, formattedPorts);
+          logger.warn("`%s` is not configured -> %s", hostname, formattedPorts);
         }
-      }
+      });
     });
 }
