@@ -47,7 +47,7 @@ export function createSetupCommand({ binDir, installDir, caddyfilePath }: Contex
     .description("setup config files")
     .option("--verbose", "verbose mode, show background output", false)
     .action(async function setupAction(options: CommandOptions) {
-      debug("setup command options %o", options);
+      const { verbose } = options;
 
       await checkInternalTools();
 
@@ -71,15 +71,14 @@ export function createSetupCommand({ binDir, installDir, caddyfilePath }: Contex
       await fileService.print();
 
       const caddyService = new CaddyService(caddyfilePath);
-      await caddyService.reboot(options);
+      await caddyService.reboot({ verbose });
 
       const caddyfileService = new CaddyfileService(caddyfilePath);
-
       const localDomains = await caddyfileService.getLocalDomains();
-      const hosts = localDomains.map((d) => d.host);
+      const hostnames = localDomains.map((d) => d.hostname);
 
-      const hostsService = new HostsService(hosts);
-      await hostsService.setup(options);
+      const hostsService = new HostsService();
+      await hostsService.setup({ verbose, hostnames });
 
       logger.success("Setup completed!");
     });

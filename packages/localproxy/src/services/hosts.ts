@@ -4,16 +4,20 @@ import { SudoService } from "./sudo";
 
 type SetupOptions = {
   verbose: boolean;
+  hostnames: string[];
+};
+
+type Host = {
+  ip: string;
+  hostname: string;
 };
 
 const debug = logger.subdebug("hosts");
 
 export class HostsService {
-  #hosts: string[];
   #sudo: SudoService;
 
-  constructor(domains: string[]) {
-    this.#hosts = domains;
+  constructor() {
     this.#sudo = new SudoService();
   }
 
@@ -22,6 +26,8 @@ export class HostsService {
   }
 
   async setup(options: SetupOptions) {
+    const { hostnames } = options;
+
     logger.start("Setting up hosts");
 
     await this.#sudo.auth();
@@ -30,7 +36,7 @@ export class HostsService {
 
     await $`sudo hosts backups create`;
 
-    for (const host of this.#hosts) {
+    for (const host of hostnames) {
       await this.addHost(host, options);
     }
 
@@ -38,9 +44,11 @@ export class HostsService {
   }
 
   async clean(options: SetupOptions) {
+    const { hostnames } = options;
+
     await this.#sudo.auth();
 
-    for (const host of this.#hosts) {
+    for (const host of hostnames) {
       await this.removeHost(host, options);
     }
   }
@@ -70,5 +78,24 @@ export class HostsService {
     if (!found) {
       await $`sudo hosts remove ${host}`;
     }
+  }
+
+  async getEnabledHosts(): Promise<Host[]> {
+    const output = await quietShell.$`hosts list enabled`.text();
+
+    const hosts = output
+      .split("\n")
+      .map((line) => {
+        const [ip, hostname] = line.split(/\s+/);
+
+        if (!ip || !hostname) {
+          return null;
+        }
+
+        return { ip, hostname };
+      })
+      .filter(Boolean);
+
+    return hosts as Host[];
   }
 }
