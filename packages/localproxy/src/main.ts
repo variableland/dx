@@ -45,7 +45,11 @@ export async function main(options: ProgramOptions) {
     const program = await createProgram(options);
     await program.parseAsync();
   } catch (error) {
-    logger.error("Cannot run main successfully", error);
-    process.exit(1);
+    if (error instanceof Error && error.name === "ExitPromptError") {
+      logger.success("👋 cancelled, until next time!");
+    } else {
+      logger.error(error);
+      process.exit(1);
+    }
   }
 }
