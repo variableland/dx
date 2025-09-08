@@ -1,5 +1,11 @@
 # @vlandoss/localproxy
 
+## 0.0.5
+
+### Patch Changes
+
+- [#127](https://github.com/variableland/dx/pull/127) [`d40355f`](https://github.com/variableland/dx/commit/d40355fa43c3d0f251012575f1d719856884ad58) Thanks [@rqbazan](https://github.com/rqbazan)! - Add gracefully exit
+
 ## 0.0.4
 
 ### Patch Changes
