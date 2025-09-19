@@ -1,9 +1,9 @@
 import { describe, expect, it } from "bun:test";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { FixtureReader } from "test/helpers";
-import { CaddyfileService, type LocalDomain } from "~/services/caddyfile";
-import { type Caddyfile, CaddyfileParser } from "~/services/caddyfile/parser";
+import { CaddyfileService, type LocalDomain } from "#/services/caddyfile";
+import { type Caddyfile, CaddyfileParser } from "#/services/caddyfile/parser";
+import { FixtureReader } from "#test/helpers";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const fixtureReader = new FixtureReader(__dirname);

@@ -1,6 +1,6 @@
 import { getVersion } from "@vlandoss/clibuddy";
 import { createCommand } from "commander";
-import { createContext } from "~/services/ctx";
+import { createContext } from "#/services/ctx";
 import { createCheckCommand } from "./commands/check";
 import { createCleanCommand } from "./commands/clean";
 import { createFormatCommand } from "./commands/format";

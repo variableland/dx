@@ -1,6 +1,6 @@
 import { createCommand } from "commander";
-import { BiomeService } from "~/services/biome";
-import type { Context } from "~/services/ctx";
+import { BiomeService } from "#/services/biome";
+import type { Context } from "#/services/ctx";
 
 export function createLintCommand(ctx: Context) {
   return createCommand("lint")
