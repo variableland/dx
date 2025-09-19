@@ -1,5 +1,5 @@
 import type { ShellService } from "@vlandoss/clibuddy";
-import { gracefullBinDir } from "~/utils/gracefullBinDir";
+import { gracefullBinDir } from "#/utils/gracefullBinDir";
 import type { ToolService } from "./models";
 
 export class BiomeService implements ToolService {

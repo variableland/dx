@@ -1,5 +1,5 @@
 import { afterEach, expect, test } from "bun:test";
-import { createTestProgram, execCli, mocked } from "test/helpers";
+import { createTestProgram, execCli, mocked } from "#test/helpers";
 
 const { program, ctx } = await createTestProgram();
 const $ = ctx.shell.$;
