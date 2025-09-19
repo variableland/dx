@@ -10,20 +10,29 @@ afterEach(() => {
   mocked($).mockClear();
 });
 
-for (const cmd of rootCommands) {
-  test(`should match command: "${cmd}"`, async () => {
-    const { stdout } = await execCli(cmd);
+test("should match all root commands", async () => {
+  const results = await Promise.all(
+    rootCommands.map(async (cmd) => {
+      const { stdout } = await execCli(cmd);
+      return { cmd, output: stdout };
+    }),
+  );
 
-    expect(stdout).toMatchSnapshot();
-  });
-}
+  for (const { cmd, output } of results) {
+    expect(output).toMatchSnapshot(`root-command-${cmd}`);
+  }
+});
 
-for (const command of program.commands) {
-  const cmd = command.name();
+test("should match help messages for all commands", async () => {
+  const results = await Promise.all(
+    program.commands.map(async (command) => {
+      const cmd = command.name();
+      const { stdout } = await execCli(`${cmd} --help`);
+      return { cmd, output: stdout };
+    }),
+  );
 
-  test(`should match help message for command "${cmd}"`, async () => {
-    const { stdout } = await execCli(`${cmd} --help`);
-
-    expect(stdout).toMatchSnapshot();
-  });
-}
+  for (const { cmd, output } of results) {
+    expect(output).toMatchSnapshot(`help-command-${cmd}`);
+  }
+});
