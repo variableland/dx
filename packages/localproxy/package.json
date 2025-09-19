@@ -24,7 +24,7 @@
     "tsconfig.json"
   ],
   "scripts": {
-    "test": "vitest run"
+    "test": "bun test"
   },
   "dependencies": {
     "@inquirer/prompts": "^7.8.4",
