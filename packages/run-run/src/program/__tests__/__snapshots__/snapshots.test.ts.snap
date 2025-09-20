@@ -1,6 +1,6 @@
 // Bun Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`should match command: "help" 1`] = `
+exports[`should match all root commands: root-command-help 1`] = `
 "🦊 R U N - R U N: The CLI toolbox to fullstack common scripts in Variable Land 👊
 
 Usage: rr|run-run [options] <command...>
@@ -27,7 +27,7 @@ Acknowledgment:
 "
 `;
 
-exports[`should match command: "--help" 1`] = `
+exports[`should match all root commands: root-command---help 1`] = `
 "🦊 R U N - R U N: The CLI toolbox to fullstack common scripts in Variable Land 👊
 
 Usage: rr|run-run [options] <command...>
@@ -54,17 +54,17 @@ Acknowledgment:
 "
 `;
 
-exports[`should match command: "--version" 1`] = `
+exports[`should match all root commands: root-command---version 1`] = `
 "0.0.0-test
 "
 `;
 
-exports[`should match command: "-v" 1`] = `
+exports[`should match all root commands: root-command--v 1`] = `
 "0.0.0-test
 "
 `;
 
-exports[`should match help message for command "run" 1`] = `
+exports[`should match help messages for all commands: help-command-run 1`] = `
 "Usage: rr run [options] <cmds...>
 
 Arguments:
@@ -75,7 +75,7 @@ Options:
 "
 `;
 
-exports[`should match help message for command "check" 1`] = `
+exports[`should match help messages for all commands: help-command-check 1`] = `
 "Usage: rr check|test:static [options]
 
 check format and lint issues 🔍
@@ -89,7 +89,7 @@ Under the hood, this command uses the biome CLI to check the code.
 "
 `;
 
-exports[`should match help message for command "lint" 1`] = `
+exports[`should match help messages for all commands: help-command-lint 1`] = `
 "Usage: rr lint [options]
 
 lint the code 🧹
@@ -103,7 +103,7 @@ Under the hood, this command uses the biome CLI to lint the code.
 "
 `;
 
-exports[`should match help message for command "fmt" 1`] = `
+exports[`should match help messages for all commands: help-command-fmt 1`] = `
 "Usage: rr fmt|format [options]
 
 format the code 🎨
@@ -117,7 +117,7 @@ Under the hood, this command uses the biome CLI to format the code.
 "
 `;
 
-exports[`should match help message for command "tsc" 1`] = `
+exports[`should match help messages for all commands: help-command-tsc 1`] = `
 "Usage: rr tsc|typecheck [options]
 
 check if TypeScript code is well typed 🎨
@@ -129,7 +129,7 @@ Under the hood, this command uses the TypeScript CLI to check the code.
 "
 `;
 
-exports[`should match help message for command "clean" 1`] = `
+exports[`should match help messages for all commands: help-command-clean 1`] = `
 "Usage: rr clean [options]
 
 delete dirty folders or files such as node_modules, etc 🗑️
@@ -143,7 +143,7 @@ Under the hood, this command uses the rimraf.js to delete dirty folders or files
 "
 `;
 
-exports[`should match help message for command "tools" 1`] = `
+exports[`should match help messages for all commands: help-command-tools 1`] = `
 "Usage: rr tools [options] [command]
 
 expose the internal tools 🛠️
