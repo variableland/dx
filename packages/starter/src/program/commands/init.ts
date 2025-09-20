@@ -1,9 +1,9 @@
 import { cwd } from "@vlandoss/clibuddy";
 import { Argument, createCommand, Option } from "commander";
-import { InitAction } from "~/actions/init";
-import type { ContextValue } from "~/services/ctx";
-import { logger } from "~/services/logger";
-import { createPlopTemplateService } from "~/services/template";
+import { InitAction } from "#/actions/init";
+import type { ContextValue } from "#/services/ctx";
+import { logger } from "#/services/logger";
+import { createPlopTemplateService } from "#/services/template";
 
 type InitOptions = {
   dest: string;

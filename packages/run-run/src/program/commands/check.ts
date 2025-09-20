@@ -1,7 +1,7 @@
 import { createCommand } from "commander";
 import isCI from "is-ci";
-import { BiomeService } from "~/services/biome";
-import type { Context } from "~/services/ctx";
+import { BiomeService } from "#/services/biome";
+import type { Context } from "#/services/ctx";
 
 export function createCheckCommand(ctx: Context) {
   return createCommand("check")

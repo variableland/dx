@@ -1,5 +1,5 @@
-import { logger } from "~/services/logger";
-import type { TemplateService } from "~/services/types";
+import { logger } from "#/services/logger";
+import type { TemplateService } from "#/services/types";
 import type { AnyAction } from "./types";
 
 type CreateOptions = {

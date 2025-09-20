@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import { logger } from "~/services/logger";
+import { logger } from "#/services/logger";
 
 export function gracefullBinDir(binPathResolver: () => string) {
   try {

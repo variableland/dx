@@ -1,7 +1,7 @@
 import type { Project } from "@vlandoss/clibuddy";
 import { createCommand } from "commander";
-import type { Context } from "~/services/ctx";
-import { logger } from "~/services/logger";
+import type { Context } from "#/services/ctx";
+import { logger } from "#/services/logger";
 
 export function createTypecheckCommand(ctx: Context) {
   return createCommand("tsc")

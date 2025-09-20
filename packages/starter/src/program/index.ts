@@ -1,6 +1,6 @@
 import { getVersion } from "@vlandoss/clibuddy";
 import { Command } from "commander";
-import { createContext } from "~/services/ctx";
+import { createContext } from "#/services/ctx";
 import { createAddCommand } from "./commands/add";
 import { createInitCommand } from "./commands/init";
 import { BANNER_TEXT } from "./ui";
