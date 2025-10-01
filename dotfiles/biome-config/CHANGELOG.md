@@ -1,5 +1,11 @@
 # @vlandoss/biome-config
 
+## 0.0.4
+
+### Patch Changes
+
+- [#132](https://github.com/variableland/dx/pull/132) [`7074d20`](https://github.com/variableland/dx/commit/7074d208730494641fc6b3bc18176cbf2371f29f) Thanks [@rqbazan](https://github.com/rqbazan)! - Disable svg without title rule
+
 ## 0.0.3
 
 ### Patch Changes
