@@ -1,5 +1,11 @@
 # @vlandoss/biome-config
 
+## 0.0.5
+
+### Patch Changes
+
+- [#134](https://github.com/variableland/dx/pull/134) [`6fe338f`](https://github.com/variableland/dx/commit/6fe338f630efe7c2554fb2bd172157d395d3931b) Thanks [@rqbazan](https://github.com/rqbazan)! - Off complexity/noStaticOnlyClass lint rule
+
 ## 0.0.4
 
 ### Patch Changes
