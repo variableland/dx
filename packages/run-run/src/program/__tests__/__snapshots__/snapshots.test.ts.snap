@@ -16,6 +16,8 @@ Commands:
   tsc|typecheck                check if TypeScript code is well typed 🎨
   clean [options]              delete dirty folders or files such as
                                node_modules, etc 🗑️
+  pkgs|packages [options]      list unique affected packages from list of files
+                               📦
   help [command]               display help for command
 
 Acknowledgment:
@@ -43,6 +45,8 @@ Commands:
   tsc|typecheck                check if TypeScript code is well typed 🎨
   clean [options]              delete dirty folders or files such as
                                node_modules, etc 🗑️
+  pkgs|packages [options]      list unique affected packages from list of files
+                               📦
   help [command]               display help for command
 
 Acknowledgment:
@@ -140,6 +144,18 @@ Options:
   -h, --help   display help for command
 
 Under the hood, this command uses the rimraf.js to delete dirty folders or files.
+"
+`;
+
+exports[`should match help messages for all commands: help-command-pkgs 1`] = `
+"Usage: rr pkgs|packages [options]
+
+list unique affected packages from list of files 📦
+
+Options:
+  --files <files...>  list of files to check
+  --decorator [type]  type of decorator to use (choices: "turbo")
+  -h, --help          display help for command
 "
 `;
 
