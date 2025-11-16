@@ -1,5 +1,11 @@
 # @vlandoss/run-run
 
+## 0.0.12
+
+### Patch Changes
+
+- [#136](https://github.com/variableland/dx/pull/136) [`ab88a87`](https://github.com/variableland/dx/commit/ab88a8781750f49ea394c7da00bc014ce1aba2a1) Thanks [@rqbazan](https://github.com/rqbazan)! - Add `pkgs` command
+
 ## 0.0.11
 
 ### Patch Changes
