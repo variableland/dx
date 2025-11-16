@@ -5,6 +5,7 @@ import { createCheckCommand } from "./commands/check";
 import { createCleanCommand } from "./commands/clean";
 import { createFormatCommand } from "./commands/format";
 import { createLintCommand } from "./commands/lint";
+import { createPkgsCommand } from "./commands/pkgs";
 import { createRunCommand } from "./commands/run";
 import { createToolsCommand } from "./commands/tools";
 import { createTypecheckCommand } from "./commands/typecheck";
@@ -31,6 +32,7 @@ export async function createProgram(options: Options) {
     .addCommand(createFormatCommand(ctx))
     .addCommand(createTypecheckCommand(ctx))
     .addCommand(createCleanCommand())
+    .addCommand(createPkgsCommand(ctx))
     .addCommand(createToolsCommand(ctx), {
       hidden: true,
     });
