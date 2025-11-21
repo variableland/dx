@@ -10,21 +10,10 @@ export function createTypecheckCommand(ctx: Context) {
     .action(async function typecheckAction() {
       const { appPkg, shell } = ctx;
 
-      async function singleTypecheck(dir?: string, options?: { logger?: typeof logger }): Promise<boolean | undefined> {
-        const log = options?.logger ?? logger;
+      const isTsProject = (dir: string) => appPkg.hasFile("tsconfig.json", dir);
 
-        if (!appPkg.hasFile("tsconfig.json", dir)) {
-          log.info("No tsconfig.json found, skipping typecheck");
-          return;
-        }
-
-        if (dir) {
-          await shell.at(dir).$`tsc --noEmit`;
-        } else {
-          await shell.$`tsc --noEmit`;
-        }
-
-        return true;
+      async function typecheckTask(dir: string) {
+        await shell.at(dir).$`tsc --noEmit`;
       }
 
       async function typecheckAtProject(project: Project) {
@@ -35,14 +24,8 @@ export function createTypecheckCommand(ctx: Context) {
 
         try {
           childLogger.start("Type checking started");
-
-          const success = await singleTypecheck(project.rootDir, {
-            logger: childLogger,
-          });
-
-          if (success) {
-            childLogger.success("Typecheck completed");
-          }
+          await typecheckTask(project.rootDir);
+          childLogger.success("Typecheck completed");
         } catch (error) {
           childLogger.error("Typecheck failed");
           throw error;
@@ -51,7 +34,12 @@ export function createTypecheckCommand(ctx: Context) {
 
       if (!appPkg.isMonorepo()) {
         try {
-          await singleTypecheck();
+          if (!isTsProject(appPkg.dirPath)) {
+            logger.info("No tsconfig.json found, skipping typecheck");
+            return;
+          }
+
+          await typecheckTask(appPkg.dirPath);
         } catch (error) {
           logger.error("Typecheck failed");
           throw error;
@@ -59,10 +47,14 @@ export function createTypecheckCommand(ctx: Context) {
       }
 
       const projects = await appPkg.getWorkspaceProjects();
+      const tsProjects = projects.filter((project) => isTsProject(project.rootDir));
 
-      for (const project of projects) {
-        await typecheckAtProject(project);
+      if (!tsProjects.length) {
+        logger.warn("No TypeScript projects found in the monorepo, skipping typecheck");
+        return;
       }
+
+      await Promise.all(tsProjects.map(typecheckAtProject));
     })
     .addHelpText("afterAll", "\nUnder the hood, this command uses the TypeScript CLI to check the code.");
 }
