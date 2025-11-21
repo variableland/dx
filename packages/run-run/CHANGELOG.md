@@ -1,5 +1,11 @@
 # @vlandoss/run-run
 
+## 0.0.13
+
+### Patch Changes
+
+- [#138](https://github.com/variableland/dx/pull/138) [`87c603a`](https://github.com/variableland/dx/commit/87c603aadca4681370e1387d280522cf82426dd9) Thanks [@rqbazan](https://github.com/rqbazan)! - Add concurrency to tsc
+
 ## 0.0.12
 
 ### Patch Changes
