@@ -12,7 +12,15 @@ export function createTypecheckCommand(ctx: Context) {
 
       const isTsProject = (dir: string) => appPkg.hasFile("tsconfig.json", dir);
 
-      async function typecheckTask(dir: string) {
+      const getPreScript = (scripts: Record<string, string> | undefined) => {
+        return scripts?.pretsc ?? scripts?.pretypecheck;
+      };
+
+      async function typecheckTask(dir: string, preScript?: string) {
+        if (preScript) {
+          await shell.at(dir).$`${preScript}`;
+        }
+
         await shell.at(dir).$`tsc --noEmit`;
       }
 
@@ -24,7 +32,8 @@ export function createTypecheckCommand(ctx: Context) {
 
         try {
           childLogger.start("Type checking started");
-          await typecheckTask(project.rootDir);
+          const preScript = getPreScript(project.manifest.scripts);
+          await typecheckTask(project.rootDir, preScript);
           childLogger.success("Typecheck completed");
         } catch (error) {
           childLogger.error("Typecheck failed");
@@ -39,11 +48,16 @@ export function createTypecheckCommand(ctx: Context) {
             return;
           }
 
-          await typecheckTask(appPkg.dirPath);
+          const preScript = getPreScript(appPkg.packageJson.scripts);
+
+          logger.start("Type checking started");
+          await typecheckTask(appPkg.dirPath, preScript);
+          logger.success("Typecheck completed");
         } catch (error) {
           logger.error("Typecheck failed");
           throw error;
         }
+        return;
       }
 
       const projects = await appPkg.getWorkspaceProjects();
