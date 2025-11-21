@@ -72,7 +72,7 @@ exports[`should match help messages for all commands: help-command-run 1`] = `
 "Usage: rr run [options] <cmds...>
 
 Arguments:
-  cmds        commands to execute in sequence (e.g. 'check tsc')
+  cmds        commands to execute concurrently (e.g. 'check tsc')
 
 Options:
   -h, --help  display help for command
