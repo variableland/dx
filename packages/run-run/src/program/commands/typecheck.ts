@@ -1,7 +1,14 @@
-import type { Project } from "@vlandoss/clibuddy";
+import { cwd } from "@vlandoss/clibuddy";
+import type { AnyLogger } from "@vlandoss/loggy";
 import { createCommand } from "commander";
 import type { Context } from "#/services/ctx";
 import { logger } from "#/services/logger";
+
+type TypecheckAtOptions = {
+  dir: string;
+  scripts: Record<string, string | undefined> | undefined;
+  log: AnyLogger;
+};
 
 export function createTypecheckCommand(ctx: Context) {
   return createCommand("tsc")
@@ -10,59 +17,65 @@ export function createTypecheckCommand(ctx: Context) {
     .action(async function typecheckAction() {
       const { appPkg, shell } = ctx;
 
-      async function singleTypecheck(dir?: string, options?: { logger?: typeof logger }): Promise<boolean | undefined> {
-        const log = options?.logger ?? logger;
+      const isTsProject = (dir: string) => appPkg.hasFile("tsconfig.json", dir);
 
-        if (!appPkg.hasFile("tsconfig.json", dir)) {
-          log.info("No tsconfig.json found, skipping typecheck");
-          return;
-        }
+      const getPreScript = (scripts: Record<string, string | undefined> | undefined) => scripts?.pretsc ?? scripts?.pretypecheck;
 
-        if (dir) {
-          await shell.at(dir).$`tsc --noEmit`;
-        } else {
-          await shell.$`tsc --noEmit`;
-        }
-
-        return true;
-      }
-
-      async function typecheckAtProject(project: Project) {
-        const childLogger = logger.child({
-          tag: project.manifest.name,
-          namespace: "typecheck",
-        });
+      async function typecheckAt({ dir, scripts, log }: TypecheckAtOptions) {
+        const shellAt = cwd === dir ? shell : shell.at(dir);
 
         try {
-          childLogger.start("Type checking started");
-
-          const success = await singleTypecheck(project.rootDir, {
-            logger: childLogger,
-          });
-
-          if (success) {
-            childLogger.success("Typecheck completed");
+          const preScript = getPreScript(scripts);
+          if (preScript) {
+            log.start(`Running pre-script: ${preScript}`);
+            await shellAt.$`${preScript}`;
+            log.success("Pre-script completed");
           }
+
+          log.start("Type checking started");
+          await shellAt.$`tsc --noEmit`;
+          log.success("Typecheck completed");
         } catch (error) {
-          childLogger.error("Typecheck failed");
+          log.error("Typecheck failed");
           throw error;
         }
       }
 
       if (!appPkg.isMonorepo()) {
-        try {
-          await singleTypecheck();
-        } catch (error) {
-          logger.error("Typecheck failed");
-          throw error;
+        if (!isTsProject(appPkg.dirPath)) {
+          logger.info("No tsconfig.json found, skipping typecheck");
+          return;
         }
+
+        await typecheckAt({
+          dir: appPkg.dirPath,
+          scripts: appPkg.packageJson.scripts,
+          log: logger,
+        });
+
+        return;
       }
 
       const projects = await appPkg.getWorkspaceProjects();
+      const tsProjects = projects.filter((project) => isTsProject(project.rootDir));
 
-      for (const project of projects) {
-        await typecheckAtProject(project);
+      if (!tsProjects.length) {
+        logger.warn("No TypeScript projects found in the monorepo, skipping typecheck");
+        return;
       }
+
+      await Promise.all(
+        tsProjects.map((p) =>
+          typecheckAt({
+            dir: p.rootDir,
+            scripts: p.manifest.scripts,
+            log: logger.child({
+              tag: p.manifest.name,
+              namespace: "typecheck",
+            }),
+          }),
+        ),
+      );
     })
     .addHelpText("afterAll", "\nUnder the hood, this command uses the TypeScript CLI to check the code.");
 }

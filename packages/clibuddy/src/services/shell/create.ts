@@ -1,7 +1,7 @@
 import fs from "node:fs";
-import path from "node:path";
 import { ShellService } from "./shell";
 import type { CreateOptions } from "./types";
+import { getPreferLocal } from "./utils";
 
 export const cwd = fs.realpathSync(process.cwd());
 
@@ -25,8 +25,6 @@ export function quote(arg: string) {
 export const isRaw = (arg: unknown): arg is { stdout: string } =>
   typeof arg === "object" && arg !== null && "stdout" in arg && typeof arg.stdout === "string";
 
-const getLocalBinPath = (dirPath: string) => path.join(dirPath, "node_modules", ".bin");
-
 function defaultQuote(arg: unknown) {
   if (typeof arg === "string") {
     return quote(arg);
@@ -40,11 +38,7 @@ function defaultQuote(arg: unknown) {
 }
 
 export function createShellService(options: CreateOptions = {}) {
-  const preferLocal = !options.localBaseBinPath
-    ? undefined
-    : Array.isArray(options.localBaseBinPath)
-      ? options.localBaseBinPath.map(getLocalBinPath)
-      : [options.localBaseBinPath].map(getLocalBinPath);
+  const preferLocal = getPreferLocal(options.localBaseBinPath);
 
   return new ShellService({
     verbose: true,
