@@ -1,12 +1,12 @@
 import type { ShellService } from "@vlandoss/clibuddy";
 import { ToolService } from "./tool";
 
-export class BiomeService extends ToolService {
+export class OxfmtService extends ToolService {
   constructor(shellService: ShellService) {
-    super({ cmd: "biome", shellService });
+    super({ cmd: "oxfmt", shellService });
   }
 
   getBinDir() {
-    return require.resolve("@biomejs/biome/bin/biome");
+    return require.resolve("oxfmt/bin/oxfmt");
   }
 }

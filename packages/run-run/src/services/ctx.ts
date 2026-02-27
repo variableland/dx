@@ -1,15 +1,18 @@
 import fs from "node:fs";
 import { createPkgService, createShellService, cwd, type PkgService, type ShellService } from "@vlandoss/clibuddy";
+import type { UserConfig } from "#/types/config";
+import { ConfigService } from "./config";
 import { logger } from "./logger";
 
 export type Context = {
   binPkg: PkgService;
   appPkg: PkgService;
   shell: ShellService;
+  config: UserConfig;
 };
 
 export async function createContext(binDir: string): Promise<Context> {
-  const debug = logger.subdebug("create-context-value");
+  const debug = logger.subdebug("create-context");
 
   const binPath = fs.realpathSync(binDir);
 
@@ -36,9 +39,13 @@ export async function createContext(binDir: string): Promise<Context> {
 
   debug("shell service options: %O", shell.options);
 
+  const configService = new ConfigService();
+  const config = await configService.load();
+
   return {
     appPkg,
     binPkg,
     shell,
+    config,
   };
 }
