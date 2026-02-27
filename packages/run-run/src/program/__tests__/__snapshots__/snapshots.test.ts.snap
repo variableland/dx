@@ -10,7 +10,7 @@ Options:
   -h, --help                   display help for command
 
 Commands:
-  config|cfg                   display the current configuration 🛠️
+  config|cfg                   display the current config 🛠️
   check|test:static [options]  check format and lint issues 🔍
   lint [options]               lint the code 🧹
   fmt|format [options]         format the code 🎨
@@ -40,7 +40,7 @@ Options:
   -h, --help                   display help for command
 
 Commands:
-  config|cfg                   display the current configuration 🛠️
+  config|cfg                   display the current config 🛠️
   check|test:static [options]  check format and lint issues 🔍
   lint [options]               lint the code 🧹
   fmt|format [options]         format the code 🎨
@@ -84,7 +84,7 @@ Options:
 exports[`should match help messages for all commands: help-command-config 1`] = `
 "Usage: rr config|cfg [options]
 
-display the current configuration 🛠️
+display the current config 🛠️
 
 Options:
   -h, --help  display help for command
