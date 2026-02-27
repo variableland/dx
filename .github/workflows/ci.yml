@@ -68,6 +68,6 @@ jobs:
         uses: variableland/gh-actions/actions/setup-pnpm-bun@main
 
       - name: 🚀 Preview release
-        uses: variableland/gh-actions/actions/monorepo-preview-release@main
+        uses: variableland/gh-actions/actions/monorepo-preview-release@dev
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
