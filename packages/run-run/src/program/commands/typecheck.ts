@@ -16,7 +16,16 @@ type TypecheckAtOptions = {
 const getPreScript = (scripts: Record<string, string | undefined> | undefined) => scripts?.pretsc ?? scripts?.pretypecheck;
 
 async function typecheckAt({ dir, scripts, log, shell, run }: TypecheckAtOptions) {
-  const shellAt = cwd === dir ? shell : shell.at(dir);
+  let shellAt: ShellService;
+
+  log.debug(`checking types at ${dir}`);
+
+  if (cwd === dir) {
+    shellAt = shell;
+  } else {
+    log.debug(`Changing directory to ${dir} for typecheck`);
+    shellAt = shell.at(dir);
+  }
 
   try {
     const preScript = getPreScript(scripts);
