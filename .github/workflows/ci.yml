@@ -52,6 +52,7 @@ jobs:
           publish: bunx changeset publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          LEFTHOOK: 0
 
   preview:
     runs-on: ubuntu-latest
