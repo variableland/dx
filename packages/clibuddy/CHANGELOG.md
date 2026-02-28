@@ -1,5 +1,11 @@
 # @vlandoss/clibuddy
 
+## 0.0.6
+
+### Patch Changes
+
+- [#140](https://github.com/variableland/dx/pull/140) [`97a4b51`](https://github.com/variableland/dx/commit/97a4b513617b39b49dbc5244c9c8d9011a721f6f) Thanks [@rqbazan](https://github.com/rqbazan)! - Export new colors for terminal ui
+
 ## 0.0.5
 
 ### Patch Changes
