@@ -12,4 +12,6 @@ export const colors = {
   redBright: safe(chalk.redBright),
   greenBright: safe(chalk.greenBright),
   bold: safe(chalk.bold),
+  muted: safe(chalk.dim),
+  link: safe(chalk.underline),
 };

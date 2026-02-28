@@ -1,5 +1,6 @@
+import os from "node:os";
 import { type AsyncSearcher, lilconfig } from "lilconfig";
-import type { UserConfig } from "#/types/config";
+import type { ExportedConfig, UserConfig } from "#/types/config";
 import { logger } from "./logger";
 
 const DEFAULT_CONFIG: UserConfig = {
@@ -14,26 +15,28 @@ export class ConfigService {
   constructor() {
     this.#searcher = lilconfig("run-run", {
       searchPlaces: ["run-run.config.ts"],
+      cache: true,
+      stopDir: os.homedir(),
       loaders: {
         ".ts": (filepath: string) => import(filepath).then((mod) => mod.default),
       },
     });
   }
 
-  async load(cwd?: string) {
+  async load(): Promise<ExportedConfig> {
     const debug = logger.subdebug("load-config");
 
-    if (cwd) {
-      debug("config cwd: %s", cwd);
-    } else {
-      debug("config cwd not provided");
-    }
-
-    const searchResult = await this.#searcher.search(cwd);
+    const searchResult = await this.#searcher.search();
 
     if (!searchResult || searchResult?.isEmpty) {
       debug("loaded default config: %O", DEFAULT_CONFIG);
-      return DEFAULT_CONFIG;
+      return {
+        config: DEFAULT_CONFIG,
+        meta: {
+          isDefault: true,
+          filepath: undefined,
+        },
+      };
     }
 
     const config = searchResult.config as UserConfig;
@@ -41,6 +44,12 @@ export class ConfigService {
     debug("loaded config: %O", config);
     debug("config file: %s", searchResult.filepath);
 
-    return config;
+    return {
+      config,
+      meta: {
+        isDefault: false,
+        filepath: searchResult.filepath,
+      },
+    };
   }
 }

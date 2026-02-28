@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import { createPkgService, createShellService, cwd, type PkgService, type ShellService } from "@vlandoss/clibuddy";
-import type { UserConfig } from "#/types/config";
+import type { ExportedConfig } from "#/types/config";
 import { ConfigService } from "./config";
 import { logger } from "./logger";
 
@@ -8,7 +8,7 @@ export type Context = {
   binPkg: PkgService;
   appPkg: PkgService;
   shell: ShellService;
-  config: UserConfig;
+  config: ExportedConfig;
 };
 
 export async function createContext(binDir: string): Promise<Context> {

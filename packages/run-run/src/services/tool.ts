@@ -1,29 +1,40 @@
-import type { ShellService } from "@vlandoss/clibuddy";
+import type { Shell, ShellService } from "@vlandoss/clibuddy";
+import memoize from "memoize";
 import { gracefullBinDir } from "#/utils/gracefullBinDir";
 
 type CreateOptions = {
-  cmd: string;
+  bin: string;
   shellService: ShellService;
 };
 
 export abstract class ToolService {
   #shellService: ShellService;
-  #cmd: string;
+  #bin: string;
 
-  constructor({ cmd, shellService }: CreateOptions) {
-    this.#cmd = cmd;
+  constructor({ bin: cmd, shellService }: CreateOptions) {
+    this.#bin = cmd;
     this.#shellService = shellService;
   }
 
   abstract getBinDir(): string;
 
-  get $() {
-    return this.#shellService.child({
-      preferLocal: gracefullBinDir(() => this.getBinDir()),
-    }).$;
+  exec(args: string | string[]) {
+    const $ = this.#shell();
+    return this.#run($, args);
   }
 
-  async execute(args: string[]): Promise<void> {
-    this.$`${this.#cmd} ${args.join(" ")}`;
+  #shell = memoize((cwd?: string) => {
+    return this.#shellService.child({
+      cwd,
+      preferLocal: gracefullBinDir(() => this.getBinDir()),
+    }).$;
+  });
+
+  #run(shell: Shell, args: string | string[]) {
+    return shell`${this.#bin} ${typeof args === "string" ? args : args.join(" ")}`;
+  }
+
+  get bin() {
+    return this.#bin;
   }
 }
