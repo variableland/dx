@@ -1,25 +1,33 @@
 import type { ShellService } from "@vlandoss/clibuddy";
-import { gracefullBinDir } from "#/utils/gracefullBinDir";
-import type { ToolService } from "./models";
+import type { FormatOptions, Formatter, Linter, LintOptions } from "#/types/tool";
+import { ToolService } from "./tool";
 
-export class BiomeService implements ToolService {
-  #shellService: ShellService;
-
+export class BiomeService extends ToolService implements Formatter, Linter {
   constructor(shellService: ShellService) {
-    this.#shellService = shellService;
+    super({ bin: "biome", shellService });
   }
 
-  get $() {
-    return this.#shellService.child({
-      preferLocal: this.#getBinDir(),
-    }).$;
+  getBinDir() {
+    return require.resolve("@biomejs/biome/bin/biome");
   }
 
-  async execute(args: string[]): Promise<void> {
-    this.$`biome ${args.join(" ")}`;
+  async format(options: FormatOptions) {
+    const commonOptions = "format --no-errors-on-unmatched --colors=force";
+
+    if (options.fix) {
+      await this.exec(`${commonOptions} --fix`);
+    } else if (options.check) {
+      await this.exec(`${commonOptions}`);
+    }
   }
 
-  #getBinDir() {
-    return gracefullBinDir(() => require.resolve("@biomejs/biome/bin/biome"));
+  async lint(options: LintOptions) {
+    const commonOptions = "check --colors=force --formatter-enabled=false";
+
+    if (options.fix) {
+      await this.exec(`${commonOptions} --fix --unsafe`);
+    } else if (options.check) {
+      await this.exec(`${commonOptions}`);
+    }
   }
 }

@@ -10,20 +10,16 @@ export function createCheckCommand(ctx: Context) {
     .option("-f, --fix", "try to fix issues automatically")
     .option("--fix-staged", "try to fix staged files only")
     .action(async function checkAction(options) {
-      const { $ } = new BiomeService(ctx.shell);
-      const toolCmd = (cmd = "check") => `biome ${cmd} --colors=force`;
+      const biome = new BiomeService(ctx.shell);
+      const toolCmd = (cmd = "check") => `${cmd} --colors=force`;
 
       if (options.fix) {
-        await $`${toolCmd()} --fix`;
-        return;
+        await biome.exec(`${toolCmd()} --fix`);
+      } else if (options.fixStaged) {
+        await biome.exec(`${toolCmd()} --no-errors-on-unmatched --fix --staged`);
+      } else {
+        await biome.exec(`${toolCmd(isCI ? "ci" : "check")}`);
       }
-
-      if (options.fixStaged) {
-        await $`${toolCmd()} --no-errors-on-unmatched --fix --staged`;
-        return;
-      }
-
-      await $`${toolCmd(isCI ? "ci" : "check")}`;
     })
     .addHelpText("afterAll", "\nUnder the hood, this command uses the biome CLI to check the code.");
 }
