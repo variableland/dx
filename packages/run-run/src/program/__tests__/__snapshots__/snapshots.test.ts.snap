@@ -1,4 +1,4 @@
-// Bun Snapshot v1, https://goo.gl/fbAQLP
+// Bun Snapshot v1, https://bun.sh/docs/test/snapshots
 
 exports[`should match all root commands: root-command-help 1`] = `
 "🦊 R U N - R U N: The CLI toolbox to fullstack common scripts in Variable Land 👊
@@ -10,6 +10,7 @@ Options:
   -h, --help                   display help for command
 
 Commands:
+  config|cfg                   display the current config 🛠️
   check|test:static [options]  check format and lint issues 🔍
   lint [options]               lint the code 🧹
   fmt|format [options]         format the code 🎨
@@ -39,6 +40,7 @@ Options:
   -h, --help                   display help for command
 
 Commands:
+  config|cfg                   display the current config 🛠️
   check|test:static [options]  check format and lint issues 🔍
   lint [options]               lint the code 🧹
   fmt|format [options]         format the code 🎨
@@ -73,6 +75,16 @@ exports[`should match help messages for all commands: help-command-run 1`] = `
 
 Arguments:
   cmds        commands to execute concurrently (e.g. 'check tsc')
+
+Options:
+  -h, --help  display help for command
+"
+`;
+
+exports[`should match help messages for all commands: help-command-config 1`] = `
+"Usage: rr config|cfg [options]
+
+display the current config 🛠️
 
 Options:
   -h, --help  display help for command
@@ -169,6 +181,8 @@ Options:
 
 Commands:
   biome
+  oxfmt
+  oxlint
   help [command]  display help for command
 "
 `;

@@ -3,6 +3,7 @@ import { createCommand } from "commander";
 import { createContext } from "#/services/ctx";
 import { createCheckCommand } from "./commands/check";
 import { createCleanCommand } from "./commands/clean";
+import { createConfigCommand } from "./commands/config";
 import { createFormatCommand } from "./commands/format";
 import { createLintCommand } from "./commands/lint";
 import { createPkgsCommand } from "./commands/pkgs";
@@ -27,6 +28,7 @@ export async function createProgram(options: Options) {
     .addCommand(createRunCommand(ctx), {
       hidden: true,
     })
+    .addCommand(createConfigCommand(ctx))
     .addCommand(createCheckCommand(ctx))
     .addCommand(createLintCommand(ctx))
     .addCommand(createFormatCommand(ctx))
