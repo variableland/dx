@@ -21,7 +21,7 @@
     "src"
   ],
   "scripts": {
-    "prepublishOnly": "pnpm build"
+    "test:types": "rr tsc"
   },
   "publishConfig": {
     "access": "public"

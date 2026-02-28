@@ -24,7 +24,7 @@
     "src"
   ],
   "scripts": {
-    "prepublishOnly": "pnpm build"
+    "test:types": "rr tsc"
   },
   "dependencies": {
     "@pnpm/workspace.find-packages": "^1000.0.62",

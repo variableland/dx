@@ -5,7 +5,7 @@
   "scripts": {
     "build": "turbo build",
     "test": "turbo test",
-    "test:coverage": "turbo test:coverage"
+    "test:types": "turbo test:types"
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.5.2",
