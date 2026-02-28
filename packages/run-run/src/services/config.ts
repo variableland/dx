@@ -1,4 +1,4 @@
-import { loadConfig } from "c12";
+import { type AsyncSearcher, lilconfig } from "lilconfig";
 import type { UserConfig } from "#/types/config";
 import { logger } from "./logger";
 
@@ -9,19 +9,38 @@ const DEFAULT_CONFIG: UserConfig = {
 };
 
 export class ConfigService {
+  #searcher: AsyncSearcher;
+
+  constructor() {
+    this.#searcher = lilconfig("run-run", {
+      searchPlaces: ["run-run.config.ts"],
+      loaders: {
+        ".ts": (filepath: string) => import(filepath).then((mod) => mod.default),
+      },
+    });
+  }
+
   async load(cwd?: string) {
     const debug = logger.subdebug("load-config");
 
-    const result = await loadConfig<UserConfig>({
-      cwd,
-      name: "run-run",
-      defaultConfig: DEFAULT_CONFIG,
-    });
+    if (cwd) {
+      debug("config cwd: %s", cwd);
+    } else {
+      debug("config cwd not provided");
+    }
 
-    debug("loaded config: %O", result.config);
-    debug("config cwd: %s", result.cwd);
-    debug("config file: %s", result.configFile);
+    const searchResult = await this.#searcher.search(cwd);
 
-    return result.config;
+    if (!searchResult || searchResult?.isEmpty) {
+      debug("loaded default config: %O", DEFAULT_CONFIG);
+      return DEFAULT_CONFIG;
+    }
+
+    const config = searchResult.config as UserConfig;
+
+    debug("loaded config: %O", config);
+    debug("config file: %s", searchResult.filepath);
+
+    return config;
   }
 }
