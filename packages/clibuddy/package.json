@@ -27,8 +27,8 @@
     "test:types": "rr tsc"
   },
   "dependencies": {
-    "@pnpm/workspace.find-packages": "^1000.0.62",
-    "@pnpm/workspace.read-manifest": "^1000.2.10",
+    "@pnpm/workspace.find-packages": "1000.0.62",
+    "@pnpm/workspace.read-manifest": "1000.2.10",
     "chalk": "5.6.2",
     "read-package-up": "12.0.0",
     "supports-color": "10.2.2",
