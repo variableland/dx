@@ -24,7 +24,8 @@
     "tsconfig.json"
   ],
   "scripts": {
-    "test": "bun test"
+    "test": "bun test",
+    "test:types": "rr tsc"
   },
   "dependencies": {
     "@inquirer/prompts": "^7.10.1",
