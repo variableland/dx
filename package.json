@@ -5,8 +5,7 @@
   "scripts": {
     "build": "turbo build",
     "test": "turbo test",
-    "test:coverage": "turbo test:coverage",
-    "prepare": "husky"
+    "test:coverage": "turbo test:coverage"
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.5.1",
@@ -17,7 +16,7 @@
     "@vlandoss/localproxy": "workspace:*",
     "@vlandoss/run-run": "workspace:*",
     "@vlandoss/starter": "workspace:*",
-    "husky": "^9.1.7",
+    "lefthook": "^2.1.1",
     "tsup": "^8.5.0",
     "turbo": "^2.5.5"
   },
