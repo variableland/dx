@@ -27,7 +27,7 @@
     "test": "bun test"
   },
   "dependencies": {
-    "@inquirer/prompts": "^7.8.4",
+    "@inquirer/prompts": "^7.10.1",
     "@vlandoss/clibuddy": "workspace:*",
     "@vlandoss/loggy": "workspace:*",
     "commander": "13.1.0"

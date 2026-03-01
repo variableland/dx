@@ -3,5 +3,4 @@ packages:
   - dotfiles/*
 onlyBuiltDependencies:
   - "@biomejs/biome"
-ignoredBuiltDependencies:
-  - esbuild
+  - lefthook
