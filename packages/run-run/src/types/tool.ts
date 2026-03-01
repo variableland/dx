@@ -10,10 +10,12 @@ export type LintOptions = {
 
 export type Formatter = {
   bin: string;
+  ui: string;
   format(options: FormatOptions): Promise<void>;
 };
 
 export type Linter = {
   bin: string;
+  ui: string;
   lint(options: LintOptions): Promise<void>;
 };

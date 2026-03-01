@@ -1,10 +1,11 @@
 import type { ShellService } from "@vlandoss/clibuddy";
+import { TOOL_LABELS } from "#/program/ui";
 import type { FormatOptions, Formatter } from "#/types/tool";
 import { ToolService } from "./tool";
 
 export class OxfmtService extends ToolService implements Formatter {
   constructor(shellService: ShellService) {
-    super({ bin: "oxfmt", shellService });
+    super({ bin: "oxfmt", ui: TOOL_LABELS.OXFMT, shellService });
   }
 
   getBinDir() {
