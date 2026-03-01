@@ -17,7 +17,7 @@ export class OxfmtService extends ToolService implements Formatter {
 
     if (options.fix) {
       await this.exec(`${commonOptions} --fix`);
-    } else if (options.check) {
+    } else {
       await this.exec(`${commonOptions} --check`);
     }
   }

@@ -1,11 +1,14 @@
 export type FormatOptions = {
-  check?: boolean;
   fix?: boolean;
 };
 
 export type LintOptions = {
-  check?: boolean;
   fix?: boolean;
+};
+
+export type StaticCheckerOptions = {
+  fix?: boolean;
+  fixStaged?: boolean;
 };
 
 export type Formatter = {
@@ -18,4 +21,14 @@ export type Linter = {
   bin: string;
   ui: string;
   lint(options: LintOptions): Promise<void>;
+};
+
+export type StaticChecker = {
+  bin: string;
+  ui: string;
+  check(options: StaticCheckerOptions): Promise<void>;
+};
+
+export type TypeChecker = {
+  check(): Promise<void>;
 };
