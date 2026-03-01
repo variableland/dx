@@ -2,4 +2,4 @@
 "@vlandoss/run-run": patch
 ---
 
-Add build:lib command
+Add build:lib command and improve banner
