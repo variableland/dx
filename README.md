@@ -47,7 +47,6 @@ This monorepo uses [Turborepo](https://turbo.build/repo/docs) to manage tasks. H
 
 - `pnpm build` - Build all packages
 - `pnpm test` - Run tests for all packages
-- `pnpm test:coverage` - Run tests with coverage for all packages
 
 Additionally, the monorepo itself uses the CLIs [`run-run`](./packages/run-run/README.md) and [`starter`](./packages/starter/README.md):
 

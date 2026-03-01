@@ -23,6 +23,9 @@
     "plopfiles",
     "tsconfig.json"
   ],
+  "scripts": {
+    "test:types": "rr tsc"
+  },
   "dependencies": {
     "@vlandoss/clibuddy": "workspace:*",
     "@vlandoss/loggy": "workspace:*",
