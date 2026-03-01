@@ -1,10 +1,11 @@
 import type { ShellService } from "@vlandoss/clibuddy";
+import { TOOL_LABELS } from "#/program/ui";
 import type { FormatOptions, Formatter, Linter, LintOptions } from "#/types/tool";
 import { ToolService } from "./tool";
 
 export class BiomeService extends ToolService implements Formatter, Linter {
   constructor(shellService: ShellService) {
-    super({ bin: "biome", shellService });
+    super({ bin: "biome", ui: TOOL_LABELS.BIOME, shellService });
   }
 
   getBinDir() {

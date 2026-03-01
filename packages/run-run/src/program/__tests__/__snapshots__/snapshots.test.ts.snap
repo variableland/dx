@@ -1,37 +1,8 @@
 // Bun Snapshot v1, https://bun.sh/docs/test/snapshots
 
-exports[`should match all root commands: root-command-help 1`] = `
-"🦊 R U N - R U N: The CLI toolbox to fullstack common scripts in Variable Land 👊
-
-Usage: rr|run-run [options] <command...>
-
-Options:
-  -v, --version                output the version number
-  -h, --help                   display help for command
-
-Commands:
-  config|cfg                   display the current config 🛠️
-  check|test:static [options]  check format and lint issues 🔍
-  lint [options]               lint the code 🧹
-  fmt|format [options]         format the code 🎨
-  tsc|typecheck                check if TypeScript code is well typed 🎨
-  clean [options]              delete dirty folders or files such as
-                               node_modules, etc 🗑️
-  pkgs|packages [options]      list unique affected packages from list of files
-                               📦
-  help [command]               display help for command
-
-Acknowledgment:
-- kcd-scripts: for main inspiration
-  https://github.com/kentcdodds/kcd-scripts
-
-- peruvian news: in honor to Run Run
-  https://es.wikipedia.org/wiki/Run_Run
-"
-`;
-
 exports[`should match all root commands: root-command---help 1`] = `
-"🦊 R U N - R U N: The CLI toolbox to fullstack common scripts in Variable Land 👊
+"🦊 R U N - R U N v0.0.0-test
+The CLI toolbox for Variable Land 👊
 
 Usage: rr|run-run [options] <command...>
 
@@ -40,16 +11,15 @@ Options:
   -h, --help                   display help for command
 
 Commands:
-  config|cfg                   display the current config 🛠️
-  check|test:static [options]  check format and lint issues 🔍
-  lint [options]               lint the code 🧹
-  fmt|format [options]         format the code 🎨
-  tsc|typecheck                check if TypeScript code is well typed 🎨
-  clean [options]              delete dirty folders or files such as
-                               node_modules, etc 🗑️
+  build:lib                    build a ts project 🏗️ (tsdown)
+  lint [options]               lint the code 🧹 (biome)
+  fmt|format [options]         format the code 🎨 (biome)
+  check|test:static [options]  check format and lint 🔍 (biome)
+  tsc|typecheck                check if ts code is well typed 🎨 (tsc)
+  clean [options]              delete dirty folders or files 🗑️ (rimraf)
   pkgs|packages [options]      list unique affected packages from list of files
                                📦
-  help [command]               display help for command
+  config|cfg                   display the current config 🛠️
 
 Acknowledgment:
 - kcd-scripts: for main inspiration
@@ -70,45 +40,22 @@ exports[`should match all root commands: root-command--v 1`] = `
 "
 `;
 
-exports[`should match help messages for all commands: help-command-run 1`] = `
-"Usage: rr run [options] <cmds...>
+exports[`should match help messages for all commands: help-command-build:lib 1`] = `
+"Usage: rr build:lib [options]
 
-Arguments:
-  cmds        commands to execute concurrently (e.g. 'check tsc')
-
-Options:
-  -h, --help  display help for command
-"
-`;
-
-exports[`should match help messages for all commands: help-command-config 1`] = `
-"Usage: rr config|cfg [options]
-
-display the current config 🛠️
+build a ts project 🏗️ (tsdown)
 
 Options:
   -h, --help  display help for command
-"
-`;
 
-exports[`should match help messages for all commands: help-command-check 1`] = `
-"Usage: rr check|test:static [options]
-
-check format and lint issues 🔍
-
-Options:
-  -f, --fix     try to fix issues automatically
-  --fix-staged  try to fix staged files only
-  -h, --help    display help for command
-
-Under the hood, this command uses the biome CLI to check the code.
+Under the hood, this command uses the tsdown CLI to build the project.
 "
 `;
 
 exports[`should match help messages for all commands: help-command-lint 1`] = `
 "Usage: rr lint [options]
 
-lint the code 🧹
+lint the code 🧹 (biome)
 
 Options:
   -c, --check  check if the code is valid (default: true)
@@ -122,7 +69,7 @@ Under the hood, this command uses the biome CLI to lint the code.
 exports[`should match help messages for all commands: help-command-fmt 1`] = `
 "Usage: rr fmt|format [options]
 
-format the code 🎨
+format the code 🎨 (biome)
 
 Options:
   -c, --check  check if the code is formatted (default: true)
@@ -133,29 +80,43 @@ Under the hood, this command uses the biome CLI to format the code.
 "
 `;
 
+exports[`should match help messages for all commands: help-command-check 1`] = `
+"Usage: rr check|test:static [options]
+
+check format and lint 🔍 (biome)
+
+Options:
+  -f, --fix     try to fix issues automatically
+  --fix-staged  try to fix staged files only
+  -h, --help    display help for command
+
+Under the hood, this command uses the biome CLI to check the code.
+"
+`;
+
 exports[`should match help messages for all commands: help-command-tsc 1`] = `
 "Usage: rr tsc|typecheck [options]
 
-check if TypeScript code is well typed 🎨
+check if ts code is well typed 🎨 (tsc)
 
 Options:
   -h, --help  display help for command
 
-Under the hood, this command uses the TypeScript CLI to check the code.
+Under the hood, this command uses the tsc CLI to check the code.
 "
 `;
 
 exports[`should match help messages for all commands: help-command-clean 1`] = `
 "Usage: rr clean [options]
 
-delete dirty folders or files such as node_modules, etc 🗑️
+delete dirty folders or files 🗑️ (rimraf)
 
 Options:
   --only-dist  delete 'dist' folders only
   --dry-run    outputs the paths that would be deleted
   -h, --help   display help for command
 
-Under the hood, this command uses the rimraf.js to delete dirty folders or files.
+Under the hood, this command uses rimraf to delete dirty folders or files.
 "
 `;
 
@@ -168,6 +129,27 @@ Options:
   --files <files...>  list of files to check
   --decorator [type]  type of decorator to use (choices: "turbo")
   -h, --help          display help for command
+"
+`;
+
+exports[`should match help messages for all commands: help-command-config 1`] = `
+"Usage: rr config|cfg [options]
+
+display the current config 🛠️
+
+Options:
+  -h, --help  display help for command
+"
+`;
+
+exports[`should match help messages for all commands: help-command-run 1`] = `
+"Usage: rr run [options] <cmds...>
+
+Arguments:
+  cmds        commands to execute concurrently (e.g. 'check tsc')
+
+Options:
+  -h, --help  display help for command
 "
 `;
 
