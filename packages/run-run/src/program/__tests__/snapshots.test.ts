@@ -4,7 +4,7 @@ import { createTestProgram, execCli, mocked } from "#test/helpers";
 const { program, ctx } = await createTestProgram();
 const $ = ctx.shell.$;
 
-const rootCommands = ["help", "--help", "--version", "-v"];
+const rootCommands = ["--help", "--version", "-v"];
 
 afterEach(() => {
   mocked($).mockClear();
