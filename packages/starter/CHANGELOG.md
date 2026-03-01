@@ -1,5 +1,15 @@
 # @vlandoss/starter
 
+## 0.0.11
+
+### Patch Changes
+
+- [#144](https://github.com/variableland/dx/pull/144) [`c1517b2`](https://github.com/variableland/dx/commit/c1517b2e05d5a3bf7a067ec461c7d9e789f06a2f) Thanks [@rqbazan](https://github.com/rqbazan)! - Add test:types script
+
+- Updated dependencies [[`c1517b2`](https://github.com/variableland/dx/commit/c1517b2e05d5a3bf7a067ec461c7d9e789f06a2f), [`b31758e`](https://github.com/variableland/dx/commit/b31758e2d2e2e97a5f3b7b3fec73939e8003da73)]:
+  - @vlandoss/clibuddy@0.0.7
+  - @vlandoss/loggy@0.0.6
+
 ## 0.0.10
 
 ### Patch Changes
