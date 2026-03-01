@@ -2,15 +2,16 @@ import { getVersion } from "@vlandoss/clibuddy";
 import { createCommand } from "commander";
 import { createContext } from "#/services/ctx";
 import { createBuildLibCommand } from "./commands/build-lib";
-import { createCheckCommand } from "./commands/check";
 import { createCleanCommand } from "./commands/clean";
 import { createConfigCommand } from "./commands/config";
 import { createFormatCommand } from "./commands/format";
+import { createJsCheckCommand } from "./commands/jscheck";
 import { createLintCommand } from "./commands/lint";
 import { createPkgsCommand } from "./commands/pkgs";
 import { createRunCommand } from "./commands/run";
+import { createTestStaticCommand } from "./commands/test-static";
 import { createToolsCommand } from "./commands/tools";
-import { createTypecheckCommand } from "./commands/typecheck";
+import { createTsCheckCommand } from "./commands/tscheck";
 import { CREDITS_TEXT, getBannerText } from "./ui";
 
 export type Options = {
@@ -31,10 +32,12 @@ export async function createProgram(options: Options) {
     // build
     .addCommand(createBuildLibCommand(ctx))
     // check
+    .addCommand(createJsCheckCommand(ctx))
+    .addCommand(createTsCheckCommand(ctx))
     .addCommand(createLintCommand(ctx))
     .addCommand(createFormatCommand(ctx))
-    .addCommand(createCheckCommand(ctx))
-    .addCommand(createTypecheckCommand(ctx))
+    // test
+    .addCommand(createTestStaticCommand(ctx))
     // misc
     .addCommand(createCleanCommand())
     .addCommand(createPkgsCommand(ctx))

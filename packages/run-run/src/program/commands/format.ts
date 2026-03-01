@@ -5,7 +5,6 @@ import { OxfmtService } from "#/services/oxfmt";
 import type { Formatter } from "#/types/tool";
 
 type ActionOptions = {
-  check?: boolean;
   fix?: boolean;
 };
 
@@ -22,11 +21,12 @@ function getToolService(ctx: Context): Formatter {
 export function createFormatCommand(ctx: Context) {
   const toolService = getToolService(ctx);
 
-  return createCommand("fmt")
-    .alias("format")
-    .description(`format the code 🎨 (${toolService.ui})`)
-    .option("-c, --check", "check if the code is formatted", true)
-    .option("-f, --fix", "format all the code")
+  return createCommand("format")
+    .summary(`check & fix format errors 🎨 (${toolService.ui})`)
+    .description(
+      "Checks the code for formatting issues and optionally fixes them, ensuring it adheres to the defined style standards.",
+    )
+    .option("--fix", "format all the code")
     .action(async function formatAction(options: ActionOptions) {
       await toolService.format(options);
     })

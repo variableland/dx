@@ -45,7 +45,7 @@ async function typecheckAt({ dir, scripts, log, shell, run }: TypecheckAtOptions
   }
 }
 
-export function createTypecheckCommand(ctx: Context) {
+export function createTsCheckCommand(ctx: Context) {
   const {
     appPkg,
     shell,
@@ -55,8 +55,11 @@ export function createTypecheckCommand(ctx: Context) {
   const toolUi = config.future?.oxc ? TOOL_LABELS.OXLINT : TOOL_LABELS.TSC;
 
   return createCommand("tsc")
-    .alias("typecheck")
-    .description(`check if ts code is well typed 🎨 (${toolUi})`)
+    .alias("tscheck")
+    .summary(`check typescript errors 🧩 (${toolUi})`)
+    .description(
+      "Checks the TypeScript code for type errors, ensuring that the code adheres to the defined type constraints and helps catch potential issues before runtime.",
+    )
     .addHelpText("afterAll", `\nUnder the hood, this command uses the ${toolUi} CLI to check the code.`)
     .action(async function typecheckAction() {
       const isTsProject = (dir: string) => appPkg.hasFile("tsconfig.json", dir);
