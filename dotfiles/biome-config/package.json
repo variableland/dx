@@ -23,6 +23,6 @@
     "access": "public"
   },
   "peerDependencies": {
-    "@biomejs/biome": "2.1.4"
+    "@biomejs/biome": "2.4.4"
   }
 }

@@ -29,8 +29,8 @@
   "dependencies": {
     "@vlandoss/clibuddy": "workspace:*",
     "@vlandoss/loggy": "workspace:*",
-    "commander": "13.1.0",
-    "node-plop": "0.32.0"
+    "commander": "14.0.3",
+    "node-plop": "0.32.3"
   },
   "publishConfig": {
     "access": "public"

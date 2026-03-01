@@ -34,19 +34,19 @@
     "test:types": "rr tsc"
   },
   "dependencies": {
-    "@biomejs/biome": "2.1.4",
+    "@biomejs/biome": "2.4.4",
     "@vlandoss/clibuddy": "workspace:*",
     "@vlandoss/loggy": "workspace:*",
-    "commander": "13.1.0",
-    "glob": "^11.0.2",
+    "commander": "14.0.3",
+    "glob": "^13.0.6",
     "is-ci": "4.1.0",
     "lilconfig": "^3.1.3",
     "memoize": "^10.2.0",
     "oxfmt": "^0.35.0",
     "oxlint": "^1.50.0",
     "oxlint-tsgolint": "^0.15.0",
-    "rimraf": "6.0.1",
-    "typescript": "5.8.2"
+    "rimraf": "6.1.3",
+    "typescript": "5.9.3"
   },
   "publishConfig": {
     "access": "public"
