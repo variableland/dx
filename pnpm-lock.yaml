@@ -9,13 +9,13 @@ importers:
   .:
     devDependencies:
       '@changesets/changelog-github':
-        specifier: ^0.5.2
+        specifier: 0.5.2
         version: 0.5.2(encoding@0.1.13)
       '@changesets/cli':
-        specifier: ^2.29.8
+        specifier: 2.29.8
         version: 2.29.8(@types/node@25.3.3)
       '@total-typescript/tsconfig':
-        specifier: ^1.0.4
+        specifier: 1.0.4
         version: 1.0.4
       '@types/bun':
         specifier: latest
@@ -27,10 +27,10 @@ importers:
         specifier: workspace:*
         version: link:packages/run-run
       lefthook:
-        specifier: ^2.1.1
+        specifier: 2.1.1
         version: 2.1.1
       turbo:
-        specifier: ^2.8.12
+        specifier: 2.8.12
         version: 2.8.12
 
   dotfiles/biome-config:
@@ -42,10 +42,10 @@ importers:
   packages/clibuddy:
     dependencies:
       '@pnpm/workspace.find-packages':
-        specifier: ^1000.0.62
+        specifier: 1000.0.62
         version: 1000.0.62(@pnpm/logger@1001.0.1)(@pnpm/worker@1000.6.5(@pnpm/logger@1001.0.1)(@types/node@25.3.3))(supports-color@10.2.2)(typanion@3.14.0)
       '@pnpm/workspace.read-manifest':
-        specifier: ^1000.2.10
+        specifier: 1000.2.10
         version: 1000.2.10
       chalk:
         specifier: 5.6.2
@@ -63,7 +63,7 @@ importers:
   packages/localproxy:
     dependencies:
       '@inquirer/prompts':
-        specifier: ^8.3.0
+        specifier: 8.3.0
         version: 8.3.0(@types/node@25.3.3)
       '@vlandoss/clibuddy':
         specifier: workspace:*
@@ -78,14 +78,14 @@ importers:
   packages/loggy:
     dependencies:
       consola:
-        specifier: ^3.4.2
+        specifier: 3.4.2
         version: 3.4.2
       debug:
-        specifier: ^4.4.3
+        specifier: 4.4.3
         version: 4.4.3(supports-color@10.2.2)
     devDependencies:
       '@types/debug':
-        specifier: ^4.1.12
+        specifier: 4.1.12
         version: 4.1.12
 
   packages/run-run:
@@ -103,25 +103,25 @@ importers:
         specifier: 14.0.3
         version: 14.0.3
       glob:
-        specifier: ^13.0.6
+        specifier: 13.0.6
         version: 13.0.6
       is-ci:
         specifier: 4.1.0
         version: 4.1.0
       lilconfig:
-        specifier: ^3.1.3
+        specifier: 3.1.3
         version: 3.1.3
       memoize:
-        specifier: ^10.2.0
+        specifier: 10.2.0
         version: 10.2.0
       oxfmt:
-        specifier: ^0.35.0
+        specifier: 0.35.0
         version: 0.35.0
       oxlint:
-        specifier: ^1.50.0
+        specifier: 1.50.0
         version: 1.50.0(oxlint-tsgolint@0.15.0)
       oxlint-tsgolint:
-        specifier: ^0.15.0
+        specifier: 0.15.0
         version: 0.15.0
       rimraf:
         specifier: 6.1.3

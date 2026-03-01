@@ -28,7 +28,7 @@
     "test:types": "rr tsc"
   },
   "dependencies": {
-    "@inquirer/prompts": "^8.3.0",
+    "@inquirer/prompts": "8.3.0",
     "@vlandoss/clibuddy": "workspace:*",
     "@vlandoss/loggy": "workspace:*",
     "commander": "14.0.3"

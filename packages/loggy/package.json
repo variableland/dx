@@ -30,10 +30,10 @@
     "bun": ">=1.0.0"
   },
   "dependencies": {
-    "consola": "^3.4.2",
-    "debug": "^4.4.3"
+    "consola": "3.4.2",
+    "debug": "4.4.3"
   },
   "devDependencies": {
-    "@types/debug": "^4.1.12"
+    "@types/debug": "4.1.12"
   }
 }
