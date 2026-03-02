@@ -23,9 +23,12 @@ export function createLintCommand(ctx: Context) {
   const toolService = getToolService(ctx);
 
   return createCommand("lint")
-    .description(`lint the code 🧹 (${toolService.ui})`)
+    .summary(`check & fix lint errors 🔍 (${toolService.ui})`)
+    .description(
+      "Checks the code for linting issues and optionally fixes them, ensuring it adheres to the defined quality standards.",
+    )
     .option("-c, --check", "check if the code is valid", true)
-    .option("-f, --fix", "try to fix all the code")
+    .option("--fix", "try to fix all the code")
     .action(async function lintAction(options: ActionOptions) {
       await toolService.lint(options);
     })

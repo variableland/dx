@@ -23,7 +23,7 @@ jobs:
         uses: variableland/gh-actions/actions/setup-pnpm-bun@main
 
       - name: 💅 Test static
-        run: pnpm rr check tsc
+        run: pnpm rr test:static
 
       - name: 🧪 Test unit
         run: pnpm test

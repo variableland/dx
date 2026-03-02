@@ -7,19 +7,19 @@ The CLI toolbox for Variable Land 👊
 Usage: rr|run-run [options] <command...>
 
 Options:
-  -v, --version                output the version number
-  -h, --help                   display help for command
+  -v, --version          output the version number
+  -h, --help             display help for command
 
 Commands:
-  build:lib                    build a ts project 🏗️ (tsdown)
-  lint [options]               lint the code 🧹 (biome)
-  fmt|format [options]         format the code 🎨 (biome)
-  check|test:static [options]  check format and lint 🔍 (biome)
-  tsc|typecheck                check if ts code is well typed 🎨 (tsc)
-  clean [options]              delete dirty folders or files 🗑️ (rimraf)
-  pkgs|packages [options]      list unique affected packages from list of files
-                               📦
-  config|cfg                   display the current config 🛠️
+  build:lib              build a ts library 🏗️ (tsdown)
+  jsc|jscheck [options]  check format and lint 🔍 (biome)
+  tsc|tscheck            check typescript errors 🧩 (tsc)
+  lint [options]         check & fix lint errors 🔍 (biome)
+  format [options]       check & fix format errors 🎨 (biome)
+  test:static            run static tests 🔬 (run-run)
+  clean [options]        delete dirty files 🗑️ (rimraf)
+  pkgs [options]         list affected packages 📦
+  config                 display the current config 🛠️
 
 Acknowledgment:
 - kcd-scripts: for main inspiration
@@ -43,7 +43,8 @@ exports[`should match all root commands: root-command--v 1`] = `
 exports[`should match help messages for all commands: help-command-build:lib 1`] = `
 "Usage: rr build:lib [options]
 
-build a ts project 🏗️ (tsdown)
+Compiles TypeScript code into JavaScript and generates type declaration files,
+making it ready for distribution.
 
 Options:
   -h, --help  display help for command
@@ -52,41 +53,14 @@ Under the hood, this command uses the tsdown CLI to build the project.
 "
 `;
 
-exports[`should match help messages for all commands: help-command-lint 1`] = `
-"Usage: rr lint [options]
+exports[`should match help messages for all commands: help-command-jsc 1`] = `
+"Usage: rr jsc|jscheck [options]
 
-lint the code 🧹 (biome)
-
-Options:
-  -c, --check  check if the code is valid (default: true)
-  -f, --fix    try to fix all the code
-  -h, --help   display help for command
-
-Under the hood, this command uses the biome CLI to lint the code.
-"
-`;
-
-exports[`should match help messages for all commands: help-command-fmt 1`] = `
-"Usage: rr fmt|format [options]
-
-format the code 🎨 (biome)
+Checks the code for formatting and linting issues, ensuring it adheres to the
+defined style and quality standards.
 
 Options:
-  -c, --check  check if the code is formatted (default: true)
-  -f, --fix    format all the code
-  -h, --help   display help for command
-
-Under the hood, this command uses the biome CLI to format the code.
-"
-`;
-
-exports[`should match help messages for all commands: help-command-check 1`] = `
-"Usage: rr check|test:static [options]
-
-check format and lint 🔍 (biome)
-
-Options:
-  -f, --fix     try to fix issues automatically
+  --fix         try to fix issues automatically
   --fix-staged  try to fix staged files only
   -h, --help    display help for command
 
@@ -95,9 +69,10 @@ Under the hood, this command uses the biome CLI to check the code.
 `;
 
 exports[`should match help messages for all commands: help-command-tsc 1`] = `
-"Usage: rr tsc|typecheck [options]
+"Usage: rr tsc|tscheck [options]
 
-check if ts code is well typed 🎨 (tsc)
+Checks the TypeScript code for type errors, ensuring that the code adheres to
+the defined type constraints and helps catch potential issues before runtime.
 
 Options:
   -h, --help  display help for command
@@ -106,10 +81,51 @@ Under the hood, this command uses the tsc CLI to check the code.
 "
 `;
 
+exports[`should match help messages for all commands: help-command-lint 1`] = `
+"Usage: rr lint [options]
+
+Checks the code for linting issues and optionally fixes them, ensuring it
+adheres to the defined quality standards.
+
+Options:
+  -c, --check  check if the code is valid (default: true)
+  --fix        try to fix all the code
+  -h, --help   display help for command
+
+Under the hood, this command uses the biome CLI to lint the code.
+"
+`;
+
+exports[`should match help messages for all commands: help-command-format 1`] = `
+"Usage: rr format [options]
+
+Checks the code for formatting issues and optionally fixes them, ensuring it
+adheres to the defined style standards.
+
+Options:
+  --fix       format all the code
+  -h, --help  display help for command
+
+Under the hood, this command uses the biome CLI to format the code.
+"
+`;
+
+exports[`should match help messages for all commands: help-command-test:static 1`] = `
+"Usage: rr test:static [options]
+
+Runs static tests, including linting, formatting checks, and TypeScript type
+checking, to ensure code quality and correctness without executing the code.
+
+Options:
+  -h, --help  display help for command
+"
+`;
+
 exports[`should match help messages for all commands: help-command-clean 1`] = `
 "Usage: rr clean [options]
 
-delete dirty folders or files 🗑️ (rimraf)
+Deletes generated files and folders such as 'dist', 'node_modules', and lock
+files to ensure a clean state.
 
 Options:
   --only-dist  delete 'dist' folders only
@@ -121,9 +137,10 @@ Under the hood, this command uses rimraf to delete dirty folders or files.
 `;
 
 exports[`should match help messages for all commands: help-command-pkgs 1`] = `
-"Usage: rr pkgs|packages [options]
+"Usage: rr pkgs [options]
 
-list unique affected packages from list of files 📦
+Given a list of files, returns the list of affected packages. Useful to run
+commands only on affected packages.
 
 Options:
   --files <files...>  list of files to check
@@ -133,9 +150,10 @@ Options:
 `;
 
 exports[`should match help messages for all commands: help-command-config 1`] = `
-"Usage: rr config|cfg [options]
+"Usage: rr config [options]
 
-display the current config 🛠️
+Displays the current configuration settings, including their source file path if
+available.
 
 Options:
   -h, --help  display help for command

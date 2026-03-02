@@ -4,7 +4,10 @@ import type { Context } from "#/services/ctx";
 
 export function createBuildLibCommand(ctx: Context) {
   return createCommand("build:lib")
-    .description(`build a ts project 🏗️ (${TOOL_LABELS.TSDOWN})`)
+    .summary(`build a ts library 🏗️ (${TOOL_LABELS.TSDOWN})`)
+    .description(
+      "Compiles TypeScript code into JavaScript and generates type declaration files, making it ready for distribution.",
+    )
     .action(async function buildAction() {
       await ctx.shell.$`tsdown`;
     })

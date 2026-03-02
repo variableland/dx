@@ -12,7 +12,8 @@ type Options = {
 
 export function createCleanCommand() {
   return createCommand("clean")
-    .description(`delete dirty folders or files 🗑️ (${TOOL_LABELS.RIMRAF})`)
+    .summary(`delete dirty files 🗑️ (${TOOL_LABELS.RIMRAF})`)
+    .description("Deletes generated files and folders such as 'dist', 'node_modules', and lock files to ensure a clean state.")
     .option("--only-dist", "delete 'dist' folders only")
     .option("--dry-run", "outputs the paths that would be deleted")
     .action(async function cleanCommandAction(options: Options) {

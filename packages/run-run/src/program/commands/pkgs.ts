@@ -14,8 +14,10 @@ type Options = {
 
 export function createPkgsCommand(ctx: Context) {
   return createCommand("pkgs")
-    .alias("packages")
-    .description("list unique affected packages from list of files 📦")
+    .summary("list affected packages 📦")
+    .description(
+      "Given a list of files, returns the list of affected packages. Useful to run commands only on affected packages.",
+    )
     .addOption(new Option("--files <files...>", "list of files to check"))
     .addOption(new Option("--decorator [type]", "type of decorator to use").choices(decorators))
     .action(async function pkgsAction({ files, decorator }: Options, cmd: Command) {

@@ -37,7 +37,6 @@ To use this monorepo, you need to have the following tools installed:
 3. Run tests:
 
    ```bash
-   pnpm rr check tsc
    pnpm test
    ```
 
