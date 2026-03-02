@@ -4,15 +4,18 @@ import { gracefullBinDir } from "#/utils/gracefullBinDir";
 
 type CreateOptions = {
   bin: string;
+  ui?: string;
   shellService: ShellService;
 };
 
 export abstract class ToolService {
   #shellService: ShellService;
   #bin: string;
+  #ui: string;
 
-  constructor({ bin: cmd, shellService }: CreateOptions) {
-    this.#bin = cmd;
+  constructor({ bin, ui, shellService }: CreateOptions) {
+    this.#bin = bin;
+    this.#ui = ui ?? bin;
     this.#shellService = shellService;
   }
 
@@ -36,5 +39,9 @@ export abstract class ToolService {
 
   get bin() {
     return this.#bin;
+  }
+
+  get ui() {
+    return this.#ui;
   }
 }

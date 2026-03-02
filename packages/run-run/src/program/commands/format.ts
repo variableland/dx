@@ -24,11 +24,11 @@ export function createFormatCommand(ctx: Context) {
 
   return createCommand("fmt")
     .alias("format")
-    .description("format the code 🎨")
+    .description(`format the code 🎨 (${toolService.ui})`)
     .option("-c, --check", "check if the code is formatted", true)
     .option("-f, --fix", "format all the code")
     .action(async function formatAction(options: ActionOptions) {
       await toolService.format(options);
     })
-    .addHelpText("afterAll", `\nUnder the hood, this command uses the ${toolService.bin} CLI to format the code.`);
+    .addHelpText("afterAll", `\nUnder the hood, this command uses the ${toolService.ui} CLI to format the code.`);
 }

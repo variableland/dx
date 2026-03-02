@@ -2,16 +2,17 @@ import chalk, { type ChalkInstance } from "chalk";
 import supportsColor from "supports-color";
 
 // https://no-color.org/
-const colorIsSupported = () => supportsColor.stdout && !process.env.NO_COLOR;
+export const colorIsSupported = () => supportsColor.stdout && !process.env.NO_COLOR;
 
 const identity = <T>(x: T) => x;
 const safe = (style: ChalkInstance) => (colorIsSupported() ? style : identity);
 
-export const colors = {
-  blueBright: safe(chalk.blueBright),
-  redBright: safe(chalk.redBright),
-  greenBright: safe(chalk.greenBright),
+export const colorize = (hex: string) => safe(chalk.hex(hex));
+
+export const palette = {
   bold: safe(chalk.bold),
-  muted: safe(chalk.dim),
+  italic: safe(chalk.italic),
   link: safe(chalk.underline),
+  muted: safe(chalk.dim),
+  vland: colorize("#36d399"),
 };

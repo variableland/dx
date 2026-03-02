@@ -4,6 +4,7 @@ import { createCommand } from "commander";
 import type { Context } from "#/services/ctx";
 import { logger } from "#/services/logger";
 import { OxlintService } from "#/services/oxlint";
+import { TOOL_LABELS } from "../ui";
 
 type TypecheckAtOptions = {
   dir: string;
@@ -51,13 +52,12 @@ export function createTypecheckCommand(ctx: Context) {
     config: { config },
   } = ctx;
 
+  const toolUi = config.future?.oxc ? TOOL_LABELS.OXLINT : TOOL_LABELS.TSC;
+
   return createCommand("tsc")
     .alias("typecheck")
-    .description("check if TypeScript code is well typed 🎨")
-    .addHelpText(
-      "afterAll",
-      `\nUnder the hood, this command uses the ${config.future?.oxc ? "oxlint" : "TypeScript"} CLI to check the code.`,
-    )
+    .description(`check if ts code is well typed 🎨 (${toolUi})`)
+    .addHelpText("afterAll", `\nUnder the hood, this command uses the ${toolUi} CLI to check the code.`)
     .action(async function typecheckAction() {
       const isTsProject = (dir: string) => appPkg.hasFile("tsconfig.json", dir);
 
@@ -91,7 +91,7 @@ export function createTypecheckCommand(ctx: Context) {
       const tsProjects = projects.filter((project) => isTsProject(project.rootDir));
 
       if (!tsProjects.length) {
-        logger.warn("No TypeScript projects found in the monorepo, skipping typecheck");
+        logger.warn("No ts projects found in the monorepo, skipping typecheck");
         return;
       }
 

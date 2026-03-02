@@ -1,10 +1,11 @@
 import type { ShellService } from "@vlandoss/clibuddy";
+import { TOOL_LABELS } from "#/program/ui";
 import type { Linter, LintOptions } from "#/types/tool";
 import { ToolService } from "./tool";
 
 export class OxlintService extends ToolService implements Linter {
   constructor(shellService: ShellService) {
-    super({ bin: "oxlint", shellService });
+    super({ bin: "oxlint", ui: TOOL_LABELS.OXLINT, shellService });
   }
 
   getBinDir() {

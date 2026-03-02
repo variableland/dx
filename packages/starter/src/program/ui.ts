@@ -1,7 +1,7 @@
-import { colors } from "@vlandoss/clibuddy";
+import { palette } from "@vlandoss/clibuddy";
 
-const UI_LOGO = `⚡ ${colors.blueBright("V")} ${colors.redBright("L")} ${colors.greenBright("A")} ${colors.blueBright("N")} ${colors.redBright("D")}`;
+const UI_LOGO = `⚡ ${palette.bold("V")} ${palette.bold("L")} ${palette.bold("A")} ${palette.bold("N")} ${palette.bold("D")}`;
 
-const COMPANY_LOGO = `${colors.redBright("Variable Land")} 👊`;
+const COMPANY_LOGO = `${palette.vland("Variable Land")} 👊`;
 
 export const BANNER_TEXT = `${UI_LOGO}: The CLI to init a new project in ${COMPANY_LOGO}\n`;

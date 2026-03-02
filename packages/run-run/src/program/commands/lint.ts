@@ -23,11 +23,11 @@ export function createLintCommand(ctx: Context) {
   const toolService = getToolService(ctx);
 
   return createCommand("lint")
-    .description("lint the code 🧹")
+    .description(`lint the code 🧹 (${toolService.ui})`)
     .option("-c, --check", "check if the code is valid", true)
     .option("-f, --fix", "try to fix all the code")
     .action(async function lintAction(options: ActionOptions) {
       await toolService.lint(options);
     })
-    .addHelpText("afterAll", `\nUnder the hood, this command uses the ${toolService.bin} CLI to lint the code.`);
+    .addHelpText("afterAll", `\nUnder the hood, this command uses the ${toolService.ui} CLI to lint the code.`);
 }

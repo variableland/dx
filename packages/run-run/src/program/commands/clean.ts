@@ -3,6 +3,7 @@ import { createCommand } from "commander";
 import { type GlobOptions, glob } from "glob";
 import { rimraf } from "rimraf";
 import { logger } from "#/services/logger";
+import { TOOL_LABELS } from "../ui";
 
 type Options = {
   onlyDist: boolean;
@@ -11,7 +12,7 @@ type Options = {
 
 export function createCleanCommand() {
   return createCommand("clean")
-    .description("delete dirty folders or files such as node_modules, etc 🗑️")
+    .description(`delete dirty folders or files 🗑️ (${TOOL_LABELS.RIMRAF})`)
     .option("--only-dist", "delete 'dist' folders only")
     .option("--dry-run", "outputs the paths that would be deleted")
     .action(async function cleanCommandAction(options: Options) {
@@ -47,5 +48,5 @@ export function createCleanCommand() {
         });
       }
     })
-    .addHelpText("afterAll", "\nUnder the hood, this command uses the rimraf.js to delete dirty folders or files.");
+    .addHelpText("afterAll", `\nUnder the hood, this command uses ${TOOL_LABELS.RIMRAF} to delete dirty folders or files.`);
 }
