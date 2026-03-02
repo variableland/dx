@@ -1,5 +1,11 @@
 # @vlandoss/biome-config
 
+## 0.0.6
+
+### Patch Changes
+
+- [#146](https://github.com/variableland/dx/pull/146) [`0ca5ac1`](https://github.com/variableland/dx/commit/0ca5ac1aba30399b4a3f7500e0156ab28bcf62d2) Thanks [@rqbazan](https://github.com/rqbazan)! - Migrate to biome 2.4.4
+
 ## 0.0.5
 
 ### Patch Changes

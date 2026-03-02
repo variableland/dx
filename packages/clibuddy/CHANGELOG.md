@@ -1,5 +1,13 @@
 # @vlandoss/clibuddy
 
+## 0.0.8
+
+### Patch Changes
+
+- [#149](https://github.com/variableland/dx/pull/149) [`6092149`](https://github.com/variableland/dx/commit/60921491f8d26159d450a5f41986fab220f40074) Thanks [@rqbazan](https://github.com/rqbazan)! - Change exported colors
+
+- [#146](https://github.com/variableland/dx/pull/146) [`0ca5ac1`](https://github.com/variableland/dx/commit/0ca5ac1aba30399b4a3f7500e0156ab28bcf62d2) Thanks [@rqbazan](https://github.com/rqbazan)! - Upgrade deps
+
 ## 0.0.7
 
 ### Patch Changes
