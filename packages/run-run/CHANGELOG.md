@@ -1,5 +1,11 @@
 # @vlandoss/run-run
 
+## 0.0.17
+
+### Patch Changes
+
+- [#150](https://github.com/variableland/dx/pull/150) [`701b338`](https://github.com/variableland/dx/commit/701b3386c78a76d00c127972221d50e51b563fbe) Thanks [@rqbazan](https://github.com/rqbazan)! - Reorder commands
+
 ## 0.0.16
 
 ### Patch Changes
