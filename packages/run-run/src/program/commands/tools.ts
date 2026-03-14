@@ -5,6 +5,7 @@ import type { Context } from "#/services/ctx";
 import { OxfmtService } from "#/services/oxfmt";
 import { OxlintService } from "#/services/oxlint";
 import type { ToolService } from "#/services/tool";
+import { TsdownService } from "#/services/tsdown";
 
 type ActionParams = {
   args: string[];
@@ -18,6 +19,8 @@ function getToolService(bin: string, shell: ShellService): ToolService {
       return new OxfmtService(shell);
     case "oxlint":
       return new OxlintService(shell);
+    case "tsdown":
+      return new TsdownService(shell);
     default:
       throw new Error(`Unknown tool: ${bin}`);
   }
@@ -41,5 +44,6 @@ export function createToolsCommand(ctx: Context) {
     .description("expose the internal tools 🛠️")
     .addCommand(createToolCommand("biome", ctx.shell))
     .addCommand(createToolCommand("oxfmt", ctx.shell))
-    .addCommand(createToolCommand("oxlint", ctx.shell));
+    .addCommand(createToolCommand("oxlint", ctx.shell))
+    .addCommand(createToolCommand("tsdown", ctx.shell));
 }

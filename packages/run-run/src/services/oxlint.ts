@@ -8,7 +8,7 @@ export class OxlintService extends ToolService implements Linter {
     super({ bin: "oxlint", ui: TOOL_LABELS.OXLINT, shellService });
   }
 
-  getBinDir() {
+  override getBinDir() {
     return require.resolve("oxlint/bin/oxlint");
   }
 

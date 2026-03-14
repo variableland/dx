@@ -19,7 +19,7 @@ export abstract class ToolService {
     this.#shellService = shellService;
   }
 
-  abstract getBinDir(): string;
+  getBinDir?(): string;
 
   exec(args: string | string[]) {
     const $ = this.#shell();
@@ -27,9 +27,11 @@ export abstract class ToolService {
   }
 
   #shell = memoize((cwd?: string) => {
+    const { getBinDir } = this;
+
     return this.#shellService.child({
       cwd,
-      preferLocal: gracefullBinDir(() => this.getBinDir()),
+      ...(getBinDir && { preferLocal: gracefullBinDir(() => getBinDir()) }),
     }).$;
   });
 

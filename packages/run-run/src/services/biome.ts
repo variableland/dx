@@ -9,7 +9,7 @@ export class BiomeService extends ToolService implements Formatter, Linter, Stat
     super({ bin: "biome", ui: TOOL_LABELS.BIOME, shellService });
   }
 
-  getBinDir() {
+  override getBinDir() {
     return require.resolve("@biomejs/biome/bin/biome");
   }
 

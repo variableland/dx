@@ -8,7 +8,7 @@ export class OxfmtService extends ToolService implements Formatter {
     super({ bin: "oxfmt", ui: TOOL_LABELS.OXFMT, shellService });
   }
 
-  getBinDir() {
+  override getBinDir() {
     return require.resolve("oxfmt/bin/oxfmt");
   }
 
