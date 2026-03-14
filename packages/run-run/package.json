@@ -15,10 +15,7 @@
   "type": "module",
   "exports": {
     "./config": "./src/lib/config.ts",
-    "./tools/*": {
-      "types": "./tools/*.d.ts",
-      "default": "./tools/*.js"
-    }
+    "./tools/*": "./src/tools/*.ts"
   },
   "bin": {
     "rr": "./bin.ts",
