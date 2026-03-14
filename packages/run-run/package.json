@@ -15,10 +15,12 @@
   "type": "module",
   "exports": {
     "./config": {
+      "bun": "./src/lib/config.ts",
       "types": "./dist/config.d.mts",
       "default": "./dist/config.mjs"
     },
     "./tools/*": {
+      "bun": "./src/lib/tools/*.ts",
       "types": "./dist/tools/*.d.mts",
       "default": "./dist/tools/*.mjs"
     }
