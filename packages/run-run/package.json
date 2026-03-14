@@ -14,8 +14,14 @@
   "author": "rcrd <rcrd@variable.land>",
   "type": "module",
   "exports": {
-    "./config": "./src/lib/config.ts",
-    "./tools/*": "./src/tools/*.ts"
+    "./config": {
+      "types": "./dist/config.d.mts",
+      "default": "./dist/config.mjs"
+    },
+    "./tools/*": {
+      "types": "./dist/tools/*.d.mts",
+      "default": "./dist/tools/*.mjs"
+    }
   },
   "bin": {
     "rr": "./bin.ts",
@@ -26,12 +32,15 @@
   },
   "files": [
     "bin.ts",
+    "dist",
     "src",
     "tools",
     "tsconfig.json"
   ],
   "scripts": {
+    "build": "tsdown",
     "test": "bun test",
+    "prepublishOnly": "pnpm build",
     "test:types": "rr tsc"
   },
   "dependencies": {
