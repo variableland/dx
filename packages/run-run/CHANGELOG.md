@@ -1,5 +1,11 @@
 # @vlandoss/run-run
 
+## 0.0.18
+
+### Patch Changes
+
+- [#152](https://github.com/variableland/dx/pull/152) [`373b8fc`](https://github.com/variableland/dx/commit/373b8fc9ff4d4899111b2eafdd63f27c7415fb4f) Thanks [@rqbazan](https://github.com/rqbazan)! - Add tsdown to tools
+
 ## 0.0.17
 
 ### Patch Changes
