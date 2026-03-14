@@ -1,5 +1,14 @@
 # @vlandoss/starter
 
+## 0.0.13
+
+### Patch Changes
+
+- [#154](https://github.com/variableland/dx/pull/154) [`577f4c7`](https://github.com/variableland/dx/commit/577f4c7df0f2f749fad395ec454d287f666d47bd) Thanks [@rqbazan](https://github.com/rqbazan)! - Improve fatal error logging
+
+- Updated dependencies [[`577f4c7`](https://github.com/variableland/dx/commit/577f4c7df0f2f749fad395ec454d287f666d47bd)]:
+  - @vlandoss/clibuddy@0.0.9
+
 ## 0.0.12
 
 ### Patch Changes
