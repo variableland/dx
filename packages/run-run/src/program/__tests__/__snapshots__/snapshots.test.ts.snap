@@ -183,6 +183,7 @@ Commands:
   biome
   oxfmt
   oxlint
+  tsdown
   help [command]  display help for command
 "
 `;
