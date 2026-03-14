@@ -14,7 +14,8 @@
   "author": "rcrd <rcrd@variable.land>",
   "type": "module",
   "exports": {
-    "./config": "./src/lib/config.ts"
+    "./config": "./src/lib/config.ts",
+    "./tools/*": "./src/tools/*.ts"
   },
   "bin": {
     "rr": "./bin.ts",
