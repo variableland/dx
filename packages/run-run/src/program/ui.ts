@@ -27,7 +27,7 @@ export const TOOL_LABELS = {
 
 export function getBannerText(version: string) {
   const uiLogo = `🦊 ${palette.bold("R")} ${palette.bold("U")} ${palette.bold("N")} - ${palette.bold("R")} ${palette.bold("U")} ${palette.bold("N")}`;
-  const vlandLogo = `${palette.vland("Variable Land")} 👊`;
+  const vlandLogo = `${palette.link(palette.vland("https://variable.land"))} 👊`;
 
   const title = `${uiLogo} ${palette.muted(`v${version}`)}`;
   const subtitle = `${palette.italic(palette.muted("The CLI toolbox for"))} ${vlandLogo}`;

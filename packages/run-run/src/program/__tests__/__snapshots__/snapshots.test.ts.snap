@@ -2,7 +2,7 @@
 
 exports[`should match all root commands: root-command---help 1`] = `
 "🦊 R U N - R U N v0.0.0-test
-The CLI toolbox for Variable Land 👊
+The CLI toolbox for https://variable.land 👊
 
 Usage: rr|run-run [options] <command...>
 
