@@ -41,3 +41,22 @@ Available TypeScript presets:
 - `@vlandoss/config/ts/dom/lib`
 - `@vlandoss/config/ts/no-dom/app`
 - `@vlandoss/config/ts/no-dom/lib`
+
+## Lefthook
+
+Consumed via [lefthook remotes](https://lefthook.dev/examples/remotes) — no `pnpm add` needed.
+
+`lefthook.yml`:
+
+```yaml
+remotes:
+  - git_url: https://github.com/variableland/dx
+    configs:
+      - packages/config/src/lefthook/turborepo.yml
+```
+
+Then `pnpm lefthook install` to sync the hooks.
+
+Available presets:
+
+- `packages/config/src/lefthook/turborepo.yml` — `pre-commit` (Biome `jscheck`, `turbo test:types`) and `pre-push` (`turbo test --affected`). Assumes the consumer repo has `@vlandoss/run-run` and `turbo` available.
