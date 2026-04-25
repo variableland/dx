@@ -1,0 +1,24 @@
+pre-commit:
+  parallel: true
+  jobs:
+    - name: jscheck
+      run: pnpm rr jscheck --fix-staged
+      stage_fixed: true
+
+    - name: tscheck
+      run: turbo run test:types --filter='...[HEAD]'
+      glob:
+        - "*.{ts,tsx}"
+        - "tsconfig.json"
+
+pre-push:
+  jobs:
+    - name: test
+      run: |
+        branch="$(git branch --show-current)"
+
+        if [ "$branch" = "main" ]; then
+          turbo run test --filter='...[HEAD^]'
+        else
+          turbo run test --affected
+        fi
