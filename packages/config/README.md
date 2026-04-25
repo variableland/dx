@@ -57,6 +57,3 @@ remotes:
 
 Then `pnpm lefthook install` to sync the hooks.
 
-Available presets:
-
-- `packages/config/src/lefthook/turborepo.yml` — `pre-commit` (Biome `jscheck`, `turbo test:types`) and `pre-push` (`turbo test --affected`). Assumes the consumer repo has `@vlandoss/run-run` and `turbo` available.
