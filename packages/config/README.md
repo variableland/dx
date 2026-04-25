@@ -41,3 +41,19 @@ Available TypeScript presets:
 - `@vlandoss/config/ts/dom/lib`
 - `@vlandoss/config/ts/no-dom/app`
 - `@vlandoss/config/ts/no-dom/lib`
+
+## Lefthook
+
+Consumed via [lefthook remotes](https://lefthook.dev/examples/remotes) — no `pnpm add` needed.
+
+`lefthook.yml`:
+
+```yaml
+remotes:
+  - git_url: https://github.com/variableland/dx
+    configs:
+      - packages/config/src/lefthook/turborepo.yml
+```
+
+Then `pnpm lefthook install` to sync the hooks.
+
