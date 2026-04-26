@@ -1,7 +1,7 @@
 import { type Mock, mock } from "bun:test";
 import { exec } from "node:child_process";
 import { promisify } from "node:util";
-import { createProgram } from "../src/program";
+import { createProgram } from "../src/program/index.ts";
 
 const execAsync = promisify(exec);
 

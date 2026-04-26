@@ -13,6 +13,9 @@
   "license": "MIT",
   "author": "rcrd <rcrd@variable.land>",
   "type": "module",
+  "imports": {
+    "#src/*": "./src/*"
+  },
   "module": "src/main.ts",
   "bin": {
     "vland": "./bin.ts"

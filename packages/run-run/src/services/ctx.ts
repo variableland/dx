@@ -1,8 +1,8 @@
 import fs from "node:fs";
 import { createPkgService, createShellService, cwd, type PkgService, type ShellService } from "@vlandoss/clibuddy";
-import type { ExportedConfig } from "#/types/config";
-import { ConfigService } from "./config";
-import { logger } from "./logger";
+import type { ExportedConfig } from "#src/types/config.ts";
+import { ConfigService } from "./config.ts";
+import { logger } from "./logger.ts";
 
 export type Context = {
   binPkg: PkgService;

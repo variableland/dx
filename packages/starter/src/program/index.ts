@@ -1,8 +1,8 @@
 import { getVersion } from "@vlandoss/clibuddy";
 import { Command } from "commander";
-import { createContext } from "#/services/ctx";
-import { createAddCommand } from "./commands/add";
-import { createInitCommand } from "./commands/init";
+import { createContext } from "#src/services/ctx.ts";
+import { createAddCommand } from "./commands/add.ts";
+import { createInitCommand } from "./commands/init.ts";
 import { BANNER_TEXT } from "./ui";
 
 export type Options = {

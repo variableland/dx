@@ -13,6 +13,10 @@
   "license": "MIT",
   "author": "rcrd <rcrd@variable.land>",
   "type": "module",
+  "imports": {
+    "#src/*": "./src/*",
+    "#test/*": "./test/*"
+  },
   "exports": {
     "./config": {
       "bun": "./src/lib/config.ts",

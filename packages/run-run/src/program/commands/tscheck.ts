@@ -1,9 +1,9 @@
 import { cwd, type ShellService } from "@vlandoss/clibuddy";
 import type { AnyLogger } from "@vlandoss/loggy";
 import { createCommand } from "commander";
-import type { Context } from "#/services/ctx";
-import { logger } from "#/services/logger";
-import { OxlintService } from "#/services/oxlint";
+import type { Context } from "#src/services/ctx.ts";
+import { logger } from "#src/services/logger.ts";
+import { OxlintService } from "#src/services/oxlint.ts";
 import { TOOL_LABELS } from "../ui";
 
 type TypecheckAtOptions = {

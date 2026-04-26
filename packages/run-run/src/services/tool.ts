@@ -1,6 +1,6 @@
 import type { Shell, ShellService } from "@vlandoss/clibuddy";
 import memoize from "memoize";
-import { gracefullBinDir } from "#/utils/gracefullBinDir";
+import { gracefullBinDir } from "#src/utils/gracefullBinDir.ts";
 
 type CreateOptions = {
   bin: string;
