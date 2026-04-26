@@ -1,5 +1,6 @@
 # Biome Config
 
+> [!CAUTION]
 > **Deprecated.** This package has been superseded by [`@vlandoss/config`](../../packages/config/README.md), which consolidates Biome, TypeScript, and other shared configs behind subpath exports. New projects should use `@vlandoss/config/biome` instead. This package will keep receiving critical fixes but no new features.
 
 ## Migration
