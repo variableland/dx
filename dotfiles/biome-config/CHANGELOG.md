@@ -1,5 +1,11 @@
 # @vlandoss/biome-config
 
+## 0.0.7
+
+### Patch Changes
+
+- [#158](https://github.com/variableland/dx/pull/158) [`e7d6f17`](https://github.com/variableland/dx/commit/e7d6f17b3a5bfa56a6c2ed1aab7679bda876456d) Thanks [@rqbazan](https://github.com/rqbazan)! - Mark `@vlandoss/biome-config` as deprecated in favor of `@vlandoss/config/biome`. The package will continue to receive critical fixes but no new features. See the README for migration instructions.
+
 ## 0.0.6
 
 ### Patch Changes
