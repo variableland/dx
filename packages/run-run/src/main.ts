@@ -1,7 +1,7 @@
 import { run } from "@vlandoss/clibuddy";
-import { createProgram, type Options } from "./program";
-import { parseArgs } from "./program/parse-args";
-import { logger } from "./services/logger";
+import { createProgram, type Options } from "./program/index.ts";
+import { parseArgs } from "./program/parse-args.ts";
+import { logger } from "./services/logger.ts";
 
 export async function main(options: Options) {
   await run(async () => {

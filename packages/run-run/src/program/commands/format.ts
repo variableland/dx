@@ -1,8 +1,8 @@
 import { createCommand } from "commander";
-import { BiomeService } from "#/services/biome";
-import type { Context } from "#/services/ctx";
-import { OxfmtService } from "#/services/oxfmt";
-import type { Formatter } from "#/types/tool";
+import { BiomeService } from "#src/services/biome.ts";
+import type { Context } from "#src/services/ctx.ts";
+import { OxfmtService } from "#src/services/oxfmt.ts";
+import type { Formatter } from "#src/types/tool.ts";
 
 type ActionOptions = {
   fix?: boolean;

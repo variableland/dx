@@ -1,8 +1,8 @@
 import { createCommand } from "commander";
-import { BiomeService } from "#/services/biome";
-import type { Context } from "#/services/ctx";
-import { OxlintService } from "#/services/oxlint";
-import type { Linter } from "#/types/tool";
+import { BiomeService } from "#src/services/biome.ts";
+import type { Context } from "#src/services/ctx.ts";
+import { OxlintService } from "#src/services/oxlint.ts";
+import type { Linter } from "#src/types/tool.ts";
 
 type ActionOptions = {
   check?: boolean;

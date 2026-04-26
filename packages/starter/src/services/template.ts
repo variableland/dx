@@ -1,8 +1,8 @@
 import { join } from "node:path";
 import type { NodePlopAPI } from "node-plop";
 import nodePlop from "node-plop";
-import { logger } from "./logger";
-import type { GenerateOptions, TemplateService } from "./types";
+import { logger } from "./logger.ts";
+import type { GenerateOptions, TemplateService } from "./types.ts";
 
 type CreateOptions = {
   basePath: string;

@@ -1,7 +1,7 @@
 import { createCommand } from "commander";
-import { BiomeService } from "#/services/biome";
-import type { Context } from "#/services/ctx";
-import type { StaticChecker } from "#/types/tool";
+import { BiomeService } from "#src/services/biome.ts";
+import type { Context } from "#src/services/ctx.ts";
+import type { StaticChecker } from "#src/types/tool.ts";
 
 type ActionOptions = {
   fix?: boolean;

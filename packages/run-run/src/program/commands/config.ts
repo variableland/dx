@@ -1,6 +1,6 @@
 import { palette } from "@vlandoss/clibuddy";
 import { createCommand } from "commander";
-import type { Context } from "#/services/ctx";
+import type { Context } from "#src/services/ctx.ts";
 
 export function createConfigCommand(ctx: Context) {
   return createCommand("config")

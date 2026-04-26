@@ -1,7 +1,7 @@
 import os from "node:os";
 import { type AsyncSearcher, lilconfig } from "lilconfig";
-import type { ExportedConfig, UserConfig } from "#/types/config";
-import { logger } from "./logger";
+import type { ExportedConfig, UserConfig } from "#src/types/config.ts";
+import { logger } from "./logger.ts";
 
 const DEFAULT_CONFIG: UserConfig = {
   future: {
