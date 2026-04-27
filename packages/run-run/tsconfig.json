@@ -1,11 +1,3 @@
 {
-  "extends": ["@total-typescript/tsconfig/bundler/no-dom/app"],
-  "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "#/*": ["./src/*"],
-      "#test/*": ["./test/*"],
-      "@vlandoss/*": ["../../packages/*/src"]
-    }
-  }
+  "extends": ["@vlandoss/config/ts/no-dom/lib"]
 }

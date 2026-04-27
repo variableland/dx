@@ -1,8 +1,8 @@
 import path from "node:path";
 import { type Command, createCommand, Option } from "commander";
 import memoize from "memoize";
-import type { Context } from "#/services/ctx";
-import { logger } from "#/services/logger";
+import type { Context } from "#src/services/ctx.ts";
+import { logger } from "#src/services/logger.ts";
 
 // Currently only "turbo" is supported, but this can be extended in the future
 const decorators = ["turbo"] as const;

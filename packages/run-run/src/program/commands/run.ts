@@ -1,5 +1,5 @@
 import { createCommand } from "commander";
-import type { Context } from "#/services/ctx";
+import type { Context } from "#src/services/ctx.ts";
 
 export function createRunCommand(ctx: Context) {
   return createCommand("run")

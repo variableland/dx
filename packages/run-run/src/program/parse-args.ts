@@ -1,4 +1,4 @@
-import { logger } from "../services/logger";
+import { logger } from "../services/logger.ts";
 
 const debug = logger.subdebug("parseArgs");
 

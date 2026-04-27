@@ -1,11 +1,11 @@
 import type { ShellService } from "@vlandoss/clibuddy";
 import { createCommand } from "commander";
-import { BiomeService } from "#/services/biome";
-import type { Context } from "#/services/ctx";
-import { OxfmtService } from "#/services/oxfmt";
-import { OxlintService } from "#/services/oxlint";
-import type { ToolService } from "#/services/tool";
-import { TsdownService } from "#/services/tsdown";
+import { BiomeService } from "#src/services/biome.ts";
+import type { Context } from "#src/services/ctx.ts";
+import { OxfmtService } from "#src/services/oxfmt.ts";
+import { OxlintService } from "#src/services/oxlint.ts";
+import type { ToolService } from "#src/services/tool.ts";
+import { TsdownService } from "#src/services/tsdown.ts";
 
 type ActionParams = {
   args: string[];

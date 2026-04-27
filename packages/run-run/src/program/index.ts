@@ -1,18 +1,18 @@
 import { getVersion } from "@vlandoss/clibuddy";
 import { createCommand } from "commander";
-import { createContext } from "#/services/ctx";
-import { createBuildLibCommand } from "./commands/build-lib";
-import { createCleanCommand } from "./commands/clean";
-import { createConfigCommand } from "./commands/config";
-import { createFormatCommand } from "./commands/format";
-import { createJsCheckCommand } from "./commands/jscheck";
-import { createLintCommand } from "./commands/lint";
-import { createPkgsCommand } from "./commands/pkgs";
-import { createRunCommand } from "./commands/run";
-import { createTestStaticCommand } from "./commands/test-static";
-import { createToolsCommand } from "./commands/tools";
-import { createTsCheckCommand } from "./commands/tscheck";
-import { CREDITS_TEXT, getBannerText } from "./ui";
+import { createContext } from "#src/services/ctx.ts";
+import { createBuildLibCommand } from "./commands/build-lib.ts";
+import { createCleanCommand } from "./commands/clean.ts";
+import { createConfigCommand } from "./commands/config.ts";
+import { createFormatCommand } from "./commands/format.ts";
+import { createJsCheckCommand } from "./commands/jscheck.ts";
+import { createLintCommand } from "./commands/lint.ts";
+import { createPkgsCommand } from "./commands/pkgs.ts";
+import { createRunCommand } from "./commands/run.ts";
+import { createTestStaticCommand } from "./commands/test-static.ts";
+import { createToolsCommand } from "./commands/tools.ts";
+import { createTsCheckCommand } from "./commands/tscheck.ts";
+import { CREDITS_TEXT, getBannerText } from "./ui.ts";
 
 export type Options = {
   binDir: string;

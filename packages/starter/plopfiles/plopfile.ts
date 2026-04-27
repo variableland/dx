@@ -1,6 +1,6 @@
 import path from "node:path";
 import type { NodePlopAPI } from "node-plop";
-import { ConfigService } from "#/services/config";
+import { ConfigService } from "#src/services/config.ts";
 import { tsconfigPrompts } from "./prompts/tsconfig";
 
 const validators = {

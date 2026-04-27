@@ -10,7 +10,6 @@
   "devDependencies": {
     "@changesets/changelog-github": "0.5.2",
     "@changesets/cli": "2.29.8",
-    "@total-typescript/tsconfig": "1.0.4",
     "@types/bun": "latest",
     "@vlandoss/config": "workspace:*",
     "@vlandoss/run-run": "workspace:*",

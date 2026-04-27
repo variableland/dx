@@ -2,7 +2,7 @@ import { cwd } from "@vlandoss/clibuddy";
 import { createCommand } from "commander";
 import { type GlobOptions, glob } from "glob";
 import { rimraf } from "rimraf";
-import { logger } from "#/services/logger";
+import { logger } from "#src/services/logger.ts";
 import { TOOL_LABELS } from "../ui";
 
 type Options = {

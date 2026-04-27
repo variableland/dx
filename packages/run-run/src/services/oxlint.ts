@@ -1,7 +1,7 @@
 import type { ShellService } from "@vlandoss/clibuddy";
-import { TOOL_LABELS } from "#/program/ui";
-import type { Linter, LintOptions } from "#/types/tool";
-import { ToolService } from "./tool";
+import { TOOL_LABELS } from "#src/program/ui.ts";
+import type { Linter, LintOptions } from "#src/types/tool.ts";
+import { ToolService } from "./tool.ts";
 
 export class OxlintService extends ToolService implements Linter {
   constructor(shellService: ShellService) {

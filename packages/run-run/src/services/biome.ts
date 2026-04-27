@@ -1,8 +1,8 @@
 import type { ShellService } from "@vlandoss/clibuddy";
 import isCI from "is-ci";
-import { TOOL_LABELS } from "#/program/ui";
-import type { FormatOptions, Formatter, Linter, LintOptions, StaticChecker, StaticCheckerOptions } from "#/types/tool";
-import { ToolService } from "./tool";
+import { TOOL_LABELS } from "#src/program/ui.ts";
+import type { FormatOptions, Formatter, Linter, LintOptions, StaticChecker, StaticCheckerOptions } from "#src/types/tool.ts";
+import { ToolService } from "./tool.ts";
 
 export class BiomeService extends ToolService implements Formatter, Linter, StaticChecker {
   constructor(shellService: ShellService) {

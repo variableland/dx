@@ -1,6 +1,6 @@
 import { createCommand } from "commander";
-import { TOOL_LABELS } from "#/program/ui";
-import type { Context } from "#/services/ctx";
+import { TOOL_LABELS } from "#src/program/ui.ts";
+import type { Context } from "#src/services/ctx.ts";
 
 export function createBuildLibCommand(ctx: Context) {
   return createCommand("build:lib")

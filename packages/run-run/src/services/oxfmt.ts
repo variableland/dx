@@ -1,7 +1,7 @@
 import type { ShellService } from "@vlandoss/clibuddy";
-import { TOOL_LABELS } from "#/program/ui";
-import type { FormatOptions, Formatter } from "#/types/tool";
-import { ToolService } from "./tool";
+import { TOOL_LABELS } from "#src/program/ui.ts";
+import type { FormatOptions, Formatter } from "#src/types/tool.ts";
+import { ToolService } from "./tool.ts";
 
 export class OxfmtService extends ToolService implements Formatter {
   constructor(shellService: ShellService) {

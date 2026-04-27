@@ -1,6 +1,6 @@
 import { createCommand } from "commander";
-import { TOOL_LABELS } from "#/program/ui";
-import type { Context } from "#/services/ctx";
+import { TOOL_LABELS } from "#src/program/ui.ts";
+import type { Context } from "#src/services/ctx.ts";
 
 export function createTestStaticCommand(ctx: Context) {
   return createCommand("test:static")
