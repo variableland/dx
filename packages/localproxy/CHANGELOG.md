@@ -1,5 +1,15 @@
 # @vlandoss/localproxy
 
+## 0.0.10
+
+### Patch Changes
+
+- [#162](https://github.com/variableland/dx/pull/162) [`5c89c36`](https://github.com/variableland/dx/commit/5c89c362934af0722e6b7788eb08b0620a97eb32) Thanks [@rqbazan](https://github.com/rqbazan)! - Switch tsconfigs to `@vlandoss/config/ts/*` and move path aliases from tsconfig `paths` to the `package.json` `imports` field (`#src/*`, `#test/*`). Relative imports now use explicit `.ts` extensions.
+
+- Updated dependencies [[`5c89c36`](https://github.com/variableland/dx/commit/5c89c362934af0722e6b7788eb08b0620a97eb32)]:
+  - @vlandoss/clibuddy@0.0.10
+  - @vlandoss/loggy@0.0.7
+
 ## 0.0.9
 
 ### Patch Changes
