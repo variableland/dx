@@ -1,7 +1,7 @@
-import { mock } from "bun:test";
+import { vi } from "vitest";
 import "@vlandoss/clibuddy/test-helpers";
 
 // required to make the version command work independently of the package.json version
-Bun.env.VERSION = "0.0.0-test";
+process.env.VERSION = "0.0.0-test";
 
-mock.module("is-ci", () => ({ default: false }));
+vi.mock("is-ci", () => ({ default: false }));

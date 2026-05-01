@@ -1,6 +1,6 @@
-import { type Mock, mock } from "bun:test";
 import { exec } from "node:child_process";
 import { promisify } from "node:util";
+import { vi } from "vitest";
 import { createProgram } from "../src/program/index.ts";
 
 const execAsync = promisify(exec);
@@ -10,9 +10,9 @@ export async function createTestProgram() {
     binDir: ".", // mocked value
   });
 
-  const exitFn = mock();
-  const writeOutFn = mock();
-  const writeErrFn = mock();
+  const exitFn = vi.fn();
+  const writeOutFn = vi.fn();
+  const writeErrFn = vi.fn();
 
   program.exitOverride(exitFn);
 
@@ -41,6 +41,3 @@ export async function parseProgram(argv: string[]) {
 export function execCli(cmd: string) {
   return execAsync(`bun ./bin.ts ${cmd}`);
 }
-
-// @ts-expect-error bun:test doesn't have a mocked helper function
-export const mocked = <T extends (...args: unknown[]) => unknown>(v: T): Mock<T> => v;

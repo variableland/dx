@@ -1,2 +1,2 @@
-export * from "./loggy";
-export * from "./types";
+export * from "./loggy.ts";
+export * from "./types.ts";

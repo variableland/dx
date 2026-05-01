@@ -7,8 +7,12 @@
       "outputs": ["dist/**"]
     },
     "test": {
-      "dependsOn": ["^test"]
+      "dependsOn": ["build"]
     },
-    "test:types": {}
+    "test:types": {},
+    "test:unit": {},
+    "test:integration": {
+      "dependsOn": ["build"]
+    }
   }
 }

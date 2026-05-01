@@ -1,0 +1,32 @@
+{
+  "name": "@vlandoss/tsdown-config",
+  "version": "0.0.1",
+  "description": "Shared tsdown configuration and plugins for Variable Land",
+  "homepage": "https://github.com/variableland/dx/tree/main/packages/tsdown-config#readme",
+  "bugs": {
+    "url": "https://github.com/variableland/dx/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/variableland/dx.git",
+    "directory": "packages/tsdown-config"
+  },
+  "license": "MIT",
+  "author": "rcrd <rcrd@variable.land>",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsdown"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "bun": ">=1.0.0"
+  }
+}

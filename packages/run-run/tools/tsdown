@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-bunx rr tools tsdown "$@"
+rr tools tsdown "$@"

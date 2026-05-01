@@ -1,4 +1,4 @@
-import { isProcessOutput } from "./services/shell/utils";
+import { isProcessOutput } from "./services/shell/utils.ts";
 
 function hasMessage(error: unknown): error is { message: string } {
   return (
