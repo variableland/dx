@@ -22,7 +22,7 @@
     "localp": "./bin.ts"
   },
   "files": [
-    "bin.ts",
+    "bin.mjs",
     "dist",
     "src",
     "!src/**/__tests__",
@@ -46,8 +46,8 @@
   "publishConfig": {
     "access": "public",
     "bin": {
-      "localproxy": "./dist/bin.mjs",
-      "localp": "./dist/bin.mjs"
+      "localproxy": "./bin.mjs",
+      "localp": "./bin.mjs"
     }
   },
   "engines": {
