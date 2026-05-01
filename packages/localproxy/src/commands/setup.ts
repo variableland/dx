@@ -1,13 +1,5 @@
 import * as fs from "node:fs/promises";
 import path from "node:path";
-
-async function exists(p: string): Promise<boolean> {
-  return fs
-    .access(p)
-    .then(() => true)
-    .catch(() => false);
-}
-
 import { editor as editorPrompt } from "@inquirer/prompts";
 import { createCommand } from "commander";
 import { CaddyService } from "#/services/caddy";
@@ -23,6 +15,13 @@ type CommandOptions = {
 };
 
 const debug = logger.subdebug("setup");
+
+async function exists(p: string): Promise<boolean> {
+  return fs
+    .access(p)
+    .then(() => true)
+    .catch(() => false);
+}
 
 async function checkInternalTools() {
   const { $ } = quietShell;
