@@ -1,7 +1,3 @@
-import { defineConfig } from "tsdown";
+import { defineLibConfig } from "@vlandoss/tsdown-config";
 
-export default defineConfig({
-  entry: ["src/index.ts"],
-  format: "esm",
-  dts: true,
-});
+export default defineLibConfig({ entry: ["src/index.ts"] });

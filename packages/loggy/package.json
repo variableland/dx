@@ -46,6 +46,7 @@
     "debug": "4.4.3"
   },
   "devDependencies": {
-    "@types/debug": "4.1.12"
+    "@types/debug": "4.1.12",
+    "@vlandoss/tsdown-config": "workspace:^"
   }
 }
