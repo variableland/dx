@@ -4,7 +4,7 @@ import { createCommand } from "commander";
 import type { Context } from "#src/services/ctx.ts";
 import { logger } from "#src/services/logger.ts";
 import { OxlintService } from "#src/services/oxlint.ts";
-import { TOOL_LABELS } from "../ui";
+import { TOOL_LABELS } from "../ui.ts";
 
 type TypecheckAtOptions = {
   dir: string;

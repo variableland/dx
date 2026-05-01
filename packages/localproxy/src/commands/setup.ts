@@ -16,6 +16,13 @@ type CommandOptions = {
 
 const debug = logger.subdebug("setup");
 
+async function exists(p: string): Promise<boolean> {
+  return fs
+    .access(p)
+    .then(() => true)
+    .catch(() => false);
+}
+
 async function checkInternalTools() {
   const { $ } = quietShell;
 
@@ -51,12 +58,12 @@ export function createSetupCommand({ binDir, installDir, caddyfilePath }: Contex
 
       await checkInternalTools();
 
-      if (!(await fs.exists(installDir))) {
+      if (!(await exists(installDir))) {
         await fs.mkdir(installDir);
       }
 
       const exampleCaddyFilePath = path.join(binDir, "config", "Caddyfile.example");
-      const defaultContent = (await fs.exists(caddyfilePath))
+      const defaultContent = (await exists(caddyfilePath))
         ? await fs.readFile(caddyfilePath, "utf-8")
         : await fs.readFile(exampleCaddyFilePath, "utf-8");
 
