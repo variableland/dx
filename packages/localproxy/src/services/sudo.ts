@@ -1,7 +1,7 @@
 import { password as passwordPrompt } from "@inquirer/prompts";
 import type { ShellService } from "@vlandoss/clibuddy";
-import { logger } from "./logger";
-import { silentShell } from "./shell";
+import { logger } from "./logger.ts";
+import { silentShell } from "./shell.ts";
 
 const debug = logger.subdebug("sudo");
 

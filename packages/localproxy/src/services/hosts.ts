@@ -1,6 +1,6 @@
-import { logger } from "./logger";
-import { quietShell, silentShell, verboseShell } from "./shell";
-import { SudoService } from "./sudo";
+import { logger } from "./logger.ts";
+import { quietShell, silentShell, verboseShell } from "./shell.ts";
+import { SudoService } from "./sudo.ts";
 
 type SetupOptions = {
   verbose: boolean;

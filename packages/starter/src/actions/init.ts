@@ -1,7 +1,7 @@
 import type { ShellService } from "@vlandoss/clibuddy";
 import { logger } from "#src/services/logger.ts";
 import type { TemplateService } from "#src/services/types.ts";
-import type { AnyAction } from "./types";
+import type { AnyAction } from "./types.ts";
 
 type ExecuteOptions = {
   template?: string;
