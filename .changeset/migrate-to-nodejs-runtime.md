@@ -1,0 +1,11 @@
+---
+"@vlandoss/localproxy": patch
+"@vlandoss/run-run": patch
+"@vlandoss/tsdown-config": patch
+---
+
+Migrate from Bun to Node.js as the runtime target.
+
+- `run-run`: fix `require.resolve` usage in `BiomeService` (not available in ESM with Node.js); replaced with `createRequire`. Add support for `run-run.config.mts` config files.
+- `localproxy`: replace `fs.exists` (Bun-only API) with a `fs.access`-based helper.
+- `tsdown-config`: remove `nodeShebangPlugin` export (no longer needed as source files now use `#!/usr/bin/env node` directly).
