@@ -16,7 +16,7 @@
   "type": "module",
   "exports": {
     ".": {
-      "source": "./src/index.ts",
+      "bun": "./src/index.ts",
       "import": "./dist/index.mjs",
       "default": "./dist/index.mjs"
     }
