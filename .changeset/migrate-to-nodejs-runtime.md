@@ -1,6 +1,9 @@
 ---
+"@vlandoss/clibuddy": patch
 "@vlandoss/localproxy": patch
+"@vlandoss/loggy": patch
 "@vlandoss/run-run": patch
+"@vlandoss/starter": patch
 ---
 
 Migrate from Bun to Node.js as the runtime target.
