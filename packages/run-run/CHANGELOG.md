@@ -1,5 +1,11 @@
 # @vlandoss/run-run
 
+## 0.1.3
+
+### Patch Changes
+
+- [#173](https://github.com/variableland/dx/pull/173) [`b2592a5`](https://github.com/variableland/dx/commit/b2592a518e62009dc2c2e8a64d2d3bff3dbfe07a) Thanks [@rqbazan](https://github.com/rqbazan)! - fix: add missing `tsdown` bin alias to package.json
+
 ## 0.1.2
 
 ### Patch Changes
