@@ -179,7 +179,11 @@ importers:
         specifier: workspace:^
         version: link:../tsdown-config
 
-  packages/tsdown-config: {}
+  packages/tsdown-config:
+    dependencies:
+      tsdown:
+        specifier: ^0.21.10
+        version: 0.21.10(typescript@5.9.3)
 
 packages:
 

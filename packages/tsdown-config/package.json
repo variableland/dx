@@ -28,5 +28,8 @@
   "engines": {
     "node": ">=20.0.0",
     "bun": ">=1.0.0"
+  },
+  "peerDependencies": {
+    "tsdown": "^0.21.10"
   }
 }
