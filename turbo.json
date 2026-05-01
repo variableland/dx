@@ -7,14 +7,14 @@
       "outputs": ["dist/**"]
     },
     "test": {
-      "dependsOn": ["^test"]
+      "dependsOn": ["^build", "build"]
     },
     "test:types": {},
     "test:unit": {
-      "dependsOn": ["^test:unit"]
+      "dependsOn": ["^build"]
     },
     "test:integration": {
-      "dependsOn": ["build"]
+      "dependsOn": ["^build", "build"]
     }
   }
 }

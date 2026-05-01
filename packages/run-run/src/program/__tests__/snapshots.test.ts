@@ -1,5 +1,5 @@
-import { afterEach, expect, test } from "bun:test";
-import { createTestProgram, execCli, mocked } from "#test/helpers.ts";
+import { afterEach, expect, test, vi } from "vitest";
+import { createTestProgram, execCli } from "#test/helpers.ts";
 
 const { program, ctx } = await createTestProgram();
 const $ = ctx.shell.$;
@@ -7,7 +7,7 @@ const $ = ctx.shell.$;
 const rootCommands = ["--help", "--version", "-v"];
 
 afterEach(() => {
-  mocked($).mockClear();
+  vi.mocked($).mockClear();
 });
 
 test("should match all root commands", async () => {

@@ -1,7 +1,7 @@
 import fs from "node:fs";
-import { ShellService } from "./shell";
-import type { CreateOptions } from "./types";
-import { getPreferLocal } from "./utils";
+import { ShellService } from "./shell.ts";
+import type { CreateOptions } from "./types.ts";
+import { getPreferLocal } from "./utils.ts";
 
 export const cwd = fs.realpathSync(process.cwd());
 

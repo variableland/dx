@@ -1,2 +1,2 @@
-export * from "./pkg";
-export * from "./shell";
+export * from "./pkg.ts";
+export * from "./shell/index.ts";

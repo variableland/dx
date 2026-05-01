@@ -15,11 +15,7 @@
   "author": "rcrd <rcrd@variable.land>",
   "type": "module",
   "exports": {
-    ".": {
-      "bun": "./src/index.ts",
-      "import": "./dist/index.mjs",
-      "default": "./dist/index.mjs"
-    },
+    ".": "./src/index.ts",
     "./test-helpers": "./test-helpers/index.ts"
   },
   "files": [

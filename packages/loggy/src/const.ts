@@ -1,5 +1,5 @@
 import util from "node:util";
-import type { FormatOptions, Formatters } from "./types";
+import type { FormatOptions, Formatters } from "./types.ts";
 
 export const DEFAULT_FORMAT_OPTIONS: FormatOptions = {
   colors: true,

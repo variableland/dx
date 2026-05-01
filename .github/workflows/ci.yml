@@ -30,14 +30,11 @@ jobs:
       - name: 💅 Test static
         run: pnpm rr test:static
 
-      - name: 🧪 Test unit
+      - name: 🧪 Test
         run: pnpm test
 
       - name: 🔨 Build
         run: pnpm build
-
-      - name: 🧪 Test integration
-        run: pnpm test:integration
 
   release:
     runs-on: ubuntu-latest

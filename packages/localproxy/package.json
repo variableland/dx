@@ -14,6 +14,10 @@
   "license": "MIT",
   "author": "rcrd <rcrd@variable.land>",
   "type": "module",
+  "imports": {
+    "#/*": "./src/*",
+    "#test/*": "./test/*"
+  },
   "bin": {
     "localproxy": "./bin.ts",
     "localp": "./bin.ts"
@@ -30,8 +34,8 @@
   "scripts": {
     "build": "tsdown",
     "prepublishOnly": "pnpm build",
-    "test": "bun test test/unit/",
-    "test:unit": "bun test test/unit/",
+    "test": "vitest run",
+    "test:unit": "vitest run --project unit",
     "test:types": "rr tsc"
   },
   "dependencies": {

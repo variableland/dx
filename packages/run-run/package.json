@@ -40,9 +40,9 @@
   ],
   "scripts": {
     "build": "tsdown",
-    "test": "bun test src/",
-    "test:unit": "bun test src/",
-    "test:integration": "bun test test/integration/",
+    "test": "vitest run",
+    "test:unit": "vitest run --project unit",
+    "test:integration": "vitest run --project integration",
     "prepublishOnly": "pnpm build",
     "test:types": "rr tsc"
   },

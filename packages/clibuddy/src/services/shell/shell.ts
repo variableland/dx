@@ -1,6 +1,6 @@
 import { $ as make$ } from "zx";
-import type { Shell, ShellOptions } from "./types";
-import { getPreferLocal } from "./utils";
+import type { Shell, ShellOptions } from "./types.ts";
+import { getPreferLocal } from "./utils.ts";
 
 export class ShellService {
   #shell: Shell;

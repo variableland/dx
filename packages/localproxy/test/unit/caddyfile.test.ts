@@ -1,6 +1,6 @@
-import { describe, expect, it } from "bun:test";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { describe, expect, it } from "vitest";
 import { CaddyfileService, type LocalDomain } from "#/services/caddyfile";
 import { type Caddyfile, CaddyfileParser } from "#/services/caddyfile/parser";
 import { FixtureReader } from "#test/helpers";
