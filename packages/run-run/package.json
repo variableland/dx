@@ -27,7 +27,8 @@
     "run-run": "./bin.ts",
     "biome": "./tools/biome",
     "oxfmt": "./tools/oxfmt",
-    "oxlint": "./tools/oxlint"
+    "oxlint": "./tools/oxlint",
+    "tsdown": "./tools/tsdown"
   },
   "files": [
     "bin.ts",
@@ -79,7 +80,8 @@
       "run-run": "./dist/bin.mjs",
       "biome": "./tools/biome",
       "oxfmt": "./tools/oxfmt",
-      "oxlint": "./tools/oxlint"
+      "oxlint": "./tools/oxlint",
+      "tsdown": "./tools/tsdown"
     }
   },
   "engines": {
