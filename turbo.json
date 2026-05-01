@@ -9,6 +9,9 @@
     "test": {
       "dependsOn": ["^test"]
     },
-    "test:types": {}
+    "test:types": {},
+    "test:integration": {
+      "dependsOn": ["build"]
+    }
   }
 }

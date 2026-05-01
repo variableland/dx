@@ -41,6 +41,7 @@
   "scripts": {
     "build": "tsdown",
     "test": "bun test",
+    "test:integration": "bun test test/integration/",
     "prepublishOnly": "pnpm build",
     "test:types": "rr tsc"
   },
