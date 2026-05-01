@@ -2,7 +2,6 @@
 "@vlandoss/run-run": patch
 "@vlandoss/localproxy": patch
 "@vlandoss/starter": patch
-"@vlandoss/tsdown-config": patch
 ---
 
 Fix `binDir` pointing to `dist/` in compiled CLIs
