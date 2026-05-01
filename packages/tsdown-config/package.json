@@ -23,8 +23,8 @@
   "publishConfig": {
     "access": "public"
   },
-  "peerDependencies": {
-    "tsdown": "*"
+  "dependencies": {
+    "tsdown": "0.21.0-beta.2"
   },
   "engines": {
     "bun": ">=1.0.0"
