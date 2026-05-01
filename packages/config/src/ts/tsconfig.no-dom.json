@@ -1,6 +1,7 @@
 {
   "extends": ["@total-typescript/tsconfig/bundler/no-dom"],
   "compilerOptions": {
-    "allowImportingTsExtensions": true
+    "allowImportingTsExtensions": true,
+    "customConditions": ["source"]
   }
 }

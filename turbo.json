@@ -10,6 +10,9 @@
       "dependsOn": ["^test"]
     },
     "test:types": {},
+    "test:unit": {
+      "dependsOn": ["^test:unit"]
+    },
     "test:integration": {
       "dependsOn": ["build"]
     }

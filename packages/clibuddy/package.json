@@ -15,7 +15,11 @@
   "author": "rcrd <rcrd@variable.land>",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts",
+    ".": {
+      "source": "./src/index.ts",
+      "import": "./dist/index.mjs",
+      "default": "./dist/index.mjs"
+    },
     "./test-helpers": "./test-helpers/index.ts"
   },
   "files": [

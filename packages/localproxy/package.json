@@ -30,7 +30,8 @@
   "scripts": {
     "build": "tsdown",
     "prepublishOnly": "pnpm build",
-    "test": "bun test",
+    "test": "bun test test/unit/",
+    "test:unit": "bun test test/unit/",
     "test:types": "rr tsc"
   },
   "dependencies": {
