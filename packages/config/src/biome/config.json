@@ -25,6 +25,9 @@
       },
       "complexity": {
         "noStaticOnlyClass": "off"
+      },
+      "correctness": {
+        "useImportExtensions": "error"
       }
     }
   },

@@ -3,7 +3,7 @@ import { Command } from "commander";
 import { createContext } from "#src/services/ctx.ts";
 import { createAddCommand } from "./commands/add.ts";
 import { createInitCommand } from "./commands/init.ts";
-import { BANNER_TEXT } from "./ui";
+import { BANNER_TEXT } from "./ui.ts";
 
 export type Options = {
   binDir: string;

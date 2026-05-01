@@ -39,10 +39,14 @@
     "@total-typescript/tsconfig": "1.0.4"
   },
   "peerDependencies": {
-    "@biomejs/biome": "2.4.4"
+    "@biomejs/biome": "2.4.4",
+    "@types/node": ">=20"
   },
   "peerDependenciesMeta": {
     "@biomejs/biome": {
+      "optional": true
+    },
+    "@types/node": {
       "optional": true
     }
   }

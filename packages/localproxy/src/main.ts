@@ -1,14 +1,14 @@
 import path from "node:path";
 import { createPkgService, getVersion } from "@vlandoss/clibuddy";
 import { createCommand } from "commander";
-import { createCleanCommand } from "./commands/clean";
-import { createSetupCommand } from "./commands/setup";
-import { createStartCommand } from "./commands/start";
-import { createStatusCommand } from "./commands/status";
-import { createStopCommand } from "./commands/stop";
-import { logger } from "./services/logger";
-import type { Context, ProgramOptions } from "./types";
-import { BANNER_TEXT, CREDITS_TEXT } from "./ui";
+import { createCleanCommand } from "./commands/clean.ts";
+import { createSetupCommand } from "./commands/setup.ts";
+import { createStartCommand } from "./commands/start.ts";
+import { createStatusCommand } from "./commands/status.ts";
+import { createStopCommand } from "./commands/stop.ts";
+import { logger } from "./services/logger.ts";
+import type { Context, ProgramOptions } from "./types.ts";
+import { BANNER_TEXT, CREDITS_TEXT } from "./ui.ts";
 
 async function createContext({ binDir, installDir }: ProgramOptions) {
   const binPkg = await createPkgService(binDir);
