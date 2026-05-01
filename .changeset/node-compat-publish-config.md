@@ -4,7 +4,6 @@
 "@vlandoss/localproxy": minor
 "@vlandoss/run-run": minor
 "@vlandoss/starter": minor
-"@vlandoss/tsdown-config": minor
 "@vlandoss/config": patch
 "@vlandoss/biome-config": patch
 ---
