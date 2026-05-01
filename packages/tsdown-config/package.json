@@ -17,7 +17,7 @@
   "exports": {
     ".": {
       "types": "./src/index.ts",
-      "default": "./dist/index.mjs"
+      "default": "./src/index.ts"
     }
   },
   "files": [
@@ -25,10 +25,17 @@
     "src"
   ],
   "scripts": {
-    "build": "tsdown"
+    "build": "tsdown",
+    "prepublishOnly": "pnpm build"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      }
+    }
   },
   "engines": {
     "node": ">=20.0.0",
