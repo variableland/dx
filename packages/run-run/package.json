@@ -31,7 +31,7 @@
     "tsdown": "./tools/tsdown"
   },
   "files": [
-    "bin.ts",
+    "bin.mjs",
     "dist",
     "src",
     "!src/**/__tests__",
@@ -76,8 +76,8 @@
       }
     },
     "bin": {
-      "rr": "./dist/bin.mjs",
-      "run-run": "./dist/bin.mjs",
+      "rr": "./bin.mjs",
+      "run-run": "./bin.mjs",
       "biome": "./tools/biome",
       "oxfmt": "./tools/oxfmt",
       "oxlint": "./tools/oxlint",

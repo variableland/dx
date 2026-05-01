@@ -2,7 +2,7 @@ import { defineConfig, type UserConfig } from "tsdown";
 
 export function defineBinConfig(options: UserConfig = {}) {
   return defineConfig({
-    entry: ["bin.ts"],
+    entry: ["src/main.ts"],
     format: "esm",
     ...options,
   });
