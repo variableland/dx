@@ -1,7 +1,6 @@
 ---
 "@vlandoss/localproxy": patch
 "@vlandoss/run-run": patch
-"@vlandoss/tsdown-config": patch
 ---
 
 Migrate from Bun to Node.js as the runtime target.
