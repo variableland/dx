@@ -8,7 +8,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/variableland/dx.git"
+    "url": "git+https://github.com/variableland/dx.git",
+    "directory": "packages/run-run"
   },
   "license": "MIT",
   "author": "rcrd <rcrd@variable.land>",
@@ -18,16 +19,8 @@
     "#test/*": "./test/*"
   },
   "exports": {
-    "./config": {
-      "bun": "./src/lib/config.ts",
-      "types": "./dist/config.d.mts",
-      "default": "./dist/config.mjs"
-    },
-    "./tools/*": {
-      "bun": "./src/lib/tools/*.ts",
-      "types": "./dist/tools/*.d.mts",
-      "default": "./dist/tools/*.mjs"
-    }
+    "./config": "./src/lib/config.ts",
+    "./tools/*": "./src/lib/tools/*.ts"
   },
   "bin": {
     "rr": "./bin.ts",
@@ -40,6 +33,8 @@
     "bin.ts",
     "dist",
     "src",
+    "!src/**/__tests__",
+    "!src/**/*.test.*",
     "tools",
     "tsconfig.json"
   ],
@@ -66,9 +61,27 @@
     "typescript": "5.9.3"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "exports": {
+      "./config": {
+        "types": "./dist/config.d.mts",
+        "default": "./dist/config.mjs"
+      },
+      "./tools/*": {
+        "types": "./dist/tools/*.d.mts",
+        "default": "./dist/tools/*.mjs"
+      }
+    },
+    "bin": {
+      "rr": "./dist/bin.mjs",
+      "run-run": "./dist/bin.mjs",
+      "biome": "./tools/biome",
+      "oxfmt": "./tools/oxfmt",
+      "oxlint": "./tools/oxlint"
+    }
   },
   "engines": {
+    "node": ">=18.0.0",
     "bun": ">=1.0.0"
   }
 }

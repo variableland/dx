@@ -11,15 +11,8 @@ function nodeShebang() {
   };
 }
 
-export default defineConfig([
-  {
-    entry: ["src/lib/**/*.ts"],
-    format: "esm",
-    dts: true,
-  },
-  {
-    entry: ["bin.ts"],
-    format: "esm",
-    plugins: [nodeShebang()],
-  },
-]);
+export default defineConfig({
+  entry: ["bin.ts"],
+  format: "esm",
+  plugins: [nodeShebang()],
+});

@@ -14,6 +14,7 @@
     "@vlandoss/config": "workspace:*",
     "@vlandoss/run-run": "workspace:*",
     "lefthook": "2.1.1",
+    "tsdown": "0.21.0-beta.2",
     "turbo": "2.8.12"
   },
   "packageManager": "pnpm@10.6.4"

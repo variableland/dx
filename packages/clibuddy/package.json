@@ -8,22 +8,25 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/variableland/dx.git"
+    "url": "git+https://github.com/variableland/dx.git",
+    "directory": "packages/clibuddy"
   },
   "license": "MIT",
   "author": "rcrd <rcrd@variable.land>",
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./test-helpers": {
-      "bun": "./test-helpers/index.ts"
-    }
+    "./test-helpers": "./test-helpers/index.ts"
   },
   "files": [
     "dist",
-    "src"
+    "src",
+    "!src/**/__tests__",
+    "!src/**/*.test.*"
   ],
   "scripts": {
+    "build": "tsdown",
+    "prepublishOnly": "pnpm build",
     "test:types": "rr tsc"
   },
   "dependencies": {
@@ -35,9 +38,17 @@
     "zx": "8.8.5"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      }
+    }
   },
+
   "engines": {
+    "node": ">=18.0.0",
     "bun": ">=1.0.0"
   }
 }

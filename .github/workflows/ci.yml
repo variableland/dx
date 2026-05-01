@@ -28,6 +28,9 @@ jobs:
       - name: 🧪 Test unit
         run: pnpm test
 
+      - name: 🔨 Build
+        run: pnpm build
+
   release:
     runs-on: ubuntu-latest
     needs: test
