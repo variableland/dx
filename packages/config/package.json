@@ -1,6 +1,6 @@
 {
   "name": "@vlandoss/config",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Shared configuration presets for @variableland tooling",
   "homepage": "https://github.com/variableland/dx/tree/main/packages/config#readme",
   "bugs": {
