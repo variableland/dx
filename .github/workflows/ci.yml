@@ -24,8 +24,8 @@ jobs:
         with:
           node-version-file: .node-version
 
-      - name: ⌛ Setup CI
-        uses: variableland/gh-actions/actions/setup-pnpm-bun@main
+      - name: ⌛ Setup pnpm
+        uses: variableland/gh-actions/actions/setup-pnpm@main
 
       - name: 💅 Test static
         run: pnpm rr test:static
@@ -54,15 +54,15 @@ jobs:
         with:
           node-version-file: .node-version
 
-      - name: ⌛ Setup CI
-        uses: variableland/gh-actions/actions/setup-pnpm-bun@main
+      - name: ⌛ Setup pnpm
+        uses: variableland/gh-actions/actions/setup-pnpm@main
 
       - name: 🚀 Create release PR or publish versions
         uses: changesets/action@v1
         with:
           commit: "chore: update versions"
           title: "chore: update versions"
-          publish: bunx changeset publish
+          publish: pnpm changeset publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           LEFTHOOK: 0

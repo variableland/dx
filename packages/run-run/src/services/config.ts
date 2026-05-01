@@ -14,11 +14,12 @@ export class ConfigService {
 
   constructor() {
     this.#searcher = lilconfig("run-run", {
-      searchPlaces: ["run-run.config.ts"],
+      searchPlaces: ["run-run.config.ts", "run-run.config.mts"],
       cache: true,
       stopDir: os.homedir(),
       loaders: {
         ".ts": (filepath: string) => import(filepath).then((mod) => mod.default),
+        ".mts": (filepath: string) => import(filepath).then((mod) => mod.default),
       },
     });
   }

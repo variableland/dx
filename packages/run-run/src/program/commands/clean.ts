@@ -3,7 +3,7 @@ import { createCommand } from "commander";
 import { type GlobOptions, glob } from "glob";
 import { rimraf } from "rimraf";
 import { logger } from "#src/services/logger.ts";
-import { TOOL_LABELS } from "../ui";
+import { TOOL_LABELS } from "../ui.ts";
 
 type Options = {
   onlyDist: boolean;

@@ -39,5 +39,5 @@ export async function parseProgram(argv: string[]) {
 }
 
 export function execCli(cmd: string) {
-  return execAsync(`bun ./bin.ts ${cmd}`);
+  return execAsync(`node ./bin.ts ${cmd}`);
 }

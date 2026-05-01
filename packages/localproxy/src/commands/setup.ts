@@ -1,5 +1,13 @@
 import * as fs from "node:fs/promises";
 import path from "node:path";
+
+async function exists(p: string): Promise<boolean> {
+  return fs
+    .access(p)
+    .then(() => true)
+    .catch(() => false);
+}
+
 import { editor as editorPrompt } from "@inquirer/prompts";
 import { createCommand } from "commander";
 import { CaddyService } from "#/services/caddy";
@@ -51,12 +59,12 @@ export function createSetupCommand({ binDir, installDir, caddyfilePath }: Contex
 
       await checkInternalTools();
 
-      if (!(await fs.exists(installDir))) {
+      if (!(await exists(installDir))) {
         await fs.mkdir(installDir);
       }
 
       const exampleCaddyFilePath = path.join(binDir, "config", "Caddyfile.example");
-      const defaultContent = (await fs.exists(caddyfilePath))
+      const defaultContent = (await exists(caddyfilePath))
         ? await fs.readFile(caddyfilePath, "utf-8")
         : await fs.readFile(exampleCaddyFilePath, "utf-8");
 

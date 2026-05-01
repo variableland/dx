@@ -4,7 +4,7 @@ CLI toolbox to fullstack common scripts in Variable Land 👊
 
 ## Prerequisites
 
-- Bun >= 1.2.4
+- Node.js >= 24.0.0
 
 ## Toolbox
 

@@ -18,7 +18,7 @@ http://admin.localhost
 
 ## Prerequisites
 
-- Bun >= 1.2.4
+- Node.js >= 24.0.0
 - Caddy >= 2.8.4
 - hosts >= 3.6.4
 

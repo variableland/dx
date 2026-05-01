@@ -16,7 +16,7 @@ To get started with any package, navigate to the respective package directory an
 
 To use this monorepo, you need to have the following tools installed:
 
-- [Bun](https://bun.sh) >= 1.2.4
+- [Node.js](https://nodejs.org) >= 24.0.0
 - [pnpm](https://pnpm.io) >= 10.0.0
 - [mise](https://mise.jdx.dev) >= 2025.3.3 <sup>(optional)</sup>
 
