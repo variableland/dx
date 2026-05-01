@@ -1,5 +1,3 @@
-import { defineConfig, type UserConfig } from "tsdown";
-
 export function nodeShebangPlugin() {
   return {
     name: "node-shebang",
@@ -11,19 +9,19 @@ export function nodeShebangPlugin() {
   };
 }
 
-export function defineBinConfig(options: UserConfig = {}) {
-  return defineConfig({
+export function defineBinConfig(options: object = {}) {
+  return {
     entry: ["bin.ts"],
-    format: "esm",
+    format: "esm" as const,
     plugins: [nodeShebangPlugin()],
     ...options,
-  });
+  };
 }
 
-export function defineLibConfig(options: UserConfig = {}) {
-  return defineConfig({
-    format: "esm",
+export function defineLibConfig(options: object = {}) {
+  return {
+    format: "esm" as const,
     dts: true,
     ...options,
-  });
+  };
 }
