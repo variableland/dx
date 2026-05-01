@@ -15,18 +15,26 @@
   "author": "rcrd <rcrd@variable.land>",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./dist/index.mjs"
+    }
   },
   "files": [
+    "dist",
     "src"
   ],
+  "scripts": {
+    "build": "tsdown"
+  },
   "publishConfig": {
     "access": "public"
   },
-  "dependencies": {
-    "tsdown": "0.21.0-beta.2"
+  "peerDependencies": {
+    "tsdown": "*"
   },
   "engines": {
+    "node": ">=18.0.0",
     "bun": ">=1.0.0"
   }
 }
