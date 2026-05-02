@@ -1,5 +1,15 @@
 # @vlandoss/localproxy
 
+## 0.1.3
+
+### Patch Changes
+
+- [#175](https://github.com/variableland/dx/pull/175) [`3271dd1`](https://github.com/variableland/dx/commit/3271dd1144842749cd81a2eb9ba7f85f21d5467e) Thanks [@rqbazan](https://github.com/rqbazan)! - Fix `binDir` pointing to `dist/` in compiled CLIs
+
+  When a CLI was published and executed via the compiled binary, `import.meta.url` resolved to the `dist/` folder, causing `binDir` to be `<root>/dist/` instead of the package root. This broke `localBaseBinPath` (which expects `<root>/node_modules/.bin`) and any other logic anchored to the package root.
+
+  The fix introduces a thin `bin.mjs` wrapper at the package root that computes `binDir` from its own location (always the root) and imports the compiled logic from `dist/main.mjs`. The `tsdown-config` entry point is updated accordingly from `bin.ts` to `src/main.ts`.
+
 ## 0.1.2
 
 ### Patch Changes
