@@ -11,6 +11,22 @@ export type StaticCheckerOptions = {
   fixStaged?: boolean;
 };
 
+export type DoctorOutput = {
+  stdout: string;
+  stderr: string;
+  exitCode: number | null;
+};
+
+export type DoctorResult = {
+  ok: boolean;
+  output: DoctorOutput;
+};
+
+export type Doctor = {
+  ui: string;
+  doctor(): Promise<DoctorResult>;
+};
+
 export type Formatter = {
   bin: string;
   ui: string;

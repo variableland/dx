@@ -1,43 +1,22 @@
-import { exec } from "node:child_process";
-import { promisify } from "node:util";
-import { vi } from "vitest";
-import { createProgram } from "../src/program/index.ts";
+import { spawnSync } from "node:child_process";
+import { resolve } from "node:path";
 
-const execAsync = promisify(exec);
+export function createTestCli(mode: "dev" | "prod" = "prod") {
+  const bin = resolve(import.meta.dirname, mode === "dev" ? "../bin.ts" : "../bin.mjs");
 
-export async function createTestProgram() {
-  const { program, ctx } = await createProgram({
-    binDir: ".", // mocked value
-  });
-
-  const exitFn = vi.fn();
-  const writeOutFn = vi.fn();
-  const writeErrFn = vi.fn();
-
-  program.exitOverride(exitFn);
-
-  program.configureOutput({
-    writeOut: writeOutFn,
-    writeErr: writeErrFn,
-  });
-
-  return {
-    program,
-    ctx,
-    exitFn,
-    writeOutFn,
-    writeErrFn,
+  // NODE_ENV=test and TEST=true (injected by vitest) cause consola to suppress
+  // all output. Override them so the subprocess behaves like a real invocation.
+  return function cli(cmd: string) {
+    return spawnSync("node", [bin, ...cmd.split(" ")], {
+      encoding: "utf8",
+      env:
+        mode === "dev"
+          ? process.env
+          : {
+              ...process.env,
+              NODE_ENV: "production",
+              TEST: undefined,
+            },
+    });
   };
-}
-
-export async function parseProgram(argv: string[]) {
-  const { program } = await createTestProgram();
-
-  await program.parseAsync(argv, {
-    from: "user",
-  });
-}
-
-export function execCli(cmd: string) {
-  return execAsync(`node ./bin.ts ${cmd}`);
 }

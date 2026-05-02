@@ -2,14 +2,16 @@ import { createCommand } from "commander";
 import { BiomeService } from "#src/services/biome.ts";
 import type { Context } from "#src/services/ctx.ts";
 import { OxlintService } from "#src/services/oxlint.ts";
+import type { ToolService } from "#src/services/tool.ts";
 import type { Linter } from "#src/types/tool.ts";
+import { createDoctorSubcommand } from "./doctor.ts";
 
 type ActionOptions = {
   check?: boolean;
   fix?: boolean;
 };
 
-function getToolService(ctx: Context): Linter {
+function getToolService(ctx: Context): ToolService & Linter {
   const { config } = ctx.config;
 
   if (config.future?.oxc) {
@@ -29,6 +31,7 @@ export function createLintCommand(ctx: Context) {
     )
     .option("-c, --check", "check if the code is valid", true)
     .option("--fix", "try to fix all the code")
+    .addCommand(createDoctorSubcommand(toolService))
     .action(async function lintAction(options: ActionOptions) {
       await toolService.lint(options);
     })

@@ -1,11 +1,10 @@
-import { spawnSync } from "node:child_process";
-import { resolve } from "node:path";
 import { expect, test } from "vitest";
+import { createTestCli } from "#test/helpers.ts";
 
-const bin = resolve(import.meta.dirname, "../../bin.mjs");
+const cli = createTestCli();
 
 test("node bin.mjs --help exits 0", () => {
-  const result = spawnSync("node", [bin, "--help"], { encoding: "utf8" });
+  const result = cli("--help");
 
   expect(result.stderr).toBe("");
   expect(result.stdout).toContain("Usage:");

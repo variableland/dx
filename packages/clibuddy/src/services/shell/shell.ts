@@ -33,6 +33,13 @@ export class ShellService {
     });
   }
 
+  mute(options?: ShellOptions) {
+    return this.quiet({
+      ...options,
+      stdio: "pipe",
+    });
+  }
+
   at(cwd: string, options?: ShellOptions) {
     const getLocals = (locals: boolean | string | string[] | undefined) =>
       // NOTE: the boolean handling is done outside when determining preferLocal

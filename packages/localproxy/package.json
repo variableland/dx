@@ -15,7 +15,7 @@
   "author": "rcrd <rcrd@variable.land>",
   "type": "module",
   "imports": {
-    "#/*": "./src/*"
+    "#src/*": "./src/*"
   },
   "bin": {
     "localproxy": "./bin.ts",
