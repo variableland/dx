@@ -1,5 +1,19 @@
 # @vlandoss/starter
 
+## 0.1.1
+
+### Patch Changes
+
+- [#168](https://github.com/variableland/dx/pull/168) [`80e17f9`](https://github.com/variableland/dx/commit/80e17f9544f1cfff526f27ea50e2dacc6dba6e06) Thanks [@rqbazan](https://github.com/rqbazan)! - Migrate from Bun to Node.js as the runtime target.
+
+  - `run-run`: fix `require.resolve` usage in `BiomeService` (not available in ESM with Node.js); replaced with `createRequire`. Add support for `run-run.config.mts` config files.
+  - `localproxy`: replace `fs.exists` (Bun-only API) with a `fs.access`-based helper.
+  - `clibuddy`, `loggy`, `starter`: remove `bun` from `engines` field.
+
+- Updated dependencies [[`80e17f9`](https://github.com/variableland/dx/commit/80e17f9544f1cfff526f27ea50e2dacc6dba6e06)]:
+  - @vlandoss/clibuddy@0.1.1
+  - @vlandoss/loggy@0.1.1
+
 ## 0.1.0
 
 ### Minor Changes
