@@ -6,4 +6,8 @@ export class TsdownService extends ToolService {
   constructor(shellService: ShellService) {
     super({ bin: "tsdown", ui: TOOL_LABELS.TSDOWN, shellService });
   }
+
+  async buildLib() {
+    await this.exec();
+  }
 }

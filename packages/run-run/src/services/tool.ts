@@ -23,7 +23,7 @@ export abstract class ToolService {
 
   getBinDir?(): string;
 
-  async exec(args: string | string[]) {
+  async exec(args?: string | string[]) {
     const shell = this.#shell();
     return this.#run(shell, args);
   }
@@ -46,7 +46,11 @@ export abstract class ToolService {
     });
   });
 
-  #run(shell: ShellService, args: string | string[]) {
+  #run(shell: ShellService, args?: string | string[]) {
+    if (!args) {
+      return shell.$`${this.#bin}`;
+    }
+
     return shell.$`${this.#bin} ${typeof args === "string" ? args : args.join(" ")}`;
   }
 
