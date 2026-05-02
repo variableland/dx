@@ -2,13 +2,15 @@ import { createCommand } from "commander";
 import { BiomeService } from "#src/services/biome.ts";
 import type { Context } from "#src/services/ctx.ts";
 import { OxfmtService } from "#src/services/oxfmt.ts";
+import type { ToolService } from "#src/services/tool.ts";
 import type { Formatter } from "#src/types/tool.ts";
+import { createDoctorSubcommand } from "./doctor.ts";
 
 type ActionOptions = {
   fix?: boolean;
 };
 
-function getToolService(ctx: Context): Formatter {
+function getToolService(ctx: Context): ToolService & Formatter {
   const { config } = ctx.config;
 
   if (config.future?.oxc) {
@@ -27,6 +29,7 @@ export function createFormatCommand(ctx: Context) {
       "Checks the code for formatting issues and optionally fixes them, ensuring it adheres to the defined style standards.",
     )
     .option("--fix", "format all the code")
+    .addCommand(createDoctorSubcommand(toolService))
     .action(async function formatAction(options: ActionOptions) {
       await toolService.format(options);
     })

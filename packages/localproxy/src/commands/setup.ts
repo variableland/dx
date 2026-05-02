@@ -2,13 +2,13 @@ import * as fs from "node:fs/promises";
 import path from "node:path";
 import { editor as editorPrompt } from "@inquirer/prompts";
 import { createCommand } from "commander";
-import { CaddyService } from "#/services/caddy.ts";
-import { CaddyfileService } from "#/services/caddyfile/index.ts";
-import { FileService } from "#/services/file.ts";
-import { HostsService } from "#/services/hosts.ts";
-import { logger } from "#/services/logger.ts";
-import { quietShell } from "#/services/shell.ts";
-import type { Context } from "#/types.ts";
+import { CaddyService } from "#src/services/caddy.ts";
+import { CaddyfileService } from "#src/services/caddyfile/index.ts";
+import { FileService } from "#src/services/file.ts";
+import { HostsService } from "#src/services/hosts.ts";
+import { logger } from "#src/services/logger.ts";
+import { quietShell } from "#src/services/shell.ts";
+import type { Context } from "#src/types.ts";
 
 type CommandOptions = {
   verbose: boolean;

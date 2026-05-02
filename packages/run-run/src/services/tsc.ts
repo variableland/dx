@@ -2,12 +2,8 @@ import type { ShellService } from "@vlandoss/clibuddy";
 import { TOOL_LABELS } from "#src/program/ui.ts";
 import { ToolService } from "./tool.ts";
 
-export class TsdownService extends ToolService {
+export class TscService extends ToolService {
   constructor(shellService: ShellService) {
-    super({ bin: "tsdown", ui: TOOL_LABELS.TSDOWN, shellService });
-  }
-
-  async buildLib() {
-    await this.exec();
+    super({ bin: "tsc", ui: TOOL_LABELS.TSC, shellService });
   }
 }

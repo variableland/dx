@@ -1,7 +1,7 @@
 import { createCommand } from "commander";
 import { BiomeService } from "#src/services/biome.ts";
 import type { Context } from "#src/services/ctx.ts";
-import type { StaticChecker } from "#src/types/tool.ts";
+import { createDoctorSubcommand } from "./doctor.ts";
 
 type ActionOptions = {
   fix?: boolean;
@@ -9,7 +9,7 @@ type ActionOptions = {
 };
 
 export function createJsCheckCommand(ctx: Context) {
-  const checkerService: StaticChecker = new BiomeService(ctx.shell);
+  const checkerService = new BiomeService(ctx.shell);
 
   return createCommand("jsc")
     .alias("jscheck")
@@ -20,6 +20,7 @@ export function createJsCheckCommand(ctx: Context) {
     )
     .option("--fix", "try to fix issues automatically")
     .option("--fix-staged", "try to fix staged files only")
+    .addCommand(createDoctorSubcommand(checkerService))
     .action(async function checkAction(options: ActionOptions) {
       await checkerService.check(options);
     })
