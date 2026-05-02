@@ -1,10 +1,10 @@
 import { createCommand } from "commander";
-import { CaddyService } from "#/services/caddy";
-import { CaddyfileService } from "#/services/caddyfile";
-import { FileService } from "#/services/file";
-import { HostsService } from "#/services/hosts";
-import { logger } from "#/services/logger";
-import type { Context } from "#/types";
+import { CaddyService } from "#/services/caddy.ts";
+import { CaddyfileService } from "#/services/caddyfile/index.ts";
+import { FileService } from "#/services/file.ts";
+import { HostsService } from "#/services/hosts.ts";
+import { logger } from "#/services/logger.ts";
+import type { Context } from "#/types.ts";
 
 export function createStatusCommand({ caddyfilePath }: Context) {
   return createCommand("status")

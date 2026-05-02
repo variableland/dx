@@ -1,6 +1,6 @@
 import * as fs from "node:fs/promises";
-import { logger } from "../logger";
-import { CaddyfileParser } from "./parser";
+import { logger } from "../logger.ts";
+import { CaddyfileParser } from "./parser.ts";
 
 const debug = logger.subdebug("caddyfile-service");
 

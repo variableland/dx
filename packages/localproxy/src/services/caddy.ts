@@ -1,7 +1,7 @@
 import * as fs from "node:fs";
 import path from "node:path";
-import { logger } from "./logger";
-import { quietShell, silentShell, verboseShell } from "./shell";
+import { logger } from "./logger.ts";
+import { quietShell, silentShell, verboseShell } from "./shell.ts";
 
 const debug = logger.subdebug("caddy");
 

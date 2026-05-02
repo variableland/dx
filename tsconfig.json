@@ -1,7 +1,0 @@
-{
-  "compilerOptions": {
-    "paths": {
-      "@vlandoss/run-run/*": ["./packages/run-run/src/lib/*"]
-    }
-  }
-}

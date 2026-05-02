@@ -1,7 +1,7 @@
 import path from "node:path";
 import type { NodePlopAPI } from "node-plop";
 import { ConfigService } from "#src/services/config.ts";
-import { tsconfigPrompts } from "./prompts/tsconfig";
+import { tsconfigPrompts } from "./prompts/tsconfig.ts";
 
 const validators = {
   atLeastOne: (answer: string[]) => {
