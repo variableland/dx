@@ -1,5 +1,18 @@
 # @vlandoss/starter
 
+## 0.1.2
+
+### Patch Changes
+
+- [#170](https://github.com/variableland/dx/pull/170) [`72d7305`](https://github.com/variableland/dx/commit/72d73052778ebe9d77aebc4d942eee08fe1b56b3) Thanks [@rqbazan](https://github.com/rqbazan)! - Upgrade TypeScript to 6.0.3 and enforce explicit `.ts` import extensions
+
+  - Upgrade TypeScript from 5.9.3 to 6.0.3 across the monorepo
+  - Add `useImportExtensions: "error"` biome rule to enforce explicit `.ts` extensions in all imports
+  - Add `@types/node` as optional peer dependency in `@vlandoss/config`
+  - Add `types: ["node"]` to the `tsconfig.no-dom` base config
+  - Update all import paths in `localproxy` and `starter` to use explicit `.ts` extensions
+  - Remove root-level `tsconfig.json` (paths now handled per-package)
+
 ## 0.1.1
 
 ### Patch Changes
