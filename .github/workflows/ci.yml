@@ -19,14 +19,22 @@ jobs:
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v4
 
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: .node-version
+
       - name: ⌛ Setup CI
         uses: variableland/gh-actions/actions/setup-pnpm-bun@main
 
       - name: 💅 Test static
         run: pnpm rr test:static
 
-      - name: 🧪 Test unit
+      - name: 🧪 Test
         run: pnpm test
+
+      - name: 🔨 Build
+        run: pnpm build
 
   release:
     runs-on: ubuntu-latest
@@ -40,6 +48,11 @@ jobs:
     steps:
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: .node-version
 
       - name: ⌛ Setup CI
         uses: variableland/gh-actions/actions/setup-pnpm-bun@main
@@ -66,6 +79,11 @@ jobs:
     steps:
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: .node-version
 
       - name: ⌛ Setup CI
         uses: variableland/gh-actions/actions/setup-pnpm-bun@main

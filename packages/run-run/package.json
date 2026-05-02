@@ -8,7 +8,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/variableland/dx.git"
+    "url": "git+https://github.com/variableland/dx.git",
+    "directory": "packages/run-run"
   },
   "license": "MIT",
   "author": "rcrd <rcrd@variable.land>",
@@ -18,16 +19,8 @@
     "#test/*": "./test/*"
   },
   "exports": {
-    "./config": {
-      "bun": "./src/lib/config.ts",
-      "types": "./dist/config.d.mts",
-      "default": "./dist/config.mjs"
-    },
-    "./tools/*": {
-      "bun": "./src/lib/tools/*.ts",
-      "types": "./dist/tools/*.d.mts",
-      "default": "./dist/tools/*.mjs"
-    }
+    "./config": "./src/lib/config.ts",
+    "./tools/*": "./src/lib/tools/*.ts"
   },
   "bin": {
     "rr": "./bin.ts",
@@ -40,12 +33,16 @@
     "bin.ts",
     "dist",
     "src",
+    "!src/**/__tests__",
+    "!src/**/*.test.*",
     "tools",
     "tsconfig.json"
   ],
   "scripts": {
     "build": "tsdown",
-    "test": "bun test",
+    "test": "vitest run",
+    "test:unit": "vitest run --project unit",
+    "test:integration": "vitest run --project integration",
     "prepublishOnly": "pnpm build",
     "test:types": "rr tsc"
   },
@@ -62,13 +59,34 @@
     "oxlint": "1.50.0",
     "oxlint-tsgolint": "0.15.0",
     "rimraf": "6.1.3",
-    "tsdown": "0.21.0-beta.2",
+    "tsdown": "0.21.10",
     "typescript": "5.9.3"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "exports": {
+      "./config": {
+        "types": "./dist/config.d.mts",
+        "default": "./dist/config.mjs"
+      },
+      "./tools/*": {
+        "types": "./dist/tools/*.d.mts",
+        "default": "./dist/tools/*.mjs"
+      }
+    },
+    "bin": {
+      "rr": "./dist/bin.mjs",
+      "run-run": "./dist/bin.mjs",
+      "biome": "./tools/biome",
+      "oxfmt": "./tools/oxfmt",
+      "oxlint": "./tools/oxlint"
+    }
   },
   "engines": {
+    "node": ">=20.0.0",
     "bun": ">=1.0.0"
+  },
+  "devDependencies": {
+    "@vlandoss/tsdown-config": "workspace:^"
   }
 }
