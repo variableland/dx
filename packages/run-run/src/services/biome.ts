@@ -1,3 +1,4 @@
+import { createRequire } from "node:module";
 import type { ShellService } from "@vlandoss/clibuddy";
 import isCI from "is-ci";
 import { TOOL_LABELS } from "#src/program/ui.ts";
@@ -10,6 +11,7 @@ export class BiomeService extends ToolService implements Formatter, Linter, Stat
   }
 
   override getBinDir() {
+    const require = createRequire(import.meta.url);
     return require.resolve("@biomejs/biome/bin/biome");
   }
 
