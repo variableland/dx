@@ -4,7 +4,9 @@ const debug = logger.subdebug("parseArgs");
 
 export function parseArgs(argv = process.argv) {
   const args = argv.slice(2);
-  const allArgsAreValidCommands = args.every((arg) => !arg.startsWith("-")) && args.length > 1 && args[0] !== "tools";
+  const lastArg = args[args.length - 1];
+  const allArgsAreValidCommands =
+    args.every((arg) => !arg.startsWith("-")) && args.length > 1 && args[0] !== "tools" && lastArg !== "doctor";
 
   debug("args %O", args);
 

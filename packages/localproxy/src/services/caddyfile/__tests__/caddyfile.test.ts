@@ -1,8 +1,8 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import { CaddyfileService, type LocalDomain } from "#/services/caddyfile/index.ts";
-import { type Caddyfile, CaddyfileParser } from "#/services/caddyfile/parser.ts";
+import { CaddyfileService, type LocalDomain } from "#src/services/caddyfile/index.ts";
+import { type Caddyfile, CaddyfileParser } from "#src/services/caddyfile/parser.ts";
 import { FixtureReader } from "./helpers.ts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));

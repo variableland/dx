@@ -1,6 +1,8 @@
-import type { Shell, ShellService } from "@vlandoss/clibuddy";
+import fs from "node:fs";
+import path from "node:path";
+import type { ShellService } from "@vlandoss/clibuddy";
 import memoize from "memoize";
-import { gracefullBinDir } from "#src/utils/gracefullBinDir.ts";
+import type { DoctorResult } from "#src/types/tool.ts";
 
 type CreateOptions = {
   bin: string;
@@ -21,22 +23,49 @@ export abstract class ToolService {
 
   getBinDir?(): string;
 
-  exec(args: string | string[]) {
-    const $ = this.#shell();
-    return this.#run($, args);
+  async exec(args?: string | string[]) {
+    const shell = this.#shell();
+    return this.#run(shell, args);
+  }
+
+  async doctor(): Promise<DoctorResult> {
+    const shell = this.#shell().mute();
+
+    const output = await this.#run(shell, "--help");
+    const ok = output.exitCode === 0;
+
+    return { ok, output };
   }
 
   #shell = memoize((cwd?: string) => {
-    const { getBinDir } = this;
+    const preferLocal = this.#getPreferLocal();
 
     return this.#shellService.child({
-      cwd,
-      ...(getBinDir && { preferLocal: gracefullBinDir(() => getBinDir()) }),
-    }).$;
+      ...(cwd && { cwd }),
+      ...(preferLocal && { preferLocal }),
+    });
   });
 
-  #run(shell: Shell, args: string | string[]) {
-    return shell`${this.#bin} ${typeof args === "string" ? args : args.join(" ")}`;
+  #run(shell: ShellService, args?: string | string[]) {
+    if (!args) {
+      return shell.$`${this.#bin}`;
+    }
+
+    return shell.$`${this.#bin} ${typeof args === "string" ? args : args.join(" ")}`;
+  }
+
+  #getPreferLocal() {
+    if (!this.getBinDir) {
+      return undefined;
+    }
+
+    try {
+      const binPath = this.getBinDir();
+      const isDir = fs.statSync(binPath).isDirectory();
+      return isDir ? binPath : path.dirname(binPath);
+    } catch {
+      return undefined;
+    }
   }
 
   get bin() {

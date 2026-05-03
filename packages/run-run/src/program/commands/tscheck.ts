@@ -4,7 +4,9 @@ import { createCommand } from "commander";
 import type { Context } from "#src/services/ctx.ts";
 import { logger } from "#src/services/logger.ts";
 import { OxlintService } from "#src/services/oxlint.ts";
+import { TscService } from "#src/services/tsc.ts";
 import { TOOL_LABELS } from "../ui.ts";
+import { createDoctorSubcommand } from "./doctor.ts";
 
 type TypecheckAtOptions = {
   dir: string;
@@ -53,6 +55,7 @@ export function createTsCheckCommand(ctx: Context) {
   } = ctx;
 
   const toolUi = config.future?.oxc ? TOOL_LABELS.OXLINT : TOOL_LABELS.TSC;
+  const doctorService = config.future?.oxc ? new OxlintService(shell) : new TscService(shell);
 
   return createCommand("tsc")
     .alias("tscheck")
@@ -60,6 +63,7 @@ export function createTsCheckCommand(ctx: Context) {
     .description(
       "Checks the TypeScript code for type errors, ensuring that the code adheres to the defined type constraints and helps catch potential issues before runtime.",
     )
+    .addCommand(createDoctorSubcommand(doctorService))
     .addHelpText("afterAll", `\nUnder the hood, this command uses the ${toolUi} CLI to check the code.`)
     .action(async function typecheckAction() {
       const isTsProject = (dir: string) => appPkg.hasFile("tsconfig.json", dir);
@@ -69,7 +73,9 @@ export function createTsCheckCommand(ctx: Context) {
           const oxlint = new OxlintService(shell);
           await oxlint.exec(`--type-aware --type-check --report-unused-disable-directives`);
         } else {
-          await shell.$`tsc --noEmit`;
+          const tsc = new TscService(shell);
+          await tsc.exec(`--noEmit`);
+          // await shell.$`tsc --noEmit`;
         }
       };
 

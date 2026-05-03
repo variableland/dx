@@ -1,9 +1,9 @@
 import { createCommand } from "commander";
-import { CaddyService } from "#/services/caddy.ts";
-import { CaddyfileService } from "#/services/caddyfile/index.ts";
-import { HostsService } from "#/services/hosts.ts";
-import { logger } from "#/services/logger.ts";
-import type { Context } from "#/types.ts";
+import { CaddyService } from "#src/services/caddy.ts";
+import { CaddyfileService } from "#src/services/caddyfile/index.ts";
+import { HostsService } from "#src/services/hosts.ts";
+import { logger } from "#src/services/logger.ts";
+import type { Context } from "#src/types.ts";
 
 type CommandOptions = {
   verbose: boolean;
