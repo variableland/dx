@@ -1,5 +1,6 @@
+import { homedir } from "node:os";
 import path from "node:path";
-import { createPkgService, getVersion } from "@vlandoss/clibuddy";
+import { createPkgService, dirnameOf, getVersion } from "@vlandoss/clibuddy";
 import { createCommand } from "commander";
 import { createCleanCommand } from "./commands/clean.ts";
 import { createSetupCommand } from "./commands/setup.ts";
@@ -9,6 +10,9 @@ import { createStopCommand } from "./commands/stop.ts";
 import { logger } from "./services/logger.ts";
 import type { Context, ProgramOptions } from "./types.ts";
 import { BANNER_TEXT, CREDITS_TEXT } from "./ui.ts";
+
+const BIN_DIR = path.dirname(dirnameOf(import.meta));
+const INSTALL_DIR = path.join(homedir(), ".localproxy");
 
 async function createContext({ binDir, installDir }: ProgramOptions) {
   const binPkg = await createPkgService(binDir);
@@ -40,16 +44,14 @@ async function createProgram(options: ProgramOptions) {
     .addCommand(createCleanCommand(ctx));
 }
 
-export async function main(options: ProgramOptions) {
-  try {
-    const program = await createProgram(options);
-    await program.parseAsync();
-  } catch (error) {
-    if (error instanceof Error && error.name === "ExitPromptError") {
-      logger.success("👋 cancelled, until next time!");
-    } else {
-      logger.error(error);
-      process.exit(1);
-    }
+try {
+  const program = await createProgram({ binDir: BIN_DIR, installDir: INSTALL_DIR });
+  await program.parseAsync();
+} catch (error) {
+  if (error instanceof Error && error.name === "ExitPromptError") {
+    logger.success("👋 cancelled, until next time!");
+  } else {
+    logger.error(error);
+    process.exit(1);
   }
 }
