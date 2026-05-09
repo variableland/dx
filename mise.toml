@@ -1,2 +1,5 @@
 [env]
 _.path = ["{{config_root}}/node_modules/.bin"]
+
+[tools]
+usage = "3.3.0"
