@@ -1,0 +1,93 @@
+name: cli docs
+
+# To add a new CLI (e.g. starter/vland):
+#   1. Add its tag pattern under `on.push.tags`.
+#   2. Add its package dir to the REGISTRY env below.
+# The CLI's `build` script must emit `<dir>/dist/cli.usage.kdl`. Output is `<dir>/CLI.md`.
+on:
+  push:
+    tags:
+      - "@vlandoss/run-run@*"
+  workflow_dispatch:
+
+# Serialize runs so concurrent CLI tag pushes don't race on the rolling PR branch.
+concurrency:
+  group: cli-docs
+  cancel-in-progress: false
+
+env:
+  # One package dir per line. Each must produce `<dir>/dist/cli.usage.kdl` at build time;
+  # output is written to `<dir>/CLI.md`.
+  REGISTRY: |
+    packages/run-run
+
+jobs:
+  regen:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: ⬇️ Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: .node-version
+
+      - name: ⌛ Setup pnpm
+        uses: variableland/gh-actions/actions/setup-pnpm@main
+
+      - name: 🛠️ Setup mise (provides usage CLI)
+        uses: jdx/mise-action@v2
+
+      - name: 🔨 Build registered CLIs
+        run: |
+          set -euo pipefail
+          filters=()
+          while read -r dir; do
+            [ -z "$dir" ] && continue
+            filters+=("--filter" "./$dir")
+          done <<< "$REGISTRY"
+          pnpm "${filters[@]}" build
+
+      - name: 📝 Regenerate CLI.md from KDL
+        run: |
+          set -euo pipefail
+          while read -r dir; do
+            [ -z "$dir" ] && continue
+            kdl="$dir/dist/cli.usage.kdl"
+            out="$dir/CLI.md"
+            if [ ! -f "$kdl" ]; then
+              echo "::warning::missing $kdl, skipping"
+              continue
+            fi
+            echo "→ $out (from $kdl)"
+            usage generate markdown \
+              --file "$kdl" \
+              --out-file "$out" \
+              --replace-pre-with-code-fences
+          done <<< "$REGISTRY"
+
+      - name: 🚀 Open or update rolling PR
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: automation/cli-docs
+          base: main
+          commit-message: "chore: regenerate CLI docs"
+          title: "chore: regenerate CLI docs"
+          body: |
+            Auto-generated update of CLI markdown docs from each registered CLI's KDL spec.
+
+            Last trigger: tag [`${{ github.ref_name }}`](${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ github.ref_name }})
+
+            Safe to merge — content is derived from the published CLI's KDL spec via `usage generate markdown`. The branch is rolling: subsequent CLI release tags force-push updated docs onto this same PR.
+          labels: |
+            automated
+            chore
+          add-paths: |
+            packages/*/CLI.md
