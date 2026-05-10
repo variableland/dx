@@ -16,14 +16,35 @@ It will adds the `vland` to your global workspace
 
 ## Usage
 
-> [!NOTE]
-> The documentation is WIP
-
 Run the help command:
 
 ```sh
 vland help
 ```
+
+## Shell completion
+
+`vland` ships a `completion` subcommand that prints a shell-specific script. Add it to your shell rc file:
+
+```sh
+# zsh — ~/.zshrc
+eval "$(vland completion zsh)"
+
+# bash — ~/.bashrc
+eval "$(vland completion bash)"
+
+# fish — ~/.config/fish/config.fish
+vland completion fish | source
+```
+
+**Prerequisite:** the [`usage`](https://usage.jdx.dev) CLI must be on your `PATH` (it powers completion at runtime). Install via one of:
+
+```sh
+mise use -g usage
+brew install usage
+```
+
+When you upgrade `@vlandoss/starter`, the next shell session will pick up new commands automatically — no need to re-run anything.
 
 ## Troubleshooting
 
