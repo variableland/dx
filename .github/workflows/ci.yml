@@ -67,12 +67,18 @@ jobs:
       - name: ⌛ Setup pnpm
         uses: variableland/gh-actions/actions/setup-pnpm@main
 
+      - name: 🧑‍💻 Configure git user
+        run: |
+          git config user.name "vland-bot[bot]"
+          git config user.email "282456776+vland-bot[bot]@users.noreply.github.com"
+
       - name: 🚀 Create release PR or publish versions
         uses: changesets/action@v1
         with:
           commit: "chore: update versions"
           title: "chore: update versions"
           publish: pnpm changeset publish
+          setupGitUser: false
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
           LEFTHOOK: 0
