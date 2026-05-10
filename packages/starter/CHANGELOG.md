@@ -1,5 +1,11 @@
 # @vlandoss/starter
 
+## 0.4.0
+
+### Minor Changes
+
+- [#195](https://github.com/variableland/dx/pull/195) [`ebcc490`](https://github.com/variableland/dx/commit/ebcc4903b2e1bdeb49ae3e49fbe60bc0ac4b599c) Thanks [@rqbazan](https://github.com/rqbazan)! - Add shell completion support to the `vland` CLI via a new `completion <shell>` subcommand (bash/zsh/fish), powered by [`usage`](https://usage.jdx.dev).
+
 ## 0.3.0
 
 ### Minor Changes
