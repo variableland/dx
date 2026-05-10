@@ -23,6 +23,9 @@ importers:
       '@vlandoss/run-run':
         specifier: workspace:*
         version: link:packages/run-run
+      '@vlandoss/starter':
+        specifier: workspace:*
+        version: link:packages/starter
       lefthook:
         specifier: 2.1.1
         version: 2.1.1

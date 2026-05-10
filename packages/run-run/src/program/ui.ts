@@ -1,4 +1,4 @@
-import { colorIsSupported, colorize, palette } from "@vlandoss/clibuddy";
+import { colorize, palette, text } from "@vlandoss/clibuddy";
 
 export const CREDITS_TEXT = `\nAcknowledgment:
 - kcd-scripts: for main inspiration
@@ -13,7 +13,7 @@ const oxlintColor = colorize("#32F3E9");
 const oxfmtColor = colorize("#32F3E9");
 const tscColor = colorize("#3178C6");
 const rimrafColor = colorize("#7C7270");
-const runRunColor = colorize("FC7A1E");
+const runRunColor = colorize("#E8722A");
 const usageColor = colorize("#24C55E");
 
 export const TOOL_LABELS = {
@@ -27,44 +27,21 @@ export const TOOL_LABELS = {
   USAGE: usageColor("usage"),
 };
 
+// npx figlet -f "ANSI Shadow" "run-run"
 export function getBannerText(version: string) {
-  const uiLogo = `🦊 ${palette.bold("R")} ${palette.bold("U")} ${palette.bold("N")} - ${palette.bold("R")} ${palette.bold("U")} ${palette.bold("N")}`;
-  const vlandLogo = `${palette.link(palette.vland("https://variable.land"))} 👊`;
+  const uiLogo = runRunColor(
+    `
+██████╗ ██╗   ██╗███╗   ██╗      ██████╗ ██╗   ██╗███╗   ██╗
+██╔══██╗██║   ██║████╗  ██║      ██╔══██╗██║   ██║████╗  ██║
+██████╔╝██║   ██║██╔██╗ ██║█████╗██████╔╝██║   ██║██╔██╗ ██║
+██╔══██╗██║   ██║██║╚██╗██║╚════╝██╔══██╗██║   ██║██║╚██╗██║
+██║  ██║╚██████╔╝██║ ╚████║      ██║  ██║╚██████╔╝██║ ╚████║
+╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═══╝      ╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═══╝ ${text.version(version)}
+`.trim(),
+  );
 
-  const title = `${uiLogo} ${palette.muted(`v${version}`)}`;
-  const subtitle = `${palette.italic(palette.muted("The CLI toolbox for"))} ${vlandLogo}`;
+  return `
+${uiLogo}
 
-  if (!colorIsSupported()) {
-    return `${title}\n${subtitle}\n`;
-  }
-
-  const FOX_COLORS = {
-    BLACK: colorize("#39393A"),
-    ORANGE: runRunColor,
-    WHITE: colorize("#FFFFFF"),
-  };
-
-  const _ = "  "; // hole
-  const B = FOX_COLORS.BLACK("██"); // black
-  const O = FOX_COLORS.ORANGE("██"); // orange
-  const W = FOX_COLORS.WHITE("██"); // white
-
-  const grid = [
-    [_, B, _, _, _, _, _, B, _],
-    [_, O, W, _, _, _, W, O, _],
-    [_, O, W, O, _, O, W, O, _],
-    [B, O, O, O, O, O, O, O, B],
-    [O, O, O, O, O, O, O, O, O],
-    [W, O, B, O, O, O, B, O, W],
-    [_, W, W, O, O, O, W, W, _],
-    [_, _, W, W, B, W, W, _, _],
-    [_, _, _, W, W, W, _, _, _],
-  ];
-
-  const lines = grid.map((row) => row.join(""));
-
-  lines[3] += `    ${title}`;
-  lines[4] += `    ${subtitle}`;
-
-  return `${lines.join("\n")}\n`;
+🦊 ${palette.italic(palette.muted("The CLI toolbox for"))} ${text.vland}\n`.trimStart();
 }
