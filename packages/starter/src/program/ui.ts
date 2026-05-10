@@ -1,7 +1,22 @@
-import { palette } from "@vlandoss/clibuddy";
+import { colorize, palette, text } from "@vlandoss/clibuddy";
 
-const UI_LOGO = `⚡ ${palette.bold("V")} ${palette.bold("L")} ${palette.bold("A")} ${palette.bold("N")} ${palette.bold("D")}`;
+const vlandColor = colorize("#a78bfa");
 
-const COMPANY_LOGO = `${palette.vland("Variable Land")} 👊`;
+// npx figlet -f "ANSI Shadow" "vland"
+export function getBannerText(version: string) {
+  const uiLogo = vlandColor(
+    `
+██╗   ██╗██╗      █████╗ ███╗   ██╗██████╗
+██║   ██║██║     ██╔══██╗████╗  ██║██╔══██╗
+██║   ██║██║     ███████║██╔██╗ ██║██║  ██║
+╚██╗ ██╔╝██║     ██╔══██║██║╚██╗██║██║  ██║
+ ╚████╔╝ ███████╗██║  ██║██║ ╚████║██████╔╝
+  ╚═══╝  ╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═════╝ ${text.version(version)}
+`.trim(),
+  );
 
-export const BANNER_TEXT = `${UI_LOGO}: The CLI to init a new project in ${COMPANY_LOGO}\n`;
+  return `
+${uiLogo}
+
+🦉 ${palette.italic(palette.muted("The CLI to init a new project in"))} ${text.vland}\n`.trimStart();
+}
