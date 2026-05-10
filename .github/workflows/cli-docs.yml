@@ -28,10 +28,18 @@ jobs:
       contents: write
       pull-requests: write
     steps:
+      - name: 🔑 Mint vland-bot token
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.VLAND_BOT_APP_ID }}
+          private-key: ${{ secrets.VLAND_BOT_PRIVATE_KEY }}
+
       - name: ⬇️ Checkout main
         uses: actions/checkout@v4
         with:
           ref: main
+          token: ${{ steps.app-token.outputs.token }}
 
       - name: 🟢 Setup Node.js
         uses: actions/setup-node@v6
@@ -75,7 +83,7 @@ jobs:
       - name: 🚀 Open or update rolling PR
         uses: peter-evans/create-pull-request@v6
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ steps.app-token.outputs.token }}
           branch: automation/cli-docs
           base: main
           commit-message: "chore: regenerate CLI docs"
