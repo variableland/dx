@@ -14,6 +14,7 @@ const oxfmtColor = colorize("#32F3E9");
 const tscColor = colorize("#3178C6");
 const rimrafColor = colorize("#7C7270");
 const runRunColor = colorize("FC7A1E");
+const usageColor = colorize("#24C55E");
 
 export const TOOL_LABELS = {
   TSDOWN: tsdownColor("tsdown"),
@@ -23,6 +24,7 @@ export const TOOL_LABELS = {
   TSC: tscColor("tsc"),
   RIMRAF: rimrafColor("rimraf"),
   RUN_RUN: runRunColor("run-run"),
+  USAGE: usageColor("usage"),
 };
 
 export function getBannerText(version: string) {

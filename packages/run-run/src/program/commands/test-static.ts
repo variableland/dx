@@ -9,6 +9,6 @@ export function createTestStaticCommand(ctx: Context) {
       "Runs static tests, including linting, formatting checks, and TypeScript type checking, to ensure code quality and correctness without executing the code.",
     )
     .action(async function testStaticAction() {
-      await ctx.shell.$`rr jscheck tscheck`;
+      await ctx.shell.$`rr x jscheck tscheck`;
     });
 }

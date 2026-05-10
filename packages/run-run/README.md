@@ -18,18 +18,41 @@ CLI toolbox to fullstack common scripts in Variable Land 👊
 pnpm add @vlandoss/run-run
 ```
 
-It will adds the `rr` and `run-run` command to your project
+It adds the `rr` command to your project.
 
 ## Usage
-
-> [!NOTE]
-> The documentation is WIP
 
 Run the help command:
 
 ```sh
 rr help
 ```
+
+See [`CLI.md`](./CLI.md) for the full reference (auto-generated per release).
+
+## Shell completion
+
+`rr` ships a `completion` subcommand that prints a shell-specific script. Add it to your shell rc file:
+
+```sh
+# zsh — ~/.zshrc
+eval "$(rr completion zsh)"
+
+# bash — ~/.bashrc
+eval "$(rr completion bash)"
+
+# fish — ~/.config/fish/config.fish
+rr completion fish | source
+```
+
+**Prerequisite:** the [`usage`](https://usage.jdx.dev) CLI must be on your `PATH` (it powers completion at runtime). Install via one of:
+
+```sh
+mise use -g usage
+brew install usage
+```
+
+When you upgrade `@vlandoss/run-run`, the next shell session will pick up new commands automatically — no need to re-run anything.
 
 ## Troubleshooting
 

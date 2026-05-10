@@ -23,15 +23,14 @@
     "./tools/*": "./src/lib/tools/*.ts"
   },
   "bin": {
-    "rr": "./bin.ts",
-    "run-run": "./bin.ts",
+    "rr": "./bin",
     "biome": "./tools/biome",
     "oxfmt": "./tools/oxfmt",
     "oxlint": "./tools/oxlint",
     "tsdown": "./tools/tsdown"
   },
   "files": [
-    "bin.mjs",
+    "bin",
     "dist",
     "src",
     "!src/**/__tests__",
@@ -39,30 +38,6 @@
     "tools",
     "tsconfig.json"
   ],
-  "scripts": {
-    "build": "tsdown",
-    "test": "vitest run",
-    "test:unit": "vitest run --project unit",
-    "test:integration": "vitest run --project integration",
-    "prepublishOnly": "pnpm build",
-    "test:types": "rr tsc"
-  },
-  "dependencies": {
-    "@biomejs/biome": "2.4.4",
-    "@vlandoss/clibuddy": "workspace:*",
-    "@vlandoss/loggy": "workspace:*",
-    "commander": "14.0.3",
-    "glob": "13.0.6",
-    "is-ci": "4.1.0",
-    "lilconfig": "3.1.3",
-    "memoize": "10.2.0",
-    "oxfmt": "0.35.0",
-    "oxlint": "1.50.0",
-    "oxlint-tsgolint": "0.15.0",
-    "rimraf": "6.1.3",
-    "tsdown": "0.21.10",
-    "typescript": "6.0.3"
-  },
   "publishConfig": {
     "access": "public",
     "exports": {
@@ -76,8 +51,7 @@
       }
     },
     "bin": {
-      "rr": "./bin.mjs",
-      "run-run": "./bin.mjs",
+      "rr": "./bin",
       "biome": "./tools/biome",
       "oxfmt": "./tools/oxfmt",
       "oxlint": "./tools/oxlint",
@@ -86,6 +60,32 @@
   },
   "engines": {
     "node": ">=20.0.0"
+  },
+  "scripts": {
+    "build": "tsdown && pnpm build:kdl",
+    "build:kdl": "./bin --usage > dist/cli.usage.kdl",
+    "test": "vitest run",
+    "test:unit": "vitest run --project unit",
+    "test:integration": "vitest run --project integration",
+    "prepublishOnly": "pnpm build",
+    "test:types": "rr tsc"
+  },
+  "dependencies": {
+    "@biomejs/biome": "2.4.4",
+    "@usage-spec/commander": "1.1.0",
+    "@vlandoss/clibuddy": "workspace:*",
+    "@vlandoss/loggy": "workspace:*",
+    "commander": "14.0.3",
+    "glob": "13.0.6",
+    "is-ci": "4.1.0",
+    "lilconfig": "3.1.3",
+    "memoize": "10.2.0",
+    "oxfmt": "0.35.0",
+    "oxlint": "1.50.0",
+    "oxlint-tsgolint": "0.15.0",
+    "rimraf": "6.1.3",
+    "tsdown": "0.21.10",
+    "typescript": "6.0.3"
   },
   "devDependencies": {
     "@vlandoss/tsdown-config": "workspace:^"
