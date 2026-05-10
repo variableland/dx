@@ -47,8 +47,17 @@ jobs:
       packages: write
       pull-requests: write
     steps:
+      - name: 🔑 Mint vland-bot token
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.VLAND_BOT_APP_ID }}
+          private-key: ${{ secrets.VLAND_BOT_PRIVATE_KEY }}
+
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v4
+        with:
+          token: ${{ steps.app-token.outputs.token }}
 
       - name: 🟢 Setup Node.js
         uses: actions/setup-node@v6
@@ -65,7 +74,7 @@ jobs:
           title: "chore: update versions"
           publish: pnpm changeset publish
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
           LEFTHOOK: 0
 
   preview:
