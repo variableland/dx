@@ -1,5 +1,11 @@
 # @vlandoss/run-run
 
+## 0.4.1
+
+### Patch Changes
+
+- [#188](https://github.com/variableland/dx/pull/188) [`9e40d2f`](https://github.com/variableland/dx/commit/9e40d2fccdae5a0b0b0f8053083906113d301f93) Thanks [@rqbazan](https://github.com/rqbazan)! - Update run-run readme
+
 ## 0.4.0
 
 ### Minor Changes
