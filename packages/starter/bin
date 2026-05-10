@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+set -e
+
+SOURCE="${BASH_SOURCE[0]}"
+while [ -L "$SOURCE" ]; do
+  TARGET="$(readlink "$SOURCE")"
+  case "$TARGET" in
+    /*) SOURCE="$TARGET" ;;
+    *) SOURCE="$(dirname "$SOURCE")/$TARGET" ;;
+  esac
+done
+DIR="$(cd "$(dirname "$SOURCE")" && pwd)"
+
+if [ "$1" = "completion" ]; then
+  case "$2" in
+    bash | zsh | fish)
+      kdl="$DIR/dist/cli.usage.kdl"
+      if [ ! -f "$kdl" ]; then
+        echo "vland completion: missing $kdl. Reinstall @vlandoss/starter or run \`pnpm build\`." >&2
+        exit 1
+      fi
+      if ! command -v usage >/dev/null 2>&1; then
+        echo "vland completion: 'usage' CLI not found in PATH." >&2
+        echo "Install via: mise use -g usage  |  brew install usage" >&2
+        exit 1
+      fi
+      exec usage generate completion "$2" vland --file "$kdl"
+      ;;
+  esac
+  # Unknown shell or `--help`: fall through to Node so Commander prints help/errors.
+fi
+
+# In the source repo (tsdown.config.ts present, NOT shipped in the npm tarball),
+# always run from src/ so live edits show up. In a published install, use the
+# bundled dist/run.mjs.
+if [ -f "$DIR/tsdown.config.ts" ]; then
+  exec node "$DIR/src/run.ts" "$@"
+else
+  exec node "$DIR/dist/run.mjs" "$@"
+fi

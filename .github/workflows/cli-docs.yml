@@ -8,6 +8,7 @@ on:
   push:
     tags:
       - "@vlandoss/run-run@*"
+      - "@vlandoss/starter@*"
   workflow_dispatch:
 
 # Serialize runs so concurrent CLI tag pushes don't race on the rolling PR branch.
@@ -20,6 +21,7 @@ env:
   # output is written to `<dir>/CLI.md`.
   REGISTRY: |
     packages/run-run
+    packages/starter
 
 jobs:
   regen:

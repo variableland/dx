@@ -1,6 +1,11 @@
 import { colorize, palette, text } from "@vlandoss/clibuddy";
 
 const vlandColor = colorize("#a78bfa");
+const usageColor = colorize("#24C55E");
+
+export const TOOL_LABELS = {
+  USAGE: usageColor("usage"),
+};
 
 // npx figlet -f "ANSI Shadow" "vland"
 export function getBannerText(version: string) {
