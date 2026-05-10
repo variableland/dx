@@ -8,9 +8,12 @@ CLI toolbox to fullstack common scripts in Variable Land 👊
 
 ## Toolbox
 
-- [Biome](https://biomejs.dev)
-- [TSC](https://www.typescriptlang.org)
+- [biome](https://biomejs.dev)
+- [tsc](https://www.typescriptlang.org)
 - [rimraf](https://www.npmjs.com/package/rimraf)
+- [oxfmt](https://oxc.rs/docs/guide/usage/formatter.html)
+- [oxlint](https://oxc.rs/docs/guide/usage/linter.html)
+- [tsdown](https://tsdown.dev)
 
 ## Installation
 
@@ -60,10 +63,4 @@ To enable debug mode, set the `DEBUG` environment variable to `run-run:*` before
 
 ```sh
 DEBUG=run-run:* rr <command>
-```
-
-Additionally, there is an special command to display `package.json` information:
-
-```sh
-rr info:pkg --help
 ```
