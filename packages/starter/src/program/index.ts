@@ -3,7 +3,7 @@ import { Command } from "commander";
 import { createContext } from "#src/services/ctx.ts";
 import { createAddCommand } from "./commands/add.ts";
 import { createInitCommand } from "./commands/init.ts";
-import { BANNER_TEXT } from "./ui.ts";
+import { getBannerText } from "./ui.ts";
 
 export type Options = {
   binDir: string;
@@ -11,10 +11,11 @@ export type Options = {
 
 export async function createProgram(options: Options) {
   const ctx = await createContext(options.binDir);
+  const version = getVersion(ctx.binPkg);
 
   return new Command("vland")
-    .version(getVersion(ctx.binPkg), "-v, --version")
-    .addHelpText("before", BANNER_TEXT)
+    .version(version, "-v, --version")
+    .addHelpText("before", getBannerText(version))
     .addCommand(createInitCommand(ctx))
     .addCommand(createAddCommand(ctx));
 }

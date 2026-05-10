@@ -13,6 +13,6 @@ export const palette = {
   bold: safe(chalk.bold),
   italic: safe(chalk.italic),
   link: safe(chalk.underline),
-  muted: safe(chalk.dim),
-  vland: colorize("#36d399"),
+  muted: colorize("#a8afb5"),
+  primary: colorize("#36d399"),
 };
