@@ -1,5 +1,16 @@
 # @vlandoss/starter
 
+## 0.3.0
+
+### Minor Changes
+
+- [#192](https://github.com/variableland/dx/pull/192) [`45e1b91`](https://github.com/variableland/dx/commit/45e1b9104d777f3a3da84f395ea62bdf8a2c5f58) Thanks [@rqbazan](https://github.com/rqbazan)! - Add UI consistency for CLIs
+
+### Patch Changes
+
+- Updated dependencies [[`45e1b91`](https://github.com/variableland/dx/commit/45e1b9104d777f3a3da84f395ea62bdf8a2c5f58)]:
+  - @vlandoss/clibuddy@0.4.0
+
 ## 0.2.0
 
 ### Minor Changes
