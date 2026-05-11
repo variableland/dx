@@ -2,7 +2,7 @@ import { Argument, createCommand, Option } from "commander";
 import { runInit } from "#src/actions/init.ts";
 import { TEMPLATES, type TemplateName } from "#src/actions/template.ts";
 import type { Context } from "#src/services/ctx.ts";
-import { TOOL_LABELS } from "../ui.ts";
+import { getBannerText, TOOL_LABELS } from "../ui.ts";
 
 type InitOptions = {
   dir?: string;
@@ -25,6 +25,7 @@ export function createInitCommand(ctx: Context) {
     .addOption(new Option("--no-git", "skip git init"))
     .addOption(new Option("-f, --force", "overwrite existing directory").default(false))
     .action(async (name: string | undefined, options: InitOptions) => {
+      console.log(getBannerText(ctx.binPkg.version));
       await runInit(ctx, {
         name,
         ...options,
