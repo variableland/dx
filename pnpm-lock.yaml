@@ -171,6 +171,9 @@ importers:
 
   packages/starter:
     dependencies:
+      '@usage-spec/commander':
+        specifier: 1.1.0
+        version: 1.1.0
       '@vlandoss/clibuddy':
         specifier: workspace:*
         version: link:../clibuddy
