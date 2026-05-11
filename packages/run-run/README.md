@@ -18,7 +18,7 @@ CLI toolbox to fullstack common scripts in [Variable Land](https://variable.land
 ## Installation
 
 ```sh
-pnpm add @vlandoss/run-run
+pnpm add -D @vlandoss/run-run
 ```
 
 It adds the `rr` command to your project.
@@ -28,8 +28,10 @@ It adds the `rr` command to your project.
 Run the help command:
 
 ```sh
-rr help
+pnpm rr help
 ```
+
+> If you have `node_modules/.bin` on your `PATH` (e.g. via `mise` or `direnv` — see [Shell completion](#shell-completion)), you can drop the `pnpm` prefix and invoke `rr` directly.
 
 See [`CLI.md`](./CLI.md) for the full reference (auto-generated per release).
 
@@ -104,5 +106,5 @@ brew install usage
 To enable debug mode, set the `DEBUG` environment variable to `run-run:*` before running *any* command.
 
 ```sh
-DEBUG=run-run:* rr <command>
+DEBUG=run-run:* pnpm rr <command>
 ```
