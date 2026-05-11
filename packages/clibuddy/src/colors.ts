@@ -1,18 +1,20 @@
-import chalk, { type ChalkInstance } from "chalk";
-import supportsColor from "supports-color";
+import ansis, { bold, cyan, dim, green, italic, underline } from "ansis";
 
-// https://no-color.org/
-export const colorIsSupported = () => supportsColor.stdout && !process.env.NO_COLOR;
+// hex-from-string factory; matches the previous public API.
+export const colorize = (hex: string) => ansis.hex(hex);
 
-const identity = <T>(x: T) => x;
-const safe = (style: ChalkInstance) => (colorIsSupported() ? style : identity);
-
-export const colorize = (hex: string) => safe(chalk.hex(hex));
-
+// Curated semantic palette used across our CLIs.
 export const palette = {
-  bold: safe(chalk.bold),
-  italic: safe(chalk.italic),
-  link: safe(chalk.underline),
-  muted: colorize("#a8afb5"),
-  primary: colorize("#36d399"),
+  // structural
+  bold,
+  italic,
+  link: underline,
+  // tones
+  muted: ansis.hex("#a8afb5"),
+  primary: ansis.hex("#36d399"),
+  dim,
+  // semantic
+  highlight: cyan,
+  success: green,
+  label: (s: string) => ansis.bgMagenta.black(s),
 };

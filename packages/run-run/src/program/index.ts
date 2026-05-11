@@ -1,4 +1,3 @@
-import { getVersion } from "@vlandoss/clibuddy";
 import { createCommand } from "commander";
 import { createContext } from "#src/services/ctx.ts";
 import { createBuildLibCommand } from "./commands/build-lib.ts";
@@ -22,7 +21,7 @@ export type Options = {
 
 export async function createProgram(options: Options) {
   const ctx = await createContext(options.binDir);
-  const version = getVersion(ctx.binPkg);
+  const version = ctx.binPkg.version;
 
   const program = addUsage(
     createCommand("rr")

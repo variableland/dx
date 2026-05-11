@@ -1,0 +1,15 @@
+pre-commit:
+  parallel: true
+  jobs:
+    - name: lint
+      run: pnpm lint --fix-staged
+      stage_fixed: true
+
+    - name: types
+      glob: "*.{ts,tsx,json}"
+      run: pnpm turbo run test:types --filter='...[HEAD]'
+
+pre-push:
+  jobs:
+    - name: test
+      run: pnpm turbo run test --affected

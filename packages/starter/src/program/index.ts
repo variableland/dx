@@ -1,4 +1,3 @@
-import { getVersion } from "@vlandoss/clibuddy";
 import { Command } from "commander";
 import { createContext } from "#src/services/ctx.ts";
 import { createAddCommand } from "./commands/add.ts";
@@ -13,7 +12,7 @@ export type Options = {
 
 export async function createProgram(options: Options) {
   const ctx = await createContext(options.binDir);
-  const version = getVersion(ctx.binPkg);
+  const version = ctx.binPkg.version;
 
   return addUsage(
     new Command("vland")

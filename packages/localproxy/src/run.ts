@@ -1,6 +1,6 @@
 import { homedir } from "node:os";
 import path from "node:path";
-import { createPkgService, dirnameOf, getVersion } from "@vlandoss/clibuddy";
+import { createPkg, dirnameOf } from "@vlandoss/clibuddy";
 import { createCommand } from "commander";
 import { createCleanCommand } from "./commands/clean.ts";
 import { createSetupCommand } from "./commands/setup.ts";
@@ -15,7 +15,7 @@ const BIN_DIR = path.dirname(dirnameOf(import.meta));
 const INSTALL_DIR = path.join(homedir(), ".localproxy");
 
 async function createContext({ binDir, installDir }: ProgramOptions) {
-  const binPkg = await createPkgService(binDir);
+  const binPkg = await createPkg(binDir);
 
   if (!binPkg) {
     throw new Error("Could not find bin package.json");
@@ -31,10 +31,11 @@ async function createContext({ binDir, installDir }: ProgramOptions) {
 
 async function createProgram(options: ProgramOptions) {
   const ctx = await createContext(options);
+  const version = ctx.binPkg.version;
 
   return createCommand("localproxy")
     .alias("localp")
-    .version(getVersion(ctx.binPkg), "-v, --version")
+    .version(version, "-v, --version")
     .addHelpText("before", BANNER_TEXT)
     .addHelpText("after", CREDITS_TEXT)
     .addCommand(createSetupCommand(ctx))

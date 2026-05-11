@@ -1,6 +1,5 @@
 import { createRequire } from "node:module";
-import type { ShellService } from "@vlandoss/clibuddy";
-import isCI from "is-ci";
+import { isCI, type ShellService } from "@vlandoss/clibuddy";
 import { TOOL_LABELS } from "#src/program/ui.ts";
 import type { FormatOptions, Formatter, Linter, LintOptions, StaticChecker, StaticCheckerOptions } from "#src/types/tool.ts";
 import { ToolService } from "./tool.ts";
