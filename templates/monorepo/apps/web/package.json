@@ -1,0 +1,26 @@
+{
+  "name": "@{{projectName}}/web",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite",
+    "preview": "vite preview",
+    "test:types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@{{projectName}}/types": "workspace:*",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^6.0.1",
+    "@vlandoss/config": "^0.2.0",
+    "typescript": "6.0.3",
+    "vite": "^8.0.11"
+  }
+}

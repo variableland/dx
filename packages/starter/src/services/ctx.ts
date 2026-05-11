@@ -1,10 +1,10 @@
 import fs from "node:fs";
-import { createPkgService, createShellService, type PkgService, type ShellService } from "@vlandoss/clibuddy";
+import { createPkg, createShellService, type Pkg, type ShellService } from "@vlandoss/clibuddy";
 import { ConfigService } from "./config.ts";
 import { logger } from "./logger.ts";
 
 export type ContextValue = {
-  binPkg: PkgService;
+  binPkg: Pkg;
   config: ConfigService;
   shell: ShellService;
 };
@@ -16,7 +16,7 @@ export async function createContext(binDir: string): Promise<ContextValue> {
 
   debug("bin path %s", binPath);
 
-  const binPkg = await createPkgService(binPath);
+  const binPkg = await createPkg(binPath);
 
   if (!binPkg) {
     throw new Error("Could not find bin package.json");

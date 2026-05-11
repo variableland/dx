@@ -1,6 +1,6 @@
 # 🦊 run-run
 
-CLI toolbox to fullstack common scripts in Variable Land 👊
+CLI toolbox to fullstack common scripts in [Variable Land](https://variable.land) 👊
 
 ## Prerequisites
 
