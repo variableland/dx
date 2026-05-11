@@ -1,5 +1,11 @@
 # @vlandoss/run-run
 
+## 0.5.2
+
+### Patch Changes
+
+- [#201](https://github.com/variableland/dx/pull/201) [`c46f6e8`](https://github.com/variableland/dx/commit/c46f6e8ea78d7c14c3e44ef1d1d543a812437cdf) Thanks [@rqbazan](https://github.com/rqbazan)! - Document shell completion setup for project-local installs (mise/direnv guard + cached-script fallback)
+
 ## 0.5.1
 
 ### Patch Changes
