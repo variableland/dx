@@ -1,5 +1,11 @@
 # @vlandoss/vland
 
+## 0.1.1
+
+### Patch Changes
+
+- [#204](https://github.com/variableland/dx/pull/204) [`75e5b1c`](https://github.com/variableland/dx/commit/75e5b1c1834719d46d5c78f8c94a32636e7097a8) Thanks [@rqbazan](https://github.com/rqbazan)! - Show the vland banner at the start of the `init` command
+
 ## 0.1.0
 
 ### Minor Changes
