@@ -4,7 +4,12 @@ Monorepo to hold tools made for DX ⚡
 
 ## Packages
 
-Check the documentation [here](./docs/README.md).
+
+| Name    | Description                                                  | Documentation                                                                          |
+| ------- | ------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
+| run-run | The CLI toolbox to fullstack common scripts in Variable Land | [run-run](../packages/run-run/README.md) ([CLI reference](../packages/run-run/CLI.md)) |
+| vland   | The CLI to init a new project in Variable Land               | [vland](../packages/vland/README.md) ([CLI reference](../packages/vland/CLI.md))       |
+
 
 ## Usage
 
@@ -63,7 +68,7 @@ This monorepo uses [Changesets](https://github.com/changesets/changesets) to man
 
 **Preview Release**:
 
-To preview changes in any package, create a pull request using the branch pattern `feat/*` or `fix/*`. This triggers a special GitHub workflow that publishes the package with the changes to the npm registry under the tag `pr-<PR_NUMBER>`. To preview your changes, install the package with the corresponding tag:
+To preview changes in any package, create a pull request using the branch pattern `feat/*` or `fix/*` or add a label `preview` to the PR. This triggers a special GitHub workflow that publishes the package with the changes to the npm registry under the tag `pr-<PR_NUMBER>`. To preview your changes, install the package with the corresponding tag:
 
 ```bash
 pnpm add @vlandoss/<package>@pr-123
