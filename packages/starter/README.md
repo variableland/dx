@@ -2,6 +2,15 @@
 
 The CLI to init a new project in Variable Land 👊
 
+> [!CAUTION]
+> `@vlandoss/starter` is deprecated. Use [`@vlandoss/vland`](https://github.com/variableland/dx/tree/main/packages/vland) instead — same `vland` binary, modern stack (`giget` + `@clack/prompts` + `commander`), and three first-class templates (`library`, `backend`, `monorepo`).
+>
+> ```sh
+> pnpm add -g @vlandoss/vland
+> # or one-shot:
+> npx @vlandoss/vland init
+> ```
+
 ## Prerequisites
 
 - Node.js >= 24.0.0

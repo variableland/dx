@@ -30,6 +30,16 @@ if [ "$1" = "completion" ]; then
   # Unknown shell or `--help`: fall through to Node so Commander prints help/errors.
 fi
 
+# `--usage` emits a KDL spec for downstream parsers (e.g. `usage generate
+# completion`). Force NO_COLOR so command summaries don't leak ANSI escapes
+# into the spec — colors are presentation, KDL is data.
+for arg in "$@"; do
+  if [ "$arg" = "--usage" ]; then
+    export NO_COLOR=1
+    break
+  fi
+done
+
 # In the source repo (tsdown.config.ts present, NOT shipped in the npm tarball),
 # always run from src/ so live edits show up. In a published install, use the
 # bundled dist/run.mjs.

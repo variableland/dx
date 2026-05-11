@@ -1,0 +1,46 @@
+{
+  "name": "{{projectName}}",
+  "version": "0.0.0",
+  "description": "",
+  "license": "MIT",
+  "author": "{{author}}",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "publishConfig": {
+    "access": "public",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    }
+  },
+  "files": ["dist", "src", "!src/**/__tests__", "!src/**/*.test.*", "tsconfig.json"],
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "prepublishOnly": "pnpm build",
+    "test": "vitest run",
+    "test:types": "tsc --noEmit",
+    "lint": "biome check --colors=force",
+    "lint:fix": "biome check --colors=force --fix",
+    "release": "changeset publish"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.4.4",
+    "@changesets/changelog-github": "0.5.2",
+    "@changesets/cli": "2.29.8",
+    "@total-typescript/tsconfig": "1.0.4",
+    "@types/node": "latest",
+    "@vlandoss/config": "^0.2.0",
+    "lefthook": "2.1.1",
+    "tsdown": "0.21.10",
+    "typescript": "6.0.3",
+    "vitest": "^4.0.0"
+  },
+  "packageManager": "pnpm@10.6.4"
+}

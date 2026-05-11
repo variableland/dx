@@ -1,6 +1,6 @@
 name: cli docs
 
-# To add a new CLI (e.g. starter/vland):
+# To add a new CLI:
 #   1. Add its tag pattern under `on.push.tags`.
 #   2. Add its package dir to the REGISTRY env below.
 # The CLI's `build` script must emit `<dir>/dist/cli.usage.kdl`. Output is `<dir>/CLI.md`.
@@ -8,7 +8,7 @@ on:
   push:
     tags:
       - "@vlandoss/run-run@*"
-      - "@vlandoss/starter@*"
+      - "@vlandoss/vland@*"
   workflow_dispatch:
 
 # Serialize runs so concurrent CLI tag pushes don't race on the rolling PR branch.
@@ -21,7 +21,7 @@ env:
   # output is written to `<dir>/CLI.md`.
   REGISTRY: |
     packages/run-run
-    packages/starter
+    packages/vland
 
 jobs:
   regen:

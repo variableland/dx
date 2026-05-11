@@ -59,7 +59,7 @@ export function createTsCheckCommand(ctx: Context) {
 
   return createCommand("tsc")
     .alias("tscheck")
-    .summary(`check typescript errors 🧩 (${toolUi})`)
+    .summary(`check typescript errors 📐 (${toolUi})`)
     .description(
       "Checks the TypeScript code for type errors, ensuring that the code adheres to the defined type constraints and helps catch potential issues before runtime.",
     )

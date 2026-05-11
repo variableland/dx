@@ -1,6 +1,6 @@
-# config
+# ⚙️ config
 
-Shared configuration presets for `@variableland` tooling (Biome, TypeScript, and more over time).
+Shared configuration presets for tooling (biome, tsc, etc)
 
 ## Installation
 

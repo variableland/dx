@@ -1,4 +1,4 @@
-import type { PkgService } from "@vlandoss/clibuddy";
+import type { Pkg } from "@vlandoss/clibuddy";
 
 export type ProgramOptions = {
   binDir: string;
@@ -9,5 +9,5 @@ export type Context = {
   binDir: string;
   installDir: string;
   caddyfilePath: string;
-  binPkg: PkgService;
+  binPkg: Pkg;
 };
