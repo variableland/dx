@@ -1,5 +1,16 @@
 # @vlandoss/starter
 
+## 0.4.1
+
+### Patch Changes
+
+- [#198](https://github.com/variableland/dx/pull/198) [`d467f7f`](https://github.com/variableland/dx/commit/d467f7fd0f0512a1fe15f6d74cd9a540a21bbfbc) Thanks [@rqbazan](https://github.com/rqbazan)! - Add a `[!CAUTION]` block at the top of the README announcing that `@vlandoss/starter` is deprecated in favour of [`@vlandoss/vland`](https://github.com/variableland/dx/tree/main/packages/vland), with a one-liner install snippet.
+
+  The package is still functional and unchanged otherwise; npm-registry deprecation is a separate manual step for a follow-up release.
+
+- Updated dependencies [[`d467f7f`](https://github.com/variableland/dx/commit/d467f7fd0f0512a1fe15f6d74cd9a540a21bbfbc)]:
+  - @vlandoss/clibuddy@0.5.0
+
 ## 0.4.0
 
 ### Minor Changes

@@ -1,5 +1,14 @@
 # @vlandoss/run-run
 
+## 0.5.1
+
+### Patch Changes
+
+- [#198](https://github.com/variableland/dx/pull/198) [`d467f7f`](https://github.com/variableland/dx/commit/d467f7fd0f0512a1fe15f6d74cd9a540a21bbfbc) Thanks [@rqbazan](https://github.com/rqbazan)! - - Drop the direct `is-ci` dependency in favour of `isCI` re-exported from `@vlandoss/clibuddy`'s new env module. One less direct dep, single source of truth for env detection.
+  - Remove the duplicate `bin` block from `publishConfig` — it mirrored the top-level `bin` field with no overrides.
+- Updated dependencies [[`d467f7f`](https://github.com/variableland/dx/commit/d467f7fd0f0512a1fe15f6d74cd9a540a21bbfbc)]:
+  - @vlandoss/clibuddy@0.5.0
+
 ## 0.5.0
 
 ### Minor Changes

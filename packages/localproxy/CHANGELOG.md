@@ -1,5 +1,12 @@
 # @vlandoss/localproxy
 
+## 0.2.2
+
+### Patch Changes
+
+- Updated dependencies [[`d467f7f`](https://github.com/variableland/dx/commit/d467f7fd0f0512a1fe15f6d74cd9a540a21bbfbc)]:
+  - @vlandoss/clibuddy@0.5.0
+
 ## 0.2.1
 
 ### Patch Changes
