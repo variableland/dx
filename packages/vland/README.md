@@ -1,6 +1,6 @@
 # 🦉 vland
 
-The CLI to init a new project in Variable Land 👊
+The CLI to init a new project in [Variable Land](https://variable.land) 👊
 
 ## Prerequisites
 
@@ -33,10 +33,10 @@ See [`CLI.md`](./CLI.md) for the full reference (auto-generated per release).
 
 ### Templates
 
-| Template   | What you get |
-|------------|--------------|
-| `library`  | A standalone TypeScript library with tsdown, Vitest, biome, Changesets release workflow. |
-| `backend`  | An Elysia (`@elysiajs/node`) backend with evlog, Vitest, Dockerfile, CI shape. |
+| Template   | What you get                                                                              |
+| ---------- | ----------------------------------------------------------------------------------------- |
+| `library`  | A standalone TypeScript library with tsdown, Vitest, biome, Changesets release workflow.  |
+| `backend`  | An Elysia (`@elysiajs/node`) backend with evlog, Vitest, Dockerfile, CI shape.            |
 | `monorepo` | pnpm + Turbo workspace with an Elysia API, a Vite-React SPA, and a few internal packages. |
 
 All templates target Node.js, use pnpm, and extend `@vlandoss/config` for biome and tsconfig.

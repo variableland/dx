@@ -5,11 +5,11 @@ Monorepo to hold tools made for DX ⚡
 ## Packages
 
 
-| Name    | Description                                                    | Documentation                                                                        |
-| ------- | -------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
-| run-run | The CLI toolbox to fullstack common scripts in Variable Land   | [run-run](./packages/run-run/README.md) ([CLI reference](./packages/run-run/CLI.md)) |
-| vland   | The CLI to init a new project in Variable Land                 | [vland](./packages/vland/README.md) ([CLI reference](./packages/vland/CLI.md))       |
-| config  | Shared configurations for underline tools like tsc, biome, etc | [config](./packages/config/README.md)                                                |
+| Name    | Description                                                  | Documentation                                                                        |
+| ------- | ------------------------------------------------------------ | ------------------------------------------------------------------------------------ |
+| vland   | 🦉 The CLI to init a new project in Variable Land             | [vland](./packages/vland/README.md) ([CLI reference](./packages/vland/CLI.md))       |
+| run-run | 🦊 CLI toolbox to fullstack common scripts in Variable Land   | [run-run](./packages/run-run/README.md) ([CLI reference](./packages/run-run/CLI.md)) |
+| config  | ⚙️ Shared configuration presets for tooling (biome, tsc, etc) | [config](./packages/config/README.md)                                                |
 
 
 ## Usage
