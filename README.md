@@ -53,15 +53,15 @@ This monorepo uses [Turborepo](https://turbo.build/repo/docs) to manage tasks. H
 - `pnpm build` - Build all packages
 - `pnpm test` - Run tests for all packages
 
-Additionally, the monorepo itself uses the CLIs [`run-run`](./packages/run-run/README.md) and [`starter`](./packages/starter/README.md):
+Additionally, the monorepo itself uses the CLIs [`run-run`](./packages/run-run/README.md) and [`vland`](./packages/vland/README.md):
 
 - `pnpm rr` - Run the `run-run` CLI in development mode
-- `pnpm vland` - Run the `starter` CLI in development mode
+- `pnpm vland` - Run the `vland` CLI in development mode
 
 If you have [mise](https://mise.jdx.dev) installed, you can use the following commands directly:
 
 - `rr` - Run the `run-run` CLI in development mode
-- `vland` - Run the `starter` CLI in development mode
+- `vland` - Run the `vland` CLI in development mode
 
 ### Release
 
