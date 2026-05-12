@@ -162,7 +162,7 @@ export async function runInit(ctx: Context, options: InitOptions) {
     const installSpin = spinner();
     installSpin.start(`Installing dependencies with ${palette.highlight(detected)}`);
     try {
-      await installDependencies({ cwd: dir, packageManager: { name: detected, command: detected } });
+      await installDependencies({ cwd: dir, packageManager: { name: detected, command: detected }, silent: true });
       installSpin.stop(`Installed with ${palette.highlight(detected)}`);
     } catch (error) {
       installSpin.stop("Failed to install dependencies", 1);
