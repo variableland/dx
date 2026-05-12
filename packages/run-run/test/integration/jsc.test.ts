@@ -23,10 +23,11 @@ describe("rr jsc", () => {
     expect(r.status).toBe(0);
   });
 
-  test("runs biome check end-to-end on a clean fixture", () => {
+  test("runs biome end-to-end on a clean fixture", () => {
     const r = cli("jsc", { cwd: fixture.dir });
     const combined = r.stdout + r.stderr;
-    expect(combined).toMatch(/\$ biome check/);
+    // `check` locally, `ci` in CI — both are valid and exercise the same path.
+    expect(combined).toMatch(/\$ biome (check|ci)/);
     expect(combined).not.toMatch(/expected `COMMAND/);
     expect(r.status).toBe(0);
   });
@@ -34,7 +35,7 @@ describe("rr jsc", () => {
   test("forwards each biome flag as its own argv entry", () => {
     const r = cli("jsc", { cwd: fixture.dir });
     const combined = r.stdout + r.stderr;
-    expect(combined).toMatch(/\$ biome check --colors=force --no-errors-on-unmatched/);
+    expect(combined).toMatch(/\$ biome (check|ci) --colors=force --no-errors-on-unmatched/);
     expect(r.status).toBe(0);
   });
 });
