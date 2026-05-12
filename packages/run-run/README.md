@@ -4,7 +4,7 @@ CLI toolbox to fullstack common scripts in [Variable Land](https://variable.land
 
 ## Prerequisites
 
-- Node.js >= 24.0.0
+- Node.js >= 20.0.0
 
 ## Toolbox
 
