@@ -1,4 +1,4 @@
-import type { ShellService } from "@vlandoss/clibuddy";
+import { resolveBinPath, type ShellService } from "@vlandoss/clibuddy";
 import { TOOL_LABELS } from "#src/program/ui.ts";
 import type { FormatOptions, Formatter } from "#src/types/tool.ts";
 import { ToolService } from "./tool.ts";
@@ -9,16 +9,10 @@ export class OxfmtService extends ToolService implements Formatter {
   }
 
   override getBinDir() {
-    return require.resolve("oxfmt/bin/oxfmt");
+    return resolveBinPath("oxfmt", { from: import.meta.url });
   }
 
   async format(options: FormatOptions) {
-    const commonOptions = "--no-error-on-unmatched-pattern";
-
-    if (options.fix) {
-      await this.exec(`${commonOptions} --fix`);
-    } else {
-      await this.exec(`${commonOptions} --check`);
-    }
+    await this.exec(["--no-error-on-unmatched-pattern", options.fix ? "--fix" : "--check"]);
   }
 }

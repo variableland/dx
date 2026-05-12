@@ -7,8 +7,7 @@ export function createXCommand(ctx: Context) {
     .description("Run multiple rr subcommands concurrently (e.g. `rr x jsc tsc`).")
     .argument("<cmds...>", "rr subcommands to execute concurrently")
     .action(async function runXAction(cmds: string[]) {
-      const { $ } = ctx.shell;
-      const results = await Promise.allSettled(cmds.map((cmd) => $`rr ${cmd}`));
+      const results = await Promise.allSettled(cmds.map((cmd) => ctx.shell.run("rr", [cmd])));
       if (results.some((r) => r.status === "rejected")) {
         process.exitCode = 1;
       }

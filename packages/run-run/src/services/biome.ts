@@ -1,8 +1,9 @@
-import { createRequire } from "node:module";
-import { isCI, type ShellService } from "@vlandoss/clibuddy";
+import { isCI, resolveBinPath, type ShellService } from "@vlandoss/clibuddy";
 import { TOOL_LABELS } from "#src/program/ui.ts";
 import type { FormatOptions, Formatter, Linter, LintOptions, StaticChecker, StaticCheckerOptions } from "#src/types/tool.ts";
 import { ToolService } from "./tool.ts";
+
+const COMMON_FLAGS = ["--colors=force", "--no-errors-on-unmatched"];
 
 export class BiomeService extends ToolService implements Formatter, Linter, StaticChecker {
   constructor(shellService: ShellService) {
@@ -10,39 +11,28 @@ export class BiomeService extends ToolService implements Formatter, Linter, Stat
   }
 
   override getBinDir() {
-    const require = createRequire(import.meta.url);
-    return require.resolve("@biomejs/biome/bin/biome");
+    return resolveBinPath("@biomejs/biome", { from: import.meta.url, binName: "biome" });
   }
 
   async format(options: FormatOptions) {
-    const commonOptions = "format --colors=force --no-errors-on-unmatched";
-
-    if (options.fix) {
-      await this.exec(`${commonOptions} --fix`);
-    } else {
-      await this.exec(`${commonOptions}`);
-    }
+    const args = ["format", ...COMMON_FLAGS];
+    if (options.fix) args.push("--fix");
+    await this.exec(args);
   }
 
   async lint(options: LintOptions) {
-    const commonOptions = "check --colors=force --no-errors-on-unmatched --formatter-enabled=false";
-
-    if (options.fix) {
-      await this.exec(`${commonOptions} --fix --unsafe`);
-    } else {
-      await this.exec(`${commonOptions}`);
-    }
+    const args = ["check", ...COMMON_FLAGS, "--formatter-enabled=false"];
+    if (options.fix) args.push("--fix", "--unsafe");
+    await this.exec(args);
   }
 
   async check(options: StaticCheckerOptions): Promise<void> {
-    const commonOptions = (cmd = "check") => `${cmd} --colors=force --no-errors-on-unmatched`;
-
     if (options.fix) {
-      await this.exec(`${commonOptions()} --fix`);
+      await this.exec(["check", ...COMMON_FLAGS, "--fix"]);
     } else if (options.fixStaged) {
-      await this.exec(`${commonOptions()}  --fix --staged`);
+      await this.exec(["check", ...COMMON_FLAGS, "--fix", "--staged"]);
     } else {
-      await this.exec(`${commonOptions(isCI ? "ci" : "check")}`);
+      await this.exec([isCI ? "ci" : "check", ...COMMON_FLAGS]);
     }
   }
 }

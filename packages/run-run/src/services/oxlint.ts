@@ -1,4 +1,4 @@
-import type { ShellService } from "@vlandoss/clibuddy";
+import { resolveBinPath, type ShellService } from "@vlandoss/clibuddy";
 import { TOOL_LABELS } from "#src/program/ui.ts";
 import type { Linter, LintOptions } from "#src/types/tool.ts";
 import { ToolService } from "./tool.ts";
@@ -9,16 +9,10 @@ export class OxlintService extends ToolService implements Linter {
   }
 
   override getBinDir() {
-    return require.resolve("oxlint/bin/oxlint");
+    return resolveBinPath("oxlint", { from: import.meta.url });
   }
 
   async lint(options: LintOptions) {
-    const commonOptions = "--report-unused-disable-directives";
-
-    if (options.fix) {
-      await this.exec(`${commonOptions} --fix`);
-    } else {
-      await this.exec(`${commonOptions} --check`);
-    }
+    await this.exec(["--report-unused-disable-directives", options.fix ? "--fix" : "--check"]);
   }
 }

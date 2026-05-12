@@ -1,7 +1,4 @@
-import fs from "node:fs";
-import path from "node:path";
 import type { ShellService } from "@vlandoss/clibuddy";
-import memoize from "memoize";
 import type { DoctorResult } from "#src/types/tool.ts";
 
 type CreateOptions = {
@@ -21,51 +18,22 @@ export abstract class ToolService {
     this.#shellService = shellService;
   }
 
-  getBinDir?(): string;
+  // Must return an absolute path so we bypass the `node_modules/.bin/<bin>`
+  // shims that run-run itself publishes (`tools/biome`, etc) — otherwise
+  // calling the friendly name loops back through `rr tools <bin>`.
+  abstract getBinDir(): string;
 
-  async exec(args?: string | string[]) {
-    const shell = this.#shell();
-    return this.#run(shell, args);
+  async exec(args: string[] = []) {
+    return this.#shellService.run(this.getBinDir(), args, { display: this.#bin });
   }
 
   async doctor(): Promise<DoctorResult> {
-    const shell = this.#shell().mute();
-
-    const output = await this.#run(shell, "--help");
+    const output = await this.#shellService.runCaptured(this.getBinDir(), ["--help"], { throwOnError: false });
     const ok = output.exitCode === 0;
-
-    return { ok, output };
-  }
-
-  #shell = memoize((cwd?: string) => {
-    const preferLocal = this.#getPreferLocal();
-
-    return this.#shellService.child({
-      ...(cwd && { cwd }),
-      ...(preferLocal && { preferLocal }),
-    });
-  });
-
-  #run(shell: ShellService, args?: string | string[]) {
-    if (!args) {
-      return shell.$`${this.#bin}`;
-    }
-
-    return shell.$`${this.#bin} ${typeof args === "string" ? args : args.join(" ")}`;
-  }
-
-  #getPreferLocal() {
-    if (!this.getBinDir) {
-      return undefined;
-    }
-
-    try {
-      const binPath = this.getBinDir();
-      const isDir = fs.statSync(binPath).isDirectory();
-      return isDir ? binPath : path.dirname(binPath);
-    } catch {
-      return undefined;
-    }
+    return {
+      ok,
+      output: { stdout: output.stdout, stderr: output.stderr, exitCode: output.exitCode },
+    };
   }
 
   get bin() {

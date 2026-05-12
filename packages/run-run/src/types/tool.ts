@@ -14,7 +14,7 @@ export type StaticCheckerOptions = {
 export type DoctorOutput = {
   stdout: string;
   stderr: string;
-  exitCode: number | null;
+  exitCode: number | undefined;
 };
 
 export type DoctorResult = {

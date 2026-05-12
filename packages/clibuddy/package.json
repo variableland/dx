@@ -15,8 +15,7 @@
   "author": "rcrd <rcrd@variable.land>",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts",
-    "./test-helpers": "./test-helpers/index.ts"
+    ".": "./src/index.ts"
   },
   "files": [
     "dist",
@@ -35,8 +34,8 @@
     "ansis": "4.2.0",
     "pkg-types": "2.3.0",
     "std-env": "3.9.0",
-    "yaml": "2.8.4",
-    "zx": "8.8.5"
+    "tinyexec": "1.1.2",
+    "yaml": "2.8.4"
   },
   "publishConfig": {
     "access": "public",
