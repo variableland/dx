@@ -1,5 +1,14 @@
 # 🛠️ localproxy
 
+> [!CAUTION]
+> **Deprecated.** This package is no longer maintained. Use [Portless](https://port1355.dev) instead — it provides the same `*.localhost` mapping with automatic HTTPS and a smoother setup. This package will not receive further updates and will be removed from the registry shortly.
+>
+> ```sh
+> # Migration: install Portless and remove localproxy
+> # See https://port1355.dev for setup
+> pnpm remove -g @vlandoss/localproxy
+> ```
+
 **Simple local development proxy automation with Caddy + hosts management**
 
 Stop remembering ports! localproxy automatically maps your projects to clean `.localhost` domains with automatic HTTPS and hosts file management.
