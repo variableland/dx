@@ -1,9 +1,12 @@
-import type { Options as ZxOptions, Shell as ZxShell } from "zx";
+export type ShellOptions = {
+  cwd?: string;
+  env?: NodeJS.ProcessEnv;
+  verbose?: boolean;
+};
 
-export type Shell = ZxShell;
-
-export type ShellOptions = Partial<ZxOptions>;
-
-export type CreateOptions = ShellOptions & {
-  localBaseBinPath?: string | Array<string>;
+export type RunOptions = ShellOptions & {
+  throwOnError?: boolean;
+  shell?: boolean;
+  stdin?: string;
+  display?: string;
 };

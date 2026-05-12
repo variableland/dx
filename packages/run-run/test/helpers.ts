@@ -1,17 +1,22 @@
 import { spawnSync } from "node:child_process";
-import { resolve } from "node:path";
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import path, { resolve } from "node:path";
 import { dirnameOf } from "@vlandoss/clibuddy";
 
-export function createTestCli(mode: "dev" | "prod" = "prod") {
-  const bin = resolve(dirnameOf(import.meta), "../bin");
+const BIN = resolve(dirnameOf(import.meta), "../bin");
 
-  // NODE_ENV=test and TEST=true (injected by vitest) cause consola to suppress
-  // all output. Override them so the subprocess behaves like a real invocation.
-  // NO_COLOR=1 keeps assertions stable across color-library detection differences
-  // — tests check content, not terminal escape sequences.
-  return function cli(cmd: string) {
-    return spawnSync(bin, cmd.split(" "), {
+type CliMode = "dev" | "prod";
+
+type CliOptions = {
+  cwd?: string;
+};
+
+export function createTestCli(mode: CliMode = "prod") {
+  return function cli(cmd: string, opts: CliOptions = {}) {
+    return spawnSync(BIN, cmd.split(" ").filter(Boolean), {
       encoding: "utf8",
+      cwd: opts.cwd,
       env:
         mode === "dev"
           ? process.env
@@ -24,3 +29,28 @@ export function createTestCli(mode: "dev" | "prod" = "prod") {
     });
   };
 }
+
+type FixtureFiles = Record<string, string>;
+
+export function makeFixture(name: string, files: FixtureFiles): { dir: string; cleanup: () => void } {
+  const dir = mkdtempSync(path.join(tmpdir(), `rr-${name}-`));
+  for (const [rel, content] of Object.entries(files)) {
+    const abs = path.join(dir, rel);
+    mkdirSync(path.dirname(abs), { recursive: true });
+    writeFileSync(abs, content);
+  }
+  return {
+    dir,
+    cleanup: () => {
+      rmSync(dir, { recursive: true, force: true });
+    },
+  };
+}
+
+export const fixtures = {
+  pkg: (name = "rr-test-fixture") => `${JSON.stringify({ name, version: "0.0.0", private: true }, null, 2)}\n`,
+  biomeNoop: () =>
+    `${JSON.stringify({ formatter: { enabled: false }, linter: { enabled: false }, assist: { enabled: false } }, null, 2)}\n`,
+  tsconfig: () =>
+    `${JSON.stringify({ compilerOptions: { target: "es2020", module: "esnext", moduleResolution: "bundler", strict: true, noEmit: true, skipLibCheck: true } }, null, 2)}\n`,
+};

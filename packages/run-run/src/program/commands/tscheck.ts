@@ -34,7 +34,9 @@ async function typecheckAt({ dir, scripts, log, shell, run }: TypecheckAtOptions
     const preScript = getPreScript(scripts);
     if (preScript) {
       log.start(`Running pre-script: ${preScript}`);
-      await shellAt.$`${preScript}`;
+      // Pre-scripts come from package.json and may contain shell features
+      // (`&&`, pipes, env-var substitution) — run them through `/bin/sh -c`.
+      await shellAt.run(preScript, [], { shell: true });
       log.success("Pre-script completed");
     }
 
@@ -71,11 +73,10 @@ export function createTsCheckCommand(ctx: Context) {
       const runTypecheck = async (shell: ShellService) => {
         if (config.future?.oxc) {
           const oxlint = new OxlintService(shell);
-          await oxlint.exec(`--type-aware --type-check --report-unused-disable-directives`);
+          await oxlint.exec(["--type-aware", "--type-check", "--report-unused-disable-directives"]);
         } else {
           const tsc = new TscService(shell);
-          await tsc.exec(`--noEmit`);
-          // await shell.$`tsc --noEmit`;
+          await tsc.exec(["--noEmit"]);
         }
       };
 

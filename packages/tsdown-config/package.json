@@ -29,6 +29,6 @@
     "node": ">=20.0.0"
   },
   "peerDependencies": {
-    "tsdown": "^0.21.10"
+    "tsdown": "^0.22.0"
   }
 }
