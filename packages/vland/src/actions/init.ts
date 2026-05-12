@@ -6,7 +6,7 @@ import { detectPackageManager, installDependencies } from "nypm";
 import type { Context } from "#src/services/ctx.ts";
 import { logger } from "#src/services/logger.ts";
 import { replacePlaceholders, updateRootPackageName } from "./placeholders.ts";
-import { fetchTemplate, TEMPLATES, type TemplateName } from "./template.ts";
+import { fetchTemplate, TEMPLATE_META, TEMPLATES, type TemplateName } from "./template.ts";
 
 export type InitOptions = {
   name?: string;
@@ -92,7 +92,7 @@ export async function runInit(ctx: Context, options: InitOptions) {
     if (!hasTTY) abort("Project name is required in non-interactive environments. Pass it as the first argument.");
     const value = await text({
       message: "Project name",
-      placeholder: "my-app",
+      placeholder: TEMPLATE_META[template].placeholder,
       validate: (input) => validateProjectName(input ?? ""),
     });
     if (isCancel(value)) abort("Cancelled.");
@@ -200,13 +200,14 @@ export async function runInit(ctx: Context, options: InitOptions) {
 
   // 10. Outro with next steps
   const detectedPm = options.pm ?? (await detectPackageManager(dir, { ignorePackageJSON: false }))?.name ?? "pnpm";
+  const runScript = TEMPLATE_META[template].runScript;
   outro(
     [
       palette.success("Done!"),
       "",
       palette.muted("Next steps:"),
       `  cd ${name}`,
-      shouldInstall ? `  ${detectedPm} dev` : `  ${detectedPm} install && ${detectedPm} dev`,
+      shouldInstall ? `  ${detectedPm} ${runScript}` : `  ${detectedPm} install && ${detectedPm} ${runScript}`,
     ].join("\n"),
   );
 }

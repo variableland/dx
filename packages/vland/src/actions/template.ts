@@ -6,6 +6,12 @@ import { logger } from "#src/services/logger.ts";
 export const TEMPLATES = ["library", "backend", "monorepo"] as const;
 export type TemplateName = (typeof TEMPLATES)[number];
 
+export const TEMPLATE_META: Record<TemplateName, { placeholder: string; runScript: string }> = {
+  library: { placeholder: "my-lib", runScript: "test" },
+  backend: { placeholder: "my-api", runScript: "dev" },
+  monorepo: { placeholder: "my-mono", runScript: "dev" },
+};
+
 const GITHUB_SOURCE = "github:variableland/dx";
 const GITHUB_REF = "main";
 

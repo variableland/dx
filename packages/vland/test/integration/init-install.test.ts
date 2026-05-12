@@ -12,11 +12,17 @@ describe("vland init (install resolution)", () => {
 
   afterEach(() => fixture.cleanup());
 
-  test("--no-install: skips and recommends `install && dev` next", () => {
+  test("library: --no-install recommends `install && test` (no dev script in libraries)", () => {
     const r = cli("init install-off -t library --no-install --no-git", { cwd: fixture.dir });
     expect(r.status).toBe(0);
     const out = r.stdout + r.stderr;
     expect(out).toMatch(/Skipping.*install/);
-    expect(out).toMatch(/install && pnpm dev/);
+    expect(out).toMatch(/install && pnpm test/);
+  });
+
+  test("backend: --no-install recommends `install && dev`", () => {
+    const r = cli("init install-off -t backend --no-install --no-git", { cwd: fixture.dir });
+    expect(r.status).toBe(0);
+    expect(r.stdout + r.stderr).toMatch(/install && pnpm dev/);
   });
 });
