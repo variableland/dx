@@ -1,4 +1,4 @@
-import { isProcessOutput } from "./shell/utils.ts";
+import { isNonZeroExitError } from "./shell/utils.ts";
 
 function hasMessage(error: unknown): error is { message: string } {
   return (
@@ -18,7 +18,8 @@ export async function run(fn: () => Promise<void>, logger: { error: (...args: un
   try {
     await fn();
   } catch (error) {
-    if (!isProcessOutput(error)) {
+    // The subprocess already streamed its own stderr; don't double-print.
+    if (!isNonZeroExitError(error)) {
       logger.error(formatError(error));
     }
     process.exit(1);

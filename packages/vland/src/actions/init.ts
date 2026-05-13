@@ -1,20 +1,20 @@
 import { readdir } from "node:fs/promises";
 import { isAbsolute, resolve } from "node:path";
-import { cancel, intro, isCancel, log, outro, select, spinner, text } from "@clack/prompts";
+import { cancel, confirm, intro, isCancel, log, outro, select, spinner, text } from "@clack/prompts";
 import { hasTTY, palette } from "@vlandoss/clibuddy";
 import { detectPackageManager, installDependencies } from "nypm";
 import type { Context } from "#src/services/ctx.ts";
 import { logger } from "#src/services/logger.ts";
 import { replacePlaceholders, updateRootPackageName } from "./placeholders.ts";
-import { fetchTemplate, TEMPLATES, type TemplateName } from "./template.ts";
+import { fetchTemplate, TEMPLATE_META, TEMPLATES, type TemplateName } from "./template.ts";
 
 export type InitOptions = {
   name?: string;
   template?: TemplateName;
   dir?: string;
   pm?: "npm" | "pnpm" | "yarn" | "bun";
-  install: boolean;
-  git: boolean;
+  install?: boolean;
+  git?: boolean;
   force: boolean;
 };
 
@@ -46,8 +46,8 @@ async function isDirEmpty(dir: string): Promise<boolean> {
 async function readGitAuthor(shell: Context["shell"]): Promise<string | undefined> {
   try {
     const [name, email] = await Promise.all([
-      shell.$`git config --get user.name`.nothrow(),
-      shell.$`git config --get user.email`.nothrow(),
+      shell.runCaptured("git", ["config", "--get", "user.name"], { throwOnError: false }),
+      shell.runCaptured("git", ["config", "--get", "user.email"], { throwOnError: false }),
     ]);
     const trimmedName = name.stdout.trim();
     const trimmedEmail = email.stdout.trim();
@@ -67,8 +67,7 @@ export async function runInit(ctx: Context, options: InitOptions) {
   const debug = logger.subdebug("init");
   debug("options: %O", options);
 
-  // Mute zx so the @clack/prompts UI stays clean while git output is captured.
-  const shell = ctx.shell.mute();
+  const shell = ctx.shell;
 
   intro(`${palette.label(" vland init ")}`);
 
@@ -93,7 +92,7 @@ export async function runInit(ctx: Context, options: InitOptions) {
     if (!hasTTY) abort("Project name is required in non-interactive environments. Pass it as the first argument.");
     const value = await text({
       message: "Project name",
-      placeholder: "my-app",
+      placeholder: TEMPLATE_META[template].placeholder,
       validate: (input) => validateProjectName(input ?? ""),
     });
     if (isCancel(value)) abort("Cancelled.");
@@ -153,13 +152,17 @@ export async function runInit(ctx: Context, options: InitOptions) {
   await updateRootPackageName(dir, name);
   placeholderSpin.stop("Placeholders applied");
 
-  // 7. Install deps
-  if (options.install) {
+  // 7. Resolve install / git decisions (prompt with default-yes when not set on CLI)
+  const shouldInstall = await resolveYesNo(options.install, "Install dependencies?");
+  const shouldGit = await resolveYesNo(options.git, "Initialise a git repository?");
+
+  // 8. Install deps
+  if (shouldInstall) {
     const detected = options.pm ?? (await detectPackageManager(dir, { ignorePackageJSON: false }))?.name ?? "pnpm";
     const installSpin = spinner();
     installSpin.start(`Installing dependencies with ${palette.highlight(detected)}`);
     try {
-      await installDependencies({ cwd: dir, packageManager: { name: detected, command: detected } });
+      await installDependencies({ cwd: dir, packageManager: { name: detected, command: detected }, silent: true });
       installSpin.stop(`Installed with ${palette.highlight(detected)}`);
     } catch (error) {
       installSpin.stop("Failed to install dependencies", 1);
@@ -167,44 +170,52 @@ export async function runInit(ctx: Context, options: InitOptions) {
       debug("install error: %O", error);
     }
   } else {
-    log.info(`Skipping ${palette.highlight("install")} (--no-install).`);
+    log.info(`Skipping ${palette.highlight("install")}.`);
   }
 
-  // 8. Git init
-  if (options.git) {
+  // 9. Git init
+  if (shouldGit) {
     const gitSpin = spinner();
     gitSpin.start("Initialising git repository");
     try {
       const gitShell = shell.at(dir).child({
         env: {
-          ...process.env,
           GIT_AUTHOR_NAME: process.env.GIT_AUTHOR_NAME ?? "vland",
           GIT_AUTHOR_EMAIL: process.env.GIT_AUTHOR_EMAIL ?? "noreply@variable.land",
           GIT_COMMITTER_NAME: process.env.GIT_COMMITTER_NAME ?? "vland",
           GIT_COMMITTER_EMAIL: process.env.GIT_COMMITTER_EMAIL ?? "noreply@variable.land",
         },
       });
-      await gitShell.$`git init`;
-      await gitShell.$`git add -A`;
-      await gitShell.$`git commit -m ${"chore: initial commit from vland"}`;
+      await gitShell.runCaptured("git", ["init"]);
+      await gitShell.runCaptured("git", ["add", "-A"]);
+      await gitShell.runCaptured("git", ["commit", "-m", "chore: initial commit from vland"]);
       gitSpin.stop("Initialised git repository");
     } catch (error) {
       gitSpin.stop("Failed to initialise git", 1);
       debug("git error: %O", error);
     }
   } else {
-    log.info(`Skipping ${palette.highlight("git init")} (--no-git).`);
+    log.info(`Skipping ${palette.highlight("git init")}.`);
   }
 
-  // 9. Outro with next steps
+  // 10. Outro with next steps
   const detectedPm = options.pm ?? (await detectPackageManager(dir, { ignorePackageJSON: false }))?.name ?? "pnpm";
+  const runScript = TEMPLATE_META[template].runScript;
   outro(
     [
       palette.success("Done!"),
       "",
       palette.muted("Next steps:"),
       `  cd ${name}`,
-      options.install ? `  ${detectedPm} dev` : `  ${detectedPm} install && ${detectedPm} dev`,
+      shouldInstall ? `  ${detectedPm} ${runScript}` : `  ${detectedPm} install && ${detectedPm} ${runScript}`,
     ].join("\n"),
   );
+}
+
+async function resolveYesNo(explicit: boolean | undefined, message: string): Promise<boolean> {
+  if (typeof explicit === "boolean") return explicit;
+  if (!hasTTY) return true;
+  const value = await confirm({ message, initialValue: true });
+  if (isCancel(value)) abort("Cancelled.");
+  return value as boolean;
 }

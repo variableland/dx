@@ -5,20 +5,10 @@ import { ToolService } from "./tool.ts";
 
 export class OxfmtService extends ToolService implements Formatter {
   constructor(shellService: ShellService) {
-    super({ bin: "oxfmt", ui: TOOL_LABELS.OXFMT, shellService });
-  }
-
-  override getBinDir() {
-    return require.resolve("oxfmt/bin/oxfmt");
+    super({ pkg: "oxfmt", ui: TOOL_LABELS.OXFMT, shellService });
   }
 
   async format(options: FormatOptions) {
-    const commonOptions = "--no-error-on-unmatched-pattern";
-
-    if (options.fix) {
-      await this.exec(`${commonOptions} --fix`);
-    } else {
-      await this.exec(`${commonOptions} --check`);
-    }
+    await this.exec(["--no-error-on-unmatched-pattern", options.fix ? "--fix" : "--check"]);
   }
 }

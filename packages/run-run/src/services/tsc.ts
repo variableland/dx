@@ -4,6 +4,6 @@ import { ToolService } from "./tool.ts";
 
 export class TscService extends ToolService {
   constructor(shellService: ShellService) {
-    super({ bin: "tsc", ui: TOOL_LABELS.TSC, shellService });
+    super({ pkg: "typescript", bin: "tsc", ui: TOOL_LABELS.TSC, shellService });
   }
 }

@@ -4,7 +4,7 @@ import { ToolService } from "./tool.ts";
 
 export class TsdownService extends ToolService {
   constructor(shellService: ShellService) {
-    super({ bin: "tsdown", ui: TOOL_LABELS.TSDOWN, shellService });
+    super({ pkg: "tsdown", ui: TOOL_LABELS.TSDOWN, shellService });
   }
 
   async buildLib() {

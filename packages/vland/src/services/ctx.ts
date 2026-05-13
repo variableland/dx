@@ -22,9 +22,7 @@ export async function createContext(binDir: string): Promise<Context> {
 
   debug("bin pkg info: %O", binPkg.info());
 
-  const shell = createShellService({
-    localBaseBinPath: [binDir],
-  });
+  const shell = createShellService();
 
   debug("shell service options: %O", shell.options);
 

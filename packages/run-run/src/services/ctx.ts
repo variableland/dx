@@ -32,10 +32,7 @@ export async function createContext(binDir: string): Promise<Context> {
   debug("app pkg info: %O", appPkg.info());
   debug("bin pkg info: %O", binPkg.info());
 
-  const shell = createShellService({
-    localBaseBinPath: [binDir],
-    stdio: "inherit",
-  });
+  const shell = createShellService();
 
   debug("shell service options: %O", shell.options);
 
