@@ -42,6 +42,7 @@ function createToolCommand(bin: string, shell: ShellService) {
 export function createToolsCommand(ctx: Context) {
   return createCommand("tools")
     .description("expose the internal tools 🛠️")
+    .passThroughOptions()
     .addCommand(createToolCommand("biome", ctx.shell))
     .addCommand(createToolCommand("oxfmt", ctx.shell))
     .addCommand(createToolCommand("oxlint", ctx.shell))
