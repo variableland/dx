@@ -1,5 +1,15 @@
 # @vlandoss/run-run
 
+## 0.6.1
+
+### Patch Changes
+
+- [#216](https://github.com/variableland/dx/pull/216) [`825080c`](https://github.com/variableland/dx/commit/825080c9ea162cbf7e2b909895c173c9e9ad57f4) Thanks [@rqbazan](https://github.com/rqbazan)! - Stop swallowing flags passed to the `tools` shims.
+
+  `rr` defines `-v/--version`, `-h/--help` and `--usage` at the root level. By default Commander accepts those flags anywhere in the argv, so invocations like `rr tools biome --version` (or the published `biome` shim, which delegates to `rr tools biome "$@"`) were resolved by the root parser and printed rr's own version/help instead of forwarding to the underlying tool.
+
+  Enabling `enablePositionalOptions()` on the root program and `passThroughOptions()` on the `tools` command keeps the root flags scoped to the root, so anything after `rr tools <bin>` is forwarded verbatim to the wrapped binary. Same applies to the `oxfmt`, `oxlint` and `tsdown` shims.
+
 ## 0.6.0
 
 ### Minor Changes
