@@ -13,7 +13,6 @@ export function createJsCheckCommand(ctx: Context) {
 
   return createCommand("jsc")
     .alias("jscheck")
-    .alias("check")
     .summary(`check format and lint 🔍 (${checkerService.ui})`)
     .description(
       "Checks the code for formatting and linting issues, ensuring it adheres to the defined style and quality standards.",

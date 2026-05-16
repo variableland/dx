@@ -28,8 +28,8 @@ jobs:
       - name: ⌛ Setup pnpm
         uses: variableland/gh-actions/actions/setup-pnpm@main
 
-      - name: 💅 Test static
-        run: pnpm rr test:static
+      - name: 💅 Check
+        run: pnpm rr check
 
       - name: 🧪 Test
         run: pnpm test
