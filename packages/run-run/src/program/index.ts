@@ -26,6 +26,7 @@ export async function createProgram(options: Options) {
   const program = addUsage(
     createCommand("rr")
       .usage("[options] <command...>")
+      .enablePositionalOptions()
       .version(version, "-v, --version")
       .addHelpText("before", getBannerText(version))
       .addHelpText("after", CREDITS_TEXT)
