@@ -1,6 +1,7 @@
 import { createCommand } from "commander";
 import { createContext } from "#src/services/ctx.ts";
 import { createBuildLibCommand } from "./commands/build-lib.ts";
+import { createCheckCommand } from "./commands/check.ts";
 import { createCleanCommand } from "./commands/clean.ts";
 import { createCompletionCommand } from "./commands/completion.ts";
 import { createConfigCommand } from "./commands/config.ts";
@@ -8,7 +9,6 @@ import { createFormatCommand } from "./commands/format.ts";
 import { createJsCheckCommand } from "./commands/jscheck.ts";
 import { createLintCommand } from "./commands/lint.ts";
 import { createPkgsCommand } from "./commands/pkgs.ts";
-import { createTestStaticCommand } from "./commands/test-static.ts";
 import { createToolsCommand } from "./commands/tools.ts";
 import { createTsCheckCommand } from "./commands/tscheck.ts";
 import { addUsage } from "./commands/usage.ts";
@@ -38,8 +38,7 @@ export async function createProgram(options: Options) {
       .addCommand(createTsCheckCommand(ctx))
       .addCommand(createLintCommand(ctx))
       .addCommand(createFormatCommand(ctx))
-      // test
-      .addCommand(createTestStaticCommand(ctx))
+      .addCommand(createCheckCommand(ctx))
       // misc
       .addCommand(createCleanCommand())
       .addCommand(createPkgsCommand(ctx))
