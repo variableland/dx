@@ -1,5 +1,5 @@
 ---
-"@rrlab/cli": minor
+"@rrlab/cli": patch
 "@rrlab/plugin-biome": minor
 "@rrlab/plugin-oxc": minor
 "@rrlab/plugin-ts": minor
