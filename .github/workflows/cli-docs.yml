@@ -7,7 +7,7 @@ name: cli docs
 on:
   push:
     tags:
-      - "@vlandoss/run-run@*"
+      - "@rrlab/cli@*"
       - "@vlandoss/vland@*"
   workflow_dispatch:
 
@@ -20,8 +20,8 @@ env:
   # One package dir per line. Each must produce `<dir>/dist/cli.usage.kdl` at build time;
   # output is written to `<dir>/CLI.md`.
   REGISTRY: |
-    packages/run-run
-    packages/vland
+    run-run/cli
+    vland/cli
 
 jobs:
   regen:
@@ -100,4 +100,5 @@ jobs:
             automated
             chore
           add-paths: |
-            packages/*/CLI.md
+            run-run/*/CLI.md
+            vland/cli/CLI.md

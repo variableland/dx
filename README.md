@@ -4,12 +4,13 @@ Monorepo to hold tools made for DX ⚡
 
 ## Packages
 
+| Name      | Description                                                                              | Documentation                                                              |
+| --------- | ---------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| `vland`   | 🦉 CLI to init a new project in Variable Land                                             | [vland](./vland/cli/README.md) ([CLI reference](./vland/cli/CLI.md))       |
+| `run-run` | 🦊 Microkernel CLI + plugin ecosystem (`@rrlab/*`) for common scripts in Variable Land    | [run-run](./run-run/cli/README.md) ([CLI reference](./run-run/cli/CLI.md)) |
+| `shared`  | 🛠 Internal utilities (`@vlandoss/clibuddy`, `@vlandoss/loggy`) shared across both CLIs   | [clibuddy](./shared/clibuddy/README.md), [loggy](./shared/loggy/README.md) |
 
-| Name    | Description                                                  | Documentation                                                                        |
-| ------- | ------------------------------------------------------------ | ------------------------------------------------------------------------------------ |
-| vland   | 🦉 The CLI to init a new project in Variable Land             | [vland](./packages/vland/README.md) ([CLI reference](./packages/vland/CLI.md))       |
-| run-run | 🦊 CLI toolbox to fullstack common scripts in Variable Land   | [run-run](./packages/run-run/README.md) ([CLI reference](./packages/run-run/CLI.md)) |
-| config  | ⚙️ Shared configuration presets for tooling (biome, tsc, etc) | [config](./packages/config/README.md)                                                |
+The `run-run` ecosystem ships as opt-in pieces: the `@rrlab/cli` kernel + four official plugins (`@rrlab/plugin-{biome,oxc,ts,tsdown}`) + their shared config presets (`@rrlab/{biome,ts,tsdown}-config`). See [`run-run/CLAUDE.md`](./run-run/CLAUDE.md) for the architecture.
 
 
 ## Usage
@@ -53,7 +54,7 @@ This monorepo uses [Turborepo](https://turbo.build/repo/docs) to manage tasks. H
 - `pnpm build` - Build all packages
 - `pnpm test` - Run tests for all packages
 
-Additionally, the monorepo itself uses the CLIs [`run-run`](./packages/run-run/README.md) and [`vland`](./packages/vland/README.md):
+Additionally, the monorepo itself uses the CLIs [`run-run`](./run-run/cli/README.md) and [`vland`](./vland/cli/README.md):
 
 - `pnpm rr` - Run the `run-run` CLI in development mode
 - `pnpm vland` - Run the `vland` CLI in development mode

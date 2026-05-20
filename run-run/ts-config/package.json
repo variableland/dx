@@ -1,0 +1,48 @@
+{
+  "name": "@rrlab/ts-config",
+  "version": "0.0.0",
+  "description": "Shared TypeScript presets used by @rrlab/plugin-ts.",
+  "homepage": "https://github.com/variableland/dx/tree/main/run-run/ts-config#readme",
+  "bugs": {
+    "url": "https://github.com/variableland/dx/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/variableland/dx.git",
+    "directory": "run-run/ts-config"
+  },
+  "license": "MIT",
+  "author": "rcrd <rcrd@variable.land>",
+  "keywords": [
+    "tsconfig",
+    "typescript",
+    "presets",
+    "rrlab"
+  ],
+  "type": "module",
+  "exports": {
+    "./react": "./src/tsconfig.react.json",
+    "./dom/app": "./src/tsconfig.dom.json",
+    "./dom/lib": "./src/tsconfig.dom.json",
+    "./no-dom/app": "./src/tsconfig.no-dom.json",
+    "./no-dom/lib": "./src/tsconfig.no-dom.json"
+  },
+  "files": [
+    "src"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@total-typescript/tsconfig": "1.0.4"
+  },
+  "peerDependencies": {
+    "typescript": ">=5.0.0",
+    "@types/node": ">=20"
+  },
+  "peerDependenciesMeta": {
+    "@types/node": {
+      "optional": true
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "name": "{{projectName}}",
+  "version": "0.0.0",
+  "private": true,
+  "description": "",
+  "license": "MIT",
+  "author": "{{author}}",
+  "type": "module",
+  "imports": {
+    "#src/*": "./src/*",
+    "#test/*": "./test/*"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "start": "node dist/index.mjs",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@elysiajs/node": "^1.4.5",
+    "elysia": "^1.4.28",
+    "evlog": "^2.17.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@rrlab/cli": "^0.1.0",
+    "@types/node": "latest",
+    "lefthook": "2.1.1",
+    "tsx": "^4.21.0",
+    "vitest": "^4.0.0"
+  },
+  "packageManager": "pnpm@10.6.4"
+}

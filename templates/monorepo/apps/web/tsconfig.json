@@ -1,4 +1,0 @@
-{
-  "extends": ["@vlandoss/config/ts/react"],
-  "include": ["src", "vite.config.ts"]
-}
