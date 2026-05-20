@@ -53,33 +53,18 @@ Per-plugin duplication of small constants (the `{ install, peer }` shape repeate
 
 ## Architecture in one screen
 
-```
-                user's run-run.config.{ts,mts}
-                  ┌──────────────────────────────────┐
-                  │ plugins: [biome(), ts(), …]     │
-                  └────────────────┬─────────────────┘
-                                   │
-                  ┌────────────────▼─────────────────┐
-                  │ @rrlab/cli  (the kernel)         │
-                  │                                  │
-                  │  createContext()                 │
-                  │   → load config                  │
-                  │   → for each plugin: setup(ctx)  │
-                  │   → register capabilities        │
-                  │                                  │
-                  │  commands consult ctx.registry   │
-                  │   lint  → registry.get("lint")   │
-                  │   tsc   → registry.get("tsc")    │
-                  │   …                              │
-                  └──────────────────────────────────┘
-                            ▲             ▲
-                            │             │
-                  ┌─────────┴───┐   ┌────┴────────┐
-                  │ plugin-biome │   │ plugin-ts   │  …
-                  │ Linter+Doctor│   │ TypeChecker │
-                  │ Formatter    │   │             │
-                  │ StaticChecker│   │             │
-                  └──────────────┘   └─────────────┘
+```mermaid
+flowchart TD
+    Config["<b>user's run-run.config.{ts,mts}</b><br/>plugins: [biome(), ts(), …]"]
+    Kernel["<b>@rrlab/cli</b> — the kernel<br/><br/>createContext()<br/>• load config<br/>• for each plugin: setup(ctx)<br/>• register capabilities<br/><br/>commands consult ctx.registry<br/>lint → registry.get('lint')<br/>tsc  → registry.get('tsc')<br/>…"]
+    Biome["<b>plugin-biome</b><br/>Linter + Doctor<br/>Formatter<br/>StaticChecker"]
+    TS["<b>plugin-ts</b><br/>TypeChecker"]
+    More["…"]
+
+    Config --> Kernel
+    Kernel --> Biome
+    Kernel --> TS
+    Kernel -.-> More
 ```
 
 Every plugin's host-side tool (`@biomejs/biome`, `typescript`, etc.) is a `peerDependency`. `rr plugins add <alias>` installs it; the kernel never bundles the tool.
