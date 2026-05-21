@@ -20,24 +20,24 @@ importers:
       '@rrlab/biome-config':
         specifier: workspace:*
         version: link:run-run/biome-config
+      '@rrlab/biome-plugin':
+        specifier: workspace:*
+        version: link:run-run/biome-plugin
       '@rrlab/cli':
         specifier: workspace:*
         version: link:run-run/cli
-      '@rrlab/plugin-biome':
-        specifier: workspace:*
-        version: link:run-run/plugin-biome
-      '@rrlab/plugin-ts':
-        specifier: workspace:*
-        version: link:run-run/plugin-ts
-      '@rrlab/plugin-tsdown':
-        specifier: workspace:*
-        version: link:run-run/plugin-tsdown
       '@rrlab/ts-config':
         specifier: workspace:*
         version: link:run-run/ts-config
+      '@rrlab/ts-plugin':
+        specifier: workspace:*
+        version: link:run-run/ts-plugin
       '@rrlab/tsdown-config':
         specifier: workspace:*
         version: link:run-run/tsdown-config
+      '@rrlab/tsdown-plugin':
+        specifier: workspace:*
+        version: link:run-run/tsdown-plugin
       '@types/node':
         specifier: latest
         version: 25.9.1
@@ -65,6 +65,25 @@ importers:
       '@biomejs/biome':
         specifier: '>=2.0.0'
         version: 2.4.4
+
+  run-run/biome-plugin:
+    dependencies:
+      '@vlandoss/clibuddy':
+        specifier: workspace:*
+        version: link:../../shared/clibuddy
+      comment-json:
+        specifier: 4.2.5
+        version: 4.2.5
+    devDependencies:
+      '@biomejs/biome':
+        specifier: 2.4.4
+        version: 2.4.4
+      '@rrlab/cli':
+        specifier: workspace:*
+        version: link:../cli
+      '@rrlab/tsdown-config':
+        specifier: workspace:^
+        version: link:../tsdown-config
 
   run-run/cli:
     dependencies:
@@ -112,26 +131,7 @@ importers:
         specifier: 0.22.0
         version: 0.22.0(typescript@6.0.3)(unrun@0.2.39)
 
-  run-run/plugin-biome:
-    dependencies:
-      '@vlandoss/clibuddy':
-        specifier: workspace:*
-        version: link:../../shared/clibuddy
-      comment-json:
-        specifier: 4.2.5
-        version: 4.2.5
-    devDependencies:
-      '@biomejs/biome':
-        specifier: 2.4.4
-        version: 2.4.4
-      '@rrlab/cli':
-        specifier: workspace:*
-        version: link:../cli
-      '@rrlab/tsdown-config':
-        specifier: workspace:^
-        version: link:../tsdown-config
-
-  run-run/plugin-oxc:
+  run-run/oxc-plugin:
     dependencies:
       '@vlandoss/clibuddy':
         specifier: workspace:*
@@ -153,7 +153,19 @@ importers:
         specifier: 0.15.0
         version: 0.15.0
 
-  run-run/plugin-ts:
+  run-run/ts-config:
+    dependencies:
+      '@total-typescript/tsconfig':
+        specifier: 1.0.4
+        version: 1.0.4
+      '@types/node':
+        specifier: '>=20'
+        version: 25.9.1
+      typescript:
+        specifier: '>=5.0.0'
+        version: 6.0.3
+
+  run-run/ts-plugin:
     dependencies:
       '@vlandoss/clibuddy':
         specifier: workspace:*
@@ -172,7 +184,13 @@ importers:
         specifier: 6.0.3
         version: 6.0.3
 
-  run-run/plugin-tsdown:
+  run-run/tsdown-config:
+    dependencies:
+      tsdown:
+        specifier: '>=0.22.0'
+        version: 0.22.0(typescript@6.0.3)(unrun@0.2.39)
+
+  run-run/tsdown-plugin:
     dependencies:
       '@vlandoss/clibuddy':
         specifier: workspace:*
@@ -189,24 +207,6 @@ importers:
         version: link:../tsdown-config
       tsdown:
         specifier: 0.22.0
-        version: 0.22.0(typescript@6.0.3)(unrun@0.2.39)
-
-  run-run/ts-config:
-    dependencies:
-      '@total-typescript/tsconfig':
-        specifier: 1.0.4
-        version: 1.0.4
-      '@types/node':
-        specifier: '>=20'
-        version: 25.9.1
-      typescript:
-        specifier: '>=5.0.0'
-        version: 6.0.3
-
-  run-run/tsdown-config:
-    dependencies:
-      tsdown:
-        specifier: '>=0.22.0'
         version: 0.22.0(typescript@6.0.3)(unrun@0.2.39)
 
   shared/clibuddy:
@@ -306,10 +306,6 @@ packages:
     resolution: {integrity: sha512-qSs4ifwzKJSV39ucNjsvc6WVHs6b7S03sOh2OcHF9UHfVPqWWALUsNUVzhSBiItjRZoLHx7nIarVjqKVusUZ1Q==}
     engines: {node: '>=6.9.0'}
 
-  '@babel/helper-validator-identifier@8.0.0-rc.3':
-    resolution: {integrity: sha512-8AWCJ2VJJyDFlGBep5GpaaQ9AAaE/FjAcrqI7jyssYhtL7WGV0DOKpJsQqM037xDbpRLHXsY8TwU7zDma7coOw==}
-    engines: {node: ^20.19.0 || >=22.12.0}
-
   '@babel/helper-validator-identifier@8.0.0-rc.5':
     resolution: {integrity: sha512-ehJDxHvtbZ85RtX/L2fi0h9AGsBNqB5Euv1EB8RMAvGYvD+2X+QbpzzOpbklnNXO+WSZJNOaetw2BBj27xsWVg==}
     engines: {node: ^22.18.0 || >=24.11.0}
@@ -317,11 +313,6 @@ packages:
   '@babel/parser@7.29.3':
     resolution: {integrity: sha512-b3ctpQwp+PROvU/cttc4OYl4MzfJUWy6FZg+PMXfzmt/+39iHVF0sDfqay8TQM3JA2EUOyKcFZt75jWriQijsA==}
     engines: {node: '>=6.0.0'}
-    hasBin: true
-
-  '@babel/parser@8.0.0-rc.3':
-    resolution: {integrity: sha512-B20dvP3MfNc/XS5KKCHy/oyWl5IA6Cn9YjXRdDlCjNmUFrjvLXMNUfQq/QUy9fnG2gYkKKcrto2YaF9B32ToOQ==}
-    engines: {node: ^20.19.0 || >=22.12.0}
     hasBin: true
 
   '@babel/parser@8.0.0-rc.4':
@@ -341,10 +332,6 @@ packages:
   '@babel/types@7.29.0':
     resolution: {integrity: sha512-LwdZHpScM4Qz8Xw2iKSzS+cfglZzJGvofQICy7W7v4caru4EaAmyUuO6BGrbyQ2mYV11W0U8j5mBhd14dd3B0A==}
     engines: {node: '>=6.9.0'}
-
-  '@babel/types@8.0.0-rc.3':
-    resolution: {integrity: sha512-mOm5ZrYmphGfqVWoH5YYMTITb3cDXsFgmvFlvkvWDMsR9X8RFnt7a0Wb6yNIdoFsiMO9WjYLq+U/FMtqIYAF8Q==}
-    engines: {node: ^20.19.0 || >=22.12.0}
 
   '@babel/types@8.0.0-rc.5':
     resolution: {integrity: sha512-JeSVu/m8x/zpp4CLjYHVNXuhEyOkhPXuxM8YOXjh6L4LlvQNKuUNOTo5KdBuKAcTDHw8DquToTaEkhsBqPXOaA==}
@@ -2136,17 +2123,11 @@ snapshots:
 
   '@babel/helper-validator-identifier@7.28.5': {}
 
-  '@babel/helper-validator-identifier@8.0.0-rc.3': {}
-
   '@babel/helper-validator-identifier@8.0.0-rc.5': {}
 
   '@babel/parser@7.29.3':
     dependencies:
       '@babel/types': 7.29.0
-
-  '@babel/parser@8.0.0-rc.3':
-    dependencies:
-      '@babel/types': 8.0.0-rc.3
 
   '@babel/parser@8.0.0-rc.4':
     dependencies:
@@ -2162,11 +2143,6 @@ snapshots:
     dependencies:
       '@babel/helper-string-parser': 7.27.1
       '@babel/helper-validator-identifier': 7.28.5
-
-  '@babel/types@8.0.0-rc.3':
-    dependencies:
-      '@babel/helper-string-parser': 8.0.0-rc.5
-      '@babel/helper-validator-identifier': 8.0.0-rc.3
 
   '@babel/types@8.0.0-rc.5':
     dependencies:
@@ -2877,7 +2853,7 @@ snapshots:
 
   ast-kit@3.0.0-beta.1:
     dependencies:
-      '@babel/parser': 8.0.0-rc.3
+      '@babel/parser': 8.0.0-rc.5
       estree-walker: 3.0.3
       pathe: 2.0.3
 

@@ -1,4 +1,4 @@
-# @rrlab/plugin-biome
+# @rrlab/biome-plugin
 
 Biome plugin for [`@rrlab/cli`](https://npmjs.com/package/@rrlab/cli). Provides `lint`, `format`, and `jsc` capabilities backed by [Biome](https://biomejs.dev).
 
@@ -8,7 +8,7 @@ Biome plugin for [`@rrlab/cli`](https://npmjs.com/package/@rrlab/cli). Provides 
 rr plugins add biome
 ```
 
-`rr plugins add` installs `@rrlab/plugin-biome`, adds `@biomejs/biome` as a `devDependency`, and (with your confirmation) scaffolds a `biome.json` extending [`@rrlab/biome-config`](https://npmjs.com/package/@rrlab/biome-config). When `biome.json` already exists you can choose to patch it, leave it alone, or overwrite it.
+`rr plugins add` installs `@rrlab/biome-plugin`, adds `@biomejs/biome` as a `devDependency`, and (with your confirmation) scaffolds a `biome.json` extending [`@rrlab/biome-config`](https://npmjs.com/package/@rrlab/biome-config). When `biome.json` already exists you can choose to patch it, leave it alone, or overwrite it.
 
 ## What it provides
 

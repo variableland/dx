@@ -15,7 +15,7 @@ export default defineConfig({
 `;
 
 const ONE_PLUGIN_CONFIG = `import { defineConfig } from "@rrlab/cli/config";
-import biome from "@rrlab/plugin-biome";
+import biome from "@rrlab/biome-plugin";
 
 export default defineConfig({
   plugins: [biome()],
@@ -23,8 +23,8 @@ export default defineConfig({
 `;
 
 const TWO_PLUGINS_CONFIG = `import { defineConfig } from "@rrlab/cli/config";
-import biome from "@rrlab/plugin-biome";
-import ts from "@rrlab/plugin-ts";
+import biome from "@rrlab/biome-plugin";
+import ts from "@rrlab/ts-plugin";
 
 export default defineConfig({
   plugins: [biome(), ts()],
@@ -51,28 +51,28 @@ describe("ConfigAstService", () => {
   describe("addPlugin", () => {
     it("adds the import and pushes a call onto plugins[]", () => {
       const mod = parseModule(EMPTY_CONFIG);
-      const result = svc.addPlugin(mod, { exportName: "biome", pkgName: "@rrlab/plugin-biome" });
+      const result = svc.addPlugin(mod, { exportName: "biome", pkgName: "@rrlab/biome-plugin" });
       expect(result.changed).toBe(true);
       const { code } = generateCode(mod);
-      expect(code).toContain(`import biome from "@rrlab/plugin-biome"`);
+      expect(code).toContain(`import biome from "@rrlab/biome-plugin"`);
       expect(code).toMatch(/plugins:\s*\[\s*biome\(\)\s*\]/);
     });
 
     it("is idempotent — adding the same plugin twice produces a single entry", () => {
       const mod = parseModule(ONE_PLUGIN_CONFIG);
-      const result = svc.addPlugin(mod, { exportName: "biome", pkgName: "@rrlab/plugin-biome" });
+      const result = svc.addPlugin(mod, { exportName: "biome", pkgName: "@rrlab/biome-plugin" });
       expect(result.changed).toBe(false);
       expect(svc.listPlugins(mod)).toEqual(["biome"]);
     });
 
     it("appends to an existing plugins list without disturbing the others", () => {
       const mod = parseModule(ONE_PLUGIN_CONFIG);
-      const result = svc.addPlugin(mod, { exportName: "tsdown", pkgName: "@rrlab/plugin-tsdown" });
+      const result = svc.addPlugin(mod, { exportName: "tsdown", pkgName: "@rrlab/ts-plugindown" });
       expect(result.changed).toBe(true);
       expect(svc.listPlugins(mod)).toEqual(["biome", "tsdown"]);
       const { code } = generateCode(mod);
-      expect(code).toContain(`import tsdown from "@rrlab/plugin-tsdown"`);
-      expect(code).toContain(`import biome from "@rrlab/plugin-biome"`);
+      expect(code).toContain(`import tsdown from "@rrlab/ts-plugindown"`);
+      expect(code).toContain(`import biome from "@rrlab/biome-plugin"`);
     });
   });
 
@@ -83,7 +83,7 @@ describe("ConfigAstService", () => {
       expect(result.changed).toBe(true);
       expect(svc.listPlugins(mod)).toEqual(["biome"]);
       const { code } = generateCode(mod);
-      expect(code).not.toContain(`import ts from "@rrlab/plugin-ts"`);
+      expect(code).not.toContain(`import ts from "@rrlab/ts-plugin"`);
     });
 
     it("is a no-op for a plugin that is not present", () => {
@@ -120,23 +120,23 @@ describe("ConfigAstService", () => {
       expect(loaded.isNew).toBe(false);
       expect(loaded.filepath).toBe(cfgPath);
 
-      svc.addPlugin(loaded.mod, { exportName: "ts", pkgName: "@rrlab/plugin-ts" });
+      svc.addPlugin(loaded.mod, { exportName: "ts", pkgName: "@rrlab/ts-plugin" });
       await svc.save(loaded);
 
       const written = await fs.readFile(cfgPath, "utf8");
-      expect(written).toContain(`import biome from "@rrlab/plugin-biome"`);
-      expect(written).toContain(`import ts from "@rrlab/plugin-ts"`);
+      expect(written).toContain(`import biome from "@rrlab/biome-plugin"`);
+      expect(written).toContain(`import ts from "@rrlab/ts-plugin"`);
       expect(written).toMatch(/plugins:\s*\[\s*biome\(\),\s*ts\(\)\s*\]/);
     });
 
     it("writes a brand-new minimal config when none existed and a plugin was added", async () => {
       const loaded = await svc.load(tmpDir);
-      svc.addPlugin(loaded.mod, { exportName: "biome", pkgName: "@rrlab/plugin-biome" });
+      svc.addPlugin(loaded.mod, { exportName: "biome", pkgName: "@rrlab/biome-plugin" });
       await svc.save(loaded);
 
       const written = await fs.readFile(loaded.filepath, "utf8");
       expect(written).toContain(`import { defineConfig } from "@rrlab/cli/config"`);
-      expect(written).toContain(`import biome from "@rrlab/plugin-biome"`);
+      expect(written).toContain(`import biome from "@rrlab/biome-plugin"`);
       expect(written).toContain(`biome()`);
     });
 

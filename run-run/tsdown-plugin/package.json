@@ -1,15 +1,15 @@
 {
-  "name": "@rrlab/plugin-biome",
-  "version": "0.1.0",
-  "description": "Biome plugin for @rrlab/cli — provides lint, format, and jsc capabilities.",
-  "homepage": "https://github.com/variableland/dx/tree/main/run-run/plugin-biome#readme",
+  "name": "@rrlab/tsdown-plugin",
+  "version": "0.0.0",
+  "description": "tsdown plugin for @rrlab/cli — provides the pack capability for building TS libraries.",
+  "homepage": "https://github.com/variableland/dx/tree/main/run-run/tsdown-plugin#readme",
   "bugs": {
     "url": "https://github.com/variableland/dx/issues"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/variableland/dx.git",
-    "directory": "run-run/plugin-biome"
+    "directory": "run-run/tsdown-plugin"
   },
   "license": "MIT",
   "author": "rcrd <rcrd@variable.land>",
@@ -37,19 +37,20 @@
   },
   "scripts": {
     "build": "tsdown",
-    "test": "vitest run"
+    "test": "vitest run",
+    "prepublishOnly": "pnpm build"
   },
   "dependencies": {
     "@vlandoss/clibuddy": "workspace:*",
-    "comment-json": "4.2.5"
+    "magicast": "0.3.5"
   },
   "peerDependencies": {
-    "@biomejs/biome": ">=2.0.0",
-    "@rrlab/cli": "workspace:*"
+    "@rrlab/cli": "workspace:*",
+    "tsdown": ">=0.22.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.4.4",
     "@rrlab/cli": "workspace:*",
-    "@rrlab/tsdown-config": "workspace:^"
+    "@rrlab/tsdown-config": "workspace:^",
+    "tsdown": "0.22.0"
   }
 }
