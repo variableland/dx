@@ -65,7 +65,7 @@ export async function install(ctx: InstallContext): Promise<InstallResult> {
 
   const devDependencies: Record<string, string> = {
     tsdown: TOOL_VERSIONS.tsdown.install,
-    [CONFIG_PKG]: "^0.1.0",
+    [CONFIG_PKG]: await ctx.release.resolve(CONFIG_PKG),
   };
 
   if (action === "create" || action === "overwrite") {

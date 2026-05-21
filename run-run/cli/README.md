@@ -35,6 +35,26 @@ pnpm rr help
 
 See [`CLI.md`](./CLI.md) for the full reference (auto-generated per release).
 
+## Plugins
+
+`rr` is a microkernel: every tool (Biome, TypeScript, tsdown, …) lives in its own `@rrlab/<tool>-plugin` package. Install one with:
+
+```sh
+rr plugins add biome
+```
+
+This installs `@rrlab/biome-plugin` plus its peer tool and shared config, scaffolds `biome.json` if missing, and wires the plugin into `run-run.config.{ts,mts}`.
+
+To install from a specific dist-tag (e.g. a PR preview release published as `pr-<N>`, or a custom tag), append `@<spec>`:
+
+```sh
+rr plugins add biome@pr-226   # preview tag
+rr plugins add biome@next     # any dist-tag
+rr plugins add biome@^0.1.0   # explicit version range (sibling configs still use latest)
+```
+
+When the spec is a dist-tag, `rr` resolves any `@rrlab/*-config` sibling at the same tag, falling back to `latest` if the registry doesn't have the sibling at that tag.
+
 ## Shell completion
 
 `rr` ships a `completion` subcommand that prints a shell-specific script.
