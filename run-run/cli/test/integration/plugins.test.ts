@@ -66,6 +66,20 @@ describe("rr plugins", () => {
       expect(r.status).toBe(0);
     });
 
+    test("upgrades the plugin to <spec> when it is already in package.json", () => {
+      fixture = makeFixture("plugins-add-upgrade", {
+        "package.json": `${JSON.stringify(
+          { name: "rr-test-fixture", version: "0.0.0", private: true, devDependencies: { "@rrlab/biome-plugin": "0.1.0" } },
+          null,
+          2,
+        )}\n`,
+      });
+      const r = cli("plugins add biome@pr-226 --dry-run", { cwd: fixture.dir });
+      const combined = r.stdout + r.stderr;
+      expect(combined).toMatch(/Would: install @rrlab\/biome-plugin@pr-226.*will be updated to this spec/);
+      expect(r.status).toBe(0);
+    });
+
     test("at a pnpm workspace root, the plan targets the workspace root", () => {
       fixture = makeFixture("plugins-add-monorepo", {
         "package.json": fixtures.pkg(),

@@ -93,7 +93,7 @@ async function runAdd(ctx: Context, name: string, opts: AddOptions) {
   const loaded = await ast.load(ctx.appPkg.dirPath);
   const inConfig = !loaded.isNew && ast.hasPlugin(loaded.mod, exportName);
 
-  if (inPkg && inConfig && !opts.force) {
+  if (inPkg && inConfig && !opts.force && !spec) {
     clack.log.warn(`${pkgName} is already installed and configured. Use --force to re-run install.`);
     clack.outro("Nothing to do.");
     return;
@@ -103,11 +103,16 @@ async function runAdd(ctx: Context, name: string, opts: AddOptions) {
   const wsChoice = resolveWorkspaceChoice(ctx.appPkg, pm);
   const workspace = toNypmWorkspace(wsChoice);
   const targetLabel = describeWorkspaceChoice(wsChoice);
+  // A spec means "(re)install at this spec" — upgrade even when the package is already in package.json.
+  const willInstall = !inPkg || !!spec;
 
   if (opts.dryRun) {
-    clack.log.info(
-      `Would: install ${installSpec} as a devDependency in ${targetLabel}${inPkg ? " (already present, skipped)" : ""}.`,
-    );
+    const presence = willInstall
+      ? inPkg
+        ? " (already present, will be updated to this spec)"
+        : ""
+      : " (already present, skipped)";
+    clack.log.info(`Would: install ${installSpec} as a devDependency in ${targetLabel}${presence}.`);
     if (!inConfig) {
       const rel = path.relative(ctx.appPkg.dirPath, loaded.filepath) || loaded.filepath;
       clack.log.info(`Would: add ${exportName}() to ${rel} (plugins[]).`);
@@ -118,11 +123,12 @@ async function runAdd(ctx: Context, name: string, opts: AddOptions) {
   }
 
   let installedNow = false;
-  if (!inPkg) {
+  if (willInstall) {
     await withSpinner(`Installing ${installSpec}`, async () => {
       await addDependency([installSpec], { cwd: ctx.appPkg.dirPath, dev: true, silent: true, workspace });
     });
-    installedNow = true;
+    // Only mark for rollback when this was a fresh install — a failed upgrade can't be safely reverted to the previous version.
+    if (!inPkg) installedNow = true;
   }
 
   let installResult: InstallResult | undefined;
