@@ -1,0 +1,48 @@
+{
+  "name": "@rrlab/tsdown-config",
+  "version": "0.0.0",
+  "description": "Shared tsdown configuration helpers used by @rrlab/plugin-tsdown.",
+  "homepage": "https://github.com/variableland/dx/tree/main/run-run/tsdown-config#readme",
+  "bugs": {
+    "url": "https://github.com/variableland/dx/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/variableland/dx.git",
+    "directory": "run-run/tsdown-config"
+  },
+  "license": "MIT",
+  "author": "rcrd <rcrd@variable.land>",
+  "keywords": [
+    "tsdown",
+    "config",
+    "presets",
+    "rrlab"
+  ],
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      }
+    }
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "build": "tsdown"
+  },
+  "peerDependencies": {
+    "tsdown": ">=0.22.0"
+  }
+}

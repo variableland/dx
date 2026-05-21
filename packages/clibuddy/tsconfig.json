@@ -1,3 +1,0 @@
-{
-  "extends": ["@vlandoss/config/ts/no-dom/lib"]
-}
