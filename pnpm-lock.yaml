@@ -96,6 +96,12 @@ importers:
       '@rrlab/tsdown-config':
         specifier: workspace:^
         version: link:../tsdown-config
+      '@types/semver':
+        specifier: ^7.7.1
+        version: 7.7.1
+      semver:
+        specifier: ^7.8.1
+        version: 7.8.1
 
   run-run/cli:
     dependencies:
@@ -155,6 +161,9 @@ importers:
       '@rrlab/tsdown-config':
         specifier: workspace:^
         version: link:../tsdown-config
+      '@types/semver':
+        specifier: ^7.7.1
+        version: 7.7.1
       oxfmt:
         specifier: 0.35.0
         version: 0.35.0
@@ -164,6 +173,9 @@ importers:
       oxlint-tsgolint:
         specifier: 0.15.0
         version: 0.15.0
+      semver:
+        specifier: ^7.8.1
+        version: 7.8.1
 
   run-run/ts-config:
     dependencies:
@@ -192,6 +204,12 @@ importers:
       '@rrlab/tsdown-config':
         specifier: workspace:^
         version: link:../tsdown-config
+      '@types/semver':
+        specifier: ^7.7.1
+        version: 7.7.1
+      semver:
+        specifier: ^7.8.1
+        version: 7.8.1
       typescript:
         specifier: 6.0.3
         version: 6.0.3
@@ -217,6 +235,12 @@ importers:
       '@rrlab/tsdown-config':
         specifier: workspace:^
         version: link:../tsdown-config
+      '@types/semver':
+        specifier: ^7.7.1
+        version: 7.7.1
+      semver:
+        specifier: ^7.8.1
+        version: 7.8.1
       tsdown:
         specifier: 0.22.0
         version: 0.22.0(typescript@6.0.3)(unrun@0.2.39)
@@ -1187,6 +1211,9 @@ packages:
   '@types/node@25.9.1':
     resolution: {integrity: sha512-xfrlY7UD5rMJk3ZVJP8BNzS28J36YJg+xp+LPXV1TdWxr8uMH5A860QNxYDGQe/ylDSgjxE52Q9VnO7p75tJxg==}
 
+  '@types/semver@7.7.1':
+    resolution: {integrity: sha512-FmgJfu+MOcQ370SD0ev7EI8TlCAfKYU+B4m5T3yXc1CiRN94g/SZPtsCkk506aUDtlMnFZvasDwHHUcZUEaYuA==}
+
   '@usage-spec/commander@1.1.0':
     resolution: {integrity: sha512-hVv+ccKtcPaiaywLrm7Q/Nb4nGdRD319FBhfmTWQq3yUlS1SK/pmwyn0+BFQGAYN4uOMxvYDrqPH+qXpmINrkg==}
 
@@ -1922,6 +1949,11 @@ packages:
 
   semver@7.8.0:
     resolution: {integrity: sha512-AcM7dV/5ul4EekoQ29Agm5vri8JNqRyj39o0qpX6vDF2GZrtutZl5RwgD1XnZjiTAfncsJhMI48QQH3sN87YNA==}
+    engines: {node: '>=10'}
+    hasBin: true
+
+  semver@7.8.1:
+    resolution: {integrity: sha512-rkVq3IXh+4FDGch+KwzX3aV9W3kO54GyEgpvBzSyctDA6Xtd7RJQV1xmXbeQp5v7+VzLOfVqiutSE6GICgPFvg==}
     engines: {node: '>=10'}
     hasBin: true
 
@@ -2971,6 +3003,8 @@ snapshots:
     dependencies:
       undici-types: 7.24.6
 
+  '@types/semver@7.7.1': {}
+
   '@usage-spec/commander@1.1.0':
     dependencies:
       '@usage-spec/core': 1.1.0
@@ -3681,6 +3715,8 @@ snapshots:
 
   semver@7.8.0: {}
 
+  semver@7.8.1: {}
+
   shebang-command@2.0.0:
     dependencies:
       shebang-regex: 3.0.0
@@ -3759,7 +3795,7 @@ snapshots:
       picomatch: 4.0.4
       rolldown: 1.0.1
       rolldown-plugin-dts: 0.25.1(rolldown@1.0.1)(typescript@6.0.3)
-      semver: 7.8.0
+      semver: 7.8.1
       tinyexec: 1.1.2
       tinyglobby: 0.2.16
       tree-kill: 1.2.2
