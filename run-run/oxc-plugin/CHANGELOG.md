@@ -1,5 +1,57 @@
 # @rrlab/oxc-plugin
 
+## 1.0.0
+
+### Major Changes
+
+- [#229](https://github.com/variableland/dx/pull/229) [`696de73`](https://github.com/variableland/dx/commit/696de73e4f602b860586df413757274dabc1c198) Thanks [@rqbazan](https://github.com/rqbazan)! - ### Declarative plugin shape + first-class `only` narrowing
+
+  Every official plugin factory now accepts an `only?: readonly Kind[]` option that narrows which capabilities the plugin contributes to the kernel's registry. The `only` array is typed against the kinds _that plugin_ provides — `biome({ only: ["lint", "format"] })` and `oxc({ only: ["tsc"] })` are both valid; `oxc({ only: ["pack"] })` is a compile error.
+
+  This unblocks host configurations that mix plugins with overlapping capabilities — for example, biome for lint+format alongside oxc for type-aware checks:
+
+  ```ts
+  import biome from "@rrlab/biome-plugin";
+  import oxc from "@rrlab/oxc-plugin";
+  import { defineConfig } from "@rrlab/cli/config";
+
+  export default defineConfig({
+    plugins: [biome({ only: ["lint", "format"] }), oxc({ only: ["tsc"] })],
+  });
+  ```
+
+  ### `@rrlab/oxc-plugin` — new `tsc` capability
+
+  `@rrlab/oxc-plugin` now provides a `tsc` capability backed by the `oxlint-tsgolint` peer (already installed by `rr plugins add oxc`). `rr tsc` configured with the oxc plugin runs `oxlint --type-aware --type-check`.
+
+  ### `@rrlab/cli` — better multi-provider error
+
+  The error thrown when two plugins claim the same capability now references the `only` syntax explicitly, e.g.:
+
+  > Multiple plugins provide capability 'lint': biome, oxc. Narrow each plugin's capabilities in run-run.config.ts using the 'only' option — e.g. biome({ only: ['lint'] }) or oxc({ only: ['lint'] }).
+
+  ### Plugin authoring — declarative shape (internal-only)
+
+  Plugins now declare `capabilities` (a `{ kind: service }` map) rather than implementing an imperative `setup()`. The kernel-internal SDK at `@rrlab/cli/plugin` applies `only` narrowing, deduplicates bin probes across services that share a `pkg`, and surfaces a single canonical "requires X to be installed" error when a peer-installed tool is missing. New plugin-authoring helpers `decideScaffold` and `pickPreset` are exported from `@rrlab/cli/plugin` and are the canonical path for any user interaction during `rr plugins add`.
+
+  The plugin API remains internal to `@rrlab/*` (no third-party authoring contract). Architectural rationale recorded in `decisions/007-per-plugin-only-option.md` (superseded by 009) and `decisions/009-declarative-plugin-shape.md`.
+
+### Patch Changes
+
+- [#229](https://github.com/variableland/dx/pull/229) [`696de73`](https://github.com/variableland/dx/commit/696de73e4f602b860586df413757274dabc1c198) Thanks [@rqbazan](https://github.com/rqbazan)! - Refresh stale install ranges in `oxc-plugin`'s `TOOL_VERSIONS` so `rr plugins add oxc` no longer pins users to old 0.x minors. `^0.X.Y` semver on 0.x packages only allows patch bumps — `oxfmt ^0.30.0` was strands at 0.30.x while upstream shipped through 0.51.0, and `oxlint-tsgolint ^0.15.0` strands at 0.15.x while upstream shipped 0.23.0.
+
+  - `oxfmt`: install `^0.30.0` → `^0.51.0`; devDep `0.35.0` → `0.51.0`.
+  - `oxlint-tsgolint`: install `^0.15.0` → `^0.23.0`; devDep `0.15.0` → `0.23.0`.
+  - `oxlint`: install stays `^1.0.0` (caret on 1.x already covers 1.66.x); devDep `1.50.0` → `1.66.0`.
+  - `@biomejs/biome`: install stays `^2.0.0` (caret on 2.x covers latest); devDep `2.4.4` → `2.4.15`.
+
+- [#229](https://github.com/variableland/dx/pull/229) [`696de73`](https://github.com/variableland/dx/commit/696de73e4f602b860586df413757274dabc1c198) Thanks [@rqbazan](https://github.com/rqbazan)! - `TOOL_VERSIONS` now carries only `install` (the prescriptive pin used by `rr plugins add`). The `peer` field is gone — `package.json#peerDependencies` is the single source of truth for the peer contract. The per-plugin `tool-versions.test.ts` asserts `semver.subset(install, peerDependencies[name])` instead of string-equality with a duplicated `peer` field. No runtime behaviour change — `peer` was never read outside its parity test.
+
+  Architectural rationale: `decisions/010-tool-versions-install-only.md`.
+
+- Updated dependencies [[`696de73`](https://github.com/variableland/dx/commit/696de73e4f602b860586df413757274dabc1c198)]:
+  - @rrlab/cli@1.0.0
+
 ## 0.1.1
 
 ### Patch Changes
