@@ -23,7 +23,7 @@ const PACKAGE_MANAGER = "pnpm" as const;
 const NPM_NAME_RE = /^(?:@[a-z0-9-~][a-z0-9-._~]*\/)?[a-z0-9-~][a-z0-9-._~]*$/;
 
 function validateProjectName(name: string): string | undefined {
-  if (!name || !name.trim()) return "Name is required.";
+  if (!name?.trim()) return "Name is required.";
   if (/\s/.test(name)) return "Name cannot contain whitespace.";
   if (name.startsWith(".") || name.startsWith("/") || name.startsWith("\\")) {
     return "Name cannot start with '.', '/' or '\\'.";
