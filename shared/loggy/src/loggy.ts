@@ -40,15 +40,15 @@ export class Loggy implements AnyLogger {
     this.#consola.error(this.#format(...args));
   }
 
-  info(opts: LogFnOptions | unknown, ...args: unknown[]) {
+  info(opts: LogFnOptions | string, ...args: unknown[]) {
     this.#consola.info(this.#format(opts, ...args));
   }
 
-  trace(opts: LogFnOptions | unknown, ...args: unknown[]) {
+  trace(opts: LogFnOptions | string, ...args: unknown[]) {
     this.#consola.trace(this.#format(opts, ...args));
   }
 
-  warn(opts: LogFnOptions | unknown, ...args: unknown[]) {
+  warn(opts: LogFnOptions | string, ...args: unknown[]) {
     this.#consola.warn(this.#format(opts, ...args));
   }
 
@@ -60,11 +60,11 @@ export class Loggy implements AnyLogger {
     });
   }
 
-  start(opts: LogFnOptions | unknown, ...args: unknown[]) {
+  start(opts: LogFnOptions | string, ...args: unknown[]) {
     this.#consola.start(this.#format(opts, ...args));
   }
 
-  success(opts: LogFnOptions | unknown, ...args: unknown[]) {
+  success(opts: LogFnOptions | string, ...args: unknown[]) {
     this.#consola.success(this.#format(opts, ...args));
   }
 

@@ -7,6 +7,8 @@ import {
   type Linter,
   type LintOptions,
   ToolService,
+  type TypeChecker,
+  type TypeCheckOptions,
   type UninstallContext,
   type UninstallResult,
 } from "@rrlab/cli/plugin";
@@ -40,6 +42,16 @@ export class OxfmtService extends ToolService implements Formatter {
   }
 }
 
+export class OxlintTypeCheckService extends ToolService implements TypeChecker {
+  constructor(shellService: ShellService) {
+    super({ pkg: "oxlint", ui: UI_LINT, shellService, from: FROM });
+  }
+
+  async check(options: TypeCheckOptions = {}): Promise<void> {
+    await this.exec(["--type-aware", "--type-check"], { cwd: options.cwd, verbose: !options.cwd });
+  }
+}
+
 export async function install(_ctx: InstallContext): Promise<InstallResult> {
   return {
     devDependencies: {
@@ -54,27 +66,16 @@ export async function uninstall(_ctx: UninstallContext): Promise<UninstallResult
   return { removeDependencies: ["oxlint", "oxfmt", "oxlint-tsgolint"] };
 }
 
-const oxc = definePlugin<void>(() => ({
+const oxc = definePlugin(() => ({
   name: "oxc",
   apiVersion: 1,
   install,
   uninstall,
-  async setup({ shell }) {
-    const lintSvc = new OxlintService(shell);
-    const fmtSvc = new OxfmtService(shell);
-    try {
-      await Promise.all([lintSvc.getBinDir(), fmtSvc.getBinDir()]);
-    } catch (_err) {
-      throw new Error(
-        "@rrlab/oxc-plugin requires oxlint and oxfmt to be installed in the host project. " +
-          "Run: rr plugins add oxc  (or: pnpm add -D oxlint oxfmt)",
-      );
-    }
-    return {
-      lint: lintSvc,
-      format: fmtSvc,
-    };
-  },
+  capabilities: ({ shell }) => ({
+    lint: new OxlintService(shell),
+    format: new OxfmtService(shell),
+    tsc: new OxlintTypeCheckService(shell),
+  }),
 }));
 
 export default oxc;

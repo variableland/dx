@@ -24,25 +24,25 @@ export type DoctorResult = {
 
 export type Doctor = {
   ui: string;
-  doctor(): Promise<DoctorResult>;
+  doctor: () => Promise<DoctorResult>;
 };
 
 export type Formatter = {
   bin: string;
   ui: string;
-  format(options: FormatOptions): Promise<void>;
+  format: (options: FormatOptions) => Promise<void>;
 };
 
 export type Linter = {
   bin: string;
   ui: string;
-  lint(options: LintOptions): Promise<void>;
+  lint: (options: LintOptions) => Promise<void>;
 };
 
 export type StaticChecker = {
   bin: string;
   ui: string;
-  check(options: StaticCheckerOptions): Promise<void>;
+  check: (options: StaticCheckerOptions) => Promise<void>;
 };
 
 export type TypeCheckOptions = {
@@ -53,5 +53,5 @@ export type TypeCheckOptions = {
 export type TypeChecker = {
   bin: string;
   ui: string;
-  check(options?: TypeCheckOptions): Promise<void>;
+  check: (options?: TypeCheckOptions) => Promise<void>;
 };

@@ -212,7 +212,7 @@ async function runRemove(ctx: Context, alias: OfficialAlias, opts: RemoveOptions
         });
       }
     } catch (err) {
-      clack.log.warn(`Could not load ${pkgName} for uninstall hook: ${err instanceof Error ? err.message : err}`);
+      clack.log.warn(`Could not load ${pkgName} for uninstall hook: ${err instanceof Error ? err.message : String(err)}`);
     }
   }
 
@@ -290,9 +290,9 @@ function isDistTag(spec: string): boolean {
 function hasInPackageJson(ctx: Context, pkgName: string): boolean {
   const pkg = ctx.appPkg.packageJson;
   const deps = {
-    ...(pkg.dependencies ?? {}),
-    ...(pkg.devDependencies ?? {}),
-    ...(pkg.peerDependencies ?? {}),
+    ...pkg.dependencies,
+    ...pkg.devDependencies,
+    ...pkg.peerDependencies,
   };
   return pkgName in deps;
 }

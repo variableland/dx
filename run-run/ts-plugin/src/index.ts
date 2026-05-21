@@ -1,10 +1,12 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import {
+  decideScaffold,
   definePlugin,
   type FileOp,
   type InstallContext,
   type InstallResult,
+  pickPreset,
   ToolService,
   type TypeChecker,
   type TypeCheckOptions,
@@ -50,18 +52,24 @@ const PRESETS: Record<Preset, PresetInfo> = {
 
 const DEFAULT_PRESET: Preset = "no-dom-app";
 
-type ExistingFileAction = "skip" | "patch" | "overwrite";
-
 export async function install(ctx: InstallContext): Promise<InstallResult> {
   const tsconfigPath = path.join(ctx.appPkg.dirPath, TSCONFIG);
   const fileExists = await pathExists(tsconfigPath);
+  const scaffoldDecision = await decideScaffold(ctx, {
+    label: TSCONFIG,
+    fileExists,
+    patchHint: "update extends, keep my other settings",
+  });
 
-  const scaffoldDecision = await decideScaffoldAction(ctx, fileExists);
   if (scaffoldDecision === "skip") {
     return { devDependencies: { typescript: TOOL_VERSIONS.typescript.install } };
   }
 
-  const preset = await pickPreset(ctx);
+  const preset = await pickPreset(ctx, {
+    message: "Which kind of TS project do you need?",
+    presets: PRESETS,
+    defaultPreset: DEFAULT_PRESET,
+  });
   const presetInfo = PRESETS[preset];
 
   const devDependencies: Record<string, string> = {
@@ -96,7 +104,6 @@ export async function uninstall(ctx: UninstallContext): Promise<UninstallResult>
     return { removeDependencies };
   }
 
-  // Read the current tsconfig to decide between full delete and surgical unset.
   let existing: Record<string, unknown> | undefined;
   try {
     const text = await fs.readFile(tsconfigPath, "utf8");
@@ -119,51 +126,6 @@ export async function uninstall(ctx: UninstallContext): Promise<UninstallResult>
   return { removeDependencies, files };
 }
 
-async function decideScaffoldAction(
-  ctx: InstallContext,
-  fileExists: boolean,
-): Promise<"create" | "patch" | "overwrite" | "skip"> {
-  if (!fileExists) {
-    if (ctx.flags.yes || ctx.flags.nonInteractive) return "create";
-    const choice = await ctx.prompts.confirm({
-      message: `Scaffold ${TSCONFIG} with an @rrlab/ts-config preset?`,
-      initialValue: true,
-    });
-    if (ctx.prompts.isCancel(choice)) throw new Error("Cancelled by user.");
-    return choice ? "create" : "skip";
-  }
-
-  // Existing file. Default to patch for migration safety.
-  if (ctx.flags.yes || ctx.flags.nonInteractive) return "patch";
-
-  const choice = await ctx.prompts.select<ExistingFileAction>({
-    message: `${TSCONFIG} already exists. What do you want to do?`,
-    options: [
-      { value: "patch", label: "Patch — update extends, keep my other settings" },
-      { value: "skip", label: "Skip — leave it alone" },
-      { value: "overwrite", label: "Overwrite — replace with a fresh scaffold" },
-    ],
-    initialValue: "patch",
-  });
-  if (ctx.prompts.isCancel(choice)) throw new Error("Cancelled by user.");
-  return choice;
-}
-
-async function pickPreset(ctx: InstallContext): Promise<Preset> {
-  if (ctx.flags.yes || ctx.flags.nonInteractive) return DEFAULT_PRESET;
-
-  const choice = await ctx.prompts.select<Preset>({
-    message: "Which kind of TS project do you need?",
-    options: (Object.entries(PRESETS) as Array<[Preset, PresetInfo]>).map(([value, meta]) => ({
-      value,
-      label: meta.label,
-    })),
-    initialValue: DEFAULT_PRESET,
-  });
-  if (ctx.prompts.isCancel(choice)) throw new Error("Cancelled by user.");
-  return choice;
-}
-
 async function pathExists(p: string): Promise<boolean> {
   try {
     await fs.access(p);
@@ -173,23 +135,12 @@ async function pathExists(p: string): Promise<boolean> {
   }
 }
 
-const ts = definePlugin<void>(() => ({
+const ts = definePlugin(() => ({
   name: "ts",
   apiVersion: 1,
   install,
   uninstall,
-  async setup({ shell }) {
-    const svc = new TscService(shell);
-    try {
-      await svc.getBinDir();
-    } catch (_err) {
-      throw new Error(
-        "@rrlab/ts-plugin requires typescript to be installed in the host project. " +
-          "Run: rr plugins add ts  (or: pnpm add -D typescript)",
-      );
-    }
-    return { tsc: svc };
-  },
+  capabilities: ({ shell }) => ({ tsc: new TscService(shell) }),
 }));
 
 export default ts;

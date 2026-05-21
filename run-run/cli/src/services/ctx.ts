@@ -52,13 +52,12 @@ export async function createContext(binDir: string): Promise<Context> {
   };
 
   for (const plugin of config.config.plugins ?? []) {
-    if (plugin.apiVersion !== 1) {
-      throw new Error(
-        `Plugin '${plugin.name}' targets apiVersion ${plugin.apiVersion}, but this kernel supports only apiVersion 1.`,
-      );
+    const got = plugin.apiVersion as number;
+    if (got !== 1) {
+      throw new Error(`Plugin '${plugin.name}' targets apiVersion ${got}, but this kernel supports only apiVersion 1.`);
     }
     debug("registering plugin: %s", plugin.name);
-    const capabilities = await plugin.setup(pluginContext);
+    const capabilities = await plugin.capabilities(pluginContext);
     registry.register(plugin, capabilities);
   }
 

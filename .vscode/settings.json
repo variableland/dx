@@ -1,3 +1,4 @@
 {
-  "vitest.configSearchPatternExclude": "{**/node_modules/**,**/.*/**,**/*.timestamp-*,**/templates/**}"
+  "vitest.configSearchPatternExclude": "{**/node_modules/**,**/.*/**,**/*.timestamp-*,**/templates/**}",
+  "oxc.typeAware": true
 }

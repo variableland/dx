@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import path from "node:path";
 import { afterEach, describe, expect, test } from "vitest";
 import { createTestCli, fixtures, makeFixture } from "#test/helpers.ts";
 
@@ -126,6 +128,20 @@ describe("rr plugins", () => {
       const r = cli("plugins remove biome --yes", { cwd: fixture.dir });
       expect(r.stdout + r.stderr).toMatch(/Removed biome\(\) from run-run\.config\.mts/);
       expect(r.status).toBe(0);
+    });
+
+    test("removes an entry that carries an `only` option object", () => {
+      fixture = makeFixture("plugins-remove-only", {
+        "package.json": fixtures.pkg(),
+        "run-run.config.mts": fixtures.config([{ alias: "biome", only: ["lint", "format"] }, "ts"]),
+      });
+      const r = cli("plugins remove biome --yes", { cwd: fixture.dir });
+      expect(r.stdout + r.stderr).toMatch(/Removed biome\(\) from run-run\.config\.mts/);
+      expect(r.status).toBe(0);
+
+      const after = readFileSync(path.join(fixture.dir, "run-run.config.mts"), "utf8");
+      expect(after).not.toMatch(/biome/);
+      expect(after).toMatch(/ts\(\)/);
     });
   });
 });

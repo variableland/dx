@@ -15,7 +15,7 @@ function plugin(name: string): Plugin {
   return {
     name,
     apiVersion: 1,
-    setup: () => ({}),
+    capabilities: async () => ({}),
   };
 }
 
@@ -72,6 +72,13 @@ describe("PluginRegistry", () => {
       registry.register(plugin("biome"), { lint: fakeLinter() });
       registry.register(plugin("eslint"), { lint: fakeLinter() });
       expect(() => registry.get("lint")).toThrowError(/biome.*eslint|eslint.*biome/);
+    });
+
+    it("suggests the 'only' option when reporting multi-provider conflicts", () => {
+      const registry = new PluginRegistry();
+      registry.register(plugin("biome"), { lint: fakeLinter() });
+      registry.register(plugin("oxc"), { lint: fakeLinter() });
+      expect(() => registry.get("lint")).toThrowError(/only:\s*\['lint'\]/);
     });
 
     it("supports tsc and pack kinds", () => {

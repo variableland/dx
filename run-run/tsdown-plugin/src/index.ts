@@ -1,9 +1,11 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import {
+  decideScaffold,
   definePlugin,
   type InstallContext,
   type InstallResult,
+  pickPreset,
   ToolService,
   type UninstallContext,
   type UninstallResult,
@@ -41,8 +43,6 @@ const PRESETS: Record<Preset, PresetInfo> = {
 };
 const DEFAULT_PRESET: Preset = "lib";
 
-type ExistingFileAction = "patch" | "skip" | "overwrite";
-
 export class TsdownService extends ToolService {
   constructor(shellService: ShellService) {
     super({ pkg: "tsdown", ui: UI, shellService, from: FROM });
@@ -55,12 +55,22 @@ export class TsdownService extends ToolService {
 
 export async function install(ctx: InstallContext): Promise<InstallResult> {
   const existingPath = await findExistingConfig(ctx.appPkg.dirPath);
-  const action = await decideScaffoldAction(ctx, existingPath);
+  const action = await decideScaffold(ctx, {
+    label: existingPath ? path.relative(ctx.appPkg.dirPath, existingPath) : DEFAULT_CONFIG_FILENAME,
+    fileExists: existingPath !== null,
+    patchHint: `rewrite to use ${CONFIG_PKG}, keep my options`,
+    unattendedExistingAction: "skip",
+  });
+
   if (action === "skip") {
     return { devDependencies: { tsdown: TOOL_VERSIONS.tsdown.install } };
   }
 
-  const preset = await pickPreset(ctx);
+  const preset = await pickPreset(ctx, {
+    message: "Which kind of build?",
+    presets: PRESETS,
+    defaultPreset: DEFAULT_PRESET,
+  });
   const { factory } = PRESETS[preset];
 
   const devDependencies: Record<string, string> = {
@@ -148,49 +158,6 @@ async function findExistingConfig(cwd: string): Promise<string | null> {
     }
   }
   return null;
-}
-
-async function decideScaffoldAction(ctx: InstallContext, existingPath: string | null): Promise<"create" | ExistingFileAction> {
-  if (!existingPath) {
-    if (ctx.flags.yes || ctx.flags.nonInteractive) return "create";
-    const choice = await ctx.prompts.confirm({
-      message: `Scaffold ${DEFAULT_CONFIG_FILENAME} from ${CONFIG_PKG}?`,
-      initialValue: true,
-    });
-    if (ctx.prompts.isCancel(choice)) throw new Error("Cancelled by user.");
-    return choice ? "create" : "skip";
-  }
-
-  // Existing file: don't silently rewrite under --yes — that's user code.
-  if (ctx.flags.yes || ctx.flags.nonInteractive) return "skip";
-
-  const relPath = path.relative(ctx.appPkg.dirPath, existingPath);
-  const choice = await ctx.prompts.select<ExistingFileAction>({
-    message: `${relPath} already exists. What do you want to do?`,
-    options: [
-      { value: "patch", label: `Patch — rewrite to use ${CONFIG_PKG}, keep my options` },
-      { value: "skip", label: "Skip — leave it alone" },
-      { value: "overwrite", label: "Overwrite — replace with a fresh scaffold" },
-    ],
-    initialValue: "patch",
-  });
-  if (ctx.prompts.isCancel(choice)) throw new Error("Cancelled by user.");
-  return choice;
-}
-
-async function pickPreset(ctx: InstallContext): Promise<Preset> {
-  if (ctx.flags.yes || ctx.flags.nonInteractive) return DEFAULT_PRESET;
-
-  const choice = await ctx.prompts.select<Preset>({
-    message: "Which kind of build?",
-    options: (Object.entries(PRESETS) as Array<[Preset, PresetInfo]>).map(([value, meta]) => ({
-      value,
-      label: meta.label,
-    })),
-    initialValue: DEFAULT_PRESET,
-  });
-  if (ctx.prompts.isCancel(choice)) throw new Error("Cancelled by user.");
-  return choice;
 }
 
 function renderScaffold(factory: FactoryName): string {
@@ -302,23 +269,12 @@ function setCalleeName(mod: ProxifiedModule, newName: string): void {
   ast.callee.name = newName;
 }
 
-const tsdown = definePlugin<void>(() => ({
+const tsdown = definePlugin(() => ({
   name: "tsdown",
   apiVersion: 1,
   install,
   uninstall,
-  async setup({ shell }) {
-    const svc = new TsdownService(shell);
-    try {
-      await svc.getBinDir();
-    } catch (_err) {
-      throw new Error(
-        "@rrlab/tsdown-plugin requires tsdown to be installed in the host project. " +
-          "Run: rr plugins add tsdown  (or: pnpm add -D tsdown)",
-      );
-    }
-    return { pack: svc };
-  },
+  capabilities: ({ shell }) => ({ pack: new TsdownService(shell) }),
 }));
 
 export default tsdown;

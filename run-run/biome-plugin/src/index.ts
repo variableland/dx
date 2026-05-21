@@ -1,6 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import {
+  decideScaffold,
   definePlugin,
   type FileOp,
   type FormatOptions,
@@ -59,7 +60,11 @@ export class BiomeService extends ToolService implements Formatter, Linter, Stat
 export async function install(ctx: InstallContext): Promise<InstallResult> {
   const biomeJsonPath = path.join(ctx.appPkg.dirPath, BIOME_JSON);
   const fileExists = await pathExists(biomeJsonPath);
-  const scaffoldDecision = await decideScaffoldAction(ctx, fileExists);
+  const scaffoldDecision = await decideScaffold(ctx, {
+    label: BIOME_JSON,
+    fileExists,
+    patchHint: `add ${BIOME_CONFIG_PKG} to extends, keep my other settings`,
+  });
 
   if (scaffoldDecision === "skip") {
     return { devDependencies: { "@biomejs/biome": TOOL_VERSIONS["@biomejs/biome"].install } };
@@ -126,37 +131,6 @@ export async function uninstall(ctx: UninstallContext): Promise<UninstallResult>
   return { removeDependencies, files };
 }
 
-type ExistingFileAction = "skip" | "patch" | "overwrite";
-
-async function decideScaffoldAction(
-  ctx: InstallContext,
-  fileExists: boolean,
-): Promise<"create" | "patch" | "overwrite" | "skip"> {
-  if (!fileExists) {
-    if (ctx.flags.yes || ctx.flags.nonInteractive) return "create";
-    const choice = await ctx.prompts.confirm({
-      message: `Scaffold ${BIOME_JSON} with the @rrlab/biome-config preset?`,
-      initialValue: true,
-    });
-    if (ctx.prompts.isCancel(choice)) throw new Error("Cancelled by user.");
-    return choice ? "create" : "skip";
-  }
-
-  if (ctx.flags.yes || ctx.flags.nonInteractive) return "patch";
-
-  const choice = await ctx.prompts.select<ExistingFileAction>({
-    message: `${BIOME_JSON} already exists. What do you want to do?`,
-    options: [
-      { value: "patch", label: "Patch — add @rrlab/biome-config to extends, keep my other settings" },
-      { value: "skip", label: "Skip — leave it alone" },
-      { value: "overwrite", label: "Overwrite — replace with a fresh scaffold" },
-    ],
-    initialValue: "patch",
-  });
-  if (ctx.prompts.isCancel(choice)) throw new Error("Cancelled by user.");
-  return choice;
-}
-
 async function pathExists(p: string): Promise<boolean> {
   try {
     await fs.access(p);
@@ -166,26 +140,14 @@ async function pathExists(p: string): Promise<boolean> {
   }
 }
 
-const biome = definePlugin<void>(() => ({
+const biome = definePlugin(() => ({
   name: "biome",
   apiVersion: 1,
   install,
   uninstall,
-  async setup({ shell }) {
+  capabilities: ({ shell }) => {
     const svc = new BiomeService(shell);
-    try {
-      await svc.getBinDir();
-    } catch (_err) {
-      throw new Error(
-        "@rrlab/biome-plugin requires @biomejs/biome to be installed in the host project. " +
-          "Run: rr plugins add biome  (or: pnpm add -D @biomejs/biome)",
-      );
-    }
-    return {
-      lint: svc,
-      format: svc,
-      jsc: svc,
-    };
+    return { lint: svc, format: svc, jsc: svc };
   },
 }));
 
