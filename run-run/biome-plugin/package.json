@@ -1,6 +1,6 @@
 {
   "name": "@rrlab/biome-plugin",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Biome plugin for @rrlab/cli — provides lint, format, and jsc capabilities.",
   "homepage": "https://github.com/variableland/dx/tree/main/run-run/biome-plugin#readme",
   "bugs": {
