@@ -56,7 +56,7 @@ describe("@rrlab/tsdown-plugin install()", () => {
       const result = await install(installCtx());
       expect(result.devDependencies).toEqual({
         tsdown: expect.stringMatching(/\^?\d/),
-        "@rrlab/tsdown-config": expect.stringMatching(/\^?\d/),
+        "@rrlab/tsdown-config": "latest",
       });
       expect(result.files).toHaveLength(1);
       const op = result.files?.[0];

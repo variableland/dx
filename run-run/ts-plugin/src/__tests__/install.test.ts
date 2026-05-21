@@ -56,7 +56,7 @@ describe("@rrlab/ts-plugin install()", () => {
       const result = await install(installCtx());
       expect(result.devDependencies).toMatchObject({
         typescript: expect.stringMatching(/\^?\d/),
-        "@rrlab/ts-config": expect.stringMatching(/\^?\d/),
+        "@rrlab/ts-config": "latest",
         "@types/node": expect.any(String), // no-dom preset → needs @types/node
       });
       expect(result.files).toHaveLength(1);
