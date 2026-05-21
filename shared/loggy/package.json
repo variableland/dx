@@ -1,0 +1,51 @@
+{
+  "name": "@vlandoss/loggy",
+  "version": "0.2.0",
+  "description": "Console wrapper to make logging fun again",
+  "homepage": "https://github.com/variableland/dx/tree/main/shared/loggy#readme",
+  "bugs": {
+    "url": "https://github.com/variableland/dx/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/variableland/dx.git",
+    "directory": "shared/loggy"
+  },
+  "license": "MIT",
+  "author": "rcrd <rcrd@variable.land>",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "files": [
+    "dist",
+    "src",
+    "!src/**/__tests__",
+    "!src/**/*.test.*"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "prepublishOnly": "pnpm build",
+    "test:types": "rr tsc"
+  },
+  "publishConfig": {
+    "access": "public",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      }
+    }
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "consola": "3.4.2",
+    "debug": "4.4.3"
+  },
+  "devDependencies": {
+    "@types/debug": "4.1.12",
+    "@rrlab/tsdown-config": "workspace:^"
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "name": "@vlandoss/vland",
+  "version": "0.2.0",
+  "description": "The CLI to init a new project in Variable Land",
+  "homepage": "https://github.com/variableland/dx/tree/main/vland/cli#readme",
+  "bugs": {
+    "url": "https://github.com/variableland/dx/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/variableland/dx.git",
+    "directory": "vland/cli"
+  },
+  "license": "MIT",
+  "author": "rcrd <rcrd@variable.land>",
+  "type": "module",
+  "imports": {
+    "#src/*": "./src/*",
+    "#test/*": "./test/*"
+  },
+  "bin": {
+    "vland": "./bin"
+  },
+  "files": [
+    "bin",
+    "dist",
+    "src",
+    "!src/**/__tests__",
+    "!src/**/*.test.*",
+    "tsconfig.json"
+  ],
+  "scripts": {
+    "build": "tsdown && pnpm build:kdl",
+    "build:kdl": "./bin --usage > dist/cli.usage.kdl",
+    "prepublishOnly": "pnpm build",
+    "test": "vitest run",
+    "test:unit": "vitest run --project unit",
+    "test:integration": "vitest run --project integration",
+    "test:types": "rr tsc"
+  },
+  "dependencies": {
+    "@clack/prompts": "0.11.0",
+    "@usage-spec/commander": "1.1.0",
+    "@vlandoss/clibuddy": "workspace:*",
+    "@vlandoss/loggy": "workspace:*",
+    "commander": "14.0.3",
+    "giget": "2.0.0",
+    "nypm": "0.6.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "devDependencies": {
+    "@rrlab/tsdown-config": "workspace:^"
+  }
+}

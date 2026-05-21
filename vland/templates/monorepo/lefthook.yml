@@ -1,0 +1,15 @@
+pre-commit:
+  parallel: true
+  jobs:
+    - name: jsc
+      run: pnpm rr jsc --fix-staged
+      stage_fixed: true
+
+    - name: tsc
+      glob: "*.{ts,tsx,json}"
+      run: pnpm rr tsc
+
+pre-push:
+  jobs:
+    - name: test
+      run: pnpm turbo run test --affected

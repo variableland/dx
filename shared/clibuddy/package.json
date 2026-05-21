@@ -1,0 +1,56 @@
+{
+  "name": "@vlandoss/clibuddy",
+  "version": "0.6.0",
+  "description": "A helper library to create CLIs in Variable Land",
+  "homepage": "https://github.com/variableland/dx/tree/main/shared/clibuddy#readme",
+  "bugs": {
+    "url": "https://github.com/variableland/dx/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/variableland/dx.git",
+    "directory": "shared/clibuddy"
+  },
+  "license": "MIT",
+  "author": "rcrd <rcrd@variable.land>",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "files": [
+    "dist",
+    "src",
+    "!src/**/__tests__",
+    "!src/**/*.test.*"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "prepublishOnly": "pnpm build",
+    "test:types": "rr tsc"
+  },
+  "dependencies": {
+    "@pnpm/fs.find-packages": "1000.0.24",
+    "@pnpm/types": "1001.3.0",
+    "ansis": "4.2.0",
+    "memoize": "10.2.0",
+    "pkg-types": "2.3.0",
+    "std-env": "3.9.0",
+    "tinyexec": "1.1.2",
+    "yaml": "2.8.4"
+  },
+  "publishConfig": {
+    "access": "public",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      }
+    }
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "devDependencies": {
+    "@rrlab/tsdown-config": "workspace:^"
+  }
+}

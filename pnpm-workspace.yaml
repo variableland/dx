@@ -1,6 +1,7 @@
 packages:
-  - packages/*
-  - dotfiles/*
+  - shared/*
+  - run-run/*
+  - vland/cli
 onlyBuiltDependencies:
   - "@biomejs/biome"
   - lefthook
