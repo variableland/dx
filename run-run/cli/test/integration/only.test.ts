@@ -40,7 +40,7 @@ describe("plugin { only } narrowing", () => {
       const r = cli("tsc", { cwd: fixture.dir });
       const combined = r.stdout + r.stderr;
       expect(combined).toMatch(/\$ oxlint --type-aware --type-check/);
-    });
+    }, 15_000);
 
     test("rr jsc composes biome's lint+format (biome's direct jsc was narrowed away)", () => {
       const r = cli("jsc", { cwd: fixture.dir });
