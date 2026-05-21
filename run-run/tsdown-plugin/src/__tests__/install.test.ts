@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import type { ClackPrompts, InstallContext, UninstallContext } from "@rrlab/cli/plugin";
+import { type ClackPrompts, type InstallContext, ReleaseService, type UninstallContext } from "@rrlab/cli/plugin";
 import type { Pkg, ShellService } from "@vlandoss/clibuddy";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { install, uninstall } from "../index.ts";
@@ -24,6 +24,7 @@ function installCtx(overrides: Partial<InstallContext> = {}): InstallContext {
     appPkg: { dirPath: tmpDir } as Pkg,
     prompts: stubPrompts(),
     flags: { force: false, yes: true, nonInteractive: true },
+    release: new ReleaseService(undefined),
     ...overrides,
   };
 }
@@ -219,6 +220,14 @@ describe("@rrlab/tsdown-plugin install()", () => {
       if (op?.kind !== "edit-text") throw new Error("expected edit-text op");
       const input = await fs.readFile(path.join(tmpDir, "tsdown.config.ts"), "utf8");
       expect(() => op.edit(input)).toThrowError(/someOtherBuilder/);
+    });
+  });
+
+  describe("release-driven sibling resolution", () => {
+    it("threads ctx.release.resolve into @rrlab/tsdown-config's install spec", async () => {
+      const release = new ReleaseService("pr-226", { fetcher: async () => new Response("{}", { status: 200 }) });
+      const result = await install(installCtx({ release }));
+      expect(result.devDependencies?.["@rrlab/tsdown-config"]).toBe("pr-226");
     });
   });
 });

@@ -29,3 +29,4 @@ export type {
   UninstallResult,
 } from "#src/plugin/types.ts";
 export { PLUGIN_KINDS } from "#src/plugin/types.ts";
+export { ReleaseService, type ReleaseServiceOptions } from "#src/services/release.ts";

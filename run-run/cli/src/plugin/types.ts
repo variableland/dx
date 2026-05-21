@@ -1,5 +1,6 @@
 import type { Pkg, ShellService } from "@vlandoss/clibuddy";
 import type { AnyLogger as Logger } from "@vlandoss/loggy";
+import type { ReleaseService } from "#src/services/release.ts";
 import type { Doctor, Formatter, Linter, StaticChecker, TypeChecker } from "#src/types/tool.ts";
 
 export type {
@@ -83,6 +84,13 @@ export type InstallContext = {
   appPkg: Pkg;
   prompts: ClackPrompts;
   flags: InstallFlags;
+  /**
+   * The release this install is running against — encapsulates the dist-tag the
+   * user picked (`rr plugins add biome@pr-226`) and resolves install specs for
+   * related packages under it. Use `ctx.release.resolve(pkg)` for every
+   * `@rrlab/*-config` sibling so previews and `latest` work uniformly.
+   */
+  release: ReleaseService;
 };
 
 export type UninstallContext = {

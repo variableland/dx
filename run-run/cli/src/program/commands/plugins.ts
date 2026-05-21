@@ -10,6 +10,7 @@ import { applyJsonEdits } from "#src/services/json-edit.ts";
 import { logger } from "#src/services/logger.ts";
 import { OFFICIAL_PLUGINS, type OfficialAlias, officialAliases } from "#src/services/plugins-registry.ts";
 import { createClackPrompts } from "#src/services/prompts.ts";
+import { ReleaseService } from "#src/services/release.ts";
 import { describeWorkspaceChoice, resolveWorkspaceChoice, toNypmWorkspace } from "#src/services/workspace-target.ts";
 
 type AddOptions = {
@@ -38,11 +39,13 @@ export function createPluginsCommand(ctx: Context) {
   cmd
     .command("add")
     .description("install and configure an @rrlab plugin")
-    .addArgument(new Argument("<name>", "plugin alias").choices(officialAliases()))
+    .addArgument(
+      new Argument("<name>", `plugin alias (${officialAliases().join("|")}), optionally with @<spec> e.g. biome@pr-226`),
+    )
     .option("--force", "re-run install even if the plugin is already configured")
     .option("--yes", "skip prompts and use defaults (non-interactive)")
     .option("--dry-run", "show what would happen, without applying changes")
-    .action((name: OfficialAlias, opts: AddOptions) => runAdd(ctx, name, opts));
+    .action((name: string, opts: AddOptions) => runAdd(ctx, name, opts));
 
   cmd
     .command("remove")
@@ -74,10 +77,16 @@ async function runList(ctx: Context) {
   }
 }
 
-async function runAdd(ctx: Context, alias: OfficialAlias, opts: AddOptions) {
-  const { pkg: pkgName, exportName } = OFFICIAL_PLUGINS[alias];
+async function runAdd(ctx: Context, name: string, opts: AddOptions) {
+  const { alias, spec } = parseAliasSpec(name);
+  if (!(alias in OFFICIAL_PLUGINS)) {
+    throw new Error(`'${alias}' is invalid for argument 'name'. Allowed choices are ${officialAliases().join(", ")}.`);
+  }
+  const { pkg: pkgName, exportName } = OFFICIAL_PLUGINS[alias as OfficialAlias];
+  const tag = spec && isDistTag(spec) ? spec : undefined;
+  const installSpec = spec ? `${pkgName}@${spec}` : pkgName;
 
-  clack.intro(` rr plugins add ${alias} `);
+  clack.intro(` rr plugins add ${name} `);
 
   const inPkg = hasInPackageJson(ctx, pkgName);
   const ast = new ConfigAstService();
@@ -97,7 +106,7 @@ async function runAdd(ctx: Context, alias: OfficialAlias, opts: AddOptions) {
 
   if (opts.dryRun) {
     clack.log.info(
-      `Would: install ${pkgName} as a devDependency in ${targetLabel}${inPkg ? " (already present, skipped)" : ""}.`,
+      `Would: install ${installSpec} as a devDependency in ${targetLabel}${inPkg ? " (already present, skipped)" : ""}.`,
     );
     if (!inConfig) {
       const rel = path.relative(ctx.appPkg.dirPath, loaded.filepath) || loaded.filepath;
@@ -110,8 +119,8 @@ async function runAdd(ctx: Context, alias: OfficialAlias, opts: AddOptions) {
 
   let installedNow = false;
   if (!inPkg) {
-    await withSpinner(`Installing ${pkgName}`, async () => {
-      await addDependency([pkgName], { cwd: ctx.appPkg.dirPath, dev: true, silent: true, workspace });
+    await withSpinner(`Installing ${installSpec}`, async () => {
+      await addDependency([installSpec], { cwd: ctx.appPkg.dirPath, dev: true, silent: true, workspace });
     });
     installedNow = true;
   }
@@ -135,6 +144,7 @@ async function runAdd(ctx: Context, alias: OfficialAlias, opts: AddOptions) {
           yes: !!opts.yes,
           nonInteractive: !!opts.yes,
         },
+        release: new ReleaseService(tag),
       };
       installResult = await plugin.install(installCtx);
     }
@@ -258,6 +268,17 @@ async function runRemove(ctx: Context, alias: OfficialAlias, opts: RemoveOptions
   }
 
   clack.outro(`Plugin '${alias}' removed.`);
+}
+
+function parseAliasSpec(input: string): { alias: string; spec?: string } {
+  const at = input.indexOf("@");
+  if (at <= 0) return { alias: input };
+  return { alias: input.slice(0, at), spec: input.slice(at + 1) };
+}
+
+/** A dist-tag starts with a letter and contains only safe identifier chars. Version ranges (`^0.1`, `>=1`, `0.0.2`, `*`) don't match. */
+function isDistTag(spec: string): boolean {
+  return /^[a-zA-Z][a-zA-Z0-9_.-]*$/.test(spec) && spec !== "latest";
 }
 
 function hasInPackageJson(ctx: Context, pkgName: string): boolean {

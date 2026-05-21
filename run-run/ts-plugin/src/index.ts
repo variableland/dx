@@ -66,7 +66,7 @@ export async function install(ctx: InstallContext): Promise<InstallResult> {
 
   const devDependencies: Record<string, string> = {
     typescript: TOOL_VERSIONS.typescript.install,
-    "@rrlab/ts-config": "latest",
+    "@rrlab/ts-config": await ctx.release.resolve("@rrlab/ts-config"),
   };
   if (presetInfo.needsNode) devDependencies["@types/node"] = TOOL_VERSIONS["@types/node"].install;
 

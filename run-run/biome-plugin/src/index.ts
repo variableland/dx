@@ -67,7 +67,7 @@ export async function install(ctx: InstallContext): Promise<InstallResult> {
 
   const devDependencies: Record<string, string> = {
     "@biomejs/biome": TOOL_VERSIONS["@biomejs/biome"].install,
-    [BIOME_CONFIG_PKG]: "latest",
+    [BIOME_CONFIG_PKG]: await ctx.release.resolve(BIOME_CONFIG_PKG),
   };
 
   const file: FileOp =
