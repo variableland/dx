@@ -184,7 +184,7 @@ const ts = definePlugin<void>(() => ({
       await svc.getBinDir();
     } catch (_err) {
       throw new Error(
-        "@rrlab/plugin-ts requires typescript to be installed in the host project. " +
+        "@rrlab/ts-plugin requires typescript to be installed in the host project. " +
           "Run: rr plugins add ts  (or: pnpm add -D typescript)",
       );
     }

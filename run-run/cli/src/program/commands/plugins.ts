@@ -141,7 +141,7 @@ async function runAdd(ctx: Context, alias: OfficialAlias, opts: AddOptions) {
   } catch (err) {
     if (installedNow) {
       try {
-        await removeDependency(pkgName, { cwd: ctx.appPkg.dirPath, workspace });
+        await removeDependency(pkgName, { cwd: ctx.appPkg.dirPath, silent: true, workspace });
       } catch {
         // best-effort rollback — don't mask the original error
       }
@@ -253,7 +253,7 @@ async function runRemove(ctx: Context, alias: OfficialAlias, opts: RemoveOptions
   }
   for (const dep of depsToRemove) {
     await withSpinner(`Uninstalling ${dep}`, async () => {
-      await removeDependency(dep, { cwd: ctx.appPkg.dirPath, workspace });
+      await removeDependency(dep, { cwd: ctx.appPkg.dirPath, silent: true, workspace });
     });
   }
 

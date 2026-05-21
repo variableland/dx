@@ -5,9 +5,9 @@ import { builders, generateCode, loadFile, type ProxifiedModule, parseModule, wr
 const CONFIG_FILENAMES = ["run-run.config.ts", "run-run.config.mts"] as const;
 
 export type PluginEntry = {
-  /** Local binding (e.g. `biome` for `import biome from "@rrlab/plugin-biome"`). */
+  /** Local binding (e.g. `biome` for `import biome from "@rrlab/biome-plugin"`). */
   exportName: string;
-  /** Full npm package name (e.g. `@rrlab/plugin-biome`). */
+  /** Full npm package name (e.g. `@rrlab/biome-plugin`). */
   pkgName: string;
 };
 

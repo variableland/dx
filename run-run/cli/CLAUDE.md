@@ -136,7 +136,7 @@ Both support `--dry-run` (print plan, no side effects) and `--yes` (skip prompts
 ## Tests
 
 - `src/**/__tests__/*.test.ts` — unit tests (no fs, no spawn).
-- `test/integration/*.test.ts` — spawn `rr` against a real fixture in `os.tmpdir()`. The fixture symlinks the workspace `node_modules` so the fixture's `run-run.config.mts` can import `@rrlab/plugin-*`.
+- `test/integration/*.test.ts` — spawn `rr` against a real fixture in `os.tmpdir()`. The fixture symlinks the workspace `node_modules` so the fixture's `run-run.config.mts` can import `@rrlab/*-plugin`.
 
 When the integration test asserts on the doctor or output of a plugin-backed command, configure the fixture's `run-run.config.mts` with `fixtures.config([...aliases])`. See `test/integration/check.test.ts` for the canonical multi-plugin shape (biome + ts).
 

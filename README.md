@@ -11,7 +11,7 @@ Monorepo to hold tools made for DX ⚡
 | `run-run` | 🦊 CLI + plugin ecosystem for scripts in Variable Land | [run-run](./run-run/cli/README.md) ([CLI reference](./run-run/cli/CLI.md)) |
 | `shared`  | 🛠 Internal utilities shared across both CLIs          | [clibuddy](./shared/clibuddy/README.md), [loggy](./shared/loggy/README.md) |
 
-The `run-run` ecosystem ships as opt-in pieces: the `@rrlab/cli` kernel + four official plugins (`@rrlab/plugin-{biome,oxc,ts,tsdown}`) + their shared config presets (`@rrlab/{biome,ts,tsdown}-config`). See [`run-run/CLAUDE.md`](./run-run/CLAUDE.md) for the architecture.
+The `run-run` ecosystem ships as opt-in pieces: the `@rrlab/cli` kernel + four official plugins (`@rrlab/{biome,oxc,ts,tsdown}-plugin`) + their shared config presets (`@rrlab/{biome,ts,tsdown}-config`). See [`run-run/CLAUDE.md`](./run-run/CLAUDE.md) for the architecture.
 
 
 ## Usage

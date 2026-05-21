@@ -177,7 +177,7 @@ const biome = definePlugin<void>(() => ({
       await svc.getBinDir();
     } catch (_err) {
       throw new Error(
-        "@rrlab/plugin-biome requires @biomejs/biome to be installed in the host project. " +
+        "@rrlab/biome-plugin requires @biomejs/biome to be installed in the host project. " +
           "Run: rr plugins add biome  (or: pnpm add -D @biomejs/biome)",
       );
     }

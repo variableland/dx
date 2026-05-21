@@ -1,15 +1,15 @@
 {
-  "name": "@rrlab/plugin-ts",
-  "version": "0.1.0",
+  "name": "@rrlab/ts-plugin",
+  "version": "0.0.0",
   "description": "TypeScript plugin for @rrlab/cli — provides the tsc capability.",
-  "homepage": "https://github.com/variableland/dx/tree/main/run-run/plugin-ts#readme",
+  "homepage": "https://github.com/variableland/dx/tree/main/run-run/ts-plugin#readme",
   "bugs": {
     "url": "https://github.com/variableland/dx/issues"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/variableland/dx.git",
-    "directory": "run-run/plugin-ts"
+    "directory": "run-run/ts-plugin"
   },
   "license": "MIT",
   "author": "rcrd <rcrd@variable.land>",
@@ -37,7 +37,8 @@
   },
   "scripts": {
     "build": "tsdown",
-    "test": "vitest run"
+    "test": "vitest run",
+    "prepublishOnly": "pnpm build"
   },
   "dependencies": {
     "@vlandoss/clibuddy": "workspace:*",

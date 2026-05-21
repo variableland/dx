@@ -40,7 +40,7 @@ Add the plugins you want — each one writes its own config file and registers i
 rr plugins add biome
 
 # Type-checking iterates every workspace when invoked at root.
-# Install plugin-ts at root (decline scaffolding root tsconfig.json),
+# Install ts-plugin at root (decline scaffolding root tsconfig.json),
 # then install it inside each workspace that needs its own tsconfig.
 rr plugins add ts                                                          # at root
 cd apps/api       && pnpm rr plugins add ts && pnpm rr plugins add tsdown && cd ../..

@@ -4,14 +4,15 @@
  * is imported as inside `run-run.config.{ts,mts}`.
  *
  * Third-party plugins use their full package name; the binding is derived
- * by stripping a `@scope/plugin-` (or `@scope/run-run-plugin-`) prefix.
+ * by stripping a `@scope/<tool>-plugin` (or `@scope/<tool>-run-run-plugin`)
+ * suffix and using the tool segment.
  */
 export const OFFICIAL_PLUGINS = {
-  ts: { pkg: "@rrlab/plugin-ts", exportName: "ts" },
-  eslint: { pkg: "@rrlab/plugin-eslint", exportName: "eslint" },
-  biome: { pkg: "@rrlab/plugin-biome", exportName: "biome" },
-  oxc: { pkg: "@rrlab/plugin-oxc", exportName: "oxc" },
-  tsdown: { pkg: "@rrlab/plugin-tsdown", exportName: "tsdown" },
+  ts: { pkg: "@rrlab/ts-plugin", exportName: "ts" },
+  eslint: { pkg: "@rrlab/eslint-plugin", exportName: "eslint" },
+  biome: { pkg: "@rrlab/biome-plugin", exportName: "biome" },
+  oxc: { pkg: "@rrlab/oxc-plugin", exportName: "oxc" },
+  tsdown: { pkg: "@rrlab/tsdown-plugin", exportName: "tsdown" },
 } as const;
 
 export type OfficialAlias = keyof typeof OFFICIAL_PLUGINS;

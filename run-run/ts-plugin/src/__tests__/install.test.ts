@@ -9,7 +9,7 @@ import { install, uninstall } from "../index.ts";
 let tmpDir: string;
 
 beforeEach(async () => {
-  tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "rr-plugin-ts-"));
+  tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "rr-ts-plugin-"));
 });
 
 afterEach(async () => {
@@ -50,7 +50,7 @@ function stubPrompts(overrides: Partial<ClackPrompts> = {}): ClackPrompts {
   };
 }
 
-describe("@rrlab/plugin-ts install()", () => {
+describe("@rrlab/ts-plugin install()", () => {
   describe("non-interactive (--yes / nonInteractive)", () => {
     it("creates tsconfig.json with the default preset (no-dom-app) when no file exists", async () => {
       const result = await install(installCtx());
@@ -132,7 +132,7 @@ describe("@rrlab/plugin-ts install()", () => {
   });
 });
 
-describe("@rrlab/plugin-ts uninstall()", () => {
+describe("@rrlab/ts-plugin uninstall()", () => {
   it("returns removeDependencies and no file ops when tsconfig.json doesn't exist", async () => {
     const result = await uninstall(uninstallCtx());
     expect(result.removeDependencies).toEqual(["typescript", "@rrlab/ts-config", "@types/node"]);

@@ -66,7 +66,7 @@ const oxc = definePlugin<void>(() => ({
       await Promise.all([lintSvc.getBinDir(), fmtSvc.getBinDir()]);
     } catch (_err) {
       throw new Error(
-        "@rrlab/plugin-oxc requires oxlint and oxfmt to be installed in the host project. " +
+        "@rrlab/oxc-plugin requires oxlint and oxfmt to be installed in the host project. " +
           "Run: rr plugins add oxc  (or: pnpm add -D oxlint oxfmt)",
       );
     }

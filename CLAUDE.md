@@ -9,9 +9,8 @@ dx/
 ├── shared/          # @vlandoss/* — shared utilities (clibuddy, loggy)
 ├── run-run/         # @rrlab/* — the rrlab product
 │   ├── cli/         # @rrlab/cli — the kernel
-│   ├── plugin-*/    # @rrlab/plugin-{biome,oxc,ts,tsdown}
-│   ├── ts-config/   # @rrlab/ts-config — shared tsconfig presets
-│   └── biome-config/# @rrlab/biome-config — shared biome preset
+│   ├── *-plugin/    # @rrlab/{biome,oxc,ts,tsdown}-plugin
+│   └── *-config/    # @rrlab/{biome,ts,tsdown}-config — shared presets
 ├── vland/           # @vlandoss/vland CLI + the scaffolds it emits
 │   ├── cli/         # @vlandoss/vland — the `vland init` CLI
 │   └── templates/   # scaffolds emitted by `vland init`

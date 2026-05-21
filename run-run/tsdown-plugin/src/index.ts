@@ -313,7 +313,7 @@ const tsdown = definePlugin<void>(() => ({
       await svc.getBinDir();
     } catch (_err) {
       throw new Error(
-        "@rrlab/plugin-tsdown requires tsdown to be installed in the host project. " +
+        "@rrlab/tsdown-plugin requires tsdown to be installed in the host project. " +
           "Run: rr plugins add tsdown  (or: pnpm add -D tsdown)",
       );
     }

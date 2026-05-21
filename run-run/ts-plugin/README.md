@@ -1,4 +1,4 @@
-# @rrlab/plugin-ts
+# @rrlab/ts-plugin
 
 TypeScript plugin for [`@rrlab/cli`](https://npmjs.com/package/@rrlab/cli). Provides the `tsc` capability backed by the TypeScript compiler.
 
@@ -8,7 +8,7 @@ TypeScript plugin for [`@rrlab/cli`](https://npmjs.com/package/@rrlab/cli). Prov
 rr plugins add ts
 ```
 
-`rr plugins add` installs `@rrlab/plugin-ts`, adds `typescript` as a `devDependency`, and (with your confirmation) scaffolds a `tsconfig.json` extending one of the [`@rrlab/ts-config`](https://npmjs.com/package/@rrlab/ts-config) presets. When you opt into scaffolding, you're prompted to pick:
+`rr plugins add` installs `@rrlab/ts-plugin`, adds `typescript` as a `devDependency`, and (with your confirmation) scaffolds a `tsconfig.json` extending one of the [`@rrlab/ts-config`](https://npmjs.com/package/@rrlab/ts-config) presets. When you opt into scaffolding, you're prompted to pick:
 
 - `react` — React app.
 - `dom-app` — Web app (DOM, no React).

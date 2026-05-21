@@ -42,7 +42,7 @@ export function makeFixture(name: string, files: FixtureFiles): { dir: string; c
     writeFileSync(abs, content);
   }
   // Expose the workspace's `node_modules` to the fixture so any
-  // `run-run.config.mts` it writes can resolve `@rrlab/plugin-*` packages.
+  // `run-run.config.mts` it writes can resolve `@rrlab/*-plugin` packages.
   symlinkSync(WORKSPACE_NODE_MODULES, path.join(dir, "node_modules"), "dir");
   return {
     dir,
@@ -78,7 +78,7 @@ export const fixtures = {
       2,
     )}\n`,
   config: (plugins: PluginAlias[]) => {
-    const imports = plugins.map((p) => `import ${p} from "@rrlab/plugin-${p}";`).join("\n");
+    const imports = plugins.map((p) => `import ${p} from "@rrlab/${p}-plugin";`).join("\n");
     const list = plugins.map((p) => `${p}()`).join(", ");
     return `${imports}\nimport { defineConfig } from "@rrlab/cli/config";\n\nexport default defineConfig({\n  plugins: [${list}],\n});\n`;
   },
