@@ -1,6 +1,6 @@
 {
   "name": "@rrlab/tsdown-config",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Shared tsdown configuration helpers used by @rrlab/tsdown-plugin.",
   "homepage": "https://github.com/variableland/dx/tree/main/run-run/tsdown-config#readme",
   "bugs": {
