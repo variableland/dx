@@ -45,7 +45,7 @@
     "comment-json": "4.2.5"
   },
   "peerDependencies": {
-    "@rrlab/cli": "workspace:*",
+    "@rrlab/cli": "workspace:^",
     "typescript": ">=5.0.0"
   },
   "devDependencies": {

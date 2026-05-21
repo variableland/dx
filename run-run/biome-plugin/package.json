@@ -46,7 +46,7 @@
   },
   "peerDependencies": {
     "@biomejs/biome": ">=2.0.0",
-    "@rrlab/cli": "workspace:*"
+    "@rrlab/cli": "workspace:^"
   },
   "devDependencies": {
     "@biomejs/biome": "2.4.15",

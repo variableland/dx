@@ -1,9 +1,9 @@
 ---
-"@rrlab/biome-plugin": minor
-"@rrlab/oxc-plugin": minor
-"@rrlab/ts-plugin": minor
-"@rrlab/tsdown-plugin": minor
-"@rrlab/cli": minor
+"@rrlab/biome-plugin": major
+"@rrlab/oxc-plugin": major
+"@rrlab/ts-plugin": major
+"@rrlab/tsdown-plugin": major
+"@rrlab/cli": major
 ---
 
 ### Declarative plugin shape + first-class `only` narrowing
