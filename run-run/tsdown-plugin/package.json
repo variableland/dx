@@ -1,6 +1,6 @@
 {
   "name": "@rrlab/tsdown-plugin",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "tsdown plugin for @rrlab/cli — provides the pack capability for building TS libraries.",
   "homepage": "https://github.com/variableland/dx/tree/main/run-run/tsdown-plugin#readme",
   "bugs": {
