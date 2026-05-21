@@ -1,5 +1,12 @@
 # @rrlab/oxc-plugin
 
+## 0.1.1
+
+### Patch Changes
+
+- Updated dependencies [[`76ebd6c`](https://github.com/variableland/dx/commit/76ebd6c94805768583668b5003f0c28d86829487)]:
+  - @rrlab/cli@0.0.3
+
 ## 0.1.0
 
 ### Minor Changes
