@@ -1,6 +1,6 @@
 {
   "name": "@rrlab/ts-plugin",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "description": "TypeScript plugin for @rrlab/cli — provides the tsc capability.",
   "homepage": "https://github.com/variableland/dx/tree/main/run-run/ts-plugin#readme",
   "bugs": {
