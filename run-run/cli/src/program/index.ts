@@ -40,7 +40,7 @@ export async function createProgram(options: Options) {
     .addCommand(createTsCheckCommand(ctx))
     .addCommand(createLintCommand(ctx))
     .addCommand(createFormatCommand(ctx))
-    .addCommand(createCheckCommand())
+    .addCommand(createCheckCommand(ctx))
     .addCommand(createDoctorCommand(ctx))
     .addCommand(createPluginsCommand(ctx))
     .addCommand(createCleanCommand())

@@ -2,20 +2,22 @@ import type { FormatOptions } from "consola";
 
 export type AnyLogFn = (...args: unknown[]) => void;
 
+export type LogFn = (opts: LogFnOptions | string, ...args: unknown[]) => void;
+
 export type Formatters = Record<string, (arg: unknown) => string>;
 
 export type AnyLogger = {
   namespace: string;
   debug: AnyLogFn;
   error: AnyLogFn;
-  info: AnyLogFn;
-  trace: AnyLogFn;
-  warn: AnyLogFn;
+  info: LogFn;
+  trace: LogFn;
+  warn: LogFn;
   child: (options: CreateOptions) => AnyLogger;
   // { extras
   subdebug: (namespace: string) => AnyLogFn;
-  start: AnyLogFn;
-  success: AnyLogFn;
+  start: LogFn;
+  success: LogFn;
   // }
 };
 

@@ -46,11 +46,13 @@
   },
   "peerDependencies": {
     "@biomejs/biome": ">=2.0.0",
-    "@rrlab/cli": "workspace:*"
+    "@rrlab/cli": "workspace:^"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.4.4",
+    "@biomejs/biome": "2.4.15",
     "@rrlab/cli": "workspace:*",
-    "@rrlab/tsdown-config": "workspace:^"
+    "@rrlab/tsdown-config": "workspace:^",
+    "@types/semver": "^7.7.1",
+    "semver": "^7.8.1"
   }
 }

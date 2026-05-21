@@ -54,6 +54,18 @@ export function makeFixture(name: string, files: FixtureFiles): { dir: string; c
 
 type PluginAlias = "biome" | "oxc" | "ts" | "tsdown";
 
+type PluginEntry = PluginAlias | { alias: PluginAlias; only: readonly string[] };
+
+function aliasOf(entry: PluginEntry): PluginAlias {
+  return typeof entry === "string" ? entry : entry.alias;
+}
+
+function callOf(entry: PluginEntry): string {
+  if (typeof entry === "string") return `${entry}()`;
+  const only = entry.only.map((k) => `"${k}"`).join(", ");
+  return `${entry.alias}({ only: [${only}] })`;
+}
+
 export const fixtures = {
   pkg: (name = "rr-test-fixture") => `${JSON.stringify({ name, version: "0.0.0", private: true }, null, 2)}\n`,
   biomeNoop: () =>
@@ -77,9 +89,9 @@ export const fixtures = {
       null,
       2,
     )}\n`,
-  config: (plugins: PluginAlias[]) => {
-    const imports = plugins.map((p) => `import ${p} from "@rrlab/${p}-plugin";`).join("\n");
-    const list = plugins.map((p) => `${p}()`).join(", ");
+  config: (plugins: readonly PluginEntry[]) => {
+    const imports = plugins.map((p) => `import ${aliasOf(p)} from "@rrlab/${aliasOf(p)}-plugin";`).join("\n");
+    const list = plugins.map(callOf).join(", ");
     return `${imports}\nimport { defineConfig } from "@rrlab/cli/config";\n\nexport default defineConfig({\n  plugins: [${list}],\n});\n`;
   },
 };

@@ -18,9 +18,10 @@ export class PluginRegistry {
     if (!first) return undefined;
     if (rest.length > 0) {
       const names = providers.map(({ plugin }) => plugin.name).join(", ");
+      const example = providers.map(({ plugin }) => `${plugin.name}({ only: ['${kind}'] })`).join(" or ");
       throw new Error(
         `Multiple plugins provide capability '${kind}': ${names}. ` +
-          "Disambiguate by narrowing each plugin's capabilities in run-run.config.ts.",
+          `Narrow each plugin's capabilities in run-run.config.ts using the 'only' option — e.g. ${example}.`,
       );
     }
     return first.impl;

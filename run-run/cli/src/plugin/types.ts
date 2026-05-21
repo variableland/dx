@@ -20,7 +20,7 @@ export type {
 export type Packer = {
   bin: string;
   ui: string;
-  pack(): Promise<void>;
+  pack: () => Promise<void>;
 };
 
 export const PLUGIN_KINDS = ["lint", "format", "jsc", "tsc", "pack"] as const;
@@ -46,7 +46,7 @@ export type PluginContext = {
 export type Plugin = {
   name: string;
   apiVersion: 1;
-  setup(ctx: PluginContext): Promise<PluginCapabilities> | PluginCapabilities;
+  capabilities(ctx: PluginContext): Promise<PluginCapabilities>;
   install?(ctx: InstallContext): Promise<InstallResult>;
   uninstall?(ctx: UninstallContext): Promise<UninstallResult>;
 };

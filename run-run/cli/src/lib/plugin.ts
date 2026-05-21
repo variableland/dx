@@ -1,4 +1,6 @@
-export { definePlugin } from "#src/plugin/define-plugin.ts";
+export { type DecideScaffoldOptions, decideScaffold, type ScaffoldDecision } from "#src/plugin/decide-scaffold.ts";
+export { definePlugin, type PluginDefinition } from "#src/plugin/define-plugin.ts";
+export { type PickPresetOptions, pickPreset } from "#src/plugin/pick-preset.ts";
 export { ToolService, type ToolServiceOptions } from "#src/plugin/tool-service.ts";
 export type {
   ClackPrompts,

@@ -1,5 +1,6 @@
 import { type Command, createCommand } from "commander";
-import { TOOL_LABELS } from "#src/program/ui.ts";
+import { pluginAnnotation } from "#src/program/ui.ts";
+import type { Context } from "#src/services/ctx.ts";
 import { logger } from "#src/services/logger.ts";
 
 /**
@@ -15,9 +16,9 @@ import { logger } from "#src/services/logger.ts";
  * `command.js` — `fn.apply(this, actionArgs)`). `this.parent` gives us the
  * parent program without any late-binding ceremony.
  */
-export function createCheckCommand() {
+export function createCheckCommand(ctx: Context) {
   return createCommand("check")
-    .summary(`run static checks (${TOOL_LABELS.RUN_RUN})`)
+    .summary(`run static checks${checkAnnotation(ctx)}`)
     .description(
       "Runs `rr jsc` and `rr tsc` concurrently in-process. Aggregates their exit codes — non-zero when either subcommand fails.",
     )
@@ -60,4 +61,32 @@ export function createCheckCommand() {
 
 function findCommand(program: Command, name: string): Command | undefined {
   return program.commands.find((c) => c.name() === name || c.aliases().includes(name));
+}
+
+/**
+ * Mirrors the provider resolution of `jsc` + `tsc` and flattens the
+ * underlying tool labels — e.g. biome (composed lint+format) + oxc (tsc)
+ * renders as `(biome, oxlint)` rather than `(biome + biome, oxlint)`. When
+ * neither sibling has a provider, falls back to the standard `(not
+ * configured)` annotation so the help reads consistently with other
+ * commands.
+ */
+function checkAnnotation(ctx: Context): string {
+  const directJsc = ctx.registry.get("jsc");
+  const linter = ctx.registry.get("lint");
+  const formatter = ctx.registry.get("format");
+  const tsc = ctx.registry.get("tsc");
+
+  const labels: string[] = [];
+  if (directJsc) {
+    labels.push(directJsc.ui);
+  } else {
+    if (linter) labels.push(linter.ui);
+    if (formatter) labels.push(formatter.ui);
+  }
+  if (tsc) labels.push(tsc.ui);
+
+  if (labels.length === 0) return pluginAnnotation(undefined);
+  const distinct = [...new Set(labels)];
+  return pluginAnnotation({ ui: distinct.join(", ") });
 }
