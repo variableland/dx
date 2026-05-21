@@ -39,7 +39,7 @@ describe("rr plugins", () => {
       });
       const r = cli("plugins add biome --dry-run", { cwd: fixture.dir });
       const combined = r.stdout + r.stderr;
-      expect(combined).toMatch(/Would: install @rrlab\/plugin-biome/);
+      expect(combined).toMatch(/Would: install @rrlab\/biome-plugin/);
       expect(combined).toMatch(/Would: add biome\(\) to run-run\.config\.mts/);
       expect(combined).toMatch(/Dry run complete/);
       expect(r.status).toBe(0);
@@ -63,7 +63,7 @@ describe("rr plugins", () => {
       });
       const r = cli("plugins add biome --dry-run", { cwd: fixture.dir });
       const combined = r.stdout + r.stderr;
-      expect(combined).toMatch(/Would: install @rrlab\/plugin-biome.*workspace root/);
+      expect(combined).toMatch(/Would: install @rrlab\/biome-plugin.*workspace root/);
       expect(r.status).toBe(0);
     });
   });

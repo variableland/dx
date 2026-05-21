@@ -1,6 +1,6 @@
 # @rrlab/biome-config
 
-Shared [Biome](https://biomejs.dev) preset for projects using [`@rrlab/plugin-biome`](https://npmjs.com/package/@rrlab/plugin-biome).
+Shared [Biome](https://biomejs.dev) preset for projects using [`@rrlab/biome-plugin`](https://npmjs.com/package/@rrlab/biome-plugin).
 
 ## Install
 

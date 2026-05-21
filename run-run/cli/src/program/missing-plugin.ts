@@ -8,7 +8,7 @@ const SUGGESTIONS: Record<string, string[]> = {
 
 export function missingPluginError(kind: string): Error {
   const aliases = SUGGESTIONS[kind] ?? [];
-  const officialList = aliases.map((a) => `@rrlab/plugin-${a}`).join(", ");
+  const officialList = aliases.map((a) => `@rrlab/${a}-plugin`).join(", ");
   const addList = aliases.map((a) => `rr plugins add ${a}`).join(" | ");
   return new Error(
     `No plugin provides the '${kind}' capability.` +

@@ -1,6 +1,6 @@
 # @rrlab/ts-config
 
-Shared TypeScript presets for projects using [`@rrlab/plugin-ts`](https://npmjs.com/package/@rrlab/plugin-ts). Built on top of [`@total-typescript/tsconfig`](https://github.com/total-typescript/tsconfig).
+Shared TypeScript presets for projects using [`@rrlab/ts-plugin`](https://npmjs.com/package/@rrlab/ts-plugin). Built on top of [`@total-typescript/tsconfig`](https://github.com/total-typescript/tsconfig).
 
 ## Install
 

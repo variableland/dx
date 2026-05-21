@@ -9,7 +9,7 @@ import { install, uninstall } from "../index.ts";
 let tmpDir: string;
 
 beforeEach(async () => {
-  tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "rr-plugin-tsdown-"));
+  tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "rr-tsdown-plugin-"));
 });
 
 afterEach(async () => {
@@ -50,7 +50,7 @@ function stubPrompts(overrides: Partial<ClackPrompts> = {}): ClackPrompts {
   };
 }
 
-describe("@rrlab/plugin-tsdown install()", () => {
+describe("@rrlab/tsdown-plugin install()", () => {
   describe("non-interactive (--yes / nonInteractive)", () => {
     it("creates tsdown.config.ts with the default preset (lib) when no file exists", async () => {
       const result = await install(installCtx());
@@ -223,7 +223,7 @@ describe("@rrlab/plugin-tsdown install()", () => {
   });
 });
 
-describe("@rrlab/plugin-tsdown uninstall()", () => {
+describe("@rrlab/tsdown-plugin uninstall()", () => {
   it("returns removeDependencies and no file ops when no config file exists", async () => {
     const result = await uninstall(uninstallCtx());
     expect(result.removeDependencies).toEqual(["tsdown", "@rrlab/tsdown-config"]);

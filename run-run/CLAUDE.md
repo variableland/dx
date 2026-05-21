@@ -21,10 +21,10 @@ If you find yourself tempted to add a `pnpm <script>` that exists only to call `
 | Path | npm name | Role |
 |---|---|---|
 | `cli/` | `@rrlab/cli` | The kernel. Commander program, plugin registry, `rr` bin. Deep-dive in `cli/CLAUDE.md`. |
-| `plugin-biome/` | `@rrlab/plugin-biome` | `lint` + `format` + `jsc` via Biome. |
-| `plugin-oxc/` | `@rrlab/plugin-oxc` | `lint` (oxlint) + `format` (oxfmt). `jsc` is composed by the kernel. |
-| `plugin-ts/` | `@rrlab/plugin-ts` | `tsc` (TypeScript). Has `install()` that scaffolds `tsconfig.json` from a preset. |
-| `plugin-tsdown/` | `@rrlab/plugin-tsdown` | `pack` (tsdown). |
+| `biome-plugin/` | `@rrlab/biome-plugin` | `lint` + `format` + `jsc` via Biome. |
+| `oxc-plugin/` | `@rrlab/oxc-plugin` | `lint` (oxlint) + `format` (oxfmt). `jsc` is composed by the kernel. |
+| `ts-plugin/` | `@rrlab/ts-plugin` | `tsc` (TypeScript). Has `install()` that scaffolds `tsconfig.json` from a preset. |
+| `tsdown-plugin/` | `@rrlab/tsdown-plugin` | `pack` (tsdown). |
 | `ts-config/` | `@rrlab/ts-config` | Shared tsconfig presets: `react`, `dom/app`, `dom/lib`, `no-dom/app`, `no-dom/lib`. |
 | `biome-config/` | `@rrlab/biome-config` | Shared biome preset. |
 
@@ -57,8 +57,8 @@ Per-plugin duplication of small constants (the `{ install, peer }` shape repeate
 flowchart TD
     Config["<b>user's run-run.config.{ts,mts}</b><br/>plugins: [biome(), ts(), …]"]
     Kernel["<b>@rrlab/cli</b> — the kernel<br/><br/>createContext()<br/>• load config<br/>• for each plugin: setup(ctx)<br/>• register capabilities<br/><br/>commands consult ctx.registry<br/>lint → registry.get('lint')<br/>tsc  → registry.get('tsc')<br/>…"]
-    Biome["<b>plugin-biome</b><br/>Linter + Doctor<br/>Formatter<br/>StaticChecker"]
-    TS["<b>plugin-ts</b><br/>TypeChecker"]
+    Biome["<b>biome-plugin</b><br/>Linter + Doctor<br/>Formatter<br/>StaticChecker"]
+    TS["<b>ts-plugin</b><br/>TypeChecker"]
     More["…"]
 
     Config --> Kernel
@@ -76,7 +76,7 @@ Every plugin's host-side tool (`@biomejs/biome`, `typescript`, etc.) is a `peerD
    - **002** no `bin` shims.
    - **003** wire plugins via `ctx.registry` + drop of `future.oxc`.
    - **004** templating strategy + edit-json DSL.
-   - **005** `@rrlab/plugin-tsdown` scaffolding + `@rrlab/tsdown-config` shape.
+   - **005** `@rrlab/tsdown-plugin` scaffolding + `@rrlab/tsdown-config` shape.
 2. `run-run/cli/CLAUDE.md` if you're going to touch the kernel.
 3. The `*.test.ts` files of the area you're modifying. Tests are the executable spec for the existing behaviour.
 
@@ -129,7 +129,7 @@ For TS modules (`eslint.config.ts` etc. if we ever add them), the escape hatch i
 
 ### Adding a new plugin (checklist)
 
-1. `run-run/plugin-<name>/`: copy the shape of any existing plugin (`plugin-biome` is the most complete reference).
+1. `run-run/<tool>-plugin/`: copy the shape of any existing plugin (`biome-plugin` is the most complete reference).
 2. `package.json`: declare the wrapped tool as `peerDependencies` + `devDependencies` (matching version). Add `peerDependenciesMeta` for optional peers. Depends on `@rrlab/cli` as peer + dev. Include a `"test": "vitest run"` script.
 3. `src/tool-versions.ts`: export a `TOOL_VERSIONS` const mapping each wrapped tool to `{ install, peer }` ranges. Re-export from `src/index.ts` so consumers (and the install hook) read from one place. Never put this in the kernel.
 4. `src/index.ts`: export the `<Tool>Service extends ToolService` class, the `install()` and `uninstall()` hooks (consuming `TOOL_VERSIONS.<name>.install` for dev-dep pinning), and the `default = definePlugin(...)` factory.
@@ -155,9 +155,9 @@ If you need to evolve `PluginCapabilities`, `FileOp`, `JsonEdit`, `InstallResult
 
 ## Tests
 
-- **Plugin unit tests**: `run-run/plugin-*/src/__tests__/*.test.ts`. Run via `pnpm --filter @rrlab/plugin-<name> test`.
+- **Plugin unit tests**: `run-run/*-plugin/src/__tests__/*.test.ts`. Run via `pnpm --filter @rrlab/<tool>-plugin test`.
 - **Kernel unit tests**: `run-run/cli/src/**/__tests__/*.test.ts`.
-- **Kernel integration tests** (spawn the `rr` bin against a tmp fixture): `run-run/cli/test/integration/*.test.ts`. Use `makeFixture(name, files)` and `fixtures.config([...aliases])` from `run-run/cli/test/helpers.ts`. The helper symlinks the workspace's `node_modules` into the fixture so the fixture's generated `run-run.config.mts` can resolve `@rrlab/plugin-*` packages.
+- **Kernel integration tests** (spawn the `rr` bin against a tmp fixture): `run-run/cli/test/integration/*.test.ts`. Use `makeFixture(name, files)` and `fixtures.config([...aliases])` from `run-run/cli/test/helpers.ts`. The helper symlinks the workspace's `node_modules` into the fixture so the fixture's generated `run-run.config.mts` can resolve `@rrlab/*-plugin` packages.
 
 When adding integration tests for a new plugin, the canonical shape is:
 

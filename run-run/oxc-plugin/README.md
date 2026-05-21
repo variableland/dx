@@ -1,4 +1,4 @@
-# @rrlab/plugin-oxc
+# @rrlab/oxc-plugin
 
 [oxc](https://oxc.rs) plugin for [`@rrlab/cli`](https://npmjs.com/package/@rrlab/cli). Provides `lint` (oxlint) and `format` (oxfmt) capabilities.
 
@@ -8,7 +8,7 @@
 rr plugins add oxc
 ```
 
-Installs `@rrlab/plugin-oxc` and adds `oxlint`, `oxfmt`, and `oxlint-tsgolint` (optional) as `devDependencies`. No config file is scaffolded — oxlint and oxfmt work with sensible defaults and the projects that need to customise add their own `oxlintrc.json` / `.oxfmtrc` on demand.
+Installs `@rrlab/oxc-plugin` and adds `oxlint`, `oxfmt`, and `oxlint-tsgolint` (optional) as `devDependencies`. No config file is scaffolded — oxlint and oxfmt work with sensible defaults and the projects that need to customise add their own `oxlintrc.json` / `.oxfmtrc` on demand.
 
 For `rr jsc` (lint + format together), the kernel composes oxlint + oxfmt automatically when both capabilities are present and no plugin provides `jsc` directly.
 
