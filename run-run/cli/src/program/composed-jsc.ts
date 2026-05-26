@@ -1,15 +1,11 @@
 import type { Doctor, Formatter, Linter, RunReport, StaticChecker, StaticCheckerOptions } from "#src/plugin/types.ts";
 
 /**
- * Synthesises a `StaticChecker & Doctor` (the `jsc` capability) by composing
- * a separately-registered linter and formatter. Used when the user's plugin
- * set provides `lint` and `format` independently (e.g. oxc, or eslint +
- * prettier) but no single plugin claims `jsc`.
- *
- * The check runs lint then format sequentially — interleaved stdout from a
- * parallel run is hard to read for the user — and merges their reports into one
- * so the board renders the pair as a single row. `fixStaged` is dropped because
- * the underlying tools don't have a uniform staged-aware mode.
+ * Synthesises the `jsc` capability (`StaticChecker & Doctor`) by composing a
+ * separately-registered linter and formatter — used when the plugin set
+ * provides `lint` and `format` independently (e.g. oxc) but no plugin claims
+ * `jsc`. Runs lint then format sequentially (parallel stdout interleaves badly)
+ * and merges their reports into one board row.
  */
 export function composedJscProvider(linter: Linter & Doctor, formatter: Formatter & Doctor): StaticChecker & Doctor {
   return {

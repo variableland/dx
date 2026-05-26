@@ -6,17 +6,11 @@ import type { Context } from "#src/services/ctx.ts";
 import { logger } from "#src/services/logger.ts";
 
 /**
- * `rr check` is the umbrella that runs the JS check (lint+format) and the
- * TS type check together. Both subcommands are already wired into
- * commander as siblings (`rr jsc`, `rr tsc`), so we reuse the program's
- * command tree as the action registry instead of duplicating it: look the
- * sibling up by name and invoke its action via `parseAsync([])`, which
- * applies its declared option defaults exactly as if the user had typed
- * `rr jsc` directly.
- *
- * Commander binds the running command as `this` inside an action (see
- * `command.js` — `fn.apply(this, actionArgs)`). `this.parent` gives us the
- * parent program without any late-binding ceremony.
+ * `rr check` runs `jsc` then `tsc`. Rather than keep a parallel action
+ * registry, it reuses commander's command tree: it finds each sibling on
+ * `this.parent` and runs it via `parseAsync([])`, which applies the sibling's
+ * own option defaults. (`this` is the running command inside a non-arrow
+ * action — see cli/CLAUDE.md.)
  */
 export function createCheckCommand(ctx: Context) {
   return createCommand("check")
@@ -32,13 +26,11 @@ export function createCheckCommand(ctx: Context) {
         throw new Error("`rr check` requires the parent program to dispatch sibling subcommands.");
       }
 
-      // jsc then tsc, sequentially: each renders its own live board and two
-      // boards can't animate the same terminal region at once (decision 012).
-      // Each section runs inside its own `runCheckSections` scope — that both
-      // keeps it framed (so the frames divide the sections) and returns the
-      // boards THAT section rendered, so failure is attributed by section name,
-      // never by a fragile dispatch-vs-render index. A section that runs no
-      // board (tsc with no tsconfig) simply reports no results.
+      // Sequentially, not in parallel: two live boards can't animate the same
+      // terminal region at once (decision 012). Each section runs in its own
+      // `runCheckSections` scope, which frames it and returns the boards it
+      // rendered — so a failure is attributed by section name, not a fragile
+      // dispatch-vs-render index.
       const start = Date.now();
       const failed: string[] = [];
       let rendered = false;
@@ -85,12 +77,9 @@ function findCommand(program: Command, name: string): Command | undefined {
 }
 
 /**
- * Mirrors the provider resolution of `jsc` + `tsc` and flattens the
- * underlying tool labels — e.g. biome (composed lint+format) + oxc (tsc)
- * renders as `(biome, oxlint)` rather than `(biome + biome, oxlint)`. When
- * neither sibling has a provider, falls back to the standard `(not
- * configured)` annotation so the help reads consistently with other
- * commands.
+ * Flattens the underlying tool labels of `jsc` + `tsc` for the help summary —
+ * e.g. `(biome, oxlint)`, deduped, not `(biome + biome, oxlint)`. Falls back to
+ * the standard `(not configured)` when neither sibling has a provider.
  */
 function checkAnnotation(ctx: Context): string {
   const directJsc = ctx.registry.get("jsc");

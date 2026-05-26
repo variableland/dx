@@ -17,32 +17,22 @@ function pkgName(appPkg: Pkg): string {
   return appPkg.packageJson.name ?? basename(appPkg.dirPath);
 }
 
-/**
- * The one canonical row label for a single-target run: `<command> (<tool>) · <package>`.
- * Every command/subcommand that acts on one target (lint, format, jsc, pack,
- * single-app tsc, a `doctor` subcommand) builds its row through here so they
- * all read identically.
- */
+/** The canonical single-target row label, `<command> (<tool>) · <package>`, so every command reads alike. */
 export function targetLabel(command: string, provider: Provider, appPkg: Pkg): string {
   return `${commandTool(command, provider)} ${palette.dim(`· ${pkgName(appPkg)}`)}`;
 }
 
 /**
- * The one canonical section title for a fan-out run: `<command> (<tool>) · <n> <unit>`
- * (e.g. `tsc (oxlint) · 8 packages`). The tool is omitted when the fan-out
- * spans several tools (`rr doctor` → `doctor · 3 tools`); the rows then carry
- * the per-unit name.
+ * The canonical fan-out section title, `<command> (<tool>) · <n> <unit>`. The
+ * tool is omitted when the fan-out spans several tools (`rr doctor` → `doctor ·
+ * 3 tools`), since the rows then carry the per-tool name.
  */
 export function fanoutTitle(command: string, provider: Provider | undefined, count: number, unit: string): string {
   const head = provider ? commandTool(command, provider) : command;
   return `${head} · ${count} ${unit}`;
 }
 
-/**
- * Bridges a check-family verb (which returns a `RunReport`) to a board row.
- * The row's spinner reflects the in-flight run; the captured `output` becomes
- * the detail the board flushes grouped under the label.
- */
+/** Bridges a check-family verb (returns a `RunReport`) to a board row, its `output` becoming the flushed detail. */
 export function reportTask(label: string, run: () => Promise<RunReport>): BoardTask {
   return {
     label,
@@ -53,11 +43,8 @@ export function reportTask(label: string, run: () => Promise<RunReport>): BoardT
   };
 }
 
-// `rr check` runs several single-task sections (jsc, tsc) back to back. On its
-// own each would render compactly, but the frame is what visually divides the
-// sections — so while check is dispatching, force every board to stay framed.
-// While active, the collector also gathers each section's result in run order
-// so `check` can print one overall verdict.
+// While `rr check` is dispatching, boards stay framed (to divide the sections)
+// and their results land in this collector so `check` can print one verdict.
 let collector: BoardResult[] | null = null;
 
 export async function runCheckSections(run: () => Promise<void>): Promise<BoardResult[]> {

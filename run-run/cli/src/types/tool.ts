@@ -1,11 +1,9 @@
 /**
- * The outcome of running a check-family tool (lint / format / static check /
- * type check) captured rather than streamed. `ok` is the tool's own verdict —
- * its exit code, never a guess parsed from output — and `output` is the
- * combined captured stdout+stderr (color preserved), flushed verbatim grouped
- * under the package label. We deliberately do NOT parse tool summaries for
- * warning/error counts: the formats are unstable and not uniform across tools
- * (tsc and oxfmt have no machine output at all). See decisions/013.
+ * The outcome of a check-family tool (lint / format / static check / type
+ * check) captured rather than streamed. `ok` is the tool's exit code — never a
+ * guess parsed from output, since tool summaries are unstable and not uniform
+ * (tsc and oxfmt emit none) — and `output` is the combined stdout+stderr (color
+ * preserved), flushed verbatim under the package label. See decisions/013.
  */
 export type RunReport = {
   ok: boolean;

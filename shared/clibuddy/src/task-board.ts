@@ -3,47 +3,35 @@ import { palette } from "./colors.ts";
 import { hasTTY, isCI } from "./env.ts";
 
 export type TaskOutcome = {
-  /** The task's verdict — typically the wrapped process's exit code === 0. */
   ok: boolean;
-  /**
-   * Output to flush, grouped under the task label, once the board settles. The
-   * board prints it verbatim whenever it's non-empty (pass or fail) — the caller
-   * decides what, if anything, to surface.
-   */
+  /** Output flushed (grouped under the label) once the board settles. */
   detail?: string;
 };
 
 export type BoardTask = {
-  /** Stable identifier rendered on the row, e.g. a package name. */
   label: string;
-  /** Runs the task. Must resolve to a `TaskOutcome`; rejections render as failed. */
+  /** Resolve to a `TaskOutcome`; a rejection renders as a failed row. */
   run: () => Promise<TaskOutcome>;
 };
 
 export type BoardOptions = {
-  /** Section header printed above the rows, e.g. `tsc · 16 packages` (framed multi-row only). */
+  /** Section header above the rows, e.g. `tsc · 16 packages` (multi-row only). */
   title?: string;
   /**
-   * Force the framed (`┌ │ └`) layout even for a single task. `rr check` sets
-   * this so its sections stay visually divided; a standalone single-task
-   * command leaves it unset and renders compactly. Defaults to `tasks.length > 1`.
+   * Force the `┌ │ └` frame even for one task. `rr check` sets it to divide its
+   * sections; otherwise a board is unframed (compact for one task, plain for many).
    */
   frame?: boolean;
 };
 
 export type BoardResult = {
-  /** False when any task ended not-ok. */
   ok: boolean;
   outcomes: TaskOutcome[];
 };
 
-// Frame + gutter mirror @clack/prompts (used by `rr plugins`) so the two flows
-// read as one family: the ◒◐◓◑ spinner and the gray │ ┌ └ gutter. The settled
-// glyph is ✔/✖ — the verdict is the tool's exit code, never parsed from output
-// (we can't tell a clean "Found 0 warnings" trailer from a real warning without
-// parsing, so we don't pretend to — the tool's own output says which it is).
-// The gutter uses the 16-color `gray` (not a fixed hex) so it adapts to the
-// terminal theme and degrades on non-truecolor surfaces / CI log viewers.
+// Glyphs mirror @clack/prompts (used by `rr plugins`) so the two flows read as
+// one family: the ◒◐◓◑ spinner and a gray `│ ┌ └` gutter, settling to ✔/✖. The
+// gray is 16-color (not a fixed hex) so it adapts to the terminal theme.
 const FRAMES = ["◒", "◐", "◓", "◑"];
 const TICK_MS = 80;
 const PASS = green("✔");
@@ -63,19 +51,12 @@ type RowState = {
 };
 
 /**
- * Runs `tasks` in parallel and reports their progress as a board: one row per
- * task with a live spinner that collapses to ✔/✖ on settle. On a TTY the rows
- * update in place; otherwise (CI, pipes) each row prints once when it settles,
- * keeping logs deterministic. After every task settles, each task's captured
- * detail is flushed grouped under its label, followed by a one-line summary.
- * Parallelism is never sacrificed — the renderer only reflects work that is
- * already running.
+ * Runs `tasks` in parallel, rendering one row each that collapses to ✔/✖, then
+ * flushes their captured detail and a one-line summary. On a TTY the rows update
+ * in place; otherwise each prints once on settle, keeping logs deterministic.
  */
 export async function runTaskBoard(tasks: BoardTask[], options: BoardOptions = {}): Promise<BoardResult> {
   const live = hasTTY && !isCI;
-  // The `┌ │ └` frame is reserved for composition — `rr check` sets `frame: true`
-  // to divide its sections. A standalone command never frames, even a monorepo
-  // run with many rows (it's still one command): it gets a plain title + summary.
   const framed = options.frame ?? false;
   return live ? runLive(tasks, options, framed) : runStatic(tasks, options, framed);
 }
@@ -122,7 +103,7 @@ async function runLive(tasks: BoardTask[], options: BoardOptions, framed: boolea
       frame = (frame + 1) % FRAMES.length;
       render();
     }
-    render(); // final frame with every row collapsed
+    render(); // collapse every row to its final glyph
   } finally {
     out.write("\x1b[?25h"); // restore cursor
   }
@@ -171,22 +152,19 @@ function finish(rows: RowState[], out: NodeJS.WriteStream, framed: boolean, mult
   // package ran — so a monorepo shows the command once instead of per package.
   const shared = blocks.length > 1 ? sharedLeadingLine(blocks.map((b) => b.detail)) : undefined;
 
-  // Framed sections lay their body inside the gutter (`│`); a plain board (no
-  // frame) indents it. The spacer above each is the gutter bar or a blank line.
+  // Framed bodies sit inside the `│` gutter; a plain board indents instead.
   const block = (text: string) => (framed ? gutter(text) : indent(text));
   const spacer = () => out.write(framed ? `${BAR}\n` : "\n");
 
   let flushed = false;
   if (shared) {
     spacer();
-    out.write(`${block(shared)}\n`); // already dim (it's the command), shown once
+    out.write(`${block(shared)}\n`);
     flushed = true;
   }
 
-  // A passing task's output is dimmed — it's the tool's proof-of-work that
-  // should recede but stay visible; a failing task keeps full brightness so the
-  // diagnostic reads. A per-task header keeps each block attributable, except a
-  // single task (the row above already names it).
+  // Passing output is dimmed (proof-of-work that recedes); a failure stays bright
+  // so the diagnostic reads. Multi-row blocks get a per-task header to attribute them.
   for (const b of blocks) {
     const rest = shared ? stripLeadingLine(b.detail, shared) : b.detail;
     if (!rest.trim()) continue; // only the shared command → nothing package-specific
@@ -201,8 +179,8 @@ function finish(rows: RowState[], out: NodeJS.WriteStream, framed: boolean, mult
     flushed = true;
   }
 
-  // Summary closes a framed section (└) or a plain multi-row board (a single
-  // command's compact output needs none — the row already carried the verdict).
+  // A framed section closes with `└ summary`; a plain multi-row board with a bare
+  // summary line. One compact task needs neither — its row already showed the verdict.
   if (framed) {
     if (flushed || multi) spacer();
     out.write(`${BAR_END}  ${summary(rows)}\n`);
@@ -224,11 +202,7 @@ function stripLeadingLine(detail: string, line: string): string {
   return detail.startsWith(line) ? detail.slice(line.length).replace(/^\n/, "") : detail;
 }
 
-/**
- * The leading decoration for a row. Framed: `│` per row, or `┌` for a framed
- * single task (status rides the opening corner). Unframed: a 2-space indent
- * under the title for a multi-row board, nothing for a lone compact row.
- */
+/** A row's leading decoration: `│` (framed multi), `┌` (framed single, status rides the corner), or a plain indent. */
 function rowPrefix(framed: boolean, multi: boolean): string {
   if (framed) return multi ? `${BAR}  ` : `${BAR_START}  `;
   return multi ? "  " : "";
