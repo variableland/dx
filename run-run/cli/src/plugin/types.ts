@@ -1,16 +1,15 @@
 import type { Pkg, ShellService } from "@vlandoss/clibuddy";
 import type { AnyLogger as Logger } from "@vlandoss/loggy";
 import type { ReleaseService } from "#src/services/release.ts";
-import type { Doctor, Formatter, Linter, StaticChecker, TypeChecker } from "#src/types/tool.ts";
+import type { Doctor, Formatter, Linter, RunReport, StaticChecker, TypeChecker } from "#src/types/tool.ts";
 
 export type {
   Doctor,
-  DoctorOutput,
-  DoctorResult,
   FormatOptions,
   Formatter,
   Linter,
   LintOptions,
+  RunReport,
   StaticChecker,
   StaticCheckerOptions,
   TypeChecker,
@@ -20,7 +19,7 @@ export type {
 export type Packer = {
   bin: string;
   ui: string;
-  pack: () => Promise<void>;
+  pack: () => Promise<RunReport>;
 };
 
 export const PLUGIN_KINDS = ["lint", "format", "jsc", "tsc", "pack"] as const;

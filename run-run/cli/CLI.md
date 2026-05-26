@@ -126,7 +126,7 @@ check if the underlying tool is working correctly
 
 - **Usage**: `rr check`
 
-Runs `rr jsc` and `rr tsc` concurrently in-process. Aggregates their exit codes — non-zero when either subcommand fails.
+Runs `rr jsc` then `rr tsc` in-process, each as its own section. Aggregates their exit codes — non-zero when either subcommand fails.
 
 ## `rr doctor`
 

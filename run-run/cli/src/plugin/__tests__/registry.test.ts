@@ -19,28 +19,29 @@ function plugin(name: string): Plugin {
   };
 }
 
-async function okDoctor(): ReturnType<Doctor["doctor"]> {
-  return { ok: true, output: { stdout: "", stderr: "", exitCode: 0 } };
+// Every verb — including `doctor` — now returns a `RunReport`.
+async function okReport() {
+  return { ok: true, output: "" };
 }
 
 function fakeLinter(): Linter & Doctor {
-  return { bin: "fake", ui: "Fake", lint: async () => {}, doctor: okDoctor };
+  return { bin: "fake", ui: "Fake", lint: okReport, doctor: okReport };
 }
 
 function fakeFormatter(): Formatter & Doctor {
-  return { bin: "fake", ui: "Fake", format: async () => {}, doctor: okDoctor };
+  return { bin: "fake", ui: "Fake", format: okReport, doctor: okReport };
 }
 
 function fakeStaticChecker(): StaticChecker & Doctor {
-  return { bin: "fake", ui: "Fake", check: async () => {}, doctor: okDoctor };
+  return { bin: "fake", ui: "Fake", check: okReport, doctor: okReport };
 }
 
 function fakeTypeChecker(): TypeChecker & Doctor {
-  return { bin: "fake", ui: "Fake", check: async () => {}, doctor: okDoctor };
+  return { bin: "fake", ui: "Fake", check: okReport, doctor: okReport };
 }
 
 function fakePacker(): Packer & Doctor {
-  return { bin: "fake", ui: "Fake", pack: async () => {}, doctor: okDoctor };
+  return { bin: "fake", ui: "Fake", pack: okReport, doctor: okReport };
 }
 
 describe("PluginRegistry", () => {

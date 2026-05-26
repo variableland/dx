@@ -10,6 +10,7 @@ import {
   type InstallResult,
   type Linter,
   type LintOptions,
+  type RunReport,
   type StaticChecker,
   type StaticCheckerOptions,
   ToolService,
@@ -34,26 +35,25 @@ export class BiomeService extends ToolService implements Formatter, Linter, Stat
     super({ pkg: "@biomejs/biome", bin: "biome", ui: UI, shellService, from: FROM });
   }
 
-  async format(options: FormatOptions) {
+  async format(options: FormatOptions): Promise<RunReport> {
     const args = ["format", ...COMMON_FLAGS];
     if (options.fix) args.push("--fix");
-    await this.exec(args);
+    return this.runReport(args);
   }
 
-  async lint(options: LintOptions) {
+  async lint(options: LintOptions): Promise<RunReport> {
     const args = ["check", ...COMMON_FLAGS, "--formatter-enabled=false"];
     if (options.fix) args.push("--fix", "--unsafe");
-    await this.exec(args);
+    return this.runReport(args);
   }
 
-  async check(options: StaticCheckerOptions): Promise<void> {
-    if (options.fix) {
-      await this.exec(["check", ...COMMON_FLAGS, "--fix"]);
-    } else if (options.fixStaged) {
-      await this.exec(["check", ...COMMON_FLAGS, "--fix", "--staged"]);
-    } else {
-      await this.exec([isCI ? "ci" : "check", ...COMMON_FLAGS]);
-    }
+  async check(options: StaticCheckerOptions): Promise<RunReport> {
+    const args = options.fix
+      ? ["check", ...COMMON_FLAGS, "--fix"]
+      : options.fixStaged
+        ? ["check", ...COMMON_FLAGS, "--fix", "--staged"]
+        : [isCI ? "ci" : "check", ...COMMON_FLAGS];
+    return this.runReport(args);
   }
 }
 

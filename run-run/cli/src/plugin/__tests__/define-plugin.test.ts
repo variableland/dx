@@ -17,20 +17,30 @@ function ctx(): PluginContext {
 
 const FROM = import.meta.url;
 
+const emptyReport = { ok: true, output: "" };
+
 class FakeBiome extends ToolService implements Linter, Formatter, StaticChecker {
   constructor() {
     super({ pkg: "@biomejs/biome", bin: "biome", ui: "fake", shellService: {} as ShellService, from: FROM });
   }
-  async lint() {}
-  async format() {}
-  async check() {}
+  async lint() {
+    return emptyReport;
+  }
+  async format() {
+    return emptyReport;
+  }
+  async check() {
+    return emptyReport;
+  }
 }
 
 class FakeTsc extends ToolService implements TypeChecker {
   constructor() {
     super({ pkg: "typescript", bin: "tsc", ui: "fake", shellService: {} as ShellService, from: FROM });
   }
-  async check() {}
+  async check() {
+    return emptyReport;
+  }
 }
 
 class MissingService extends ToolService implements Linter {
@@ -42,7 +52,9 @@ class MissingService extends ToolService implements Linter {
       from: FROM,
     });
   }
-  async lint() {}
+  async lint() {
+    return emptyReport;
+  }
 }
 
 describe("definePlugin", () => {

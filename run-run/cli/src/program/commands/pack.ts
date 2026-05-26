@@ -1,6 +1,6 @@
 import { createCommand } from "commander";
 import type { Context } from "#src/services/ctx.ts";
-import { missingPluginError } from "../missing-plugin.ts";
+import { runToolCommand } from "../board.ts";
 import { pluginAnnotation } from "../ui.ts";
 import { createDoctorSubcommand } from "./doctor.ts";
 
@@ -14,13 +14,12 @@ export function createPackCommand(ctx: Context) {
     );
 
   if (packer) {
-    cmd.addCommand(createDoctorSubcommand(packer));
+    cmd.addCommand(createDoctorSubcommand(packer, ctx.appPkg));
     cmd.addHelpText("afterAll", `\nUnder the hood, this command uses the ${packer.ui} CLI to pack the project.`);
   }
 
   cmd.action(async () => {
-    if (!packer) throw missingPluginError("pack");
-    await packer.pack();
+    await runToolCommand(ctx, { name: "pack", kind: "pack", provider: packer, run: (p) => p.pack() });
   });
 
   return cmd;

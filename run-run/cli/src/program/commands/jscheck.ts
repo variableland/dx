@@ -1,7 +1,7 @@
 import { createCommand } from "commander";
 import type { Context } from "#src/services/ctx.ts";
+import { runToolCommand } from "../board.ts";
 import { composedJscProvider } from "../composed-jsc.ts";
-import { missingPluginError } from "../missing-plugin.ts";
 import { pluginAnnotation } from "../ui.ts";
 import { createDoctorSubcommand } from "./doctor.ts";
 
@@ -28,12 +28,11 @@ export function createJsCheckCommand(ctx: Context) {
     .option("--fix-staged", "try to fix staged files only");
 
   if (checker) {
-    cmd.addCommand(createDoctorSubcommand(checker));
+    cmd.addCommand(createDoctorSubcommand(checker, ctx.appPkg));
   }
 
   cmd.action(async (options: ActionOptions = {}) => {
-    if (!checker) throw missingPluginError("jsc");
-    await checker.check(options);
+    await runToolCommand(ctx, { name: "jsc", kind: "jsc", provider: checker, run: (p) => p.check(options) });
   });
 
   if (checker) {

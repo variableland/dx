@@ -1,50 +1,14 @@
-import { cwd, type ShellService } from "@vlandoss/clibuddy";
-import type { AnyLogger } from "@vlandoss/loggy";
 import { createCommand } from "commander";
-import type { Doctor, TypeChecker } from "#src/plugin/types.ts";
 import type { Context } from "#src/services/ctx.ts";
 import { logger } from "#src/services/logger.ts";
+import { type BoardTask, fanoutTitle, reportTask, runBoard, targetLabel } from "../board.ts";
 import { missingPluginError } from "../missing-plugin.ts";
 import { pluginAnnotation } from "../ui.ts";
 import { createDoctorSubcommand } from "./doctor.ts";
 
-type TypecheckAtOptions = {
-  dir: string;
-  scripts: Record<string, string | undefined> | undefined;
-  log: AnyLogger;
-  shell: ShellService;
-  tsc: TypeChecker & Doctor;
-};
+type Scripts = Record<string, string | undefined> | undefined;
 
-const getPreScript = (scripts: Record<string, string | undefined> | undefined) => scripts?.pretsc ?? scripts?.pretypecheck;
-
-async function typecheckAt({ dir, scripts, log, shell, tsc }: TypecheckAtOptions) {
-  log.debug(`checking types at ${dir}`);
-
-  const shellAt = cwd === dir ? shell : shell.at(dir);
-
-  try {
-    const preScript = getPreScript(scripts);
-    if (preScript) {
-      log.start(`Running pre-script: ${preScript}`);
-      // Pre-scripts come from package.json and may contain shell features
-      // (`&&`, pipes, env-var substitution) — run them through `/bin/sh -c`.
-      await shellAt.run(preScript, [], { shell: true });
-      log.success("Pre-script completed");
-    }
-
-    log.start("Type checking started");
-    if (cwd === dir) {
-      await tsc.check();
-    } else {
-      await tsc.check({ cwd: dir });
-    }
-    log.success("Typecheck completed");
-  } catch (error) {
-    log.error("Typecheck failed");
-    throw error;
-  }
-}
+const getPreScript = (scripts: Scripts) => scripts?.pretsc ?? scripts?.pretypecheck;
 
 export function createTsCheckCommand(ctx: Context) {
   const { appPkg, shell } = ctx;
@@ -58,7 +22,7 @@ export function createTsCheckCommand(ctx: Context) {
     );
 
   if (tsc) {
-    cmd.addCommand(createDoctorSubcommand(tsc));
+    cmd.addCommand(createDoctorSubcommand(tsc, ctx.appPkg));
     cmd.addHelpText("afterAll", `\nUnder the hood, this command uses the ${tsc.ui} CLI to check the code.`);
   }
 
@@ -67,20 +31,36 @@ export function createTsCheckCommand(ctx: Context) {
 
     const isTsProject = (dir: string) => appPkg.hasFile("tsconfig.json", dir);
 
+    // A package's `pretsc`/`pretypecheck` runs captured, inside the task, so its
+    // output stays grouped with that package. It may use shell features, so it
+    // goes through `/bin/sh -c`. A failing pre-script fails the task before tsc.
+    const typecheckTask = (label: string, dir: string, scripts: Scripts): BoardTask =>
+      reportTask(label, async () => {
+        const preScript = getPreScript(scripts);
+        if (preScript) {
+          const pre = await shell.at(dir).runCaptured(preScript, [], { shell: true, throwOnError: false });
+          if ((pre.exitCode ?? 0) !== 0) {
+            const output = [pre.stdout, pre.stderr]
+              .map((s) => s?.trim())
+              .filter(Boolean)
+              .join("\n");
+            return { ok: false, output: `pre-script \`${preScript}\` failed\n${output}` };
+          }
+        }
+        return tsc.check({ cwd: dir });
+      });
+
     if (!appPkg.isMonorepo()) {
       if (!isTsProject(appPkg.dirPath)) {
         logger.info("No tsconfig.json found, skipping typecheck");
         return;
       }
 
-      await typecheckAt({
-        shell,
-        tsc,
-        dir: appPkg.dirPath,
-        scripts: appPkg.packageJson.scripts,
-        log: logger,
-      });
-
+      // Single package → compact board; the row carries the canonical
+      // `tsc (<tool>) · <pkg>` label like every other single-target command.
+      const label = targetLabel("tsc", tsc, appPkg);
+      const result = await runBoard([typecheckTask(label, appPkg.dirPath, appPkg.packageJson.scripts)]);
+      if (!result.ok) process.exitCode = 1;
       return;
     }
 
@@ -92,20 +72,9 @@ export function createTsCheckCommand(ctx: Context) {
       return;
     }
 
-    await Promise.all(
-      tsProjects.map((p) =>
-        typecheckAt({
-          shell,
-          tsc,
-          dir: p.rootDir,
-          scripts: p.manifest.scripts,
-          log: logger.child({
-            tag: p.manifest.name,
-            namespace: "typecheck",
-          }),
-        }),
-      ),
-    );
+    const tasks = tsProjects.map((p) => typecheckTask(p.manifest.name ?? p.rootDir, p.rootDir, p.manifest.scripts));
+    const result = await runBoard(tasks, { title: fanoutTitle("tsc", tsc, tsProjects.length, "packages") });
+    if (!result.ok) process.exitCode = 1;
   });
 
   return cmd;

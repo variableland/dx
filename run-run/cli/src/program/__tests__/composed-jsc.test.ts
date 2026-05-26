@@ -1,13 +1,13 @@
 import { describe, expect, it, vi } from "vitest";
-import type { Doctor, DoctorResult, Formatter, Linter } from "#src/plugin/types.ts";
+import type { Doctor, Formatter, Linter } from "#src/plugin/types.ts";
 import { composedJscProvider } from "#src/program/composed-jsc.ts";
 
 function makeLinter(overrides: Partial<Linter & Doctor> = {}): Linter & Doctor {
   return {
     bin: "fake-lint",
     ui: "FakeLint",
-    lint: vi.fn(async () => {}),
-    doctor: vi.fn(async (): Promise<DoctorResult> => ({ ok: true, output: { stdout: "lint-ok", stderr: "", exitCode: 0 } })),
+    lint: vi.fn(async () => ({ ok: true, output: "" })),
+    doctor: vi.fn(async () => ({ ok: true, output: "lint-ok" })),
     ...overrides,
   };
 }
@@ -16,8 +16,8 @@ function makeFormatter(overrides: Partial<Formatter & Doctor> = {}): Formatter &
   return {
     bin: "fake-fmt",
     ui: "FakeFmt",
-    format: vi.fn(async () => {}),
-    doctor: vi.fn(async (): Promise<DoctorResult> => ({ ok: true, output: { stdout: "fmt-ok", stderr: "", exitCode: 0 } })),
+    format: vi.fn(async () => ({ ok: true, output: "" })),
+    doctor: vi.fn(async () => ({ ok: true, output: "fmt-ok" })),
     ...overrides,
   };
 }
@@ -36,9 +36,11 @@ describe("composedJscProvider", () => {
       const order: string[] = [];
       vi.mocked(linter.lint).mockImplementation(async ({ fix }) => {
         order.push(`lint:${fix ?? false}`);
+        return { ok: true, output: "" };
       });
       vi.mocked(formatter.format).mockImplementation(async ({ fix }) => {
         order.push(`format:${fix ?? false}`);
+        return { ok: true, output: "" };
       });
       const provider = composedJscProvider(linter, formatter);
 
@@ -60,50 +62,44 @@ describe("composedJscProvider", () => {
       expect(formatter.format).toHaveBeenCalledWith({ fix: undefined });
     });
 
-    it("propagates a lint failure (format must not run)", async () => {
-      const linter = makeLinter({
-        lint: vi.fn(async () => {
-          throw new Error("lint exploded");
-        }),
-      });
-      const formatter = makeFormatter();
+    it("merges both reports — ok=false if either failed, keeping each tool's output under its header", async () => {
+      const linter = makeLinter({ lint: vi.fn(async () => ({ ok: false, output: "lint problems" })) });
+      const formatter = makeFormatter({ format: vi.fn(async () => ({ ok: true, output: "fmt clean" })) });
       const provider = composedJscProvider(linter, formatter);
 
-      await expect(provider.check({})).rejects.toThrow(/lint exploded/);
-      expect(formatter.format).not.toHaveBeenCalled();
+      const report = await provider.check({});
+
+      // Both run (no short-circuit) so the user sees a complete picture.
+      expect(formatter.format).toHaveBeenCalled();
+      expect(report.ok).toBe(false);
+      expect(report.output).toContain("FakeLint:");
+      expect(report.output).toContain("lint problems");
+      expect(report.output).toContain("FakeFmt:");
+      expect(report.output).toContain("fmt clean");
     });
   });
 
   describe("doctor()", () => {
-    it("returns ok when both providers' doctors pass", async () => {
+    it("returns ok when both providers' doctors pass, merging their output", async () => {
       const provider = composedJscProvider(makeLinter(), makeFormatter());
       const res = await provider.doctor();
       expect(res.ok).toBe(true);
-      expect(res.output.stdout).toContain("lint-ok");
-      expect(res.output.stdout).toContain("fmt-ok");
-      expect(res.output.exitCode).toBe(0);
+      expect(res.output).toContain("lint-ok");
+      expect(res.output).toContain("fmt-ok");
     });
 
-    it("returns ok=false and surfaces the first failing exit code when the linter doctor fails", async () => {
-      const linter = makeLinter({
-        doctor: vi.fn(async () => ({ ok: false, output: { stdout: "lint-bad", stderr: "boom", exitCode: 2 } })),
-      });
-      const formatter = makeFormatter();
-      const res = await composedJscProvider(linter, formatter).doctor();
+    it("returns ok=false when the linter doctor fails, surfacing its output", async () => {
+      const linter = makeLinter({ doctor: vi.fn(async () => ({ ok: false, output: "boom" })) });
+      const res = await composedJscProvider(linter, makeFormatter()).doctor();
       expect(res.ok).toBe(false);
-      expect(res.output.exitCode).toBe(2);
-      expect(res.output.stderr).toContain("boom");
+      expect(res.output).toContain("boom");
     });
 
     it("returns ok=false when only the formatter doctor fails", async () => {
-      const linter = makeLinter();
-      const formatter = makeFormatter({
-        doctor: vi.fn(async () => ({ ok: false, output: { stdout: "fmt-bad", stderr: "kaput", exitCode: 7 } })),
-      });
-      const res = await composedJscProvider(linter, formatter).doctor();
+      const formatter = makeFormatter({ doctor: vi.fn(async () => ({ ok: false, output: "kaput" })) });
+      const res = await composedJscProvider(makeLinter(), formatter).doctor();
       expect(res.ok).toBe(false);
-      expect(res.output.exitCode).toBe(7);
-      expect(res.output.stderr).toContain("kaput");
+      expect(res.output).toContain("kaput");
     });
   });
 });

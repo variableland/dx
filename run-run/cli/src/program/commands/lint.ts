@@ -1,6 +1,6 @@
 import { createCommand } from "commander";
 import type { Context } from "#src/services/ctx.ts";
-import { missingPluginError } from "../missing-plugin.ts";
+import { runToolCommand } from "../board.ts";
 import { pluginAnnotation } from "../ui.ts";
 import { createDoctorSubcommand } from "./doctor.ts";
 
@@ -21,12 +21,11 @@ export function createLintCommand(ctx: Context) {
     .option("--fix", "try to fix all the code");
 
   if (linter) {
-    cmd.addCommand(createDoctorSubcommand(linter));
+    cmd.addCommand(createDoctorSubcommand(linter, ctx.appPkg));
   }
 
   cmd.action(async (options: ActionOptions = {}) => {
-    if (!linter) throw missingPluginError("lint");
-    await linter.lint(options);
+    await runToolCommand(ctx, { name: "lint", kind: "lint", provider: linter, run: (p) => p.lint(options) });
   });
 
   if (linter) {

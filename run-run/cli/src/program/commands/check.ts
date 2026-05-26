@@ -1,4 +1,6 @@
+import { palette } from "@vlandoss/clibuddy";
 import { type Command, createCommand } from "commander";
+import { runCheckSections } from "#src/program/board.ts";
 import { pluginAnnotation } from "#src/program/ui.ts";
 import type { Context } from "#src/services/ctx.ts";
 import { logger } from "#src/services/logger.ts";
@@ -20,7 +22,7 @@ export function createCheckCommand(ctx: Context) {
   return createCommand("check")
     .summary(`run static checks${checkAnnotation(ctx)}`)
     .description(
-      "Runs `rr jsc` and `rr tsc` concurrently in-process. Aggregates their exit codes — non-zero when either subcommand fails.",
+      "Runs `rr jsc` then `rr tsc` in-process, each as its own section. Aggregates their exit codes — non-zero when either subcommand fails.",
     )
     .action(async function checkAction(this: Command) {
       const program = this.parent;
@@ -30,33 +32,52 @@ export function createCheckCommand(ctx: Context) {
         throw new Error("`rr check` requires the parent program to dispatch sibling subcommands.");
       }
 
-      const targets = ["jsc", "tsc"];
-      const cmds = targets.map((name) => ({ name, cmd: findCommand(program, name) }));
-
-      const missing = cmds.filter(({ cmd }) => !cmd).map(({ name }) => name);
-      if (missing.length > 0) {
-        for (const name of missing) logger.error(`rr check: subcommand "${name}" is not registered.`);
-        process.exitCode = 1;
-        return;
-      }
-
-      const results = await Promise.allSettled(
-        // biome-ignore lint/style/noNonNullAssertion: missing is guarded above
-        cmds.map(({ cmd }) => cmd!.parseAsync([], { from: "user" })),
-      );
-
-      const failed: Array<{ name: string; reason: unknown }> = [];
-      for (const [i, r] of results.entries()) {
-        if (r.status === "rejected") failed.push({ name: cmds[i]?.name ?? "?", reason: r.reason });
-      }
-      if (failed.length > 0) {
-        for (const { name, reason } of failed) {
-          const msg = reason instanceof Error ? reason.message : String(reason);
-          logger.error(`rr check (${name}): ${msg}`);
+      // jsc then tsc, sequentially: each renders its own live board and two
+      // boards can't animate the same terminal region at once (decision 012).
+      // Each section runs inside its own `runCheckSections` scope — that both
+      // keeps it framed (so the frames divide the sections) and returns the
+      // boards THAT section rendered, so failure is attributed by section name,
+      // never by a fragile dispatch-vs-render index. A section that runs no
+      // board (tsc with no tsconfig) simply reports no results.
+      const start = Date.now();
+      const failed: string[] = [];
+      let rendered = false;
+      for (const name of ["jsc", "tsc"]) {
+        const cmd = findCommand(program, name);
+        if (!cmd) {
+          logger.error(`rr check: subcommand "${name}" is not registered.`);
+          failed.push(name);
+          continue;
         }
-        process.exitCode = 1;
+        if (rendered) process.stderr.write("\n"); // one blank line between sections
+        let threw = false;
+        const results = await runCheckSections(async () => {
+          try {
+            await cmd.parseAsync([], { from: "user" });
+          } catch (reason) {
+            logger.error(`rr check (${name}): ${reason instanceof Error ? reason.message : String(reason)}`);
+            threw = true;
+          }
+        });
+        if (threw || results.some((r) => !r.ok)) failed.push(name);
+        rendered = true;
       }
+
+      // One overall verdict so the bottom of the scroll always answers "did
+      // check pass?" — a green section summary can otherwise be the last line
+      // of a run that failed in the section above it.
+      process.stderr.write(`\n${checkVerdict(failed, Date.now() - start)}\n`);
+      if (failed.length > 0) process.exitCode = 1;
     });
+}
+
+function checkVerdict(failed: string[], ms: number): string {
+  const elapsed = palette.dim(ms < 1000 ? `${Math.round(ms)}ms` : `${(ms / 1000).toFixed(1)}s`);
+  const sep = palette.dim(" · ");
+  if (failed.length > 0) {
+    return `${palette.error("✖")} check failed${sep}${[...new Set(failed)].join(", ")}${sep}${elapsed}`;
+  }
+  return `${palette.success("✔")} check passed${sep}${elapsed}`;
 }
 
 function findCommand(program: Command, name: string): Command | undefined {

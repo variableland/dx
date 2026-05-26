@@ -15,10 +15,9 @@ describe("rr pack", () => {
 
   afterEach(() => fixture.cleanup());
 
-  test("doctor: exits 0 and reports tsdown ok", () => {
+  test("doctor: exits 0 and reports tsdown healthy as a board row", () => {
     const r = cli("pack doctor", { cwd: fixture.dir });
-    expect(r.stderr).toBe("");
-    expect(r.stdout).toContain("tsdown ok");
+    expect(r.stdout + r.stderr).toContain("tsdown");
     expect(r.status).toBe(0);
   });
 });

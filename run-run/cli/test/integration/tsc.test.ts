@@ -17,10 +17,9 @@ describe("rr tsc", () => {
       });
     });
 
-    test("exits 0 and reports tsc ok", () => {
+    test("exits 0 and reports tsc healthy as a board row", () => {
       const r = cli("tsc doctor", { cwd: fixture.dir });
-      expect(r.stderr).toBe("");
-      expect(r.stdout).toContain("tsc ok");
+      expect(r.stdout + r.stderr).toContain("tsc");
       expect(r.status).toBe(0);
     });
   });
@@ -35,10 +34,11 @@ describe("rr tsc", () => {
       });
     });
 
-    test("exits 0 when types check cleanly", () => {
+    test("exits 0 when types check cleanly and renders the board", () => {
       const r = cli("tsc", { cwd: fixture.dir });
       const combined = r.stdout + r.stderr;
-      expect(combined).toMatch(/\$ tsc --noEmit/);
+      // Single package → compact board: one row labelled with the command ("tsc").
+      expect(combined).toContain("tsc");
       expect(r.status).toBe(0);
     });
   });

@@ -6,6 +6,7 @@ import {
   type InstallResult,
   type Linter,
   type LintOptions,
+  type RunReport,
   ToolService,
   type TypeChecker,
   type TypeCheckOptions,
@@ -27,8 +28,8 @@ export class OxlintService extends ToolService implements Linter {
     super({ pkg: "oxlint", ui: UI_LINT, shellService, from: FROM });
   }
 
-  async lint(options: LintOptions) {
-    await this.exec(["--report-unused-disable-directives", options.fix ? "--fix" : "--check"]);
+  async lint(options: LintOptions): Promise<RunReport> {
+    return this.runReport(["--report-unused-disable-directives", options.fix ? "--fix" : "--check"]);
   }
 }
 
@@ -37,8 +38,8 @@ export class OxfmtService extends ToolService implements Formatter {
     super({ pkg: "oxfmt", ui: UI_FMT, shellService, from: FROM });
   }
 
-  async format(options: FormatOptions) {
-    await this.exec(["--no-error-on-unmatched-pattern", options.fix ? "--fix" : "--check"]);
+  async format(options: FormatOptions): Promise<RunReport> {
+    return this.runReport(["--no-error-on-unmatched-pattern", options.fix ? "--fix" : "--check"]);
   }
 }
 
@@ -47,8 +48,8 @@ export class OxlintTypeCheckService extends ToolService implements TypeChecker {
     super({ pkg: "oxlint", ui: UI_LINT, shellService, from: FROM });
   }
 
-  async check(options: TypeCheckOptions = {}): Promise<void> {
-    await this.exec(["--type-aware", "--type-check"], { cwd: options.cwd, verbose: !options.cwd });
+  async check(options: TypeCheckOptions = {}): Promise<RunReport> {
+    return this.runReport(["--type-aware", "--type-check"], { cwd: options.cwd });
   }
 }
 
