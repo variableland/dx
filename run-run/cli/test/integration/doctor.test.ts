@@ -26,9 +26,9 @@ describe("rr doctor", () => {
     const r = cli("doctor", { cwd: fixture.dir });
     const combined = r.stdout + r.stderr;
     // biome plugin backs lint + format + jsc with the same BiomeService.
-    // Doctor should run once, not three times.
-    const okCount = (combined.match(/biome ok/g) ?? []).length;
-    expect(okCount).toBe(1);
+    // Doctor dedups by reference → it probes the tool once, not three times.
+    const runs = (combined.match(/biome --help/g) ?? []).length;
+    expect(runs).toBe(1);
     expect(r.status).toBe(0);
   });
 
@@ -41,8 +41,10 @@ describe("rr doctor", () => {
     });
     const r = cli("doctor", { cwd: fixture.dir });
     const combined = r.stdout + r.stderr;
-    expect(combined).toMatch(/biome ok/);
-    expect(combined).toMatch(/tsc ok/);
+    // Two distinct providers → a row per tool, closing with a clean summary.
+    expect(combined).toContain("biome");
+    expect(combined).toContain("tsc");
+    expect(combined).toMatch(/2 ok/);
     expect(r.status).toBe(0);
   });
 });

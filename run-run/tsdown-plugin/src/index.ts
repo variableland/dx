@@ -49,7 +49,7 @@ export class TsdownService extends ToolService {
   }
 
   async pack() {
-    await this.exec();
+    return this.runReport();
   }
 }
 

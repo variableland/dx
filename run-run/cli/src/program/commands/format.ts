@@ -1,6 +1,6 @@
 import { createCommand } from "commander";
 import type { Context } from "#src/services/ctx.ts";
-import { missingPluginError } from "../missing-plugin.ts";
+import { runToolCommand } from "../board.ts";
 import { pluginAnnotation } from "../ui.ts";
 import { createDoctorSubcommand } from "./doctor.ts";
 
@@ -19,12 +19,11 @@ export function createFormatCommand(ctx: Context) {
     .option("--fix", "format all the code");
 
   if (formatter) {
-    cmd.addCommand(createDoctorSubcommand(formatter));
+    cmd.addCommand(createDoctorSubcommand(formatter, ctx.appPkg));
   }
 
   cmd.action(async (options: ActionOptions = {}) => {
-    if (!formatter) throw missingPluginError("format");
-    await formatter.format(options);
+    await runToolCommand(ctx, { name: "format", kind: "format", provider: formatter, run: (p) => p.format(options) });
   });
 
   if (formatter) {

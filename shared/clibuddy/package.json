@@ -26,6 +26,7 @@
   "scripts": {
     "build": "tsdown",
     "prepublishOnly": "pnpm build",
+    "test": "vitest run",
     "test:types": "rr tsc"
   },
   "dependencies": {

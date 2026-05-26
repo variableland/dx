@@ -1,4 +1,4 @@
-import ansis, { bold, cyan, dim, green, italic, underline } from "ansis";
+import ansis, { bold, cyan, dim, green, italic, red, underline } from "ansis";
 
 // hex-from-string factory; matches the previous public API.
 export const colorize = (hex: string) => ansis.hex(hex);
@@ -16,5 +16,6 @@ export const palette = {
   // semantic
   highlight: cyan,
   success: green,
+  error: red,
   label: (s: string) => ansis.bgMagenta.black(s),
 };

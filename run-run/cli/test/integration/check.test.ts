@@ -18,9 +18,11 @@ describe("rr check", () => {
     });
     const r = cli("check", { cwd: fixture.dir });
     const combined = r.stdout + r.stderr;
-    // Both siblings are invoked in-process — we see each tool's command line.
-    expect(combined).toMatch(/\$ biome (check|ci)/);
-    expect(combined).toMatch(/\$ tsc --noEmit/);
+    // Single-package fixture → each section is a one-row board: jsc's row is
+    // labelled "biome", tsc's row "tsc". `check` closes with an overall verdict.
+    expect(combined).toContain("biome");
+    expect(combined).toContain("tsc");
+    expect(combined).toContain("check passed");
     expect(r.status).toBe(0);
   });
 
@@ -33,7 +35,9 @@ describe("rr check", () => {
       "src/bad.ts": 'export const bad: number = "not a number";\n',
     });
     const r = cli("check", { cwd: fixture.dir });
-    expect(r.stdout + r.stderr).toMatch(/Type 'string' is not assignable to type 'number'/);
+    const combined = r.stdout + r.stderr;
+    expect(combined).toMatch(/Type 'string' is not assignable to type 'number'/);
+    expect(combined).toContain("check failed"); // overall verdict names the failure
     expect(r.status).not.toBe(0);
   });
 

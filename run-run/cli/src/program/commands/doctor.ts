@@ -1,29 +1,23 @@
+import type { Pkg } from "@vlandoss/clibuddy";
 import { createCommand } from "commander";
-import type { Doctor, DoctorResult } from "#src/plugin/types.ts";
+import type { Doctor } from "#src/plugin/types.ts";
 import { PLUGIN_KINDS } from "#src/plugin/types.ts";
 import type { Context } from "#src/services/ctx.ts";
 import { logger } from "#src/services/logger.ts";
+import { fanoutTitle, reportTask, runBoard, targetLabel } from "../board.ts";
 
 /**
  * Subcommand factory used by every plugin-backed command (lint, format, jsc,
- * tsc, pack) to expose a `doctor` subcommand that verifies the underlying
- * tool is wired correctly. Each calls this with its own provider.
+ * tsc, pack) to expose a `doctor` subcommand that verifies the underlying tool
+ * is wired correctly. Renders the canonical `doctor (<tool>) · <pkg>` row like
+ * every other single-target command — `doctor()` returns a `RunReport`.
  */
-export function createDoctorSubcommand(service: Doctor) {
+export function createDoctorSubcommand(service: Doctor, appPkg: Pkg) {
   return createCommand("doctor")
     .summary("check if the underlying tool is working correctly")
     .action(async function doctorAction() {
-      const debug = logger.subdebug("doctor");
-      const { ok, output } = await service.doctor();
-
-      if (ok) {
-        logger.success(`${service.ui} ok`);
-        debug("%O", output);
-      } else {
-        logger.error(`${service.ui} not working`);
-        debug("%O", output);
-        process.exit(output.exitCode ?? 1);
-      }
+      const result = await runBoard([reportTask(targetLabel("doctor", service, appPkg), () => service.doctor())]);
+      if (!result.ok) process.exitCode = 1;
     });
 }
 
@@ -46,27 +40,11 @@ export function createDoctorCommand(ctx: Context) {
         return;
       }
 
-      const debug = logger.subdebug("doctor");
-      const results = await Promise.all(
-        services.map(async (svc) => {
-          const result = await svc.doctor();
-          return { svc, result };
-        }),
-      );
-
-      let failures = 0;
-      for (const { svc, result } of results) {
-        if (result.ok) {
-          logger.success(`${svc.ui} ok`);
-          debug("%s: %O", svc.ui, result.output);
-        } else {
-          logger.error(`${svc.ui} not working`);
-          debug("%s: %O", svc.ui, result.output);
-          failures++;
-        }
-      }
-
-      if (failures > 0) process.exitCode = 1;
+      // Each tool's health check is one parallel board row — a fan-out across
+      // tools, so the rows carry the tool name and the title omits a single tool.
+      const tasks = services.map((svc) => reportTask(svc.ui, () => svc.doctor()));
+      const result = await runBoard(tasks, { title: fanoutTitle("doctor", undefined, services.length, "tools") });
+      if (!result.ok) process.exitCode = 1;
     });
 }
 
@@ -81,5 +59,3 @@ function collectDistinctDoctors(ctx: Context): Doctor[] {
   }
   return [...seen];
 }
-
-export type { Doctor as _Doctor, DoctorResult as _DoctorResult };

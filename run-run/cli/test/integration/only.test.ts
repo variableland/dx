@@ -22,30 +22,38 @@ describe("plugin { only } narrowing", () => {
       });
     });
 
+    // The board row label is the provider's `ui`, so it tells us which tool was
+    // dispatched: biome → "biome", oxc's type-checker → "oxlint".
     test("rr lint dispatches to biome", () => {
       const r = cli("lint", { cwd: fixture.dir });
       const combined = r.stdout + r.stderr;
-      expect(combined).toMatch(/\$ biome check .*--formatter-enabled=false/);
+      expect(combined).toContain("biome");
+      expect(combined).not.toContain("oxlint");
       expect(r.status).toBe(0);
     });
 
     test("rr format dispatches to biome", () => {
       const r = cli("format", { cwd: fixture.dir });
       const combined = r.stdout + r.stderr;
-      expect(combined).toMatch(/\$ biome format/);
+      expect(combined).toContain("biome");
+      expect(combined).not.toContain("oxlint");
       expect(r.status).toBe(0);
     });
 
-    test("rr tsc dispatches to oxlint with --type-aware --type-check", () => {
+    test("rr tsc dispatches to oxlint", () => {
       const r = cli("tsc", { cwd: fixture.dir });
       const combined = r.stdout + r.stderr;
-      expect(combined).toMatch(/\$ oxlint --type-aware --type-check/);
+      // The tsc row is labelled "tsc"; oxlint identity shows in its flushed
+      // output: either its `N warnings and M errors` summary or the `tsgolint`
+      // type-checker it shells out to — both are oxlint-exclusive markers.
+      expect(combined).toMatch(/\d+ warnings? and \d+ errors?|tsgolint/i);
     }, 15_000);
 
     test("rr jsc composes biome's lint+format (biome's direct jsc was narrowed away)", () => {
       const r = cli("jsc", { cwd: fixture.dir });
       const combined = r.stdout + r.stderr;
-      expect(combined).toMatch(/\$ biome (check|format)/);
+      // Composed jsc renders one row labelled with both providers' ui ("biome + biome").
+      expect(combined).toMatch(/biome \+ biome/);
       expect(r.status).toBe(0);
     });
   });

@@ -7,6 +7,7 @@ import {
   type InstallContext,
   type InstallResult,
   pickPreset,
+  type RunReport,
   ToolService,
   type TypeChecker,
   type TypeCheckOptions,
@@ -28,8 +29,10 @@ export class TscService extends ToolService implements TypeChecker {
     super({ pkg: "typescript", bin: "tsc", ui: UI, shellService, from: FROM });
   }
 
-  async check(options: TypeCheckOptions = {}): Promise<void> {
-    await this.exec(["--noEmit"], { cwd: options.cwd, verbose: !options.cwd });
+  async check(options: TypeCheckOptions = {}): Promise<RunReport> {
+    // `--pretty` forces color + formatting even when captured (tsc otherwise
+    // drops color off a TTY); see decisions/013.
+    return this.runReport(["--noEmit", "--pretty"], { cwd: options.cwd });
   }
 }
 
