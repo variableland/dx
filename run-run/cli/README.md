@@ -6,15 +6,6 @@ CLI toolbox to fullstack common scripts in [Variable Land](https://variable.land
 
 - Node.js >= 20.0.0
 
-## Toolbox
-
-- [biome](https://biomejs.dev)
-- [tsc](https://www.typescriptlang.org)
-- [rimraf](https://www.npmjs.com/package/rimraf)
-- [oxfmt](https://oxc.rs/docs/guide/usage/formatter.html)
-- [oxlint](https://oxc.rs/docs/guide/usage/linter.html)
-- [tsdown](https://tsdown.dev)
-
 ## Installation
 
 ```sh
@@ -37,7 +28,7 @@ See [`CLI.md`](./CLI.md) for the full reference (auto-generated per release).
 
 ## Plugins
 
-`rr` is a microkernel: every tool (Biome, TypeScript, tsdown, …) lives in its own `@rrlab/<tool>-plugin` package. Install one with:
+`rr` is a microkernel: every tool lives in its own `@rrlab/<tool>-plugin` package. The official plugins are `biome` ([Biome](https://biomejs.dev)), `oxc` ([oxlint](https://oxc.rs/docs/guide/usage/linter.html) + [oxfmt](https://oxc.rs/docs/guide/usage/formatter.html)), `ts` ([tsc](https://www.typescriptlang.org)) and `tsdown` ([tsdown](https://tsdown.dev)). Install one with:
 
 ```sh
 rr plugins add biome
