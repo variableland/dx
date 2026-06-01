@@ -1,5 +1,16 @@
 # @vlandoss/vland
 
+## 0.3.2
+
+### Patch Changes
+
+- [#235](https://github.com/variableland/dx/pull/235) [`c82191d`](https://github.com/variableland/dx/commit/c82191d8b450eaf551c5c488858193a385a48a50) Thanks [@rqbazan](https://github.com/rqbazan)! - Drop the `muted` token from `palette` and route its callers through `palette.dim`.
+
+  `muted` (a fixed `#a8afb5` gray) overlapped with `dim` for the secondary-text role it was used in (`$` command prefix, `v<version>`, the `vland init` "Next steps" / source path). Consolidating on `dim` keeps a single secondary tone and lets it follow the terminal's dim attribute. `@vlandoss/vland`'s banner, `--usage` hint, and `init` output move to `dim` accordingly.
+
+- Updated dependencies [[`c82191d`](https://github.com/variableland/dx/commit/c82191d8b450eaf551c5c488858193a385a48a50)]:
+  - @vlandoss/clibuddy@0.7.1
+
 ## 0.3.1
 
 ### Patch Changes
