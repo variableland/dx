@@ -1,15 +1,10 @@
-import { palette } from "@vlandoss/clibuddy";
-import { createCommand } from "commander";
-import type { Context } from "#src/services/ctx.ts";
+import { configAction } from "#src/actions/config.ts";
+import type { ContextValue } from "#src/services/context.ts";
+import { createCommand } from "../base.ts";
 
-export function createConfigCommand(ctx: Context) {
+export function createConfigCommand(ctx: ContextValue) {
   return createCommand("config")
     .summary("display the current config")
-    .description("Displays the current configuration settings, including their source file path if available.")
-    .action(async function configAction() {
-      const { config, meta } = ctx.config;
-      console.log(palette.muted("Config:"));
-      console.log(config);
-      console.log(palette.muted(`Loaded from ${meta.filepath ? palette.link(meta.filepath) : "n/a"}`));
-    });
+    .description("Displays the current configuration settings, including their source file path and the plugins it registers.")
+    .action(() => configAction({ ctx }));
 }

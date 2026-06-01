@@ -25,5 +25,5 @@ export function getBannerText(version: string) {
   return `
 ${uiLogo}
 
-🦉 ${palette.italic(palette.muted("The CLI to init a new project in"))} ${text.vland}\n`.trimStart();
+🦉 ${palette.italic(palette.dim("The CLI to init a new project in"))} ${text.vland}\n`.trimStart();
 }

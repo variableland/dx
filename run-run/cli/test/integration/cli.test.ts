@@ -10,14 +10,39 @@ describe("rr (cli surface)", () => {
     expect(r.stdout).toContain("Usage:");
   });
 
-  test("--version prints a semver-shaped string", () => {
+  test("--version prints the semver and exits 0", () => {
     const r = cli("--version");
     expect(r.status).toBe(0);
     expect(r.stdout.trim()).toMatch(/^\d+\.\d+\.\d+/);
   });
 
-  test("an unknown command exits non-zero", () => {
-    const r = cli("definitely-not-a-real-command");
+  test("--about prints the credits and exits 0", () => {
+    const r = cli("--about");
+    expect(r.status).toBe(0);
+    expect(r.stdout).toContain("Inspired by:");
+  });
+
+  test("--usage prints the KDL spec and exits 0", () => {
+    const r = cli("--usage");
+    expect(r.status).toBe(0);
+    expect(r.stdout).toContain("name rr");
+  });
+
+  // Unknown commands use commander's native error + suggestion (showSuggestionAfterError).
+  test("a near-miss command errors and suggests the closest match", () => {
+    const r = cli("lnit");
     expect(r.status).not.toBe(0);
+    const combined = r.stdout + r.stderr;
+    expect(combined).toContain("unknown command 'lnit'");
+    expect(combined).toContain("Did you mean");
+    expect(combined).toContain("lint");
+  });
+
+  test("a far-off command errors with no suggestion", () => {
+    const r = cli("zzzzzz");
+    expect(r.status).not.toBe(0);
+    const combined = r.stdout + r.stderr;
+    expect(combined).toContain("unknown command 'zzzzzz'");
+    expect(combined).not.toContain("Did you mean");
   });
 });

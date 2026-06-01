@@ -16,7 +16,7 @@ export async function createProgram(options: Options) {
 
   return new Command("vland")
     .version(version, "-v, --version")
-    .addOption(new Option("--usage", `print KDL spec for this CLI (${palette.muted(palette.link("https://kdl.dev"))})`))
+    .addOption(new Option("--usage", `print KDL spec for this CLI (${palette.dim(palette.link("https://kdl.dev"))})`))
     .on("option:usage", function onUsage(this: Command) {
       generateToStdout(this);
       process.exit(0);

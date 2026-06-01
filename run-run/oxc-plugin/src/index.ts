@@ -19,13 +19,11 @@ import { TOOL_VERSIONS } from "./tool-versions.ts";
 export { TOOL_VERSIONS } from "./tool-versions.ts";
 
 const FROM = import.meta.url;
-const oxColor = colorize("#32F3E9");
-const UI_LINT = oxColor("oxlint");
-const UI_FMT = oxColor("oxfmt");
+const oxcColor = colorize("#32F3E9");
 
 export class OxlintService extends ToolService implements Linter {
   constructor(shellService: ShellService) {
-    super({ pkg: "oxlint", ui: UI_LINT, shellService, from: FROM });
+    super({ bin: "oxlint", color: oxcColor, shellService, from: FROM });
   }
 
   async lint(options: LintOptions): Promise<RunReport> {
@@ -35,7 +33,7 @@ export class OxlintService extends ToolService implements Linter {
 
 export class OxfmtService extends ToolService implements Formatter {
   constructor(shellService: ShellService) {
-    super({ pkg: "oxfmt", ui: UI_FMT, shellService, from: FROM });
+    super({ bin: "oxfmt", color: oxcColor, shellService, from: FROM });
   }
 
   async format(options: FormatOptions): Promise<RunReport> {
@@ -45,7 +43,7 @@ export class OxfmtService extends ToolService implements Formatter {
 
 export class OxlintTypeCheckService extends ToolService implements TypeChecker {
   constructor(shellService: ShellService) {
-    super({ pkg: "oxlint", ui: UI_LINT, shellService, from: FROM });
+    super({ bin: "oxlint", color: oxcColor, shellService, from: FROM });
   }
 
   async check(options: TypeCheckOptions = {}): Promise<RunReport> {
@@ -67,16 +65,17 @@ export async function uninstall(_ctx: UninstallContext): Promise<UninstallResult
   return { removeDependencies: ["oxlint", "oxfmt", "oxlint-tsgolint"] };
 }
 
-const oxc = definePlugin(() => ({
-  name: "oxc",
+const oxc = definePlugin({
   apiVersion: 1,
+  name: "oxc",
+  color: oxcColor,
   install,
   uninstall,
-  capabilities: ({ shell }) => ({
+  services: ({ shell }) => ({
     lint: new OxlintService(shell),
     format: new OxfmtService(shell),
-    tsc: new OxlintTypeCheckService(shell),
+    typecheck: new OxlintTypeCheckService(shell),
   }),
-}));
+});
 
 export default oxc;

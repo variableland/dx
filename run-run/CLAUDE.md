@@ -32,7 +32,7 @@ The contract is **kernel-internal** (see root CLAUDE.md). The 4 official plugins
 
 ## The kernel is tool-agnostic — non-negotiable
 
-`@rrlab/cli` knows nothing about specific tools (biome, typescript, oxc, tsdown). It only ships **tool-shape-agnostic** things: the plugin contract (`Plugin`, `PluginCapabilities`), capability interfaces (`Linter`, `Formatter`, `TypeChecker`, `Packer`, `StaticChecker`), the file-ops engine (`FileOp`, `JsonEdit`), `ToolService` as a base class, the command tree.
+`@rrlab/cli` knows nothing about specific tools (biome, typescript, oxc, tsdown). It only ships **tool-shape-agnostic** things: the plugin contract (`Plugin`, `PluginServices`), capability interfaces (`Linter`, `Formatter`, `TypeChecker`, `Packer`, `StaticChecker`), the file-ops engine (`FileOp`, `JsonEdit`), `ToolService` as a base class, the command tree.
 
 **Each plugin owns its tool.** That includes:
 
@@ -56,7 +56,7 @@ Per-plugin duplication of small constants (the `{ install, peer }` shape repeate
 ```mermaid
 flowchart TD
     Config["<b>user's run-run.config.{ts,mts}</b><br/>plugins: [biome(), ts(), …]"]
-    Kernel["<b>@rrlab/cli</b> — the kernel<br/><br/>createContext()<br/>• load config<br/>• for each plugin: setup(ctx)<br/>• register capabilities<br/><br/>commands consult ctx.registry<br/>lint → registry.get('lint')<br/>tsc  → registry.get('tsc')<br/>…"]
+    Kernel["<b>@rrlab/cli</b> — the kernel<br/><br/>ContextService.getContext()<br/>• load config<br/>• for each plugin: services(ctx)<br/>• register services<br/><br/>commands consult ctx.plugins<br/>lint → ctx.plugins.getServiceOrThrow('lint')<br/>tsc  → ctx.plugins.getServiceOrThrow('typecheck')<br/>…"]
     Biome["<b>biome-plugin</b><br/>Linter + Doctor<br/>Formatter<br/>StaticChecker"]
     TS["<b>ts-plugin</b><br/>TypeChecker"]
     More["…"]
@@ -74,7 +74,7 @@ Every plugin's host-side tool (`@biomejs/biome`, `typescript`, etc.) is a `peerD
 1. The `decisions/` folder at the repo root. Five load-bearing decisions today:
    - **001** all-peer dependencies.
    - **002** no `bin` shims.
-   - **003** wire plugins via `ctx.registry` + drop of `future.oxc`.
+   - **003** wire plugins via the registry (`ctx.plugins`) + drop of `future.oxc`.
    - **004** templating strategy + edit-json DSL.
    - **005** `@rrlab/tsdown-plugin` scaffolding + `@rrlab/tsdown-config` shape.
 2. `run-run/cli/CLAUDE.md` if you're going to touch the kernel.
@@ -82,19 +82,20 @@ Every plugin's host-side tool (`@biomejs/biome`, `typescript`, etc.) is a `peerD
 
 ## Plugin shape (kernel-internal contract)
 
-Every official plugin exports `default = definePlugin(() => ({...}))`. The factory returns:
+Every official plugin exports `default = definePlugin({...})` — a plain `PluginDefinition` object (not a factory function). `definePlugin` returns the `(options?) => Plugin` constructor the host's `run-run.config` calls. The definition object:
 
 ```ts
 {
-  name: "<short-name>",         // matches the alias in `OFFICIAL_PLUGINS`
+  name: "<short-name>",         // matches the alias in `PLUGINS_DIRECTORY`
   apiVersion: 1,
+  color: (value: string) => string,   // the plugin's brand color; the kernel derives every `ui` label from it
   install?: (ctx: InstallContext) => Promise<InstallResult>,
   uninstall?: (ctx: UninstallContext) => Promise<UninstallResult>,
-  setup: (ctx: PluginContext) => PluginCapabilities,
+  services: (ctx: PluginContext) => PluginServices,
 }
 ```
 
-`setup()` is called at runtime — every `rr <cmd>` invocation. It must be cheap. It returns the capabilities (`lint`, `format`, `jsc`, `tsc`, `pack`) the plugin provides. Multiple capabilities can share one service (e.g. `BiomeService` is `Linter`, `Formatter`, `StaticChecker`).
+`services()` is called at runtime — every `rr <cmd>` invocation, so it must be cheap. It returns a `PluginServices` map: the capabilities (`lint`, `format`, `jscheck`, `typecheck`, `pack`) the plugin provides, each mapped to the **service** that implements it. Multiple capabilities can share one service (e.g. `BiomeService` is `Linter`, `Formatter`, `StaticChecker`). `definePlugin` owns the cross-cutting wrapping: it applies the `only` narrowing and the dedup bin-probe before handing the map to the kernel, so the `services` function itself only constructs and returns the impls.
 
 `install()` / `uninstall()` are called only by `rr plugins add` / `rr plugins remove`. They return declarative `FileOp[]` + `devDependencies` / `removeDependencies`. The kernel applies them.
 
@@ -132,25 +133,25 @@ For TS modules (`eslint.config.ts` etc. if we ever add them), the escape hatch i
 1. `run-run/<tool>-plugin/`: copy the shape of any existing plugin (`biome-plugin` is the most complete reference).
 2. `package.json`: declare the wrapped tool as `peerDependencies` + `devDependencies` (matching version). Add `peerDependenciesMeta` for optional peers. Depends on `@rrlab/cli` as peer + dev. Include a `"test": "vitest run"` script.
 3. `src/tool-versions.ts`: export a `TOOL_VERSIONS` const mapping each wrapped tool to `{ install, peer }` ranges. Re-export from `src/index.ts` so consumers (and the install hook) read from one place. Never put this in the kernel.
-4. `src/index.ts`: export the `<Tool>Service extends ToolService` class, the `install()` and `uninstall()` hooks (consuming `TOOL_VERSIONS.<name>.install` for dev-dep pinning), and the `default = definePlugin(...)` factory.
+4. `src/index.ts`: export the `<Tool>Service extends ToolService` class, the `install()` and `uninstall()` hooks (consuming `TOOL_VERSIONS.<name>.install` for dev-dep pinning), and `default = definePlugin({...})` (a plain `PluginDefinition` object with a `services(ctx)` method).
 5. `vitest.config.ts`: a one-liner `export default defineConfig({})`.
 6. `src/__tests__/tool-versions.test.ts`: read this plugin's own `package.json` and assert that every `TOOL_VERSIONS[<name>].peer` matches `peerDependencies[<name>]`. Copy the shape from any sibling plugin's test verbatim — duplication across plugins is cheaper than a kernel-level helper.
 7. `src/__tests__/install.test.ts`: cover install (default preset, declined, per-preset deps), uninstall (delete-vs-edit decision). Use `fs.mkdtemp` + a real tmp dir, not mocks.
-8. Add the alias to `run-run/cli/src/services/plugins-registry.ts` `OFFICIAL_PLUGINS`.
+8. Add the alias to `run-run/cli/src/lib/plugin/directory.ts` `PLUGINS_DIRECTORY`, listing every capability it provides in that entry's `capabilities` array (so the `MissingPluginError` hint — derived via `providersOf(capability)` — suggests it).
 9. Add an integration test in `run-run/cli/test/integration/<capability>.test.ts` if the plugin provides a capability that doesn't yet have e2e coverage.
 10. If the plugin needs a shared config, create `run-run/<tool>-config/` alongside (mirror `ts-config` / `biome-config`).
 11. Update the dogfooded `run-run.config.mts` at the repo root if it makes sense (we use biome + ts + tsdown today).
 
 ### Modifying the contract
 
-If you need to evolve `PluginCapabilities`, `FileOp`, `JsonEdit`, `InstallResult`, etc.:
+If you need to evolve `PluginServices`, `FileOp`, `JsonEdit`, `InstallResult`, etc.:
 
-1. Edit `run-run/cli/src/plugin/types.ts`.
-2. Update re-exports in `run-run/cli/src/lib/plugin.ts`.
-3. Update `run-run/cli/src/plugin/registry.ts` if registry semantics change.
+1. Edit `run-run/cli/src/lib/plugin/types.ts`.
+2. Update re-exports in `run-run/cli/src/lib/plugin/index.ts`.
+3. Update `run-run/cli/src/lib/plugin/registry.ts` if registry semantics change.
 4. Update `run-run/cli/src/services/json-edit.ts` if JsonEdit ops change.
-5. Update each of the 4 plugins' `install()` / `uninstall()` / `setup()` as needed — same commit.
-6. Update tests: `run-run/cli/src/plugin/__tests__/registry.test.ts`, `run-run/cli/src/services/__tests__/json-edit.test.ts`, each plugin's tests.
+5. Update each of the 4 plugins' `install()` / `uninstall()` / `services()` as needed — same commit.
+6. Update tests: `run-run/cli/src/lib/plugin/__tests__/registry.test.ts`, `run-run/cli/src/services/__tests__/json-edit.test.ts`, each plugin's tests.
 7. Don't add deprecation shims. The contract is internal — propagate the breaking change.
 
 ## Tests

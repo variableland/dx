@@ -1,5 +1,5 @@
 import * as cjson from "comment-json";
-import type { JsonEdit } from "#src/plugin/types.ts";
+import type { JsonEdit } from "#src/lib/plugin/types.ts";
 
 /**
  * Applies a sequence of `JsonEdit` ops to a JSON / JSONC source string.

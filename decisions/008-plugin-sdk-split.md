@@ -24,7 +24,7 @@ The kernel-agnostic rule (`run-run/CLAUDE.md` → "The kernel is tool-agnostic")
 
 ### Sub-decisions that *would have* applied
 
-1. **What lives in `@rrlab/plugin`:** all contract types, capability interfaces, `ToolService` base class + `ToolServiceOptions`, `definePlugin` factory (redesigned — see #2), `PLUGIN_KINDS` constant, structural interface for `ReleaseService` (implementation stays in kernel).
+1. **What lives in `@rrlab/plugin`:** all contract types, capability interfaces, `ToolService` base class + `ToolServiceOptions`, `definePlugin` factory (redesigned — see #2), structural interface for `ReleaseService` (implementation stays in kernel).
 
 2. **`definePlugin` becomes declarative.** New shape — `setup()` replaced by `capabilities(ctx)`. The SDK applies `only` filter (typed against `keyof ReturnType<capabilities>`), throws on unknown kinds, dedup-probes the services' `pkg` field, and surfaces a canonical "requires X" error.
 

@@ -32,14 +32,12 @@ fi
 
 # `--usage` emits a KDL spec for downstream parsers (e.g. `usage generate
 # completion`). Force NO_COLOR so command summaries don't leak ANSI escapes
-# into the spec — colors are presentation, KDL is data. Also set
-# RR_USAGE_MODE so per-environment annotations (e.g. the active plugin
-# next to each command) are stripped from the spec — the KDL must be
-# stable across machines.
+# into the spec — colors are presentation, KDL is data. Command summaries are
+# static (no per-environment plugin annotations), so the spec is already stable
+# across machines.
 for arg in "$@"; do
   if [ "$arg" = "--usage" ]; then
     export NO_COLOR=1
-    export RR_USAGE_MODE=1
     break
   fi
 done

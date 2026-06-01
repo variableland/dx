@@ -1,26 +1,22 @@
-import { createCommand } from "commander";
-import type { Context } from "#src/services/ctx.ts";
-import { runToolCommand } from "../board.ts";
-import { pluginAnnotation } from "../ui.ts";
-import { createDoctorSubcommand } from "./doctor.ts";
+import { doctorOneAction } from "#src/actions/doctor.ts";
+import { packAction } from "#src/actions/pack.ts";
+import type { ContextValue } from "#src/services/context.ts";
+import { createCommand } from "../base.ts";
 
-export function createPackCommand(ctx: Context) {
-  const packer = ctx.registry.get("pack");
-
-  const cmd = createCommand("pack")
-    .summary(`pack a ts library${pluginAnnotation(packer)}`)
+export function createPackCommand(ctx: ContextValue) {
+  return createCommand("pack")
+    .addCapabilities(["pack"])
+    .summary("pack a ts library")
     .description(
       "Compiles TypeScript code into JavaScript and generates type declaration files, packaging the library for distribution.",
-    );
-
-  if (packer) {
-    cmd.addCommand(createDoctorSubcommand(packer, ctx.appPkg));
-    cmd.addHelpText("afterAll", `\nUnder the hood, this command uses the ${packer.ui} CLI to pack the project.`);
-  }
-
-  cmd.action(async () => {
-    await runToolCommand(ctx, { name: "pack", kind: "pack", provider: packer, run: (p) => p.pack() });
-  });
-
-  return cmd;
+    )
+    .action(async () => {
+      const packer = ctx.plugins.getServiceOrThrow("pack");
+      await packAction({ ctx, packer });
+    })
+    .addHelpTextAfter(ctx)
+    .addDoctorCommand(async () => {
+      const packer = ctx.plugins.getServiceOrThrow("pack");
+      await doctorOneAction({ ctx, service: packer });
+    });
 }

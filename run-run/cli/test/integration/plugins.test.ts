@@ -54,7 +54,7 @@ describe("rr plugins", () => {
       const r = cli("plugins add not-an-alias --dry-run", { cwd: fixture.dir });
       const combined = r.stderr + r.stdout;
       expect(combined).toMatch(/'not-an-alias' is invalid for argument 'name'/);
-      expect(combined).toMatch(/Allowed choices are ts, eslint, biome, oxc, tsdown/);
+      expect(combined).toMatch(/Allowed choices are ts, biome, oxc, tsdown/);
       expect(r.status).not.toBe(0);
     });
 
@@ -133,7 +133,7 @@ describe("rr plugins", () => {
     test("removes an entry that carries an `only` option object", () => {
       fixture = makeFixture("plugins-remove-only", {
         "package.json": fixtures.pkg(),
-        "run-run.config.mts": fixtures.config([{ alias: "biome", only: ["lint", "format"] }, "ts"]),
+        "run-run.config.mts": fixtures.config([{ name: "biome", only: ["lint", "format"] }, "ts"]),
       });
       const r = cli("plugins remove biome --yes", { cwd: fixture.dir });
       expect(r.stdout + r.stderr).toMatch(/Removed biome\(\) from run-run\.config\.mts/);

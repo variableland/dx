@@ -1,53 +1,22 @@
-import { cwd } from "@vlandoss/clibuddy";
-import { createCommand } from "commander";
-import { type GlobOptions, glob } from "glob";
-import { rimraf } from "rimraf";
-import { logger } from "#src/services/logger.ts";
-import { TOOL_LABELS } from "../ui.ts";
+import { colorize } from "@vlandoss/clibuddy";
+import { cleanAction } from "#src/actions/clean.ts";
+import { createCommand } from "../base.ts";
 
 type Options = {
-  onlyDist: boolean;
-  dryRun: boolean;
+  onlyDist?: boolean;
+  dryRun?: boolean;
 };
+
+const rimrafColor = colorize("#7C7270");
 
 export function createCleanCommand() {
   return createCommand("clean")
-    .summary(`delete dirty files (${TOOL_LABELS.RIMRAF})`)
+    .summary("delete dirty files")
     .description("Deletes generated files and folders such as 'dist', 'node_modules', and lock files to ensure a clean state.")
     .option("--only-dist", "delete 'dist' folders only")
     .option("--dry-run", "outputs the paths that would be deleted")
-    .action(async function cleanCommandAction(options: Options) {
-      async function run(paths: string[], globOptions: GlobOptions) {
-        if (options.dryRun) {
-          const toDelete = await glob(paths, globOptions);
-
-          logger.info("Paths that would be deleted: %O", toDelete);
-
-          return;
-        }
-
-        logger.start("Clean started");
-
-        await rimraf(paths, {
-          glob: globOptions,
-        });
-
-        logger.success("Clean completed");
-      }
-
-      const BUILD_PATHS = ["**/dist"];
-      const ALL_DIRTY_PATHS = ["**/.turbo", "**/node_modules", "pnpm-lock.yaml", "bun.lock", ...BUILD_PATHS];
-
-      if (options.onlyDist) {
-        await run(BUILD_PATHS, {
-          cwd,
-          ignore: ["**/node_modules/**"],
-        });
-      } else {
-        await run(ALL_DIRTY_PATHS, {
-          cwd,
-        });
-      }
-    })
-    .addHelpText("afterAll", `\nUnder the hood, this command uses ${TOOL_LABELS.RIMRAF} to delete dirty folders or files.`);
+    .action((options: Options) =>
+      cleanAction({ options: { onlyDist: Boolean(options.onlyDist), dryRun: Boolean(options.dryRun) } }),
+    )
+    .addHelpText("after", `\nUnder the hood, this command uses ${rimrafColor("rimraf")} to delete dirty folders or files.`);
 }

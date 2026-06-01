@@ -10,7 +10,6 @@ export const palette = {
   italic,
   link: underline,
   // tones
-  muted: ansis.hex("#a8afb5"),
   primary: ansis.hex("#36d399"),
   dim,
   // semantic

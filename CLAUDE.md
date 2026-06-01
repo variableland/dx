@@ -58,7 +58,9 @@ pnpm build && pnpm test && pnpm rr check    # full check
 - **Imports**: `#src/...` aliases inside a package; `@rrlab/...` / `@vlandoss/...` across packages.
 - **Exports**: named exports preferred; default exports only when the consumer needs them (e.g. plugin factories).
 - **Services**: classes ending in `Service`, dependencies via constructor. Only `logger` is a singleton.
-- **Commands**: factory functions named `create<Name>Command(ctx)` returning a configured commander `Command`.
+- **Commands**: factory functions named `create<Name>Command(ctx)` returning a configured commander `Command`. A command is a thin wrapper: it resolves its provider (throwing `MissingPluginError` with its `providers` list when absent) and delegates to exactly one action. See `decisions/015-command-action-service-layering.md`.
+- **Actions**: free functions in `src/actions/` taking a **single options object** named `<Name>ActionConfig` — never positional params. Dependencies (`ctx`, the resolved provider) sit at the top level; parsed flags/positional args nest under `options` / `args` (reuse the verb-option types from `src/types/tool.ts`). Actions import only `services`/`render`/`lib` — never the CLI framework.
+- **Errors**: domain errors are classes — kernel-internal ones in `src/errors/` (e.g. `MissingPluginError`), SDK ones in `src/lib/plugin/errors.ts` (`MultipleProvidersError`). Each builds its user-facing message from structured constructor args. Do NOT set `this.name` — keep the plain `Error:` prefix, so output stays clean.
 - **Tests**: vitest. Unit tests in `src/**/__tests__/*.test.ts`. Integration tests in `test/integration/*.test.ts`. Inline snapshots for CLI output assertions.
 - **No `any`.** If TypeScript pushes you there, stop and report — it usually means a design problem.
 - **Match neighbours.** Before introducing a new pattern, scan 2-3 nearby files. If they use a different style, follow theirs.
@@ -77,7 +79,7 @@ pnpm build && pnpm test && pnpm rr check    # full check
 
 ## Plugin contract is kernel-internal
 
-The plugin API (`@rrlab/cli/plugin`: `Plugin`, `PluginCapabilities`, `InstallResult`, etc.) is treated as **internal to `@rrlab/*`**, not as a public API for third-party plugin authors. The 4 official plugins are the only consumers we commit to. This means:
+The plugin API (`@rrlab/cli/plugin`: `Plugin`, `PluginServices`, `InstallResult`, etc.) is treated as **internal to `@rrlab/*`**, not as a public API for third-party plugin authors. The 4 official plugins are the only consumers we commit to. This means:
 
 - Breaking changes to the contract are fine as long as all 4 official plugins compile and tests pass.
 - Don't write contract-level documentation for hypothetical third-party authors.

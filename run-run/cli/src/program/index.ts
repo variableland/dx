@@ -1,7 +1,6 @@
-import { generateToStdout } from "@usage-spec/commander";
-import { palette } from "@vlandoss/clibuddy";
-import { type Command, createCommand, Option } from "commander";
-import { createContext } from "#src/services/ctx.ts";
+import path from "node:path";
+import { dirnameOf } from "@vlandoss/clibuddy";
+import { ContextService } from "#src/services/context.ts";
 import { createCheckCommand } from "./commands/check.ts";
 import { createCleanCommand } from "./commands/clean.ts";
 import { createCompletionCommand } from "./commands/completion.ts";
@@ -13,38 +12,32 @@ import { createLintCommand } from "./commands/lint.ts";
 import { createPackCommand } from "./commands/pack.ts";
 import { createPluginsCommand } from "./commands/plugins.ts";
 import { createTsCheckCommand } from "./commands/tscheck.ts";
-import { CREDITS_TEXT, getBannerText } from "./ui.ts";
+import { RunRunCmd } from "./root.ts";
 
-export type Options = {
-  binDir: string;
-};
+export async function createProgram(meta: ImportMeta) {
+  const binDir = path.dirname(dirnameOf(meta));
 
-export async function createProgram(options: Options) {
-  const ctx = await createContext(options.binDir);
-  const version = ctx.binPkg.version;
+  const ctxService = new ContextService(binDir);
+  const ctx = await ctxService.getContext();
 
-  const program = createCommand("rr")
-    .usage("<command...> [options...]")
-    .enablePositionalOptions()
-    .version(version, "-v, --version")
-    .addOption(new Option("--usage", `print KDL spec for this CLI (${palette.muted(palette.link("https://kdl.dev"))})`))
-    .on("option:usage", function onUsage(this: Command) {
-      generateToStdout(this);
-      process.exit(0);
-    })
-    .addHelpText("before", getBannerText(version))
-    .addHelpText("after", CREDITS_TEXT)
-    .addCommand(createCompletionCommand())
-    .addCommand(createPackCommand(ctx))
+  const cmd = new RunRunCmd(ctx);
+
+  cmd
+    .commandsGroup("Code quality:")
+    .addCommand(createCheckCommand(ctx))
     .addCommand(createJsCheckCommand(ctx))
     .addCommand(createTsCheckCommand(ctx))
     .addCommand(createLintCommand(ctx))
     .addCommand(createFormatCommand(ctx))
-    .addCommand(createCheckCommand(ctx))
-    .addCommand(createDoctorCommand(ctx))
-    .addCommand(createPluginsCommand(ctx))
+    .commandsGroup("Build:")
+    .addCommand(createPackCommand(ctx))
+    .commandsGroup("Maintenance:")
     .addCommand(createCleanCommand())
+    .addCommand(createDoctorCommand(ctx))
+    .commandsGroup("Meta:")
+    .addCommand(createCompletionCommand())
+    .addCommand(createPluginsCommand(ctx))
     .addCommand(createConfigCommand(ctx));
 
-  return { program, ctx };
+  return cmd;
 }

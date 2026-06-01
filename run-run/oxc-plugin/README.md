@@ -18,7 +18,7 @@ For `rr jsc` (lint + format together), the kernel composes oxlint + oxfmt automa
 |---|---|---|
 | `lint` | `rr lint`, `rr lint doctor` | `oxlint --check` / `--fix` |
 | `format` | `rr format`, `rr format doctor` | `oxfmt --check` / `--fix` |
-| `tsc` | `rr tsc`, `rr tsc doctor` | `oxlint --type-aware --type-check` (via `oxlint-tsgolint`) |
+| `typecheck` | `rr tsc`, `rr tsc doctor` | `oxlint --type-aware --type-check` (via `oxlint-tsgolint`) |
 | `jsc` (composed) | `rr jsc` (synthesised lint + format) | |
 
 ## Picking only some capabilities
@@ -33,12 +33,12 @@ import { defineConfig } from "@rrlab/cli/config";
 export default defineConfig({
   plugins: [
     biome({ only: ["lint", "format"] }),
-    oxc({ only: ["tsc"] }),
+    oxc({ only: ["typecheck"] }),
   ],
 });
 ```
 
-The `only` array is typed against the kinds *this* plugin provides (`"lint" | "format" | "tsc"` for oxc), so typos like `oxc({ only: ["pack"] })` are caught at compile time.
+The `only` array is typed against the kinds *this* plugin provides (`"lint" | "format" | "typecheck"` for oxc), so typos like `oxc({ only: ["pack"] })` are caught at compile time.
 
 ## Removal
 

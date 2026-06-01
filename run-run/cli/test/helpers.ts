@@ -3,31 +3,27 @@ import { mkdirSync, mkdtempSync, rmSync, symlinkSync, writeFileSync } from "node
 import { tmpdir } from "node:os";
 import path, { resolve } from "node:path";
 import { dirnameOf } from "@vlandoss/clibuddy";
+import type { PluginName } from "#src/lib/plugin/directory.ts";
 
 const BIN = resolve(dirnameOf(import.meta), "../bin");
 // run-run/cli/test/helpers.ts → ../../../../node_modules is the workspace root's node_modules.
 const WORKSPACE_NODE_MODULES = resolve(dirnameOf(import.meta), "../../../node_modules");
 
-type CliMode = "dev" | "prod";
-
 type CliOptions = {
   cwd?: string;
 };
 
-export function createTestCli(mode: CliMode = "prod") {
+export function createTestCli() {
   return function cli(cmd: string, opts: CliOptions = {}) {
     return spawnSync(BIN, cmd.split(" ").filter(Boolean), {
       encoding: "utf8",
       cwd: opts.cwd,
-      env:
-        mode === "dev"
-          ? process.env
-          : {
-              ...process.env,
-              NODE_ENV: "production",
-              TEST: undefined,
-              NO_COLOR: "1",
-            },
+      env: {
+        ...process.env,
+        NODE_ENV: "production",
+        TEST: undefined,
+        NO_COLOR: "1",
+      },
     });
   };
 }
@@ -36,14 +32,17 @@ type FixtureFiles = Record<string, string>;
 
 export function makeFixture(name: string, files: FixtureFiles): { dir: string; cleanup: () => void } {
   const dir = mkdtempSync(path.join(tmpdir(), `rr-${name}-`));
+
   for (const [rel, content] of Object.entries(files)) {
     const abs = path.join(dir, rel);
     mkdirSync(path.dirname(abs), { recursive: true });
     writeFileSync(abs, content);
   }
+
   // Expose the workspace's `node_modules` to the fixture so any
   // `run-run.config.mts` it writes can resolve `@rrlab/*-plugin` packages.
   symlinkSync(WORKSPACE_NODE_MODULES, path.join(dir, "node_modules"), "dir");
+
   return {
     dir,
     cleanup: () => {
@@ -52,18 +51,21 @@ export function makeFixture(name: string, files: FixtureFiles): { dir: string; c
   };
 }
 
-type PluginAlias = "biome" | "oxc" | "ts" | "tsdown";
+type PluginEntry =
+  | PluginName
+  | {
+      name: PluginName;
+      only: readonly string[];
+    };
 
-type PluginEntry = PluginAlias | { alias: PluginAlias; only: readonly string[] };
-
-function aliasOf(entry: PluginEntry): PluginAlias {
-  return typeof entry === "string" ? entry : entry.alias;
+function aliasOf(entry: PluginEntry) {
+  return typeof entry === "string" ? entry : entry.name;
 }
 
 function callOf(entry: PluginEntry): string {
   if (typeof entry === "string") return `${entry}()`;
   const only = entry.only.map((k) => `"${k}"`).join(", ");
-  return `${entry.alias}({ only: [${only}] })`;
+  return `${entry.name}({ only: [${only}] })`;
 }
 
 export const fixtures = {
