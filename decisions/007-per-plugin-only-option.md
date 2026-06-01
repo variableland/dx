@@ -8,14 +8,14 @@
 
 ## Context
 
-`PluginRegistry.get<K>(kind)` throws when N>1 plugins provide the same capability (`run-run/cli/src/plugin/registry.ts:19-25`). Today that makes biome + oxc mutually exclusive: both register `lint` and `format`. A real use case has emerged — running biome for `lint`/`format` while oxc provides a forthcoming `tsc` capability backed by `oxlint --type-aware --type-check` (`oxlint-tsgolint` is already a peer of `@rrlab/oxc-plugin`). The registry's multi-provider error message already anticipates this: *"Disambiguate by narrowing each plugin's capabilities in run-run.config.ts."* — but no mechanism exists.
+`PluginRegistry.get<K>(capability)` throws when N>1 plugins provide the same capability (`run-run/cli/src/plugin/registry.ts:19-25`). Today that makes biome + oxc mutually exclusive: both register `lint` and `format`. A real use case has emerged — running biome for `lint`/`format` while oxc provides a forthcoming `tsc` capability backed by `oxlint --type-aware --type-check` (`oxlint-tsgolint` is already a peer of `@rrlab/oxc-plugin`). The registry's multi-provider error message already anticipates this: *"Disambiguate by narrowing each plugin's capabilities in run-run.config.ts."* — but no mechanism exists.
 
 `definePlugin<T>` (`run-run/cli/src/plugin/define-plugin.ts:3`) already supports a typed options generic, so per-plugin options are free at the type level.
 
 ## Options considered
 
 - **A**: Per-plugin `only?: readonly K[]` option, plugin self-filters its `setup()` return. `K` is typed against the kinds *that plugin* can provide.
-- **B**: Kernel helper `narrow(plugin: Plugin, only: PluginKind[]): Plugin` exported from `@rrlab/cli/plugin`.
+- **B**: Kernel helper `narrow(plugin: Plugin, only: PluginCapability[]): Plugin` exported from `@rrlab/cli/plugin`.
 - **C**: Registry-level config shape change — `plugins: [{ plugin: oxc(), kinds: ['tsc'] }]`.
 
 ## Decision: Option A
@@ -23,13 +23,13 @@
 Each official plugin parameterises `definePlugin<TOptions>` with an options shape that includes `only?: readonly K[]`, where `K` is the union of kinds *that plugin* provides. The plugin self-filters inside `setup()`. Example:
 
 ```ts
-type OxcKind = "lint" | "format" | "tsc";
+type OxcKind = "lint" | "format" | "typecheck";
 type OxcOptions = { only?: readonly OxcKind[] };
 
 const oxc = definePlugin<OxcOptions>((opts = {}) => ({
   name: "oxc", apiVersion: 1, install, uninstall,
   async setup({ shell }) {
-    const all = { lint: lintSvc, format: fmtSvc, tsc: tscSvc };
+    const all = { lint: lintSvc, format: fmtSvc, typecheck: tscSvc };
     if (!opts.only) return all;
     return Object.fromEntries(opts.only.map((k) => [k, all[k]])) as PluginCapabilities;
   },
@@ -39,7 +39,7 @@ const oxc = definePlugin<OxcOptions>((opts = {}) => ({
 Reasons:
 
 - Matches the kernel-agnostic rule (`run-run/CLAUDE.md` → "The kernel is tool-agnostic"): narrowing logic lives in the plugin, the kernel surface stays unchanged.
-- Per-plugin typing is sharper than a kernel helper — `biome({ only: ['tsc'] })` is a compile error because biome doesn't provide `tsc`. A `narrow(plugin, kinds[])` helper typed against the global `PluginKind` union loses that.
+- Per-plugin typing is sharper than a kernel helper — `biome({ only: ['tsc'] })` is a compile error because biome doesn't provide `tsc`. A `narrow(plugin, capabilities[])` helper typed against the global `PluginCapability` union loses that.
 - Reads better at the call site (`oxc({ only: ['tsc'] })` is configuration on the plugin, matching every other plugin-config knob).
 - Zero new kernel exports. `definePlugin<T>` already supports the generic.
 - ~3 lines × 4 plugins of duplication is exactly the trade `run-run/CLAUDE.md` endorses: *"Per-plugin duplication of small constants … is the right shape — duplication across plugins is cheap; coupling the kernel to tool details is not."*
@@ -60,7 +60,7 @@ Reasons:
 
 ## Alternatives rejected
 
-- **Option B** (kernel helper `narrow(plugin, only)`): typing is weaker (uses the global `PluginKind` union, accepts kinds the wrapped plugin doesn't provide); call-site reads as a wrapper-around-wrapper; introduces a new kernel concept the kernel-agnostic rule discourages. The ~3-line × 4-plugin duplication of Option A is cheaper than centralisation here.
+- **Option B** (kernel helper `narrow(plugin, only)`): typing is weaker (uses the global `PluginCapability` union, accepts kinds the wrapped plugin doesn't provide); call-site reads as a wrapper-around-wrapper; introduces a new kernel concept the kernel-agnostic rule discourages. The ~3-line × 4-plugin duplication of Option A is cheaper than centralisation here.
 - **Option C** (registry-level config shape): would change the public `defineConfig` array shape from `Plugin[]` to a union, breaking the `[biome(), ts()]` ergonomic to serve the 5% case. Also re-introduces pre-registry branching in the kernel, which decision 003 deliberately collapsed.
 
 ## Notes for human review

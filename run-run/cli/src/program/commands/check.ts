@@ -1,57 +1,54 @@
 import { palette } from "@vlandoss/clibuddy";
-import { type Command, createCommand } from "commander";
-import { runCheckSections } from "#src/program/board.ts";
-import { pluginAnnotation } from "#src/program/ui.ts";
-import type { Context } from "#src/services/ctx.ts";
+import { jscAction } from "#src/actions/jsc.ts";
+import { tscAction } from "#src/actions/tsc.ts";
+import { runCheckSections } from "#src/render/board.ts";
+import type { ContextValue } from "#src/services/context.ts";
 import { logger } from "#src/services/logger.ts";
+import { createCommand } from "../base.ts";
 
 /**
- * `rr check` runs `jsc` then `tsc`. Rather than keep a parallel action
- * registry, it reuses commander's command tree: it finds each sibling on
- * `this.parent` and runs it via `parseAsync([])`, which applies the sibling's
- * own option defaults. (`this` is the running command inside a non-arrow
- * action — see cli/CLAUDE.md.)
+ * `rr check` — runs jsc then tsc. Rather than dispatch through commander's
+ * command tree, it calls the same `jscAction`/`tscAction` directly — each
+ * wrapped in its own `runCheckSections` scope so failures are attributed by
+ * section name. A blank line separates the sections; `checkVerdict` is the
+ * final overall line.
  */
-export function createCheckCommand(ctx: Context) {
+export function createCheckCommand(ctx: ContextValue) {
   return createCommand("check")
-    .summary(`run static checks${checkAnnotation(ctx)}`)
+    .addCapabilities(["lint", "format", "jscheck", "typecheck"])
+    .summary("run static checks")
     .description(
       "Runs `rr jsc` then `rr tsc` in-process, each as its own section. Aggregates their exit codes — non-zero when either subcommand fails.",
     )
-    .action(async function checkAction(this: Command) {
-      const program = this.parent;
-      if (!program) {
-        // Can only happen if this command is invoked detached from the root
-        // program — current bin only constructs it as a subcommand.
-        throw new Error("`rr check` requires the parent program to dispatch sibling subcommands.");
-      }
+    .action(async () => {
+      const sections: Array<{ name: string; run: () => Promise<void> }> = [
+        {
+          name: "jsc",
+          run: () => jscAction({ ctx, checker: ctx.plugins.getJsChecker(), options: {} }),
+        },
+        {
+          name: "tsc",
+          run: () => tscAction({ ctx, tsc: ctx.plugins.getServiceOrThrow("typecheck") }),
+        },
+      ];
 
       // Sequentially, not in parallel: two live boards can't animate the same
-      // terminal region at once (decision 012). Each section runs in its own
-      // `runCheckSections` scope, which frames it and returns the boards it
-      // rendered — so a failure is attributed by section name, not a fragile
-      // dispatch-vs-render index.
+      // terminal region at once (decision 012).
       const start = Date.now();
       const failed: string[] = [];
       let rendered = false;
-      for (const name of ["jsc", "tsc"]) {
-        const cmd = findCommand(program, name);
-        if (!cmd) {
-          logger.error(`rr check: subcommand "${name}" is not registered.`);
-          failed.push(name);
-          continue;
-        }
+      for (const section of sections) {
         if (rendered) process.stderr.write("\n"); // one blank line between sections
         let threw = false;
         const results = await runCheckSections(async () => {
           try {
-            await cmd.parseAsync([], { from: "user" });
+            await section.run();
           } catch (reason) {
-            logger.error(`rr check (${name}): ${reason instanceof Error ? reason.message : String(reason)}`);
+            logger.error(`rr check (${section.name}): ${reason instanceof Error ? reason.message : String(reason)}`);
             threw = true;
           }
         });
-        if (threw || results.some((r) => !r.ok)) failed.push(name);
+        if (threw || results.some((r) => !r.ok)) failed.push(section.name);
         rendered = true;
       }
 
@@ -60,7 +57,8 @@ export function createCheckCommand(ctx: Context) {
       // of a run that failed in the section above it.
       process.stderr.write(`\n${checkVerdict(failed, Date.now() - start)}\n`);
       if (failed.length > 0) process.exitCode = 1;
-    });
+    })
+    .addHelpTextAfter(ctx);
 }
 
 function checkVerdict(failed: string[], ms: number): string {
@@ -70,33 +68,4 @@ function checkVerdict(failed: string[], ms: number): string {
     return `${palette.error("✖")} check failed${sep}${[...new Set(failed)].join(", ")}${sep}${elapsed}`;
   }
   return `${palette.success("✔")} check passed${sep}${elapsed}`;
-}
-
-function findCommand(program: Command, name: string): Command | undefined {
-  return program.commands.find((c) => c.name() === name || c.aliases().includes(name));
-}
-
-/**
- * Flattens the underlying tool labels of `jsc` + `tsc` for the help summary —
- * e.g. `(biome, oxlint)`, deduped, not `(biome + biome, oxlint)`. Falls back to
- * the standard `(not configured)` when neither sibling has a provider.
- */
-function checkAnnotation(ctx: Context): string {
-  const directJsc = ctx.registry.get("jsc");
-  const linter = ctx.registry.get("lint");
-  const formatter = ctx.registry.get("format");
-  const tsc = ctx.registry.get("tsc");
-
-  const labels: string[] = [];
-  if (directJsc) {
-    labels.push(directJsc.ui);
-  } else {
-    if (linter) labels.push(linter.ui);
-    if (formatter) labels.push(formatter.ui);
-  }
-  if (tsc) labels.push(tsc.ui);
-
-  if (labels.length === 0) return pluginAnnotation(undefined);
-  const distinct = [...new Set(labels)];
-  return pluginAnnotation({ ui: distinct.join(", ") });
 }

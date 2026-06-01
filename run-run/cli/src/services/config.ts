@@ -25,7 +25,9 @@ export class ConfigService {
   async load(): Promise<ExportedConfig> {
     const debug = logger.subdebug("load-config");
 
+    const start = performance.now();
     const searchResult = await this.#searcher.search();
+    const loadMs = performance.now() - start;
 
     if (!searchResult || searchResult?.isEmpty) {
       debug("loaded default config: %O", DEFAULT_CONFIG);
@@ -34,6 +36,7 @@ export class ConfigService {
         meta: {
           isDefault: true,
           filepath: undefined,
+          loadMs,
         },
       };
     }
@@ -48,6 +51,7 @@ export class ConfigService {
       meta: {
         isDefault: false,
         filepath: searchResult.filepath,
+        loadMs,
       },
     };
   }

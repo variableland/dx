@@ -155,7 +155,7 @@ export async function runInit(ctx: Context, options: InitOptions) {
   fetchSpin.start(`Fetching ${palette.highlight(template)} template`);
   try {
     const { source } = await fetchTemplate({ template, dir, force: options.force });
-    fetchSpin.stop(`Fetched template from ${palette.muted(source)}`);
+    fetchSpin.stop(`Fetched template from ${palette.dim(source)}`);
   } catch (error) {
     fetchSpin.stop("Failed to fetch template", 1);
     throw error;
@@ -222,7 +222,7 @@ export async function runInit(ctx: Context, options: InitOptions) {
     [
       palette.success("Done!"),
       "",
-      palette.muted("Next steps:"),
+      palette.dim("Next steps:"),
       `  cd ${name}`,
       shouldInstall ? `  ${PACKAGE_MANAGER} ${runScript}` : `  ${PACKAGE_MANAGER} install && ${PACKAGE_MANAGER} ${runScript}`,
     ].join("\n"),

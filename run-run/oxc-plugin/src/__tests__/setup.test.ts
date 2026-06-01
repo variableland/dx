@@ -14,34 +14,34 @@ function ctx(): PluginContext {
   };
 }
 
-describe("@rrlab/oxc-plugin capabilities()", () => {
-  it("returns all capabilities (lint, format, tsc) when no `only` is supplied", async () => {
-    const caps = await oxc().capabilities(ctx());
-    expect(Object.keys(caps).sort()).toEqual(["format", "lint", "tsc"]);
+describe("@rrlab/oxc-plugin services()", () => {
+  it("returns all capabilities (lint, format, typecheck) when no `only` is supplied", async () => {
+    const caps = await oxc().services(ctx());
+    expect(Object.keys(caps).sort()).toEqual(["format", "lint", "typecheck"]);
   });
 
-  it("narrows to just `tsc` when `only: ['tsc']` is supplied", async () => {
-    const caps = await oxc({ only: ["tsc"] }).capabilities(ctx());
-    expect(Object.keys(caps)).toEqual(["tsc"]);
-    expect(caps.tsc).toBeInstanceOf(OxlintTypeCheckService);
+  it("narrows to just `typecheck` when `only: ['typecheck']` is supplied", async () => {
+    const caps = await oxc({ only: ["typecheck"] }).services(ctx());
+    expect(Object.keys(caps)).toEqual(["typecheck"]);
+    expect(caps.typecheck).toBeInstanceOf(OxlintTypeCheckService);
   });
 
   it("narrows to lint+format when `only: ['lint', 'format']` is supplied", async () => {
-    const caps = await oxc({ only: ["lint", "format"] }).capabilities(ctx());
+    const caps = await oxc({ only: ["lint", "format"] }).services(ctx());
     expect(Object.keys(caps).sort()).toEqual(["format", "lint"]);
   });
 
   it("throws when `only` references an unknown capability", async () => {
     await expect(
       // biome-ignore lint/suspicious/noExplicitAny: bypassing the TS guard to exercise the runtime check
-      oxc({ only: ["pack"] as any }).capabilities(ctx()),
+      oxc({ only: ["pack"] as any }).services(ctx()),
     ).rejects.toThrow(/unknown capability 'pack'/);
   });
 });
 
 describe("OxlintTypeCheckService", () => {
-  it("constructs against the oxlint binary", () => {
+  it("constructs against the oxlint tool", () => {
     const svc = new OxlintTypeCheckService({} as ShellService);
-    expect(svc.bin).toBe("oxlint");
+    expect(svc.pkg).toBe("oxlint");
   });
 });

@@ -22,7 +22,6 @@ import { parse as parseJsonc } from "comment-json";
 import { TOOL_VERSIONS } from "./tool-versions.ts";
 
 const FROM = import.meta.url;
-const UI = colorize("#61A5FA")("biome");
 const COMMON_FLAGS = ["--colors=force", "--no-errors-on-unmatched"];
 const BIOME_JSON = "biome.json";
 const BIOME_CONFIG_PKG = "@rrlab/biome-config";
@@ -30,9 +29,11 @@ const BIOME_SCHEMA = "https://biomejs.dev/schemas/2.4.4/schema.json";
 
 export { TOOL_VERSIONS } from "./tool-versions.ts";
 
+const biomeColor = colorize("#61A5FA");
+
 export class BiomeService extends ToolService implements Formatter, Linter, StaticChecker {
   constructor(shellService: ShellService) {
-    super({ pkg: "@biomejs/biome", bin: "biome", ui: UI, shellService, from: FROM });
+    super({ pkg: "@biomejs/biome", bin: "biome", color: biomeColor, shellService, from: FROM });
   }
 
   async format(options: FormatOptions): Promise<RunReport> {
@@ -140,15 +141,16 @@ async function pathExists(p: string): Promise<boolean> {
   }
 }
 
-const biome = definePlugin(() => ({
-  name: "biome",
+const biome = definePlugin({
   apiVersion: 1,
+  name: "biome",
+  color: biomeColor,
   install,
   uninstall,
-  capabilities: ({ shell }) => {
-    const svc = new BiomeService(shell);
-    return { lint: svc, format: svc, jsc: svc };
+  services: ({ shell }) => {
+    const biome = new BiomeService(shell);
+    return { lint: biome, format: biome, jscheck: biome };
   },
-}));
+});
 
 export default biome;

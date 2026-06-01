@@ -7,99 +7,119 @@ Internals of the kernel. Read **after** the repo-root `CLAUDE.md` and `run-run/C
 ```
 bin                                    (bash dispatcher — entry point)
  └─ src/run.ts                         (boots the program)
-     └─ src/program/index.ts           (createProgram — assembles commander tree)
-         ├─ createContext()            (src/services/ctx.ts — wires shell, logger, config, registry)
+     └─ src/program/index.ts           (createProgram — builds the RunRunCmd tree)
+         ├─ src/program/root.ts        (RunRunCmd extends Command — banner/footer/--version/--about/--usage)
+         ├─ ContextService.getContext() (src/services/context.ts — wires shell, logger, config, ctx.plugins)
          │   ├─ ConfigService.load()   (src/services/config.ts — lilconfig)
-         │   └─ for each config.plugins: plugin.setup(ctx) → registry.register(...)
+         │   └─ for each config.plugins: plugin.services(ctx) → registry.register(...)
          │
-         └─ commands                   (src/program/commands/*.ts)
+         └─ commands                   (src/program/commands/*.ts — thin wrappers, built on src/program/base.ts)
              ├─ lint / format / jsc / tsc / pack
-             │   └─ ctx.registry.get(kind)
-             ├─ check                  (sibling-dispatch via this.parent)
+             │   ├─ ctx.plugins.getServiceOrThrow(capability)
+             │   └─ delegate to one action (src/actions/*.ts)
+             ├─ check                  (action calls jscAction + tscAction in-process)
              ├─ doctor                 (collects distinct providers, runs in parallel)
-             ├─ plugins {list, add, remove}
+             ├─ plugins {list, add, remove}   (src/actions/plugins/*.ts)
              ├─ clean / config / completion
              └─ --usage                (KDL spec emission)
 ```
 
 ## Commander patterns we rely on
 
-### `this` is the running Command inside actions
+### Commands are thin wrappers over actions
 
-Commander invokes actions as `fn.apply(this, [...args, options, this])`. Two things matter:
+Each `create<Name>Command(ctx)` resolves its service inside its `.action(...)` via `ctx.plugins.getServiceOrThrow(capability)` (which raises `MissingPluginError` when absent), then delegates to exactly one free-function action in `src/actions/`. Actions never import commander — they take a single `<Name>ActionConfig` object and depend only on `services`/`render`/`lib`. See `decisions/015-command-action-service-layering.md`.
 
-- Inside a non-arrow `function` action, `this` is the Command. `this.parent` is the parent program.
-- Inside an arrow function action, `this` is the enclosing module scope. Avoid arrows when you need the binding.
+Commands are built with `createCommand(name)` from `src/program/base.ts` (a `Cmd extends Command` subclass), **not** commander's own `createCommand`. `Cmd` adds three chainable methods:
 
-`rr check` uses this to dispatch to siblings: it reads `this.parent.commands`, finds `jsc` and `tsc`, calls each's `.parseAsync([], { from: "user" })`. This is how the kernel reuses commander's command tree as the action registry without maintaining a parallel one (an earlier draft had `registerCommand` / `commandHandler` on `PluginRegistry`; deleted).
+- `.addCapabilities([...capabilities])` — declares which `PluginCapability`s the command exercises.
+- `.addHelpTextAfter(ctx)` — appends the `See also:` / `Powered by:` block, both **auto-derived** from those capabilities (see below). No command hand-writes its cross-references anymore.
+- `.addDoctorCommand(fn)` — attaches the per-tool `doctor` subcommand (always present; its callback resolves the provider lazily).
 
-### `--usage` is an event listener, not an action
+### The root is a `RunRunCmd` subclass
 
-`createCommand("rr").addOption(new Option("--usage", "...")).on("option:usage", function (this: Command) { generateToStdout(this); process.exit(0); })`. Same `this` binding rule — non-arrow function gets the root program as `this`.
+`src/program/root.ts` defines `RunRunCmd extends Command`. It groups commands (`.commandsGroup("Code quality:")` etc.), registers `-v/--version` (plain version string), `--about` (credits) and `--usage` (KDL spec) as options with `option:*` listeners, and attaches the banner + installed/available plugins footer via `addHelpText`.
 
-The `bin` script exports `RR_USAGE_MODE=1` (alongside `NO_COLOR=1`) when it sees `--usage` in argv. Read at `src/program/ui.ts` to strip per-environment annotations from command summaries (`(biome)` → `""` and `(not configured)` → `""`). The KDL spec must be stable across machines; the per-project plugin set is not.
+### `--usage` emits a stable KDL spec
+
+`RunRunCmd` listens for `option:usage` and calls `generateToStdout(this)` (`@usage-spec/commander`). The `bin` script forces `NO_COLOR=1` when it sees `--usage` so no ANSI escapes leak into the spec. Command summaries are static strings (no per-environment plugin annotations), so the KDL is already stable across machines — there's no summary-stripping step.
 
 ## Context lifecycle
 
-`createContext(binDir)` runs once per `rr <cmd>` invocation. It builds a fresh `Context`:
+`ContextService` (`src/services/context.ts`) builds — once per `rr <cmd>` invocation, memoised via `getContext()` — a fresh `ContextValue`:
 
 ```ts
-type Context = {
+type ContextValue = {
   binPkg: Pkg;          // @rrlab/cli's own package.json
   appPkg: Pkg;          // the host project's package.json (resolved from cwd)
   shell: ShellService;
   config: ExportedConfig;
-  registry: PluginRegistry;
+  plugins: PluginServices;   // the facade over the populated PluginRegistry
 };
 ```
 
-The registry is populated immediately: for each `plugin` in `config.plugins ?? []`, the kernel calls `plugin.setup(pluginContext)` and registers the returned capabilities. If `apiVersion` doesn't match `1`, `createContext` throws.
+The registry is populated immediately: for each `plugin` in `config.plugins ?? []`, the kernel calls `plugin.services(pluginContext)` and registers what it returns. If `apiVersion` doesn't match `1`, it throws `PluginApiVersionError`. The populated `PluginRegistry` is then wrapped in a `PluginServices` facade and exposed as `ctx.plugins`.
 
-Commands that don't need plugin capabilities (`clean`, `config`, `completion`) still get the full context; they just ignore `registry`. Don't try to lazy-load the registry; the cost is small (plugins' `setup()` is meant to be cheap) and the simplicity is worth more than the savings.
+Commands that don't need plugin services (`clean`, `config`, `completion`) still get the full context; they just ignore `ctx.plugins`. Don't try to lazy-load it; the cost is small (a plugin's `services()` is meant to be cheap) and the simplicity is worth more than the savings.
 
-## PluginRegistry
+## ctx.plugins (the `PluginServices` facade)
 
-`src/plugin/registry.ts`. Three things it exposes:
+A `PluginCapability` is a key (`lint`, `format`, `jscheck`, `typecheck`, `pack`); a **service** is the impl that satisfies it (a `Linter & Doctor`, etc.). One plugin instance can back several capabilities with the same service object.
 
-- `register(plugin, capabilities)` — called by `createContext`.
-- `get<K>(kind: K)` — returns the impl when exactly one plugin provides it; throws on N>1 (with actionable error); undefined on N=0.
-- `providersOf(kind)` — returns all providers (used by `rr doctor` to enumerate distinct doctor implementations).
+`src/services/plugin-services.ts` defines the `PluginServices` **class** — the only plugin-resolution surface commands and actions touch (`ctx.plugins`). It wraps `PluginRegistry` and exposes:
 
-Multi-provider error message format is load-bearing for the "ambiguity → user fixes config" UX. Don't simplify it; the test in `src/plugin/__tests__/registry.test.ts` asserts the names appear.
+- `getServiceOrThrow<K>(capability)` — returns the service, throwing `MissingPluginError` on N=0 and `MultipleProvidersError` on N>1. This is what commands call from inside their `.action(...)`, so command files never import `MissingPluginError`.
+- `getJsChecker()` — the `jsc` resolver: a plugin claiming `jscheck` directly, else a `StaticCheckService` (`src/services/static-checker.ts`) composed from a separately-registered `lint` + `format`, else throws `MissingPluginError("jscheck")`. `jsc` has no single registry capability, so this — not `getServiceOrThrow` — is its entry point (shared by `rr jsc` and `rr check`).
+- `providerOf<K>(capability)` — single-provider `{ plugin, service }` (or undefined; throws on N>1). Used by `Cmd.addHelpTextAfter` to derive the `Powered by:` line from each `plugin.ui`.
+- `getAllServices()` — every distinct service instance, deduped **by reference** (a single service backing several capabilities appears once). Used by `rr doctor` so each tool's health check runs a single time.
+
+(Beware the name overlap: the **class** `PluginServices` here is the facade; the **type** `PluginServices` in `src/lib/plugin/types.ts` is the `{ capability: service }` map a plugin's `services()` returns. Different layers.)
+
+### PluginRegistry (kernel-internal)
+
+`src/lib/plugin/registry.ts` is the raw store behind the facade — `register`, `getService`/`getServiceOrThrow`, `providerOf`/`providersOf`, `getAllServices`. Commands don't touch it directly; they go through `ctx.plugins`. Multi-provider error message format is load-bearing for the "ambiguity → user fixes config" UX. Don't simplify it; the test in `src/lib/plugin/__tests__/registry.test.ts` asserts the names appear.
 
 ## Commands
 
-Every command file follows the same shape:
+Every plugin-backed command file follows the same shape:
 
 ```ts
+import { createCommand } from "../base.ts";
+
 export function create<Name>Command(ctx: Context) {
-  const provider = ctx.registry.get("<kind>");  // for plugin-backed commands
-
-  const cmd = createCommand("<name>")
-    .summary(`<summary>${pluginAnnotation(provider)}`)
+  return createCommand("<name>")
+    .addCapabilities(["<kind>"])
+    .summary("<summary>")
     .description("<description>")
-    .option(...);
-
-  if (provider) cmd.addCommand(createDoctorSubcommand(provider));
-
-  cmd.action(async function action(options) {
-    if (!provider) throw missingPluginError("<kind>");
-    await provider.<verb>(options);
-  });
-
-  return cmd;
+    .option(...)
+    .action(async (options) => {
+      const service = ctx.plugins.getServiceOrThrow("<capability>");
+      await <name>Action({ ctx, <service>, options });
+    })
+    .addHelpTextAfter(ctx)
+    .addDoctorCommand(async () => {
+      const service = ctx.plugins.getServiceOrThrow("<capability>");
+      await doctorOneAction({ ctx, service });
+    });
 }
 ```
 
-`pluginAnnotation(provider)` returns `(<ui>)` when the plugin is loaded, `(not configured)` when not, and `""` when `RR_USAGE_MODE` is set.
+The service is resolved **inside** the action / doctor callback via `ctx.plugins.getServiceOrThrow`, not hoisted to the top of the factory — so the command tree is identical regardless of which plugins are configured (the `doctor` subcommand always exists; the throw happens only on invocation). That keeps `--help` and the `--usage` KDL spec stable across machines. `jsc` is the one exception: it has no single registry capability, so it resolves via `ctx.plugins.getJsChecker()` — the composed-capability resolver, shared with `rr check`.
 
-`missingPluginError` lives in `src/program/missing-plugin.ts` and emits the `rr plugins add <alias>` suggestion the user needs.
+`.addDoctorCommand(fn)` (on the `Cmd` base class) attaches the per-tool `doctor` subcommand that every plugin-backed command exposes; its callback resolves the service and delegates to `doctorOneAction`, rendering the canonical `doctor (<tool>) · <pkg>` row.
 
-`rr check` is the exception: instead of consulting the registry directly, it grabs `this.parent` and dispatches to `jsc` + `tsc` siblings via `parseAsync([], { from: "user" })`. This is in-process; saves the ~80ms Node startup of a re-spawned `rr`.
+`MissingPluginError` (`src/errors/missing-plugin.ts`) takes just a `capability` and builds the `rr plugins add <alias>` hint by looking up which plugins provide it via `providersOf(capability)` in `src/lib/plugin/directory.ts`; `getServiceOrThrow` / `getJsChecker` raise it for you. The per-command `Powered by:` / `See also:` block is produced by `Cmd.addHelpTextAfter` (`src/program/base.ts`) and is **fully derived from the declared capabilities** — there's no `render/command-help.ts` / `render/powered-by.ts` anymore:
+
+- **See also:** every sibling command (under the same parent) whose `addCapabilities` set overlaps this command's — so `lint` and `jsc` cross-reference each other automatically because both touch `lint`.
+- **Powered by:** the `ui` of the plugin returned by `ctx.plugins.providerOf(capability)` across the command's capabilities.
+
+It renders via the `Lines` builder and returns `""` (nothing appended) when both sets are empty. Commands with no plugin capabilities (e.g. `clean`) just pass a literal string to commander's native `.addHelpText("after", ...)`.
+
+`rr check` is the exception: rather than dispatch through commander, its action calls `jscAction` then `tscAction` directly in-process — each wrapped in a `runCheckSections` scope so failures are attributed by section — and prints one aggregated verdict. In-process saves the ~80ms Node startup of a re-spawned `rr`.
 
 ## File ops engine (`applyFileOp`)
 
-`src/program/commands/plugins.ts`. Four `FileOp` kinds:
+`src/services/file-ops.ts`. `applyFileOp` performs the filesystem work and returns a `FileOpOutcome` — it never writes to the terminal; the `plugins add/remove` actions map the outcome to clack log lines (`reportFileOp`), and `describeFileOp` renders a side-effect-free one-liner for the remove plan. Four `FileOp` kinds:
 
 - `create` — writes content; respects `overwrite` flag.
 - `edit-json` — reads, applies `JsonEdit[]` via `applyJsonEdits` (in `src/services/json-edit.ts`), writes back. Uses `comment-json` so user comments + key positions survive.
@@ -110,7 +130,7 @@ export function create<Name>Command(ctx: Context) {
 
 ## `rr plugins` lifecycle (add / remove)
 
-Both commands resolve the alias via `OFFICIAL_PLUGINS` in `src/services/plugins-registry.ts`. Only official aliases are accepted; unknown aliases throw with the list.
+The flows live in `src/actions/plugins/{add,remove,list}.ts`. Both resolve the alias via `PLUGINS_DIRECTORY` in `src/lib/plugin/directory.ts` (`allPluginNames`/`isPluginName` are the lookups). Only official aliases are accepted; an unknown alias throws `UnknownPluginError` with the list.
 
 **add** flow:
 1. Install the plugin package via `nypm.addDependency` (best-effort rollback via `removeDependency` if a later step throws).

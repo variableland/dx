@@ -1,5 +1,5 @@
 import * as clack from "@clack/prompts";
-import type { ClackPrompts } from "#src/plugin/types.ts";
+import type { ClackPrompts } from "#src/lib/plugin/types.ts";
 
 /**
  * Adapter that exposes the subset of `@clack/prompts` matching the

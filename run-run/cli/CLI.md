@@ -2,47 +2,23 @@
 # `rr`
 - **version**: 1.1.0
 
-- **Usage**: `rr [--usage] <SUBCOMMAND>`
+- **Usage**: `rr [--about] [--usage] <SUBCOMMAND>`
 
 ## Flags
+
+### `--about`
+
+show credits & inspiration
 
 ### `--usage`
 
 print KDL spec for this CLI (https://kdl.dev)
 
-## `rr completion`
+## `rr check`
 
-- **Usage**: `rr completion <shell>`
+- **Usage**: `rr check`
 
-Prints a shell completion script for rr. Add to your shell rc file:
-
-  bash: eval "$(rr completion bash)"
-  zsh:  eval "$(rr completion zsh)"
-  fish: rr completion fish | source
-
-### Arguments
-
-#### `<shell>`
-
-target shell
-
-**Choices:**
-
-- `bash`
-- `zsh`
-- `fish`
-
-## `rr pack`
-
-- **Usage**: `rr pack <SUBCOMMAND>`
-
-Compiles TypeScript code into JavaScript and generates type declaration files, packaging the library for distribution.
-
-## `rr pack doctor`
-
-- **Usage**: `rr pack doctor`
-
-check if the underlying tool is working correctly
+Runs `rr jsc` then `rr tsc` in-process, each as its own section. Aggregates their exit codes — non-zero when either subcommand fails.
 
 ## `rr jsc`
 
@@ -72,7 +48,7 @@ check if the underlying tool is working correctly
 - **Usage**: `rr tsc <SUBCOMMAND>`
 - **Aliases**: `tscheck`
 
-Checks the TypeScript code for type errors, ensuring that the code adheres to the defined type constraints and helps catch potential issues before runtime.
+Checks type errors, ensuring that the code adheres to the defined type constraints and helps catch potential issues before runtime.
 
 ## `rr tsc doctor`
 
@@ -122,17 +98,61 @@ format all the code
 
 check if the underlying tool is working correctly
 
-## `rr check`
+## `rr pack`
 
-- **Usage**: `rr check`
+- **Usage**: `rr pack <SUBCOMMAND>`
 
-Runs `rr jsc` then `rr tsc` in-process, each as its own section. Aggregates their exit codes — non-zero when either subcommand fails.
+Compiles TypeScript code into JavaScript and generates type declaration files, packaging the library for distribution.
+
+## `rr pack doctor`
+
+- **Usage**: `rr pack doctor`
+
+check if the underlying tool is working correctly
+
+## `rr clean`
+
+- **Usage**: `rr clean [--only-dist] [--dry-run]`
+
+Deletes generated files and folders such as 'dist', 'node_modules', and lock files to ensure a clean state.
+
+### Flags
+
+#### `--only-dist`
+
+delete 'dist' folders only
+
+#### `--dry-run`
+
+outputs the paths that would be deleted
 
 ## `rr doctor`
 
 - **Usage**: `rr doctor`
 
 Runs the `doctor()` of every configured plugin capability. Each plugin reports ok / not working. The exit code is non-zero if any reports not working.
+
+## `rr completion`
+
+- **Usage**: `rr completion <shell>`
+
+Prints a shell completion script for rr. Add to your shell rc file:
+
+  bash: eval "$(rr completion bash)"
+  zsh:  eval "$(rr completion zsh)"
+  fish: rr completion fish | source
+
+### Arguments
+
+#### `<shell>`
+
+target shell
+
+**Choices:**
+
+- `bash`
+- `zsh`
+- `fish`
 
 ## `rr plugins`
 
@@ -156,7 +176,7 @@ install and configure an @rrlab plugin
 
 #### `<name>`
 
-plugin alias (ts|eslint|biome|oxc|tsdown), optionally with @<spec> e.g. biome@pr-226
+plugin alias (ts|biome|oxc|tsdown), optionally with @<spec> e.g. biome@pr-226
 
 ### Flags
 
@@ -187,7 +207,6 @@ plugin alias to remove
 **Choices:**
 
 - `ts`
-- `eslint`
 - `biome`
 - `oxc`
 - `tsdown`
@@ -202,24 +221,8 @@ skip the confirmation prompt
 
 print the plan without applying changes
 
-## `rr clean`
-
-- **Usage**: `rr clean [--only-dist] [--dry-run]`
-
-Deletes generated files and folders such as 'dist', 'node_modules', and lock files to ensure a clean state.
-
-### Flags
-
-#### `--only-dist`
-
-delete 'dist' folders only
-
-#### `--dry-run`
-
-outputs the paths that would be deleted
-
 ## `rr config`
 
 - **Usage**: `rr config`
 
-Displays the current configuration settings, including their source file path if available.
+Displays the current configuration settings, including their source file path and the plugins it registers.

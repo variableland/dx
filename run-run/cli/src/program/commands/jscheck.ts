@@ -1,43 +1,30 @@
-import { createCommand } from "commander";
-import type { Context } from "#src/services/ctx.ts";
-import { runToolCommand } from "../board.ts";
-import { composedJscProvider } from "../composed-jsc.ts";
-import { pluginAnnotation } from "../ui.ts";
-import { createDoctorSubcommand } from "./doctor.ts";
+import { doctorOneAction } from "#src/actions/doctor.ts";
+import { jscAction } from "#src/actions/jsc.ts";
+import type { ContextValue } from "#src/services/context.ts";
+import { createCommand } from "../base.ts";
 
 type ActionOptions = {
   fix?: boolean;
   fixStaged?: boolean;
 };
 
-export function createJsCheckCommand(ctx: Context) {
-  const direct = ctx.registry.get("jsc");
-  const linter = ctx.registry.get("lint");
-  const formatter = ctx.registry.get("format");
-  // Compose only when no plugin claims `jsc` directly and we have both
-  // building blocks separately (e.g. oxc, or eslint + prettier).
-  const checker = direct ?? (linter && formatter ? composedJscProvider(linter, formatter) : undefined);
-
-  const cmd = createCommand("jsc")
+export function createJsCheckCommand(ctx: ContextValue) {
+  return createCommand("jsc")
     .alias("jscheck")
-    .summary(`check format and lint${pluginAnnotation(checker)}`)
+    .addCapabilities(["lint", "format", "jscheck"])
+    .summary("check format and lint")
     .description(
       "Checks the code for formatting and linting issues, ensuring it adheres to the defined style and quality standards.",
     )
     .option("--fix", "try to fix issues automatically")
-    .option("--fix-staged", "try to fix staged files only");
-
-  if (checker) {
-    cmd.addCommand(createDoctorSubcommand(checker, ctx.appPkg));
-  }
-
-  cmd.action(async (options: ActionOptions = {}) => {
-    await runToolCommand(ctx, { name: "jsc", kind: "jsc", provider: checker, run: (p) => p.check(options) });
-  });
-
-  if (checker) {
-    cmd.addHelpText("afterAll", `\nUnder the hood, this command uses the ${checker.ui} CLI to check the code.`);
-  }
-
-  return cmd;
+    .option("--fix-staged", "try to fix staged files only")
+    .action(async (options: ActionOptions = {}) => {
+      const checker = ctx.plugins.getJsChecker();
+      await jscAction({ ctx, checker, options: { fix: options.fix, fixStaged: options.fixStaged } });
+    })
+    .addHelpTextAfter(ctx)
+    .addDoctorCommand(async () => {
+      const checker = ctx.plugins.getJsChecker();
+      await doctorOneAction({ ctx, service: checker });
+    });
 }

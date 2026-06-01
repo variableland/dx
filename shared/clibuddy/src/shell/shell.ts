@@ -72,5 +72,5 @@ export class ShellService {
 
 function printCmdLine(cmd: string, args: string[]): void {
   const tail = args.length === 0 ? "" : ` ${args.join(" ")}`;
-  process.stderr.write(`${palette.muted("$")} ${palette.highlight(cmd)}${tail}\n`);
+  process.stderr.write(`${palette.dim("$")} ${palette.highlight(cmd)}${tail}\n`);
 }

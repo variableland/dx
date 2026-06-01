@@ -8,15 +8,15 @@ describe("plugin { only } narrowing", () => {
 
   afterEach(() => fixture?.cleanup());
 
-  describe("biome({only:['lint','format']}) + oxc({only:['tsc']})", () => {
+  describe("biome({only:['lint','format']}) + oxc({only:['typecheck']})", () => {
     beforeEach(() => {
       fixture = makeFixture("only-biome-oxc", {
         "package.json": fixtures.pkg(),
         "biome.json": fixtures.biomeNoop(),
         "tsconfig.json": fixtures.tsconfig(),
         "run-run.config.mts": fixtures.config([
-          { alias: "biome", only: ["lint", "format"] },
-          { alias: "oxc", only: ["tsc"] },
+          { name: "biome", only: ["lint", "format"] },
+          { name: "oxc", only: ["typecheck"] },
         ]),
         "src/ok.ts": "export const ok = 1;\n",
       });
@@ -58,11 +58,11 @@ describe("plugin { only } narrowing", () => {
     });
   });
 
-  describe("oxc({only:['tsc']}) alone", () => {
+  describe("oxc({only:['typecheck']}) alone", () => {
     beforeEach(() => {
       fixture = makeFixture("only-oxc-tsc", {
         "package.json": fixtures.pkg(),
-        "run-run.config.mts": fixtures.config([{ alias: "oxc", only: ["tsc"] }]),
+        "run-run.config.mts": fixtures.config([{ name: "oxc", only: ["typecheck"] }]),
         "src/ok.ts": "export const ok = 1;\n",
       });
     });

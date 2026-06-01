@@ -17,7 +17,6 @@ import { TOOL_VERSIONS } from "./tool-versions.ts";
 export { TOOL_VERSIONS } from "./tool-versions.ts";
 
 const FROM = import.meta.url;
-const UI = colorize("#FF7E18")("tsdown");
 const CONFIG_PKG = "@rrlab/tsdown-config";
 const DEFAULT_CONFIG_FILENAME = "tsdown.config.ts";
 const CONFIG_FILENAMES = [
@@ -42,10 +41,11 @@ const PRESETS: Record<Preset, PresetInfo> = {
   bin: { factory: "defineBinConfig", label: "CLI / Node binary (entry src/run.ts)" },
 };
 const DEFAULT_PRESET: Preset = "lib";
+const tsdownColor = colorize("#FF7E18");
 
 export class TsdownService extends ToolService {
   constructor(shellService: ShellService) {
-    super({ pkg: "tsdown", ui: UI, shellService, from: FROM });
+    super({ bin: "tsdown", color: tsdownColor, shellService, from: FROM });
   }
 
   async pack() {
@@ -269,12 +269,13 @@ function setCalleeName(mod: ProxifiedModule, newName: string): void {
   ast.callee.name = newName;
 }
 
-const tsdown = definePlugin(() => ({
-  name: "tsdown",
+const tsdown = definePlugin({
   apiVersion: 1,
+  name: "tsdown",
+  color: tsdownColor,
   install,
   uninstall,
-  capabilities: ({ shell }) => ({ pack: new TsdownService(shell) }),
-}));
+  services: ({ shell }) => ({ pack: new TsdownService(shell) }),
+});
 
 export default tsdown;

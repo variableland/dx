@@ -14,21 +14,21 @@ function ctx(): PluginContext {
   };
 }
 
-describe("@rrlab/tsdown-plugin capabilities()", () => {
+describe("@rrlab/tsdown-plugin services()", () => {
   it("returns the pack capability when no `only` is supplied", async () => {
-    const caps = await tsdown().capabilities(ctx());
+    const caps = await tsdown().services(ctx());
     expect(Object.keys(caps)).toEqual(["pack"]);
   });
 
   it("returns the pack capability when `only: ['pack']` is supplied", async () => {
-    const caps = await tsdown({ only: ["pack"] }).capabilities(ctx());
+    const caps = await tsdown({ only: ["pack"] }).services(ctx());
     expect(Object.keys(caps)).toEqual(["pack"]);
   });
 
   it("throws when `only` references an unknown capability", async () => {
     await expect(
       // biome-ignore lint/suspicious/noExplicitAny: bypassing the TS guard to exercise the runtime check
-      tsdown({ only: ["lint"] as any }).capabilities(ctx()),
+      tsdown({ only: ["lint"] as any }).services(ctx()),
     ).rejects.toThrow(/unknown capability 'lint'/);
   });
 });

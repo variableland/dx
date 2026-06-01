@@ -14,21 +14,21 @@ function ctx(): PluginContext {
   };
 }
 
-describe("@rrlab/ts-plugin capabilities()", () => {
-  it("returns the tsc capability when no `only` is supplied", async () => {
-    const caps = await ts().capabilities(ctx());
-    expect(Object.keys(caps)).toEqual(["tsc"]);
+describe("@rrlab/ts-plugin services()", () => {
+  it("returns the typecheck capability when no `only` is supplied", async () => {
+    const caps = await ts().services(ctx());
+    expect(Object.keys(caps)).toEqual(["typecheck"]);
   });
 
-  it("returns the tsc capability when `only: ['tsc']` is supplied", async () => {
-    const caps = await ts({ only: ["tsc"] }).capabilities(ctx());
-    expect(Object.keys(caps)).toEqual(["tsc"]);
+  it("returns the typecheck capability when `only: ['typecheck']` is supplied", async () => {
+    const caps = await ts({ only: ["typecheck"] }).services(ctx());
+    expect(Object.keys(caps)).toEqual(["typecheck"]);
   });
 
   it("throws when `only` references an unknown capability", async () => {
     await expect(
       // biome-ignore lint/suspicious/noExplicitAny: bypassing the TS guard to exercise the runtime check
-      ts({ only: ["lint"] as any }).capabilities(ctx()),
+      ts({ only: ["lint"] as any }).services(ctx()),
     ).rejects.toThrow(/unknown capability 'lint'/);
   });
 });

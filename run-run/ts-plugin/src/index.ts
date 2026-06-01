@@ -21,12 +21,12 @@ import { TOOL_VERSIONS } from "./tool-versions.ts";
 export { TOOL_VERSIONS } from "./tool-versions.ts";
 
 const FROM = import.meta.url;
-const UI = colorize("#3178C6")("tsc");
 const TSCONFIG = "tsconfig.json";
+const tsColor = colorize("#3178C6");
 
 export class TscService extends ToolService implements TypeChecker {
   constructor(shellService: ShellService) {
-    super({ pkg: "typescript", bin: "tsc", ui: UI, shellService, from: FROM });
+    super({ pkg: "typescript", bin: "tsc", color: tsColor, shellService, from: FROM });
   }
 
   async check(options: TypeCheckOptions = {}): Promise<RunReport> {
@@ -138,12 +138,13 @@ async function pathExists(p: string): Promise<boolean> {
   }
 }
 
-const ts = definePlugin(() => ({
-  name: "ts",
+const ts = definePlugin({
   apiVersion: 1,
+  name: "ts",
+  color: tsColor,
   install,
   uninstall,
-  capabilities: ({ shell }) => ({ tsc: new TscService(shell) }),
-}));
+  services: ({ shell }) => ({ typecheck: new TscService(shell) }),
+});
 
 export default ts;

@@ -8,7 +8,7 @@
 
 With decisions 001 (all-peer) and 002 (no shims) settled, the next question was whether to keep two parallel code paths inside the kernel — the legacy `if (config.future?.oxc)` branching plus the new registry consumption — across the plugin extraction, or to collapse them in one move.
 
-An earlier draft kept the kernel's `*Service` files (`biome.ts`, `oxlint.ts`, etc.) imported via legacy branches while the plugin packages also carried their own copies. The plan was to delete the kernel versions in a later phase. That tension disappears once the kernel consumes capabilities via `ctx.registry.get(kind)`: the indirection through the registry means the kernel no longer needs a workspace dep on any plugin package (which had been creating a cyclic workspace graph turbo rejected).
+An earlier draft kept the kernel's `*Service` files (`biome.ts`, `oxlint.ts`, etc.) imported via legacy branches while the plugin packages also carried their own copies. The plan was to delete the kernel versions in a later phase. That tension disappears once the kernel consumes capabilities through `ctx.registry` instead of importing services directly: the indirection through the registry means the kernel no longer needs a workspace dep on any plugin package (which had been creating a cyclic workspace graph turbo rejected).
 
 There was also the user-driven requirement to dogfood the plugins in this monorepo's own `run-run.config.mts` and to delete `future.oxc` entirely — no deprecation window.
 
@@ -31,7 +31,7 @@ There was also the user-driven requirement to dogfood the plugins in this monore
 ## What landed in this commit
 
 - `createContext` builds a `PluginRegistry`, iterates `config.plugins`, calls each plugin's `setup({ shell, logger, appPkg, binPkg, cwd })`, and registers the returned capabilities.
-- `lint`, `format`, `jsc`, `tsc`, `pack` commands consult `ctx.registry.get(kind)`. They register cleanly even when no plugin provides the capability (so `--help` works); the action throws an actionable error referencing `rr plugins add <alias>` when invoked.
+- `lint`, `format`, `jsc`, `tsc`, `pack` commands resolve their capability from `ctx.registry` (the resolver method has been renamed since; today it's `getService` / `getServiceOrThrow`). They register cleanly even when no plugin provides the capability (so `--help` works); the action throws an actionable error referencing `rr plugins add <alias>` when invoked.
 - `tsc`'s workspace-iteration loop calls `tsc.check({ cwd: project.rootDir })`. `TypeChecker.check` gained an optional `{ cwd?: string }` argument; `ToolService.exec` learned an optional `{ cwd?: string }` to forward to `shell.at(cwd)`.
 - Kernel `src/services/{biome,oxlint,oxfmt,tsdown,tsc}.ts` deleted — each plugin owns its service.
 - Heavy deps removed from `@rrlab/cli/package.json` (`@biomejs/biome`, `oxfmt`, `oxlint`, `oxlint-tsgolint`, `tsdown`, `typescript`). `tsdown` re-added as a kernel devDep for the kernel's own build only.

@@ -4,5 +4,5 @@ import oxc from "@rrlab/oxc-plugin";
 import tsdown from "@rrlab/tsdown-plugin";
 
 export default defineConfig({
-  plugins: [tsdown(), biome(), oxc({ only: ["tsc"] })],
+  plugins: [tsdown(), biome(), oxc({ only: ["typecheck"] })],
 });
