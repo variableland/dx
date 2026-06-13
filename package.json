@@ -5,7 +5,7 @@
   "scripts": {
     "build": "turbo build",
     "test": "turbo test",
-    "test:types": "turbo test:types",
+    "tscheck": "turbo tscheck",
     "test:unit": "turbo test:unit",
     "test:integration": "turbo test:integration"
   },

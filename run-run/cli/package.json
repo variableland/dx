@@ -56,7 +56,7 @@
     "test:unit": "vitest run --project unit",
     "test:integration": "vitest run --project integration",
     "prepublishOnly": "pnpm build",
-    "test:types": "rr tsc"
+    "tscheck": "rr tsc"
   },
   "dependencies": {
     "@clack/prompts": "0.11.0",

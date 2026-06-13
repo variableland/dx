@@ -27,7 +27,7 @@
     "build": "tsdown",
     "prepublishOnly": "pnpm build",
     "test": "vitest run",
-    "test:types": "rr tsc"
+    "tscheck": "rr tsc"
   },
   "dependencies": {
     "@pnpm/fs.find-packages": "1000.0.24",

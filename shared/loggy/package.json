@@ -26,7 +26,7 @@
   "scripts": {
     "build": "tsdown",
     "prepublishOnly": "pnpm build",
-    "test:types": "rr tsc"
+    "tscheck": "rr tsc"
   },
   "publishConfig": {
     "access": "public",

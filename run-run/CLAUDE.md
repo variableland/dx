@@ -8,7 +8,7 @@ Orientation for working on the `@rrlab/*` packages. Prerequisite reading: the re
 
 This means:
 
-- **Do not wrap `rr` in `package.json` scripts.** Aliases like `"lint": "rr lint"`, `"format": "rr format --fix"`, `"test:types": "rr tsc"`, `"check": "rr check"` re-introduce the very indirection rr was created to remove (`pnpm lint` → `rr lint` → `biome check` is three layers for what should be one). The user types `rr lint`, not `pnpm lint`.
+- **Do not wrap `rr` in `package.json` scripts.** Aliases like `"lint": "rr lint"`, `"format": "rr format --fix"`, `"tscheck": "rr tsc"`, `"check": "rr check"` re-introduce the very indirection rr was created to remove (`pnpm lint` → `rr lint` → `biome check` is three layers for what should be one). The user types `rr lint`, not `pnpm lint`.
 - **The expected setup**: `node_modules/.bin` on `PATH` — typically via mise (`[env] _.path = ["{{config_root}}/node_modules/.bin"]`) — so `rr` is directly invokable from the project root without a package-manager hop. Templates ship a `mise.toml` that wires this for new projects.
 - **`package.json scripts` may still exist** — but only for things `rr` does NOT cover (`vitest run`, `tsx watch`, `node dist/...`, `vite dev`, `turbo run dev`, `changeset publish`). These are not single-command aliases; they're either different tools or multi-step compositions.
 - **Lifecycle / orchestration hooks MAY call `rr` directly.** lefthook git hooks, `prepublishOnly`, GitHub Actions workflows — those are triggered by other systems, not typed by the developer, so they don't fight the "one entry point" goal. A `pre-commit: rr jsc --fix-staged` lefthook job is exactly right.

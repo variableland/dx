@@ -78,7 +78,7 @@ describe("vland init (template scaffolding)", () => {
     const scriptNames = Object.keys(pkg.scripts ?? {});
     expect(scriptNames).not.toContain("lint");
     expect(scriptNames).not.toContain("lint:fix");
-    expect(scriptNames).not.toContain("test:types");
+    expect(scriptNames).not.toContain("tscheck");
     expect(scriptNames).not.toContain("check");
     expect(scriptNames).not.toContain("build");
   });
