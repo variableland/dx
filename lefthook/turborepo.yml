@@ -6,7 +6,7 @@ pre-commit:
       stage_fixed: true
 
     - name: tscheck
-      run: pnpm turbo run test:types --filter='...[HEAD]'
+      run: pnpm turbo run tscheck --filter='...[HEAD]'
       glob:
         - "*.{ts,tsx}"
         - "tsconfig.json"

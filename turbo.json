@@ -9,7 +9,7 @@
     "test": {
       "dependsOn": ["build"]
     },
-    "test:types": {},
+    "tscheck": {},
     "test:unit": {},
     "test:integration": {
       "dependsOn": ["build"]
