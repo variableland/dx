@@ -59,4 +59,46 @@ describe("rr tsc", () => {
       expect(r.stdout + r.stderr).toMatch(/Type 'string' is not assignable to type 'number'/);
     });
   });
+
+  describe("pre-script", () => {
+    const pkgWithScripts = (scripts: Record<string, string>) =>
+      `${JSON.stringify({ name: "rr-test-fixture", version: "0.0.0", private: true, scripts }, null, 2)}\n`;
+
+    test("runs `pretscheck` before tsc and fails the task when it fails", () => {
+      fixture = makeFixture("tsc-pretscheck", {
+        "package.json": pkgWithScripts({ pretscheck: "echo MARK_TSCHECK && exit 1" }),
+        "run-run.config.mts": fixtures.config(["ts"]),
+        "tsconfig.json": fixtures.tsconfig(),
+        "src/ok.ts": "export const ok: number = 1;\n",
+      });
+
+      const r = cli("tsc", { cwd: fixture.dir });
+      const combined = r.stdout + r.stderr;
+      expect(r.status).not.toBe(0);
+      // The task fails on the pre-script, before tsc runs; its captured output is surfaced.
+      expect(combined).toContain("pre-script");
+      expect(combined).toContain("MARK_TSCHECK");
+    });
+
+    test("prefers `pretscheck` over the legacy `pretsc`/`pretypecheck` aliases", () => {
+      fixture = makeFixture("tsc-pretscheck-precedence", {
+        "package.json": pkgWithScripts({
+          pretscheck: "echo MARK_TSCHECK && exit 1",
+          pretsc: "echo MARK_LEGACY_TSC && exit 0",
+          pretypecheck: "echo MARK_LEGACY_TYPECHECK && exit 0",
+        }),
+        "run-run.config.mts": fixtures.config(["ts"]),
+        "tsconfig.json": fixtures.tsconfig(),
+        "src/ok.ts": "export const ok: number = 1;\n",
+      });
+
+      const r = cli("tsc", { cwd: fixture.dir });
+      const combined = r.stdout + r.stderr;
+      // Only `pretscheck` runs: it fails the task and the legacy aliases never fire.
+      expect(r.status).not.toBe(0);
+      expect(combined).toContain("MARK_TSCHECK");
+      expect(combined).not.toContain("MARK_LEGACY_TSC");
+      expect(combined).not.toContain("MARK_LEGACY_TYPECHECK");
+    });
+  });
 });

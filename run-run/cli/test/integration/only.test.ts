@@ -47,7 +47,7 @@ describe("plugin { only } narrowing", () => {
       // output: either its `N warnings and M errors` summary or the `tsgolint`
       // type-checker it shells out to — both are oxlint-exclusive markers.
       expect(combined).toMatch(/\d+ warnings? and \d+ errors?|tsgolint/i);
-    }, 15_000);
+    });
 
     test("rr jsc composes biome's lint+format (biome's direct jsc was narrowed away)", () => {
       const r = cli("jsc", { cwd: fixture.dir });
