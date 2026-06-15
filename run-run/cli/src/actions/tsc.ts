@@ -11,14 +11,14 @@ export type TscActionConfig = {
 
 type Scripts = Record<string, string | undefined> | undefined;
 
-const getPreScript = (scripts: Scripts) => scripts?.pretsc ?? scripts?.pretypecheck;
+const getPreScript = (scripts: Scripts) => scripts?.pretscheck ?? scripts?.pretsc ?? scripts?.pretypecheck;
 
 export async function tscAction({ ctx, tsc }: TscActionConfig): Promise<void> {
   const { appPkg, shell } = ctx;
 
   const isTsProject = (dir: string) => appPkg.hasFile("tsconfig.json", dir);
 
-  // A package's `pretsc`/`pretypecheck` runs captured, inside the task, so its
+  // A package's `pretscheck`/`pretsc`/`pretypecheck` runs captured, inside the task, so its
   // output stays grouped with that package. It may use shell features, so it
   // goes through `/bin/sh -c`. A failing pre-script fails the task before tsc.
   const typecheckTask = (label: string, dir: string, scripts: Scripts): BoardTask =>
