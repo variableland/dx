@@ -1,5 +1,13 @@
 # @rrlab/cli
 
+## 1.2.1
+
+### Patch Changes
+
+- [#241](https://github.com/variableland/dx/pull/241) [`50bff97`](https://github.com/variableland/dx/commit/50bff97dc4b94398f2744ebb4f0e6b5e997ceb70) Thanks [@rqbazan](https://github.com/rqbazan)! - Honor `pretscheck` as the primary pre-script alias for `rr tsc`.
+
+  Now that the typecheck task is canonically named `tscheck` (#240), a package's `pretscheck` script runs before the type check, taking precedence over the legacy `pretsc` and `pretypecheck` aliases (which still work as fallbacks).
+
 ## 1.2.0
 
 ### Minor Changes

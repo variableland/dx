@@ -1,6 +1,6 @@
 {
   "name": "@rrlab/cli",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "The CLI toolbox to fullstack common scripts in Variable Land",
   "homepage": "https://github.com/variableland/dx/tree/main/run-run/cli#readme",
   "bugs": {
