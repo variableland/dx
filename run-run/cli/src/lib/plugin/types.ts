@@ -1,7 +1,7 @@
 import type { Pkg, ShellService } from "@vlandoss/clibuddy";
 import type { AnyLogger as Logger } from "@vlandoss/loggy";
 import type { ReleaseService } from "#src/services/release.ts";
-import type { Doctor, Formatter, Linter, Packer, StaticChecker, TypeChecker } from "#src/types/tool.ts";
+import type { Doctor, Formatter, Linter, Packer, StaticChecker, TestRunner, TypeChecker } from "#src/types/tool.ts";
 
 export type * from "#src/types/tool.ts";
 
@@ -13,6 +13,7 @@ export type PluginServices = {
   jscheck?: StaticChecker & Doctor;
   typecheck?: TypeChecker & Doctor;
   pack?: Packer & Doctor;
+  test?: TestRunner & Doctor;
 };
 
 export type PluginContext = {

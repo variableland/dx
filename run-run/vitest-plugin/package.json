@@ -1,0 +1,57 @@
+{
+  "name": "@rrlab/vitest-plugin",
+  "version": "0.0.0",
+  "description": "vitest plugin for @rrlab/cli — provides the test capability as a passthrough to vitest.",
+  "homepage": "https://github.com/variableland/dx/tree/main/run-run/vitest-plugin#readme",
+  "bugs": {
+    "url": "https://github.com/variableland/dx/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/variableland/dx.git",
+    "directory": "run-run/vitest-plugin"
+  },
+  "license": "MIT",
+  "author": "rcrd <rcrd@variable.land>",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "files": [
+    "dist",
+    "src",
+    "!src/**/__tests__",
+    "!src/**/*.test.*"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      }
+    }
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "test": "vitest run",
+    "prepublishOnly": "pnpm build"
+  },
+  "dependencies": {
+    "@vlandoss/clibuddy": "workspace:*"
+  },
+  "peerDependencies": {
+    "@rrlab/cli": "workspace:^",
+    "vitest": ">=3.0.0"
+  },
+  "devDependencies": {
+    "@rrlab/cli": "workspace:*",
+    "@rrlab/tsdown-config": "workspace:^",
+    "@types/semver": "^7.7.1",
+    "semver": "^7.8.1",
+    "vitest": "^4.0.0"
+  }
+}

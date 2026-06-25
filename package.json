@@ -21,6 +21,7 @@
     "@rrlab/ts-plugin": "workspace:*",
     "@rrlab/tsdown-config": "workspace:*",
     "@rrlab/tsdown-plugin": "workspace:*",
+    "@rrlab/vitest-plugin": "workspace:*",
     "@types/node": "latest",
     "@vlandoss/vland": "workspace:*",
     "lefthook": "2.1.1",
