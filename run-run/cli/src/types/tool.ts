@@ -48,3 +48,21 @@ export type Packer = {
   readonly ui: string;
   pack: () => Promise<RunReport>;
 };
+
+export type TestRunOptions = {
+  /** Env file to load before running (resolved by the provider). */
+  envFile?: string;
+  /** Arguments forwarded verbatim to the test runner. */
+  args: string[];
+};
+
+export type TestRunner = {
+  readonly ui: string;
+  /**
+   * Streams a passthrough test run and resolves with the tool's exit code.
+   * Unlike the other verbs it returns a number, not a `RunReport`: a test
+   * runner needs an inherited TTY (watch mode, colors, `--help`), so its output
+   * is never captured for the board.
+   */
+  test: (options: TestRunOptions) => Promise<number>;
+};

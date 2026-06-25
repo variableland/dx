@@ -11,6 +11,7 @@ const PLUGIN_DIRS = [
   path.resolve(RUN_RUN, "oxc-plugin/src"),
   path.resolve(RUN_RUN, "ts-plugin/src"),
   path.resolve(RUN_RUN, "tsdown-plugin/src"),
+  path.resolve(RUN_RUN, "vitest-plugin/src"),
 ] as const;
 
 function walk(dir: string): string[] {

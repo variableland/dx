@@ -24,6 +24,8 @@ export type {
   RunReport,
   StaticChecker,
   StaticCheckerOptions,
+  TestRunner,
+  TestRunOptions,
   TypeChecker,
   TypeCheckOptions,
   UninstallContext,

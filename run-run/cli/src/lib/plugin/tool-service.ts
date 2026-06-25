@@ -70,6 +70,24 @@ export class ToolService {
     return { ok: output.exitCode === 0, output: body ? `${header}\n${body}` : header };
   }
 
+  /**
+   * Streams the command straight to the terminal (`stdio: "inherit"`) and
+   * returns its exit code — the counterpart to `runReport` for passthrough
+   * verbs (e.g. a test runner) where capturing would break watch mode, colors,
+   * interactive UI, and `--help` forwarding. `verbose: false` suppresses the
+   * `$ <cmd>` line so the wrapped tool fully owns the terminal. Takes an
+   * explicit `command` because a passthrough may need to wrap its bin (e.g.
+   * `node --env-file=… <bin>`) rather than spawn it directly.
+   *
+   * A missing exit code (signal-killed, e.g. OOM) is reported as failure (`1`),
+   * mirroring `runReport`'s strict `=== 0`.
+   */
+  async runStreamed(command: string, args: string[] = [], options: RunReportOptions = {}): Promise<number> {
+    const sh = options.cwd ? this.#shellService.at(options.cwd) : this.#shellService;
+    const result = await sh.run(command, args, { throwOnError: false, verbose: false });
+    return result.exitCode ?? 1;
+  }
+
   async doctor(): Promise<RunReport> {
     const output = await this.#shellService.runCaptured(await this.getBinDir(), ["--help"], { throwOnError: false });
     const ok = output.exitCode === 0;

@@ -11,6 +11,7 @@ import { createJsCheckCommand } from "./commands/jscheck.ts";
 import { createLintCommand } from "./commands/lint.ts";
 import { createPackCommand } from "./commands/pack.ts";
 import { createPluginsCommand } from "./commands/plugins.ts";
+import { createTestCommand } from "./commands/test.ts";
 import { createTsCheckCommand } from "./commands/tscheck.ts";
 import { RunRunCmd } from "./root.ts";
 
@@ -29,6 +30,8 @@ export async function createProgram(meta: ImportMeta) {
     .addCommand(createTsCheckCommand(ctx))
     .addCommand(createLintCommand(ctx))
     .addCommand(createFormatCommand(ctx))
+    .commandsGroup("Testing:")
+    .addCommand(createTestCommand(ctx))
     .commandsGroup("Build:")
     .addCommand(createPackCommand(ctx))
     .commandsGroup("Maintenance:")
