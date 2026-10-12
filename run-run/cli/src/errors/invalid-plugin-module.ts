@@ -1,5 +1,7 @@
+import { KnownError } from "./known-error.ts";
+
 /** Thrown when an installed plugin package doesn't export a default factory function. */
-export class InvalidPluginModuleError extends Error {
+export class InvalidPluginModuleError extends KnownError {
   constructor(pkgName: string) {
     super(`Plugin '${pkgName}' did not export a default factory function.`);
   }
