@@ -13,20 +13,29 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+# The org default GITHUB_TOKEN is read-only; every job states what it needs.
+permissions: {}
+
 jobs:
   test:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: ⬇️ Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
 
       - name: 🟢 Setup Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
         with:
           node-version-file: .node-version
+          # setup-pnpm caches the pnpm store
+          package-manager-cache: false
 
       - name: ⌛ Setup pnpm
-        uses: variableland/gh-actions/actions/setup-pnpm@main
+        uses: withvariablelab/gh-actions/actions/setup-pnpm@main
 
       - name: 💅 Check
         run: pnpm rr check
@@ -37,43 +46,80 @@ jobs:
       - name: 🔨 Build
         run: pnpm build
 
+  zizmor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - name: ⬇️ Checkout repo
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+
+      # Security lint for the workflows (template injection, credential
+      # persistence, unpinned actions, excessive permissions...). pipx ships
+      # with the GitHub-hosted Ubuntu image, so no third-party setup action.
+      # Config: .github/zizmor.yml
+      - name: 🔒 Run zizmor
+        run: pipx run --spec zizmor==1.30.1 zizmor --format=github .github/
+        env:
+          # Enables the online audits (impostor commits, known-vulnerable
+          # actions, ref confusion). Read-only: the job has contents: read.
+          GH_TOKEN: ${{ github.token }}
+
   release:
     runs-on: ubuntu-latest
     needs: test
     if: ${{ github.ref == 'refs/heads/main' }}
     permissions:
-      id-token: write
-      contents: write
-      packages: write
-      pull-requests: write
+      contents: read
+      id-token: write # npm trusted publishing (OIDC)
     steps:
+      # vland-bot (not GITHUB_TOKEN) opens the "Version Packages" PR so that
+      # CI runs on it. Token scoped to this repo and to what changesets needs.
       - name: 🔑 Mint vland-bot token
         id: app-token
-        uses: actions/create-github-app-token@v1
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
         with:
-          app-id: ${{ secrets.VLAND_BOT_APP_ID }}
+          client-id: ${{ vars.VLAND_BOT_CLIENT_ID }}
           private-key: ${{ secrets.VLAND_BOT_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
 
       - name: ⬇️ Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with:
           token: ${{ steps.app-token.outputs.token }}
+          # Deliberate: changesets/action pushes the changeset-release/main
+          # branch and the release tags with these vland-bot credentials. This
+          # job only runs on main (merged code), never on PR code.
+          persist-credentials: true
 
       - name: 🟢 Setup Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
         with:
           node-version-file: .node-version
+          # setup-pnpm caches the pnpm store
+          package-manager-cache: false
 
       - name: ⌛ Setup pnpm
-        uses: variableland/gh-actions/actions/setup-pnpm@main
+        uses: withvariablelab/gh-actions/actions/setup-pnpm@main
 
       - name: 🧑‍💻 Configure git user
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          APP_SLUG: ${{ steps.app-token.outputs.app-slug }}
         run: |
-          git config user.name "vland-bot[bot]"
-          git config user.email "282456776+vland-bot[bot]@users.noreply.github.com"
+          user_id="$(gh api "/users/${APP_SLUG}[bot]" --jq .id)"
+          git config user.name "${APP_SLUG}[bot]"
+          git config user.email "${user_id}+${APP_SLUG}[bot]@users.noreply.github.com"
 
+      # No NPM_TOKEN: with id-token: write, changesets/action detects OIDC and
+      # `changeset publish` uses npm trusted publishing (needs npm >= 11.5.1,
+      # installed by setup-pnpm).
       - name: 🚀 Create release PR or publish versions
-        uses: changesets/action@v1
+        uses: changesets/action@a45c4d594aa4e2c509dc14a9f2b3b67ba3780d0d # v1.9.0
         with:
           commit: "chore: update versions"
           title: "chore: update versions"
@@ -81,30 +127,55 @@ jobs:
           setupGitUser: false
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           LEFTHOOK: 0
 
+  # Two-job previews (MIGRATION.md §3c, Regla 2). This job runs the PR code and
+  # publishes with npm OIDC; it holds no bot key and only hands the published
+  # package list to preview-comment.
   preview:
     runs-on: ubuntu-latest
     needs: test
     if: ${{ startsWith(github.head_ref, 'feat') || startsWith(github.head_ref, 'fix') || contains(github.event.pull_request.labels.*.name, 'preview') }}
     permissions:
-      id-token: write
       contents: read
+      id-token: write # npm trusted publishing (OIDC)
+    outputs:
+      packages: ${{ steps.preview.outputs.packages }}
     steps:
       - name: ⬇️ Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
 
       - name: 🟢 Setup Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
         with:
           node-version-file: .node-version
+          # setup-pnpm caches the pnpm store
+          package-manager-cache: false
 
-      - name: ⌛ Setup CI
-        uses: variableland/gh-actions/actions/setup-pnpm@main
+      - name: ⌛ Setup pnpm
+        uses: withvariablelab/gh-actions/actions/setup-pnpm@main
 
       - name: 🚀 Preview release
-        uses: variableland/gh-actions/actions/monorepo-preview-release@main
+        id: preview
+        uses: withvariablelab/gh-actions/actions/monorepo-preview-release@main
         with:
+          mode: publish
+          publish_mode: oidc-only
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          npm_token: ${{ secrets.NPM_TOKEN }}
+
+  # Never checks out or runs PR code: the reusable workflow mints the vland-bot
+  # token (this repo only, pull-requests: write) and upserts the PR comment.
+  # `packages` is untrusted (PR code ran in `preview`): it only travels through
+  # `with:` and is validated by the action, never interpolated into `run:`.
+  preview-comment:
+    needs: preview
+    if: ${{ needs.preview.result == 'success' }}
+    permissions: {}
+    uses: withvariablelab/gh-actions/.github/workflows/preview-comment.yml@main
+    with:
+      action: monorepo-preview-release
+      packages: ${{ needs.preview.outputs.packages }}
+    secrets:
+      VLAND_BOT_PRIVATE_KEY: ${{ secrets.VLAND_BOT_PRIVATE_KEY }}
