@@ -5,3 +5,11 @@ packages:
 onlyBuiltDependencies:
   - "@biomejs/biome"
   - lefthook
+# Supply-chain cooldown: never resolve a third-party version published less
+# than 24h ago (most malicious releases are pulled within the hour). Our own
+# scopes are exempt so freshly released @variablelab/* and @rrlab/* packages
+# can be consumed right away. Requires pnpm >= 10.17 (pattern excludes).
+minimumReleaseAge: 1440
+minimumReleaseAgeExclude:
+  - "@variablelab/*"
+  - "@rrlab/*"
