@@ -172,6 +172,6 @@ fixture = makeFixture("name", {
 
 ## What NOT to touch in here
 
-- `@vlandoss/clibuddy` and `@vlandoss/loggy` are dependencies — fixing bugs there is fine, but don't refactor their API while doing run-run work. Open a separate task.
-- `@vlandoss/vland` lives in `packages/` and is a different product. Touching it is out of scope for run-run work.
+- `@variablelab/clibuddy` and `@variablelab/loggy` are dependencies — fixing bugs there is fine, but don't refactor their API while doing run-run work. Open a separate task.
+- `@variablelab/vland` lives in `vland/cli/` and is a different product. Touching it is out of scope for run-run work.
 - The published name of any `@rrlab/*` package — that's a public-facing decision the human owns.

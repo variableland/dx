@@ -1,4 +1,4 @@
-import type { Pkg, ShellService } from "@vlandoss/clibuddy";
+import type { Pkg, ShellService } from "@variablelab/clibuddy";
 import { describe, expect, it, vi } from "vitest";
 import { decideScaffold } from "#src/lib/plugin/decide-scaffold.ts";
 import type { ClackPrompts, InstallContext } from "#src/lib/plugin/types.ts";

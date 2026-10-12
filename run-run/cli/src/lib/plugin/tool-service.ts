@@ -1,4 +1,4 @@
-import { palette, resolvePackageBin, type ShellService } from "@vlandoss/clibuddy";
+import { palette, resolvePackageBin, type ShellService } from "@variablelab/clibuddy";
 import type { RunReport } from "#src/types/tool.ts";
 
 export type ToolServiceOptions = {

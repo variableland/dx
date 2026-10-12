@@ -1,4 +1,4 @@
-# @vlandoss/loggy
+# @variablelab/loggy
 
 ## 0.2.1
 

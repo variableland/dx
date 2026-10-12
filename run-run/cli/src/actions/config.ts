@@ -1,4 +1,4 @@
-import { palette } from "@vlandoss/clibuddy";
+import { palette } from "@variablelab/clibuddy";
 import { Lines } from "#src/render/lines.ts";
 import { configuredPlugins, pkgCell, pluginVersionCell, relPath } from "#src/render/plugin-view.ts";
 import type { ContextValue } from "#src/services/context.ts";

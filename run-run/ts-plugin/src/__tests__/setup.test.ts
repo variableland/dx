@@ -1,5 +1,5 @@
 import type { PluginContext } from "@rrlab/cli/plugin";
-import type { Pkg, ShellService } from "@vlandoss/clibuddy";
+import type { Pkg, ShellService } from "@variablelab/clibuddy";
 import { describe, expect, it } from "vitest";
 import ts from "../index.ts";
 

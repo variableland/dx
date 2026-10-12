@@ -1,4 +1,4 @@
-import { colorize } from "@vlandoss/clibuddy";
+import { colorize } from "@variablelab/clibuddy";
 import { cleanAction } from "#src/actions/clean.ts";
 import { createCommand } from "../base.ts";
 

@@ -1,6 +1,6 @@
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
-import { dirnameOf } from "@vlandoss/clibuddy";
+import { dirnameOf } from "@variablelab/clibuddy";
 import { describe, expect, it } from "vitest";
 
 const HERE = dirnameOf(import.meta);

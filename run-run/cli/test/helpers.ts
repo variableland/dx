@@ -2,7 +2,7 @@ import { spawnSync } from "node:child_process";
 import { mkdirSync, mkdtempSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path, { resolve } from "node:path";
-import { dirnameOf } from "@vlandoss/clibuddy";
+import { dirnameOf } from "@variablelab/clibuddy";
 import type { PluginName } from "#src/lib/plugin/directory.ts";
 
 const BIN = resolve(dirnameOf(import.meta), "../bin");

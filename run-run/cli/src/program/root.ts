@@ -1,5 +1,5 @@
 import { generateToStdout } from "@usage-spec/commander";
-import { palette } from "@vlandoss/clibuddy";
+import { palette } from "@variablelab/clibuddy";
 import { Command } from "commander";
 import { getBannerText } from "#src/render/banner.ts";
 import { getFooterText } from "#src/render/footer.ts";

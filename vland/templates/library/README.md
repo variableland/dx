@@ -1,6 +1,6 @@
 # {{projectName}}
 
-A standalone TypeScript library scaffolded with [`@vlandoss/vland`](https://github.com/variableland/dx/tree/main/vland/cli).
+A standalone TypeScript library scaffolded with [`@variablelab/vland`](https://github.com/withvariablelab/dx/tree/main/vland/cli).
 
 ## Install
 
@@ -18,7 +18,7 @@ greet("vland");
 
 ## Set up tooling
 
-This project uses [`rr`](https://github.com/variableland/dx/tree/main/run-run) (the `@rrlab/cli`) as the single entry point for lint, format, type-check, and build. The pre-configured `mise.toml` puts `./node_modules/.bin` on your `PATH`, so `rr` is invokable directly from the project root.
+This project uses [`rr`](https://github.com/withvariablelab/dx/tree/main/run-run) (the `@rrlab/cli`) as the single entry point for lint, format, type-check, and build. The pre-configured `mise.toml` puts `./node_modules/.bin` on your `PATH`, so `rr` is invokable directly from the project root.
 
 ```sh
 pnpm install                    # also pulls in @rrlab/cli

@@ -2,13 +2,13 @@
   "name": "@rrlab/tsdown-plugin",
   "version": "1.1.1",
   "description": "tsdown plugin for @rrlab/cli — provides the pack capability for building TS libraries.",
-  "homepage": "https://github.com/variableland/dx/tree/main/run-run/tsdown-plugin#readme",
+  "homepage": "https://github.com/withvariablelab/dx/tree/main/run-run/tsdown-plugin#readme",
   "bugs": {
-    "url": "https://github.com/variableland/dx/issues"
+    "url": "https://github.com/withvariablelab/dx/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/variableland/dx.git",
+    "url": "git+https://github.com/withvariablelab/dx.git",
     "directory": "run-run/tsdown-plugin"
   },
   "license": "MIT",
@@ -41,7 +41,7 @@
     "prepublishOnly": "pnpm build"
   },
   "dependencies": {
-    "@vlandoss/clibuddy": "workspace:*",
+    "@variablelab/clibuddy": "workspace:*",
     "magicast": "0.3.5"
   },
   "peerDependencies": {

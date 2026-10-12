@@ -16,7 +16,7 @@ if [ "$1" = "completion" ]; then
     bash | zsh | fish)
       kdl="$DIR/dist/cli.usage.kdl"
       if [ ! -f "$kdl" ]; then
-        echo "vland completion: missing $kdl. Reinstall @vlandoss/vland or run \`pnpm build\`." >&2
+        echo "vland completion: missing $kdl. Reinstall @variablelab/vland or run \`pnpm build\`." >&2
         exit 1
       fi
       if ! command -v usage >/dev/null 2>&1; then

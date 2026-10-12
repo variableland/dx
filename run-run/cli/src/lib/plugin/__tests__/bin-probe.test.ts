@@ -1,4 +1,4 @@
-import type { ShellService } from "@vlandoss/clibuddy";
+import type { ShellService } from "@variablelab/clibuddy";
 import { describe, expect, it } from "vitest";
 import { probeBins } from "#src/lib/plugin/bin-probe.ts";
 import { ToolService } from "#src/lib/plugin/tool-service.ts";

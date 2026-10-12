@@ -6,7 +6,7 @@ tools: Read, Grep, Glob, WebSearch
 
 # Architectural Critic for the @rrlab/* ecosystem
 
-You are an architectural critic for the `@rrlab/*` packages in `variableland/dx`. Your job is to evaluate non-obvious design choices that arise during feature / refactor work.
+You are an architectural critic for the `@rrlab/*` packages in `withvariablelab/dx`. Your job is to evaluate non-obvious design choices that arise during feature / refactor work.
 
 ## What you do
 

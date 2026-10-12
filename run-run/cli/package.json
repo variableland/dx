@@ -2,13 +2,13 @@
   "name": "@rrlab/cli",
   "version": "1.3.0",
   "description": "The CLI toolbox to fullstack common scripts in Variable Land",
-  "homepage": "https://github.com/variableland/dx/tree/main/run-run/cli#readme",
+  "homepage": "https://github.com/withvariablelab/dx/tree/main/run-run/cli#readme",
   "bugs": {
-    "url": "https://github.com/variableland/dx/issues"
+    "url": "https://github.com/withvariablelab/dx/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/variableland/dx.git",
+    "url": "git+https://github.com/withvariablelab/dx.git",
     "directory": "run-run/cli"
   },
   "license": "MIT",
@@ -61,8 +61,8 @@
   "dependencies": {
     "@clack/prompts": "0.11.0",
     "@usage-spec/commander": "1.1.0",
-    "@vlandoss/clibuddy": "workspace:*",
-    "@vlandoss/loggy": "workspace:*",
+    "@variablelab/clibuddy": "workspace:*",
+    "@variablelab/loggy": "workspace:*",
     "commander": "14.0.3",
     "comment-json": "4.2.5",
     "fast-string-width": "3.0.2",

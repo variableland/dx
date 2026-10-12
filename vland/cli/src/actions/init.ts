@@ -1,7 +1,7 @@
 import { readdir } from "node:fs/promises";
 import { isAbsolute, resolve } from "node:path";
 import { cancel, confirm, intro, isCancel, log, outro, select, spinner, text } from "@clack/prompts";
-import { hasTTY, palette } from "@vlandoss/clibuddy";
+import { hasTTY, palette } from "@variablelab/clibuddy";
 import { installDependencies } from "nypm";
 import type { Context } from "#src/services/ctx.ts";
 import { logger } from "#src/services/logger.ts";
@@ -105,7 +105,7 @@ export async function runInit(ctx: Context, options: InitOptions) {
   // private flag). For backend/monorepo we ignore it — those are always
   // private at root. Prompt for it interactively when building a library
   // and the user didn't pass --visibility; non-interactive default is
-  // "public" (the OSS-style scope, @vlandoss).
+  // "public" (the OSS-style scope, @variablelab).
   let visibility = options.visibility;
   if (template === "library" && !visibility) {
     if (!hasTTY) {
@@ -114,7 +114,7 @@ export async function runInit(ctx: Context, options: InitOptions) {
       const choice = await select<Visibility>({
         message: "Library visibility",
         options: [
-          { value: "public", label: "public (@vlandoss/<name>)" },
+          { value: "public", label: "public (@variablelab/<name>)" },
           { value: "private", label: "private (@variableland/<name>, private: true)" },
         ],
         initialValue: "public",

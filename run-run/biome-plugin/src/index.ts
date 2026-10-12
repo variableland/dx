@@ -17,7 +17,7 @@ import {
   type UninstallContext,
   type UninstallResult,
 } from "@rrlab/cli/plugin";
-import { colorize, isCI, type ShellService } from "@vlandoss/clibuddy";
+import { colorize, isCI, type ShellService } from "@variablelab/clibuddy";
 import { parse as parseJsonc } from "comment-json";
 import { TOOL_VERSIONS } from "./tool-versions.ts";
 

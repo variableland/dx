@@ -1,5 +1,5 @@
 import path from "node:path";
-import { dirnameOf } from "@vlandoss/clibuddy";
+import { dirnameOf } from "@variablelab/clibuddy";
 import { ContextService } from "#src/services/context.ts";
 import { createCheckCommand } from "./commands/check.ts";
 import { createCleanCommand } from "./commands/clean.ts";

@@ -14,14 +14,14 @@ describe("vland init (template scaffolding)", () => {
 
   afterEach(() => fixture.cleanup());
 
-  test("library: defaults to the public @vlandoss scope when --visibility is omitted", async () => {
+  test("library: defaults to the public @variablelab scope when --visibility is omitted", async () => {
     const name = "my-lib";
     const r = cli(`init ${name} -t library --no-install --no-git`, { cwd: fixture.dir });
     expect(r.status).toBe(0);
 
     const projectDir = path.join(fixture.dir, name);
     const pkg = JSON.parse(await readFile(path.join(projectDir, "package.json"), "utf8"));
-    expect(pkg.name).toBe(`@vlandoss/${name}`);
+    expect(pkg.name).toBe(`@variablelab/${name}`);
     expect(pkg.private).toBeUndefined();
     expect(pkg.devDependencies).toMatchObject({ "@rrlab/cli": expect.any(String) });
 
@@ -43,13 +43,13 @@ describe("vland init (template scaffolding)", () => {
     expect(pkg.private).toBe(true);
   });
 
-  test("library: --visibility=public uses @vlandoss scope and no private flag", async () => {
+  test("library: --visibility=public uses @variablelab scope and no private flag", async () => {
     const name = "env";
     const r = cli(`init ${name} -t library --visibility=public --no-install --no-git`, { cwd: fixture.dir });
     expect(r.status).toBe(0);
 
     const pkg = JSON.parse(await readFile(path.join(fixture.dir, name, "package.json"), "utf8"));
-    expect(pkg.name).toBe(`@vlandoss/${name}`);
+    expect(pkg.name).toBe(`@variablelab/${name}`);
     expect(pkg.private).toBeUndefined();
   });
 

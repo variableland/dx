@@ -1,4 +1,4 @@
-import { colorize, palette, text } from "@vlandoss/clibuddy";
+import { colorize, palette, text } from "@variablelab/clibuddy";
 
 const vlandColor = colorize("#a78bfa");
 const usageColor = colorize("#24C55E");

@@ -23,7 +23,7 @@
     "@rrlab/tsdown-plugin": "workspace:*",
     "@rrlab/vitest-plugin": "workspace:*",
     "@types/node": "latest",
-    "@vlandoss/vland": "workspace:*",
+    "@variablelab/vland": "workspace:*",
     "lefthook": "2.1.1",
     "oxfmt": "^0.51.0",
     "oxlint": "^1.0.0",

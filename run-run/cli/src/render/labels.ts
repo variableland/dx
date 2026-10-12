@@ -1,5 +1,5 @@
 import { basename } from "node:path";
-import { type Pkg, palette } from "@vlandoss/clibuddy";
+import { type Pkg, palette } from "@variablelab/clibuddy";
 
 export type Provider = { ui: string };
 

@@ -1,4 +1,4 @@
-import type { Pkg } from "@vlandoss/clibuddy";
+import type { Pkg } from "@variablelab/clibuddy";
 import type { PackageManager } from "nypm";
 
 export type WorkspaceChoice = { kind: "current" } | { kind: "root"; flag: true | undefined };

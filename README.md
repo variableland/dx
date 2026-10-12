@@ -33,7 +33,7 @@ To use this monorepo, you need to have the following tools installed:
 1. Clone the repository:
 
    ```bash
-   git clone git@github.com:variableland/dx.git
+   git clone git@github.com:withvariablelab/dx.git
    ```
 
 2. Install dependencies:
@@ -74,7 +74,7 @@ This monorepo uses [Changesets](https://github.com/changesets/changesets) to man
 To preview changes in any package, create a pull request using the branch pattern `feat/*` or `fix/*` or add a label `preview` to the PR. This triggers a special GitHub workflow that publishes the package with the changes to the npm registry under the tag `pr-<PR_NUMBER>`. To preview your changes, install the package with the corresponding tag:
 
 ```bash
-pnpm add @vlandoss/<package>@pr-123
+pnpm add @variablelab/<package>@pr-123
 ```
 
 For `@rrlab/*-plugin` packages, `rr plugins add` accepts the same `@<tag>` suffix and propagates it to the plugin's `@rrlab/*-config` sibling — falling back to `latest` for any sibling the preview didn't publish:

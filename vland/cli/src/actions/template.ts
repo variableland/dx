@@ -18,14 +18,14 @@ export const TEMPLATE_META: Record<TemplateName, { placeholder: string; runScrip
 /**
  * The npm scope a `library` template's package is published under, indexed by
  * the user-selected visibility. Public libraries live under the open-source
- * `@vlandoss` scope; private libraries under `@variableland`.
+ * `@variablelab` scope; private libraries under `@variableland`.
  */
 export const LIBRARY_SCOPES: Record<Visibility, string> = {
   private: "@variableland",
-  public: "@vlandoss",
+  public: "@variablelab",
 };
 
-const GITHUB_SOURCE = "github:variableland/dx";
+const GITHUB_SOURCE = "github:withvariablelab/dx";
 const GITHUB_REF = "main";
 
 type ResolveOptions = {
@@ -38,7 +38,7 @@ type ResolveOptions = {
  * Resolves the template into `dir`. Source order:
  * 1. `VLAND_TEMPLATES_DIR` env var → copy from local path (used by E2E tests
  *    against the in-repo `vland/templates/`).
- * 2. Otherwise → download via giget from `github:variableland/dx/vland/templates/<name>`.
+ * 2. Otherwise → download via giget from `github:withvariablelab/dx/vland/templates/<name>`.
  */
 export async function fetchTemplate(options: ResolveOptions): Promise<{ source: string }> {
   const debug = logger.subdebug("fetch-template");
