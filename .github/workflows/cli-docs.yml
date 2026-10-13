@@ -37,15 +37,6 @@ jobs:
           permission-contents: write
           permission-pull-requests: write
 
-      - name: 🧑‍💻 Resolve bot identity
-        id: bot
-        env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
-          APP_SLUG: ${{ steps.app-token.outputs.app-slug }}
-        run: |
-          user_id="$(gh api "/users/${APP_SLUG}[bot]" --jq .id)"
-          echo "identity=${APP_SLUG}[bot] <${user_id}+${APP_SLUG}[bot]@users.noreply.github.com>" >> "$GITHUB_OUTPUT"
-
       - name: ⬇️ Checkout main
         uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with:
@@ -97,11 +88,10 @@ jobs:
           done <<< "$REGISTRY"
 
       - name: 🚀 Open or update PR
-        uses: peter-evans/create-pull-request@c5a7806660adbe173f04e3e038b0ccdcd758773c # v6.1.0
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         with:
           token: ${{ steps.app-token.outputs.token }}
-          committer: ${{ steps.bot.outputs.identity }}
-          author: ${{ steps.bot.outputs.identity }}
+          sign-commits: true
           branch: automation/cli-docs
           base: main
           commit-message: "chore: regenerate CLI docs"
