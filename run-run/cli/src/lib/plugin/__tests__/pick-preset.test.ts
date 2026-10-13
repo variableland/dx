@@ -1,4 +1,4 @@
-import type { Pkg, ShellService } from "@vlandoss/clibuddy";
+import type { Pkg, ShellService } from "@variablelab/clibuddy";
 import { describe, expect, it, vi } from "vitest";
 import { pickPreset } from "#src/lib/plugin/pick-preset.ts";
 import type { ClackPrompts, InstallContext } from "#src/lib/plugin/types.ts";

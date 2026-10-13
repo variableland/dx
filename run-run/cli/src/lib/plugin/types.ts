@@ -1,5 +1,5 @@
-import type { Pkg, ShellService } from "@vlandoss/clibuddy";
-import type { AnyLogger as Logger } from "@vlandoss/loggy";
+import type { Pkg, ShellService } from "@variablelab/clibuddy";
+import type { AnyLogger as Logger } from "@variablelab/loggy";
 import type { ReleaseService } from "#src/services/release.ts";
 import type { Doctor, Formatter, Linter, Packer, StaticChecker, TestRunner, TypeChecker } from "#src/types/tool.ts";
 

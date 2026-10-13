@@ -1,4 +1,4 @@
-import { cwd } from "@vlandoss/clibuddy";
+import { cwd } from "@variablelab/clibuddy";
 import { type GlobOptions, glob } from "glob";
 import { rimraf } from "rimraf";
 import { logger } from "#src/services/logger.ts";

@@ -1,4 +1,4 @@
-import type { Pkg } from "@vlandoss/clibuddy";
+import type { Pkg } from "@variablelab/clibuddy";
 import type { PackageManager } from "nypm";
 import { describe, expect, it } from "vitest";
 import {

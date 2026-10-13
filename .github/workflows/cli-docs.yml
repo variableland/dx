@@ -1,14 +1,10 @@
 name: cli docs
 
-# To add a new CLI:
-#   1. Add its tag pattern under `on.push.tags`.
-#   2. Add its package dir to the REGISTRY env below.
-# The CLI's `build` script must emit `<dir>/dist/cli.usage.kdl`. Output is `<dir>/CLI.md`.
 on:
   push:
     tags:
       - "@rrlab/cli@*"
-      - "@vlandoss/vland@*"
+      - "@variablelab/vland@*"
   workflow_dispatch:
 
 # Serialize runs so concurrent CLI tag pushes don't race on the rolling PR branch.
@@ -17,42 +13,60 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  # One package dir per line. Each must produce `<dir>/dist/cli.usage.kdl` at build time;
-  # output is written to `<dir>/CLI.md`.
+  # Each dir's build must emit dist/cli.usage.kdl; also add the CLI's tag under on.push.tags.
   REGISTRY: |
     run-run/cli
     vland/cli
 
+permissions: {}
+
 jobs:
   regen:
+    name: Regenerate CLI docs
     runs-on: ubuntu-latest
+    # Writes use the vland-bot token, not GITHUB_TOKEN, so CI runs on the PR.
     permissions:
-      contents: write
-      pull-requests: write
+      contents: read
     steps:
       - name: 🔑 Mint vland-bot token
         id: app-token
-        uses: actions/create-github-app-token@v1
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
         with:
-          app-id: ${{ secrets.VLAND_BOT_APP_ID }}
+          client-id: ${{ vars.VLAND_BOT_CLIENT_ID }}
           private-key: ${{ secrets.VLAND_BOT_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
+
+      - name: 🧑‍💻 Resolve bot identity
+        id: bot
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          APP_SLUG: ${{ steps.app-token.outputs.app-slug }}
+        run: |
+          user_id="$(gh api "/users/${APP_SLUG}[bot]" --jq .id)"
+          echo "identity=${APP_SLUG}[bot] <${user_id}+${APP_SLUG}[bot]@users.noreply.github.com>" >> "$GITHUB_OUTPUT"
 
       - name: ⬇️ Checkout main
-        uses: actions/checkout@v4
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with:
           ref: main
-          token: ${{ steps.app-token.outputs.token }}
+          persist-credentials: false
 
       - name: 🟢 Setup Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
         with:
           node-version-file: .node-version
+          # setup-pnpm caches the pnpm store
+          package-manager-cache: false
 
       - name: ⌛ Setup pnpm
-        uses: variableland/gh-actions/actions/setup-pnpm@main
+        uses: withvariablelab/gh-actions/actions/setup-pnpm@main
 
-      - name: 🛠️ Setup mise (provides usage CLI)
-        uses: jdx/mise-action@v2
+      - name: 🛠️ Setup mise
+        uses: jdx/mise-action@c37c93293d6b742fc901e1406b8f764f6fb19dac # v2.4.4
+        with:
+          # Tag-triggered job: keep mise's cache off (zizmor cache-poisoning).
+          cache: false
 
       - name: 🔨 Build registered CLIs
         run: |
@@ -82,10 +96,12 @@ jobs:
               --replace-pre-with-code-fences
           done <<< "$REGISTRY"
 
-      - name: 🚀 Open or update rolling PR
-        uses: peter-evans/create-pull-request@v6
+      - name: 🚀 Open or update PR
+        uses: peter-evans/create-pull-request@c5a7806660adbe173f04e3e038b0ccdcd758773c # v6.1.0
         with:
           token: ${{ steps.app-token.outputs.token }}
+          committer: ${{ steps.bot.outputs.identity }}
+          author: ${{ steps.bot.outputs.identity }}
           branch: automation/cli-docs
           base: main
           commit-message: "chore: regenerate CLI docs"

@@ -1,5 +1,5 @@
 import path from "node:path";
-import { dirnameOf, run } from "@vlandoss/clibuddy";
+import { dirnameOf, run } from "@variablelab/clibuddy";
 import { createProgram } from "./program/index.ts";
 import { logger } from "./services/logger.ts";
 

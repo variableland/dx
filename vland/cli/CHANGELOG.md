@@ -1,4 +1,4 @@
-# @vlandoss/vland
+# @variablelab/vland
 
 ## 0.3.2
 

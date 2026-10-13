@@ -1,4 +1,4 @@
-import { type BoardOptions, type BoardResult, type BoardTask, runTaskBoard } from "@vlandoss/clibuddy";
+import { type BoardOptions, type BoardResult, type BoardTask, runTaskBoard } from "@variablelab/clibuddy";
 import type { RunReport } from "#src/types/tool.ts";
 
 export type { BoardResult, BoardTask };

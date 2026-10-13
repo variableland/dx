@@ -31,7 +31,7 @@ pnpm dev
 
 ## Set up tooling
 
-This project uses [`rr`](https://github.com/variableland/dx/tree/main/run-run) (the `@rrlab/cli`) as the single entry point for lint, format, type-check, and build. The pre-configured `mise.toml` puts `./node_modules/.bin` on your `PATH`, so `rr` is invokable directly from anywhere inside the repo.
+This project uses [`rr`](https://github.com/withvariablelab/dx/tree/main/run-run) (the `@rrlab/cli`) as the single entry point for lint, format, type-check, and build. The pre-configured `mise.toml` puts `./node_modules/.bin` on your `PATH`, so `rr` is invokable directly from anywhere inside the repo.
 
 Add the plugins you want — each one writes its own config file and registers itself in the workspace's `run-run.config.mts`:
 

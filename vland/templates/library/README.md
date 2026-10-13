@@ -1,6 +1,6 @@
 # {{projectName}}
 
-A standalone TypeScript library scaffolded with [`@vlandoss/vland`](https://github.com/variableland/dx/tree/main/vland/cli).
+A standalone TypeScript library scaffolded with [`@variablelab/vland`](https://github.com/withvariablelab/dx/tree/main/vland/cli).
 
 ## Install
 
@@ -18,7 +18,7 @@ greet("vland");
 
 ## Set up tooling
 
-This project uses [`rr`](https://github.com/variableland/dx/tree/main/run-run) (the `@rrlab/cli`) as the single entry point for lint, format, type-check, and build. The pre-configured `mise.toml` puts `./node_modules/.bin` on your `PATH`, so `rr` is invokable directly from the project root.
+This project uses [`rr`](https://github.com/withvariablelab/dx/tree/main/run-run) (the `@rrlab/cli`) as the single entry point for lint, format, type-check, and build. The pre-configured `mise.toml` puts `./node_modules/.bin` on your `PATH`, so `rr` is invokable directly from the project root.
 
 ```sh
 pnpm install                    # also pulls in @rrlab/cli
@@ -49,3 +49,9 @@ pnpm changeset version    # bump versions + changelog (locally, when needed)
 ```
 
 CI invokes `pnpm changeset publish` on `main`. `prepublishOnly` runs `rr pack` automatically before publish.
+
+CI publishes with [npm trusted publishing](https://docs.npmjs.com/trusted-publishers) (OIDC), so there is no `NPM_TOKEN` secret. Packages marked `"private": true` are never published. One-time setup for a public package:
+
+1. Set `repository.url` in `package.json` to this GitHub repository. npm rejects the publish if it doesn't match exactly.
+2. Publish the first version from your machine (`pnpm publish --access public`), because a trusted publisher can only be added to a package that already exists.
+3. Trust this repository's release workflow: `npm trust github <package> --repo <owner>/<repo> --file release.yml --allow-publish`, or the "Trusted Publisher" section of the package settings on npmjs.com.

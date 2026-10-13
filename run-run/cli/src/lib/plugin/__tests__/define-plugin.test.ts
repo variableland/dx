@@ -1,4 +1,4 @@
-import type { Pkg, ShellService } from "@vlandoss/clibuddy";
+import type { Pkg, ShellService } from "@variablelab/clibuddy";
 import { describe, expect, it } from "vitest";
 import { definePlugin } from "#src/lib/plugin/define-plugin.ts";
 import { ToolService } from "#src/lib/plugin/tool-service.ts";

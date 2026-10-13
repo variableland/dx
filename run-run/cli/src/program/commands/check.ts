@@ -1,4 +1,4 @@
-import { palette } from "@vlandoss/clibuddy";
+import { palette } from "@variablelab/clibuddy";
 import { jscAction } from "#src/actions/jsc.ts";
 import { tscAction } from "#src/actions/tsc.ts";
 import { runCheckSections } from "#src/render/board.ts";

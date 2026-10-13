@@ -2,13 +2,13 @@
   "name": "@rrlab/ts-config",
   "version": "0.0.2",
   "description": "Shared TypeScript presets used by @rrlab/ts-plugin.",
-  "homepage": "https://github.com/variableland/dx/tree/main/run-run/ts-config#readme",
+  "homepage": "https://github.com/withvariablelab/dx/tree/main/run-run/ts-config#readme",
   "bugs": {
-    "url": "https://github.com/variableland/dx/issues"
+    "url": "https://github.com/withvariablelab/dx/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/variableland/dx.git",
+    "url": "git+https://github.com/withvariablelab/dx.git",
     "directory": "run-run/ts-config"
   },
   "license": "MIT",

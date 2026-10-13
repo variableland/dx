@@ -1,0 +1,7 @@
+rules:
+  unpinned-uses:
+    config:
+      policies:
+        # First-party, tracked at @main on purpose: its main branch is protected by rulesets.
+        "withvariablelab/*": ref-pin
+        "*": hash-pin

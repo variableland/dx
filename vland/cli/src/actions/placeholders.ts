@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import { readdir, readFile, stat, writeFile } from "node:fs/promises";
 import { extname, join } from "node:path";
-import { createPkg } from "@vlandoss/clibuddy";
+import { createPkg } from "@variablelab/clibuddy";
 import { logger } from "#src/services/logger.ts";
 import { LIBRARY_SCOPES, type TemplateName, type Visibility } from "./template.ts";
 
@@ -125,7 +125,7 @@ export type ApplyRootPackageOptions = {
  *
  * Naming rules:
  * - `library` private → `@variableland/<projectName>`, `private: true`
- * - `library` public  → `@vlandoss/<projectName>`
+ * - `library` public  → `@variablelab/<projectName>`
  * - `backend`         → `<projectName>`, `private: true`
  * - `monorepo`        → `<projectName>`, `private: true` (root never publishes)
  */

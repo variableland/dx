@@ -1,4 +1,4 @@
-import { colorize, palette } from "@vlandoss/clibuddy";
+import { colorize, palette } from "@variablelab/clibuddy";
 
 export const SEP = `  ${palette.dim("·")}  `;
 

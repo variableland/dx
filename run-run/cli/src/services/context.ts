@@ -1,5 +1,5 @@
 import fs from "node:fs";
-import { createPkg, createShellService, cwd, type Pkg, type ShellService } from "@vlandoss/clibuddy";
+import { createPkg, createShellService, cwd, type Pkg, type ShellService } from "@variablelab/clibuddy";
 import { PluginApiVersionError } from "#src/errors/plugin-api-version.ts";
 import { PluginRegistry } from "#src/lib/plugin/registry.ts";
 import type { PluginContext } from "#src/lib/plugin/types.ts";

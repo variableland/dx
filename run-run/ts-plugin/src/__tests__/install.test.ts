@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { type ClackPrompts, type InstallContext, ReleaseService, type UninstallContext } from "@rrlab/cli/plugin";
-import type { Pkg, ShellService } from "@vlandoss/clibuddy";
+import type { Pkg, ShellService } from "@variablelab/clibuddy";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { install, uninstall } from "../index.ts";
 
@@ -72,7 +72,7 @@ describe("@rrlab/ts-plugin install()", () => {
     it("emits an edit-json patch when the file already exists (preserves user keys)", async () => {
       await fs.writeFile(
         path.join(tmpDir, "tsconfig.json"),
-        JSON.stringify({ extends: "@vlandoss/config/ts/no-dom/app", compilerOptions: { strict: true } }, null, 2),
+        JSON.stringify({ extends: "@tsconfig/strictest/tsconfig.json", compilerOptions: { strict: true } }, null, 2),
       );
       const result = await install(installCtx());
       expect(result.files).toHaveLength(1);

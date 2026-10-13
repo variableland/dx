@@ -1,4 +1,4 @@
-import { palette, text } from "@vlandoss/clibuddy";
+import { palette, text } from "@variablelab/clibuddy";
 import { runRunColor } from "#src/ui/theme.ts";
 import { Lines } from "./lines.ts";
 

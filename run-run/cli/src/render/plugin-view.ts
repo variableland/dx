@@ -1,5 +1,5 @@
 import path from "node:path";
-import { palette } from "@vlandoss/clibuddy";
+import { palette } from "@variablelab/clibuddy";
 import { allPluginNames, isPluginName, PLUGINS_DIRECTORY } from "#src/lib/plugin/directory.ts";
 import type { ContextValue } from "#src/services/context.ts";
 import { readPluginMeta } from "#src/services/plugin-meta.ts";

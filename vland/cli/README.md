@@ -11,13 +11,13 @@ The CLI to init a new project in [Variable Land](https://variable.land)
 Run it directly with `npx`:
 
 ```sh
-npx @vlandoss/vland init
+npx @variablelab/vland init
 ```
 
 …or install it globally:
 
 ```sh
-pnpm add -g @vlandoss/vland
+pnpm add -g @variablelab/vland
 vland init
 ```
 
@@ -39,7 +39,7 @@ See [`CLI.md`](./CLI.md) for the full reference (auto-generated per release).
 | `backend`  | An Elysia (`@elysiajs/node`) backend with evlog, Vitest, Dockerfile, CI shape.            |
 | `monorepo` | pnpm + Turbo workspace with an Elysia API, a Vite-React SPA, and a few internal packages. |
 
-All templates target Node.js, use pnpm, and ship [`@rrlab/cli`](https://github.com/variableland/dx/tree/main/run-run) (`rr`) as the single entry point for lint, format, type-check, and build. The per-tool config files (`biome.json`, `tsconfig.json`, `tsdown.config.ts`) are not bundled — run `rr plugins add biome ts tsdown` (one at a time) in your new project to opt in. See the scaffolded README for the exact post-install setup.
+All templates target Node.js, use pnpm, and ship [`@rrlab/cli`](https://github.com/withvariablelab/dx/tree/main/run-run) (`rr`) as the single entry point for lint, format, type-check, and build. The per-tool config files (`biome.json`, `tsconfig.json`, `tsdown.config.ts`) are not bundled — run `rr plugins add biome ts tsdown` (one at a time) in your new project to opt in. See the scaffolded README for the exact post-install setup.
 
 ## Shell completion
 
@@ -63,7 +63,7 @@ mise use -g usage
 brew install usage
 ```
 
-When you upgrade `@vlandoss/vland`, the next shell session will pick up new commands automatically — no need to re-run anything.
+When you upgrade `@variablelab/vland`, the next shell session will pick up new commands automatically — no need to re-run anything.
 
 ## Troubleshooting
 

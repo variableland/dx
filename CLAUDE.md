@@ -1,4 +1,4 @@
-# CLAUDE.md — `variableland/dx`
+# CLAUDE.md — `withvariablelab/dx`
 
 You are an agent maintaining this monorepo. The microkernel refactor that produced `@rrlab/*` is **done** (see `decisions/` for the architectural choices that shape the codebase). Your work going forward is features, fixes, and refactors — not phased migrations.
 
@@ -6,18 +6,18 @@ You are an agent maintaining this monorepo. The microkernel refactor that produc
 
 ```
 dx/
-├── shared/          # @vlandoss/* — shared utilities (clibuddy, loggy)
+├── shared/          # @variablelab/* — shared utilities (clibuddy, loggy)
 ├── run-run/         # @rrlab/* — the rrlab product
 │   ├── cli/         # @rrlab/cli — the kernel
 │   ├── *-plugin/    # @rrlab/{biome,oxc,ts,tsdown}-plugin
 │   └── *-config/    # @rrlab/{biome,ts,tsdown}-config — shared presets
-├── vland/           # @vlandoss/vland CLI + the scaffolds it emits
-│   ├── cli/         # @vlandoss/vland — the `vland init` CLI
+├── vland/           # @variablelab/vland CLI + the scaffolds it emits
+│   ├── cli/         # @variablelab/vland — the `vland init` CLI
 │   └── templates/   # scaffolds emitted by `vland init`
 └── dotfiles/
 ```
 
-This repo hosts **two npm orgs** intentionally: `@vlandoss/*` (Variableland's utilities + the `vland` CLI) and `@rrlab/*` (the `rr` CLI product). Cross-pollination is fine — clibuddy and loggy are shared utilities both stacks depend on.
+This repo hosts **two npm orgs** intentionally: `@variablelab/*` (Variableland's utilities + the `vland` CLI) and `@rrlab/*` (the `rr` CLI product). Cross-pollination is fine — clibuddy and loggy are shared utilities both stacks depend on.
 
 Stack: pnpm workspaces, Turborepo, Changesets, `tsdown` for builds, vitest for tests, Biome for lint/format, TypeScript strict, Node ≥ 20.
 
@@ -55,7 +55,7 @@ pnpm build && pnpm test && pnpm rr check    # full check
 
 ## Coding conventions
 
-- **Imports**: `#src/...` aliases inside a package; `@rrlab/...` / `@vlandoss/...` across packages.
+- **Imports**: `#src/...` aliases inside a package; `@rrlab/...` / `@variablelab/...` across packages.
 - **Exports**: named exports preferred; default exports only when the consumer needs them (e.g. plugin factories).
 - **Services**: classes ending in `Service`, dependencies via constructor. Only `logger` is a singleton.
 - **Commands**: factory functions named `create<Name>Command(ctx)` returning a configured commander `Command`. A command is a thin wrapper: it resolves its provider (throwing `MissingPluginError` with its `providers` list when absent) and delegates to exactly one action. See `decisions/015-command-action-service-layering.md`.

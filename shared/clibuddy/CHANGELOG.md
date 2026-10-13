@@ -1,4 +1,4 @@
-# @vlandoss/clibuddy
+# @variablelab/clibuddy
 
 ## 0.7.1
 

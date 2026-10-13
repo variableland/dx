@@ -1,4 +1,4 @@
-import { colorize } from "@vlandoss/clibuddy";
+import { colorize } from "@variablelab/clibuddy";
 import { Argument } from "commander";
 import { createCommand } from "../base.ts";
 

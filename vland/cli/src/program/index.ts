@@ -1,5 +1,5 @@
 import { generateToStdout } from "@usage-spec/commander";
-import { palette } from "@vlandoss/clibuddy";
+import { palette } from "@variablelab/clibuddy";
 import { Command, Option } from "commander";
 import { createContext } from "#src/services/ctx.ts";
 import { createCompletionCommand } from "./commands/completion.ts";
