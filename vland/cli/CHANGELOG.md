@@ -1,5 +1,12 @@
 # @variablelab/vland
 
+## 0.3.4
+
+### Patch Changes
+
+- Updated dependencies [[`3b95217`](https://github.com/withvariablelab/dx/commit/3b95217c49dd32b366516085dfd5d3096d4b30fe)]:
+  - @variablelab/clibuddy@0.7.3
+
 ## 0.3.3
 
 ### Patch Changes
