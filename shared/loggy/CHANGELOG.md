@@ -1,5 +1,14 @@
 # @variablelab/loggy
 
+## 0.2.2
+
+### Patch Changes
+
+- [#248](https://github.com/withvariablelab/dx/pull/248) [`e02f589`](https://github.com/withvariablelab/dx/commit/e02f589351c8335f678c5d4ac2e9dcdfe3db187e) Thanks [@rqbazan](https://github.com/rqbazan)! - Renamed from `@vlandoss/loggy`. The package moved to the `withvariablelab/dx`
+  repository and is now published as `@variablelab/loggy`; the API is unchanged.
+  Replace `@vlandoss/loggy` with `@variablelab/loggy` in your `package.json` and
+  imports.
+
 ## 0.2.1
 
 ### Patch Changes
