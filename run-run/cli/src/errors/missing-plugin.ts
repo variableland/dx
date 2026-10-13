@@ -1,7 +1,8 @@
 import { providersOf } from "#src/lib/plugin/directory.ts";
 import type { PluginCapability } from "../lib/plugin/index.ts";
+import { KnownError } from "./known-error.ts";
 
-export class MissingPluginError extends Error {
+export class MissingPluginError extends KnownError {
   constructor(capability: PluginCapability) {
     const plugins = providersOf(capability);
 
