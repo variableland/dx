@@ -129,7 +129,7 @@ jobs:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
           LEFTHOOK: 0
 
-  # Two-job previews (MIGRATION.md §3c, Regla 2). This job runs the PR code and
+  # Two-job previews. This job runs the PR code and
   # publishes with npm OIDC; it holds no bot key and only hands the published
   # package list to preview-comment.
   preview:
