@@ -73,10 +73,8 @@ jobs:
         uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with:
           token: ${{ steps.app-token.outputs.token }}
-          # Deliberate: changesets/action pushes the changeset-release/main
-          # branch and the release tags with these vland-bot credentials. This
-          # job only runs on main (merged code), never on PR code.
-          persist-credentials: true
+          # commitMode github-api pushes the branch and tags through the API.
+          persist-credentials: false
 
       - name: 🟢 Setup Node.js
         uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
@@ -107,6 +105,8 @@ jobs:
           title: "chore: update versions"
           publish: pnpm changeset publish
           setupGitUser: false
+          github-token: ${{ steps.app-token.outputs.token }}
+          commitMode: github-api
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
           LEFTHOOK: 0
