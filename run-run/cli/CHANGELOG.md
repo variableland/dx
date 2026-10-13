@@ -1,5 +1,26 @@
 # @rrlab/cli
 
+## 1.3.1
+
+### Patch Changes
+
+- [#247](https://github.com/withvariablelab/dx/pull/247) [`ded9b58`](https://github.com/withvariablelab/dx/commit/ded9b58b52cd0a89842ec558853a14a1caa8fd5a) Thanks [@rqbazan](https://github.com/rqbazan)! - Render user-facing errors cleanly instead of dumping a raw Node stack trace.
+
+  Domain errors (e.g. a missing plugin for the requested capability) now print
+  just their message and exit 1, rather than the verbose
+  `MissingPluginError: …` + `at …` + `Node.js v…` uncaught-exception wall.
+  Unexpected errors still surface their full stack so genuine bugs stay
+  debuggable. Domain errors extend a shared `KnownError` base, and a top-level
+  handler in `run.ts` decides which treatment each gets.
+
+- [#248](https://github.com/withvariablelab/dx/pull/248) [`e02f589`](https://github.com/withvariablelab/dx/commit/e02f589351c8335f678c5d4ac2e9dcdfe3db187e) Thanks [@rqbazan](https://github.com/rqbazan)! - Republish from the `withvariablelab/dx` repository: `repository`, `homepage`
+  and `bugs` now point at `withvariablelab/dx`, and packages that depended on
+  `@vlandoss/clibuddy` / `@vlandoss/loggy` now depend on the renamed
+  `@variablelab/clibuddy` / `@variablelab/loggy`. No behavior changes.
+- Updated dependencies [[`e02f589`](https://github.com/withvariablelab/dx/commit/e02f589351c8335f678c5d4ac2e9dcdfe3db187e), [`e02f589`](https://github.com/withvariablelab/dx/commit/e02f589351c8335f678c5d4ac2e9dcdfe3db187e)]:
+  - @variablelab/clibuddy@0.7.2
+  - @variablelab/loggy@0.2.2
+
 ## 1.3.0
 
 ### Minor Changes

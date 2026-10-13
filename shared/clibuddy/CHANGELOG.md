@@ -1,5 +1,14 @@
 # @variablelab/clibuddy
 
+## 0.7.2
+
+### Patch Changes
+
+- [#248](https://github.com/withvariablelab/dx/pull/248) [`e02f589`](https://github.com/withvariablelab/dx/commit/e02f589351c8335f678c5d4ac2e9dcdfe3db187e) Thanks [@rqbazan](https://github.com/rqbazan)! - Renamed from `@vlandoss/clibuddy`. The package moved to the `withvariablelab/dx`
+  repository and is now published as `@variablelab/clibuddy`; the API is
+  unchanged. Replace `@vlandoss/clibuddy` with `@variablelab/clibuddy` in your
+  `package.json` and imports.
+
 ## 0.7.1
 
 ### Patch Changes

@@ -1,5 +1,18 @@
 # @variablelab/vland
 
+## 0.3.3
+
+### Patch Changes
+
+- [#248](https://github.com/withvariablelab/dx/pull/248) [`e02f589`](https://github.com/withvariablelab/dx/commit/e02f589351c8335f678c5d4ac2e9dcdfe3db187e) Thanks [@rqbazan](https://github.com/rqbazan)! - Renamed from `@vlandoss/vland`. The CLI moved to the `withvariablelab/dx`
+  repository and is now published as `@variablelab/vland` (the `vland` binary is
+  unchanged). `vland init -t library` with public visibility (the default) now
+  scaffolds `@variablelab/<name>` instead of `@vlandoss/<name>`, and templates are
+  downloaded from `github:withvariablelab/dx`.
+- Updated dependencies [[`e02f589`](https://github.com/withvariablelab/dx/commit/e02f589351c8335f678c5d4ac2e9dcdfe3db187e), [`e02f589`](https://github.com/withvariablelab/dx/commit/e02f589351c8335f678c5d4ac2e9dcdfe3db187e)]:
+  - @variablelab/clibuddy@0.7.2
+  - @variablelab/loggy@0.2.2
+
 ## 0.3.2
 
 ### Patch Changes

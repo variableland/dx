@@ -1,5 +1,14 @@
 # @rrlab/ts-config
 
+## 0.0.3
+
+### Patch Changes
+
+- [#248](https://github.com/withvariablelab/dx/pull/248) [`e02f589`](https://github.com/withvariablelab/dx/commit/e02f589351c8335f678c5d4ac2e9dcdfe3db187e) Thanks [@rqbazan](https://github.com/rqbazan)! - Republish from the `withvariablelab/dx` repository: `repository`, `homepage`
+  and `bugs` now point at `withvariablelab/dx`, and packages that depended on
+  `@vlandoss/clibuddy` / `@vlandoss/loggy` now depend on the renamed
+  `@variablelab/clibuddy` / `@variablelab/loggy`. No behavior changes.
+
 ## 0.0.2
 
 ### Patch Changes

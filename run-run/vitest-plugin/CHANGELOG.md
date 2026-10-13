@@ -1,5 +1,16 @@
 # @rrlab/vitest-plugin
 
+## 0.1.1
+
+### Patch Changes
+
+- [#248](https://github.com/withvariablelab/dx/pull/248) [`e02f589`](https://github.com/withvariablelab/dx/commit/e02f589351c8335f678c5d4ac2e9dcdfe3db187e) Thanks [@rqbazan](https://github.com/rqbazan)! - Republish from the `withvariablelab/dx` repository: `repository`, `homepage`
+  and `bugs` now point at `withvariablelab/dx`, and packages that depended on
+  `@vlandoss/clibuddy` / `@vlandoss/loggy` now depend on the renamed
+  `@variablelab/clibuddy` / `@variablelab/loggy`. No behavior changes.
+- Updated dependencies [[`e02f589`](https://github.com/withvariablelab/dx/commit/e02f589351c8335f678c5d4ac2e9dcdfe3db187e)]:
+  - @variablelab/clibuddy@0.7.2
+
 ## 0.1.0
 
 ### Minor Changes
