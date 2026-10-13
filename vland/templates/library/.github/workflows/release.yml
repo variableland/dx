@@ -25,15 +25,14 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm rr pack
 
-      # No NPM_TOKEN: with id-token: write, changesets/action detects OIDC and
-      # `changeset publish` uses npm trusted publishing (npm >= 11.5.1, which
-      # Node 24 ships). One-time setup on npm: see "Release" in the README.
-      - name: Create release PR or publish
+      # No NPM_TOKEN: npm trusted publishing over OIDC, set up once per package (see README).
+      - name: Release or version PR
         uses: changesets/action@v1
         with:
           publish: pnpm changeset publish
           commit: "chore: release"
           title: "chore: release"
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           commitMode: github-api
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
