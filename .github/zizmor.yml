@@ -2,9 +2,6 @@ rules:
   unpinned-uses:
     config:
       policies:
-        # First-party: dx tracks withvariablelab/gh-actions at @main on purpose.
-        # Its main branch is protected by
-        # rulesets (PR required, signed commits, no force-push or deletion).
+        # First-party, tracked at @main on purpose: its main branch is protected by rulesets.
         "withvariablelab/*": ref-pin
-        # Everything else must be pinned to a full commit SHA.
         "*": hash-pin

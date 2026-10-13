@@ -1,11 +1,5 @@
-# Regenerates each CLI's CLI.md on a CLI release tag and opens a rolling PR.
-
 name: cli docs
 
-# To add a new CLI:
-#   1. Add its tag pattern under `on.push.tags`.
-#   2. Add its package dir to the REGISTRY env below.
-# The CLI's `build` script must emit `<dir>/dist/cli.usage.kdl`. Output is `<dir>/CLI.md`.
 on:
   push:
     tags:
@@ -19,21 +13,18 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  # One package dir per line. Each must produce `<dir>/dist/cli.usage.kdl` at build time;
-  # output is written to `<dir>/CLI.md`.
+  # Each dir's build must emit dist/cli.usage.kdl; also add the CLI's tag under on.push.tags.
   REGISTRY: |
     run-run/cli
     vland/cli
 
-# The org default GITHUB_TOKEN is read-only; every job states what it needs.
 permissions: {}
 
 jobs:
   regen:
     name: Regenerate CLI docs
     runs-on: ubuntu-latest
-    # GITHUB_TOKEN is not used for writes: the vland-bot token pushes the branch
-    # and opens the PR (so CI runs on it).
+    # Writes use the vland-bot token, not GITHUB_TOKEN, so CI runs on the PR.
     permissions:
       contents: read
     steps:
@@ -59,7 +50,6 @@ jobs:
         uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with:
           ref: main
-          # create-pull-request authenticates its own push with `token` below.
           persist-credentials: false
 
       - name: 🟢 Setup Node.js
