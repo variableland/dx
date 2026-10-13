@@ -9,7 +9,7 @@ concurrency: ${{ github.workflow }}-${{ github.ref }}
 permissions:
   contents: write
   pull-requests: write
-  id-token: write
+  id-token: write # npm trusted publishing (OIDC)
 
 jobs:
   release:
@@ -25,6 +25,9 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm rr pack
 
+      # No NPM_TOKEN: with id-token: write, changesets/action detects OIDC and
+      # `changeset publish` uses npm trusted publishing (npm >= 11.5.1, which
+      # Node 24 ships). One-time setup on npm: see "Release" in the README.
       - name: Create release PR or publish
         uses: changesets/action@v1
         with:
@@ -33,5 +36,3 @@ jobs:
           title: "chore: release"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

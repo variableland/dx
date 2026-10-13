@@ -49,3 +49,9 @@ pnpm changeset version    # bump versions + changelog (locally, when needed)
 ```
 
 CI invokes `pnpm changeset publish` on `main`. `prepublishOnly` runs `rr pack` automatically before publish.
+
+CI publishes with [npm trusted publishing](https://docs.npmjs.com/trusted-publishers) (OIDC), so there is no `NPM_TOKEN` secret. Packages marked `"private": true` are never published. One-time setup for a public package:
+
+1. Set `repository.url` in `package.json` to this GitHub repository. npm rejects the publish if it doesn't match exactly.
+2. Publish the first version from your machine (`pnpm publish --access public`), because a trusted publisher can only be added to a package that already exists.
+3. Trust this repository's release workflow: `npm trust github <package> --repo <owner>/<repo> --file release.yml --allow-publish`, or the "Trusted Publisher" section of the package settings on npmjs.com.
