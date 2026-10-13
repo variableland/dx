@@ -1,5 +1,13 @@
 # @variablelab/clibuddy
 
+## 0.7.3
+
+### Patch Changes
+
+- [#252](https://github.com/withvariablelab/dx/pull/252) [`3b95217`](https://github.com/withvariablelab/dx/commit/3b95217c49dd32b366516085dfd5d3096d4b30fe) Thanks [@rqbazan](https://github.com/rqbazan)! - Treat `pnpm-workspace.yaml` as a workspace only when its `packages` array lists something other than the root.
+
+  Since pnpm 10, single-package repos use `pnpm-workspace.yaml` for settings such as `minimumReleaseAge` or `catalog`, with no `packages` or with only the root (`packages: ["."]`). `Pkg.isMonorepo()` no longer reports such a repo as a monorepo, and `getWorkspaceProjects()` falls back to `package.json` workspaces instead of throwing `Invalid workspace patterns`. In those repos `rr tsc` (and so `rr check`) typechecks the root package instead of failing or skipping it, and `rr plugins add`/`remove` target the current package instead of the workspace root.
+
 ## 0.7.2
 
 ### Patch Changes
