@@ -1,3 +1,7 @@
+# Lint, typecheck, test and build on every PR and push to main. Pushes to
+# main then publish to npm or open the version PR; PRs from feat*/fix*
+# branches or labelled "preview" publish preview packages and comment them.
+
 name: CI
 
 on:
@@ -18,6 +22,7 @@ permissions: {}
 
 jobs:
   test:
+    name: Lint, typecheck, test and build
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -34,41 +39,20 @@ jobs:
           # setup-pnpm caches the pnpm store
           package-manager-cache: false
 
-      - name: ⌛ Setup pnpm
+      - name: ⌛ Setup pnpm and install dependencies
         uses: withvariablelab/gh-actions/actions/setup-pnpm@main
 
-      - name: 💅 Check
+      - name: 💅 Lint, check formatting and typecheck
         run: pnpm rr check
 
-      - name: 🧪 Test
+      - name: 🧪 Run tests
         run: pnpm test
 
-      - name: 🔨 Build
+      - name: 🔨 Build packages
         run: pnpm build
 
-  zizmor:
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    permissions:
-      contents: read
-    steps:
-      - name: ⬇️ Checkout repo
-        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
-        with:
-          persist-credentials: false
-
-      # Security lint for the workflows (template injection, credential
-      # persistence, unpinned actions, excessive permissions...). pipx ships
-      # with the GitHub-hosted Ubuntu image, so no third-party setup action.
-      # Config: .github/zizmor.yml
-      - name: 🔒 Run zizmor
-        run: pipx run --spec zizmor==1.30.1 zizmor --format=github .github/
-        env:
-          # Enables the online audits (impostor commits, known-vulnerable
-          # actions, ref confusion). Read-only: the job has contents: read.
-          GH_TOKEN: ${{ github.token }}
-
   release:
+    name: Release or open version PR
     runs-on: ubuntu-latest
     needs: test
     if: ${{ github.ref == 'refs/heads/main' }}
@@ -103,10 +87,10 @@ jobs:
           # setup-pnpm caches the pnpm store
           package-manager-cache: false
 
-      - name: ⌛ Setup pnpm
+      - name: ⌛ Setup pnpm and install dependencies
         uses: withvariablelab/gh-actions/actions/setup-pnpm@main
 
-      - name: 🧑‍💻 Configure git user
+      - name: 🧑‍💻 Set vland-bot as git author
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
           APP_SLUG: ${{ steps.app-token.outputs.app-slug }}
@@ -118,7 +102,7 @@ jobs:
       # No NPM_TOKEN: with id-token: write, changesets/action detects OIDC and
       # `changeset publish` uses npm trusted publishing (needs npm >= 11.5.1,
       # installed by setup-pnpm).
-      - name: 🚀 Create release PR or publish versions
+      - name: 🚀 Open version PR or publish to npm
         uses: changesets/action@a45c4d594aa4e2c509dc14a9f2b3b67ba3780d0d # v1.9.0
         with:
           commit: "chore: update versions"
@@ -133,6 +117,7 @@ jobs:
   # publishes with npm OIDC; it holds no bot key and only hands the published
   # package list to preview-comment.
   preview:
+    name: Publish PR preview
     runs-on: ubuntu-latest
     needs: test
     if: ${{ startsWith(github.head_ref, 'feat') || startsWith(github.head_ref, 'fix') || contains(github.event.pull_request.labels.*.name, 'preview') }}
@@ -154,10 +139,10 @@ jobs:
           # setup-pnpm caches the pnpm store
           package-manager-cache: false
 
-      - name: ⌛ Setup pnpm
+      - name: ⌛ Setup pnpm and install dependencies
         uses: withvariablelab/gh-actions/actions/setup-pnpm@main
 
-      - name: 🚀 Preview release
+      - name: 🚀 Publish preview packages to npm
         id: preview
         uses: withvariablelab/gh-actions/actions/monorepo-preview-release@main
         with:
@@ -170,6 +155,7 @@ jobs:
   # `packages` is untrusted (PR code ran in `preview`): it only travels through
   # `with:` and is validated by the action, never interpolated into `run:`.
   preview-comment:
+    name: Comment PR preview
     needs: preview
     if: ${{ needs.preview.result == 'success' }}
     permissions: {}

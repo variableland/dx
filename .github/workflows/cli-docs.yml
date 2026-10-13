@@ -1,3 +1,7 @@
+# Regenerates each registered CLI's CLI.md from its usage spec and opens or
+# updates a rolling PR with the result. Runs when a CLI release tag is
+# pushed, or by hand from the Actions tab.
+
 name: cli docs
 
 # To add a new CLI:
@@ -28,6 +32,7 @@ permissions: {}
 
 jobs:
   regen:
+    name: Regenerate CLI docs and open PR
     runs-on: ubuntu-latest
     # GITHUB_TOKEN is not used for writes: the vland-bot token pushes the branch
     # and opens the PR (so CI runs on it).
@@ -66,7 +71,7 @@ jobs:
           # setup-pnpm caches the pnpm store
           package-manager-cache: false
 
-      - name: ⌛ Setup pnpm
+      - name: ⌛ Setup pnpm and install dependencies
         uses: withvariablelab/gh-actions/actions/setup-pnpm@main
 
       - name: 🛠️ Setup mise (provides usage CLI)
