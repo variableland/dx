@@ -92,6 +92,20 @@ describe("rr plugins", () => {
       expect(combined).toMatch(/Would: install @rrlab\/biome-plugin.*workspace root/);
       expect(r.status).toBe(0);
     });
+
+    test.each([
+      ["settings-only", "minimumReleaseAge: 1440\n"],
+      ["root-only", "packages:\n  - .\n"],
+    ])("with a %s pnpm-workspace.yaml, the plan targets the current package", (_, pnpmWorkspace) => {
+      fixture = makeFixture("plugins-add-pnpm-settings", {
+        "package.json": fixtures.pkg(),
+        "pnpm-workspace.yaml": pnpmWorkspace,
+      });
+      const r = cli("plugins add biome --dry-run", { cwd: fixture.dir });
+      const combined = r.stdout + r.stderr;
+      expect(combined).toMatch(/Would: install @rrlab\/biome-plugin.*current package/);
+      expect(r.status).toBe(0);
+    });
   });
 
   describe("remove --dry-run", () => {
