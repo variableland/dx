@@ -60,6 +60,24 @@ describe("rr tsc", () => {
     });
   });
 
+  describe("settings-only pnpm-workspace.yaml", () => {
+    beforeEach(() => {
+      fixture = makeFixture("tsc-pnpm-settings", {
+        "package.json": fixtures.pkg(),
+        "pnpm-workspace.yaml": "minimumReleaseAge: 1440\n",
+        "run-run.config.mts": fixtures.config(["ts"]),
+        "tsconfig.json": fixtures.tsconfig(),
+        "src/bad.ts": 'export const bad: number = "not a number";\n',
+      });
+    });
+
+    test("typechecks the root package as a single package", () => {
+      const r = cli("tsc", { cwd: fixture.dir });
+      expect(r.status).not.toBe(0);
+      expect(r.stdout + r.stderr).toMatch(/Type 'string' is not assignable to type 'number'/);
+    });
+  });
+
   describe("pre-script", () => {
     const pkgWithScripts = (scripts: Record<string, string>) =>
       `${JSON.stringify({ name: "rr-test-fixture", version: "0.0.0", private: true, scripts }, null, 2)}\n`;

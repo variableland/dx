@@ -1,5 +1,4 @@
-import { existsSync } from "node:fs";
-import { readFile } from "node:fs/promises";
+import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { findPackages } from "@pnpm/fs.find-packages";
 import type { Project } from "@pnpm/types";
@@ -48,15 +47,15 @@ export class Pkg {
   }
 
   isMonorepo() {
-    return !!this.#packageJson.workspaces || this.#hasPnpmWorkspace();
+    return !!this.#packageJson.workspaces || !!this.#pnpmWorkspacePatterns();
   }
 
   async getWorkspaceProjects() {
     let patterns: string[];
+    const pnpmPatterns = this.#pnpmWorkspacePatterns();
 
-    if (this.#hasPnpmWorkspace()) {
-      const manifest = await this.#readPnpmWorkspaceManifest();
-      patterns = manifest.packages;
+    if (pnpmPatterns) {
+      patterns = pnpmPatterns;
     } else {
       patterns = Array.isArray(this.#packageJson.workspaces)
         ? this.#packageJson.workspaces
@@ -82,20 +81,13 @@ export class Pkg {
     await writePackageJSON(this.#pkgPath, packageJson);
   }
 
-  #hasPnpmWorkspace() {
-    return this.hasFile("pnpm-workspace.yaml");
-  }
-
-  async #readPnpmWorkspaceManifest() {
+  // Since pnpm 10, single-package repos keep settings in pnpm-workspace.yaml without `packages`.
+  #pnpmWorkspacePatterns(): string[] | undefined {
     const manifestPath = this.#fromPkgDir("pnpm-workspace.yaml");
-    const manifestContent = await readFile(manifestPath, "utf-8");
-    const manifest = yamlParse(manifestContent);
+    if (!existsSync(manifestPath)) return;
 
-    if (!manifest) {
-      throw new Error("Can't read pnpm workspace manifest");
-    }
-
-    return manifest;
+    const manifest = yamlParse(readFileSync(manifestPath, "utf-8"));
+    return Array.isArray(manifest?.packages) && manifest.packages.length ? manifest.packages : undefined;
   }
 
   #fromPkgDir(...args: string[]) {
