@@ -49,6 +49,24 @@ describe("Pkg workspaces", () => {
     expect(await projectNames(pkg)).toEqual([]);
   });
 
+  test("a pnpm-workspace.yaml whose packages only list the root is not a workspace", async () => {
+    const pkg = await makePkg({ "package.json": manifest(), "pnpm-workspace.yaml": "packages:\n  - .\n", ...app });
+
+    expect(pkg.isMonorepo()).toBe(false);
+    expect(await projectNames(pkg)).toEqual([]);
+  });
+
+  test("a pnpm-workspace.yaml with the root and other packages is a workspace", async () => {
+    const pkg = await makePkg({
+      "package.json": manifest(),
+      "pnpm-workspace.yaml": "packages:\n  - .\n  - apps/*\n",
+      ...app,
+    });
+
+    expect(pkg.isMonorepo()).toBe(true);
+    expect(await projectNames(pkg)).toEqual(["a"]);
+  });
+
   test("a pnpm-workspace.yaml with empty packages is not a workspace", async () => {
     const pkg = await makePkg({ "package.json": manifest(), "pnpm-workspace.yaml": "packages: []\n" });
 

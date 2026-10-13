@@ -60,11 +60,14 @@ describe("rr tsc", () => {
     });
   });
 
-  describe("settings-only pnpm-workspace.yaml", () => {
+  describe.each([
+    ["settings-only", "minimumReleaseAge: 1440\n"],
+    ["root-only", "packages:\n  - .\nminimumReleaseAge: 1440\n"],
+  ])("%s pnpm-workspace.yaml", (_, pnpmWorkspace) => {
     beforeEach(() => {
       fixture = makeFixture("tsc-pnpm-settings", {
         "package.json": fixtures.pkg(),
-        "pnpm-workspace.yaml": "minimumReleaseAge: 1440\n",
+        "pnpm-workspace.yaml": pnpmWorkspace,
         "run-run.config.mts": fixtures.config(["ts"]),
         "tsconfig.json": fixtures.tsconfig(),
         "src/bad.ts": 'export const bad: number = "not a number";\n',

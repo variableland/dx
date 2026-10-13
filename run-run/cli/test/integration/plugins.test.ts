@@ -93,10 +93,13 @@ describe("rr plugins", () => {
       expect(r.status).toBe(0);
     });
 
-    test("with a settings-only pnpm-workspace.yaml, the plan targets the current package", () => {
+    test.each([
+      ["settings-only", "minimumReleaseAge: 1440\n"],
+      ["root-only", "packages:\n  - .\n"],
+    ])("with a %s pnpm-workspace.yaml, the plan targets the current package", (_, pnpmWorkspace) => {
       fixture = makeFixture("plugins-add-pnpm-settings", {
         "package.json": fixtures.pkg(),
-        "pnpm-workspace.yaml": "minimumReleaseAge: 1440\n",
+        "pnpm-workspace.yaml": pnpmWorkspace,
       });
       const r = cli("plugins add biome --dry-run", { cwd: fixture.dir });
       const combined = r.stdout + r.stderr;

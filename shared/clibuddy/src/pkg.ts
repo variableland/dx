@@ -81,13 +81,14 @@ export class Pkg {
     await writePackageJSON(this.#pkgPath, packageJson);
   }
 
-  // Since pnpm 10, single-package repos keep settings in pnpm-workspace.yaml without `packages`.
+  // Single-package repos keep pnpm settings here with no `packages` (pnpm 10) or only the root (`packages: ["."]`).
   #pnpmWorkspacePatterns(): string[] | undefined {
     const manifestPath = this.#fromPkgDir("pnpm-workspace.yaml");
     if (!existsSync(manifestPath)) return;
 
     const manifest = yamlParse(readFileSync(manifestPath, "utf-8"));
-    return Array.isArray(manifest?.packages) && manifest.packages.length ? manifest.packages : undefined;
+    const isRoot = (p: unknown) => typeof p === "string" && path.resolve(this.#dirPath, p) === this.#dirPath;
+    return Array.isArray(manifest?.packages) && !manifest.packages.every(isRoot) ? manifest.packages : undefined;
   }
 
   #fromPkgDir(...args: string[]) {
