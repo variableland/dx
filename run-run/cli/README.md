@@ -1,6 +1,10 @@
-# 🦊 run-run
+<p align="center">
+  <img src="https://raw.githubusercontent.com/withvariablelab/dx/HEAD/run-run/cli/brand/sign-readme.svg" width="64" height="64" alt="">
+</p>
 
-CLI toolbox to fullstack common scripts in [Variable Land](https://variable.land)
+<h1 align="center">run-run</h1>
+
+<p align="center">One way to run the scripts in a repo.</p>
 
 ## Prerequisites
 
