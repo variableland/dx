@@ -24,7 +24,7 @@ Changesets 3 (adopted in dx#263) changed the cascade itself: a peer dependent is
 - `1.0.0` is honest about where the contract sits. The declarative-plugin-shape change in this PR is itself a breaking edit to the kernel↔plugin SDK, so the CLI exiting `0.x` here is congruent with the change, not a marketing decision.
 - `workspace:^` + `onlyUpdatePeerDependentsWhenOutOfRange: true` is the smallest delta that gives the desired semantics for patches and minors: the plugins stay as-is. Both knobs are still supported by Changesets 3 — no fork, no custom tooling.
 - The plugin contract being kernel-internal (per `CLAUDE.md`) means the only consumers of the peer relationship are the 5 official plugins; we can keep the peer-vs-dependency distinction because pnpm + workspaces makes both resolve to the same workspace package.
-- **Rule for CLI majors (since Changesets 3):** a changeset that bumps `@rrlab/cli` by `major` also lists all 5 plugins as `major`. Changesets 3 would give them only a `patch`, yet `workspace:^` publishes their peer as `^2.0.0`: a plugin *patch* would raise its peer from `^1` to `^2`, and a host on `@rrlab/cli` `^1` taking that caret update gets an unmet peer (npm `ERESOLVE`). No config key restores the Changesets 2 cascade.
+- **Rule for CLI majors (since Changesets 3):** a changeset that bumps `@rrlab/cli` by `major` also lists every official plugin as `major`. Changesets 3 would give them only a `patch`, yet `workspace:^` publishes their peer as `^2.0.0`: a plugin *patch* would raise its peer from `^1` to `^2`, and a host on `@rrlab/cli` `^1` taking that caret update gets an unmet peer (npm `ERESOLVE`). No config key restores the Changesets 2 cascade.
 
 ```md
 ---

@@ -9,17 +9,16 @@ dx/
 ├── shared/          # @variablelab/* — shared utilities (clibuddy, loggy)
 ├── run-run/         # @rrlab/* — the rrlab product
 │   ├── cli/         # @rrlab/cli — the kernel
-│   ├── *-plugin/    # @rrlab/{biome,oxc,ts,tsdown}-plugin
-│   └── *-config/    # @rrlab/{biome,ts,tsdown}-config — shared presets
-├── vland/           # @variablelab/vland CLI + the scaffolds it emits
-│   ├── cli/         # @variablelab/vland — the `vland init` CLI
-│   └── templates/   # scaffolds emitted by `vland init`
-└── dotfiles/
+│   ├── *-plugin/    # @rrlab/<tool>-plugin — the official plugins, one per wrapped tool
+│   └── *-config/    # @rrlab/<tool>-config — shared presets
+└── vland/           # @variablelab/vland CLI + the scaffolds it emits
+    ├── cli/         # @variablelab/vland — the `vland init` CLI
+    └── templates/   # scaffolds emitted by `vland init`
 ```
 
 This repo hosts **two npm orgs** intentionally: `@variablelab/*` (Variableland's utilities + the `vland` CLI) and `@rrlab/*` (the `rr` CLI product). Cross-pollination is fine — clibuddy and loggy are shared utilities both stacks depend on.
 
-Stack: pnpm workspaces, Turborepo, Changesets, `tsdown` for builds, vitest for tests, Biome for lint/format, TypeScript strict, Node ≥ 20.
+Stack: pnpm workspaces, Turborepo, Changesets, `tsdown` for builds, vitest for tests, Biome for lint/format, TypeScript strict, Node 24 for development (pinned in `mise.toml`, which CI also installs); published packages declare `engines.node` as `>=20.0.0`.
 
 ## Build & verify
 
@@ -75,13 +74,13 @@ pnpm build && pnpm test && pnpm rr check    # full check
 
 - **`run-run/CLAUDE.md`** — orientation for working on the `@rrlab/*` ecosystem (plugin contract, conventions for adding/modifying plugins).
 - **`run-run/cli/CLAUDE.md`** — kernel internals (commander patterns, context lifecycle, edit-json DSL, KDL spec emission).
-- **`decisions/`** — one file per architectural decision (001-005 today). Read before designing anything that touches plugin lifecycle, dependency model, or templating. Format / template in `decisions/README.md`.
+- **`decisions/`** — one file per architectural decision. Read before designing anything that touches plugin lifecycle, dependency model, or templating. Format / template in `decisions/README.md`.
 
 ## Plugin contract is kernel-internal
 
-The plugin API (`@rrlab/cli/plugin`: `Plugin`, `PluginServices`, `InstallResult`, etc.) is treated as **internal to `@rrlab/*`**, not as a public API for third-party plugin authors. The 4 official plugins are the only consumers we commit to. This means:
+The plugin API (`@rrlab/cli/plugin`: `Plugin`, `PluginServices`, `InstallResult`, etc.) is treated as **internal to `@rrlab/*`**, not as a public API for third-party plugin authors. The official plugins (listed in `run-run/CLAUDE.md`) are the only consumers we commit to. This means:
 
-- Breaking changes to the contract are fine as long as all 4 official plugins compile and tests pass.
+- Breaking changes to the contract are fine as long as every official plugin compiles and tests pass.
 - Don't write contract-level documentation for hypothetical third-party authors.
 - Don't preserve backwards-compat shims for the contract.
-- If you need to evolve the contract, propagate the change across all 4 plugins in the same commit.
+- If you need to evolve the contract, propagate the change across every official plugin in the same commit.
