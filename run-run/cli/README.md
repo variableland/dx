@@ -79,18 +79,22 @@ _.path = ["{{config_root}}/node_modules/.bin"]
 PATH_add node_modules/.bin
 ```
 
-Then add a guarded eval to your shell rc — the guard makes it a no-op when you open a shell outside any project:
+Then add a guarded eval to your shell rc:
 
 ```sh
 # zsh — ~/.zshrc
-command -v rr >/dev/null 2>&1 && eval "$(rr completion zsh)"
+command -v rr >/dev/null 2>&1 && eval "$(rr completion zsh 2>/dev/null)"
 
 # bash — ~/.bashrc
-command -v rr >/dev/null 2>&1 && eval "$(rr completion bash)"
+command -v rr >/dev/null 2>&1 && eval "$(rr completion bash 2>/dev/null)"
 
 # fish — ~/.config/fish/config.fish
-command -v rr >/dev/null 2>&1; and rr completion fish | source
+command -v rr >/dev/null 2>&1; and rr completion fish 2>/dev/null | source
 ```
+
+The `command -v` guard skips the line when no `rr` is on `PATH`. A mise shim still passes it: recent versions of mise keep `~/.local/share/mise/shims` on `PATH` after `mise activate`, even outside any project (the `activate_shims` setting, on by default). Once mise has installed a tool that provides `rr`, such as `npm:@rrlab/cli` in some project's `mise.toml`, an `rr` shim exists in every directory, and where no version is active it fails with `mise ERROR No version is set for shim: rr` on stderr. The `2>/dev/null` discards that error, so the line stays silent outside a project.
+
+The line hides every error, so if completion doesn't load, run `rr completion zsh` by hand to see why.
 
 ### Option B — without a per-project PATH manager
 
