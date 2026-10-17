@@ -11,12 +11,21 @@ export function createCompletionCommand() {
   return createCommand("completion")
     .summary(`print shell completion script (${TOOL_LABELS.USAGE})`)
     .description(
-      `Prints a shell completion script for vland. Add to your shell rc file:
+      `Prints a shell completion script for vland. Add your shell's line to its rc file:
 
-  bash: eval "$(vland completion bash)"
-  zsh:  eval "$(vland completion zsh)"
-  fish: vland completion fish | source`,
+    # bash — ~/.bashrc
+    command -v vland >/dev/null 2>&1 && eval "$(vland completion bash 2>/dev/null)"
+
+    # zsh — ~/.zshrc
+    command -v vland >/dev/null 2>&1 && eval "$(vland completion zsh 2>/dev/null)"
+
+    # fish — ~/.config/fish/config.fish
+    command -v vland >/dev/null 2>&1; and vland completion fish 2>/dev/null | source`,
     )
+    .configureHelp({
+      // Commander hard-wraps help at the terminal width; a wrapped rc line breaks when pasted.
+      helpWidth: Number.POSITIVE_INFINITY,
+    })
     .addArgument(new Argument("<shell>", `target shell`).choices(SHELLS))
     .addHelpText(
       "afterAll",

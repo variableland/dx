@@ -47,18 +47,20 @@ All templates target Node.js, use pnpm, and ship [`@rrlab/cli`](https://github.c
 
 ## Shell completion
 
-`vland` ships a `completion` subcommand that prints a shell-specific script. Add it to your shell rc file:
+`vland` ships a `completion` subcommand that prints a shell-specific script. Add a guarded eval to your shell rc file:
 
 ```sh
 # zsh — ~/.zshrc
-eval "$(vland completion zsh)"
+command -v vland >/dev/null 2>&1 && eval "$(vland completion zsh 2>/dev/null)"
 
 # bash — ~/.bashrc
-eval "$(vland completion bash)"
+command -v vland >/dev/null 2>&1 && eval "$(vland completion bash 2>/dev/null)"
 
 # fish — ~/.config/fish/config.fish
-vland completion fish | source
+command -v vland >/dev/null 2>&1; and vland completion fish 2>/dev/null | source
 ```
+
+The `command -v` guard skips the line when no `vland` is on `PATH`. The `2>/dev/null` covers a mise shim with no active version: it passes the guard, then fails on stderr. If completion doesn't load, run `vland completion zsh` by hand to see why.
 
 **Prerequisite:** the [`usage`](https://usage.jdx.dev) CLI must be on your `PATH` (it powers completion at runtime). Install via one of:
 

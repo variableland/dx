@@ -160,11 +160,16 @@ Runs the `doctor()` of every configured plugin capability. Each plugin reports o
 
 - **Usage**: `rr completion <shell>`
 
-Prints a shell completion script for rr. Add to your shell rc file:
+Prints a shell completion script for rr. Add your shell's line to its rc file:
 
-  bash: eval "$(rr completion bash)"
-  zsh:  eval "$(rr completion zsh)"
-  fish: rr completion fish | source
+    # bash — ~/.bashrc
+    command -v rr >/dev/null 2>&1 && eval "$(rr completion bash 2>/dev/null)"
+
+    # zsh — ~/.zshrc
+    command -v rr >/dev/null 2>&1 && eval "$(rr completion zsh 2>/dev/null)"
+
+    # fish — ~/.config/fish/config.fish
+    command -v rr >/dev/null 2>&1; and rr completion fish 2>/dev/null | source
 
 ### Arguments
 
