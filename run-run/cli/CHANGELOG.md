@@ -1,5 +1,13 @@
 # @rrlab/cli
 
+## 1.3.4
+
+### Patch Changes
+
+- Updated dependencies [[`8f31404`](https://github.com/withvariablelab/dx/commit/8f31404722456c65fc432652e8bae13f0633a98b)]:
+  - @variablelab/clibuddy@0.7.4
+  - @variablelab/loggy@0.2.3
+
 ## 1.3.3
 
 ### Patch Changes

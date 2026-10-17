@@ -1,5 +1,11 @@
 # @rrlab/biome-config
 
+## 0.0.4
+
+### Patch Changes
+
+- [#259](https://github.com/withvariablelab/dx/pull/259) [`8f31404`](https://github.com/withvariablelab/dx/commit/8f31404722456c65fc432652e8bae13f0633a98b) Thanks [@rqbazan](https://github.com/rqbazan)! - Set the author to `rcrd <ricardo@variable.land>`.
+
 ## 0.0.3
 
 ### Patch Changes
