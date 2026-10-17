@@ -195,6 +195,17 @@ export async function runInit(ctx: Context, options: InitOptions) {
   const shouldInstall = await resolveYesNo(options.install, "Install dependencies?");
   const shouldGit = await resolveYesNo(options.git, "Initialise a git repository?");
 
+  const gitShell = shell.at(dir);
+  let gitInitError: unknown;
+  if (shouldGit) {
+    // Before the install, so a postinstall that sets up git hooks (lefthook's) finds the repo.
+    try {
+      await gitShell.runCaptured("git", ["init"]);
+    } catch (error) {
+      gitInitError = error;
+    }
+  }
+
   if (shouldInstall) {
     const installSpin = spinner();
     installSpin.start(`Installing dependencies with ${palette.highlight(PACKAGE_MANAGER)}`);
@@ -218,12 +229,12 @@ export async function runInit(ctx: Context, options: InitOptions) {
     const gitSpin = spinner();
     gitSpin.start("Initialising git repository");
     try {
-      const gitShell = shell.at(dir);
-      await gitShell.runCaptured("git", ["init"]);
+      if (gitInitError) throw gitInitError;
       await gitShell.runCaptured("git", ["add", "-A"]);
       // Read after `git init`, so an `includeIf "gitdir:…"` identity for the new repo applies.
       const identityArgs = await gitIdentityFallbackArgs(gitShell);
-      await gitShell.runCaptured("git", [...identityArgs, "commit", "-m", "chore: initial commit from vland"]);
+      // --no-verify: the hooks the install just set up are for the user's commits, not the template as generated.
+      await gitShell.runCaptured("git", [...identityArgs, "commit", "--no-verify", "-m", "chore: initial commit from vland"]);
       gitSpin.stop("Initialised git repository");
     } catch (error) {
       gitSpin.stop("Failed to initialise git", 1);
