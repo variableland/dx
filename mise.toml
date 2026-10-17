@@ -2,4 +2,9 @@
 _.path = ["{{config_root}}/node_modules/.bin"]
 
 [tools]
+node = "24"
+pnpm = "10.30.3"
 usage = "3.3.0"
+
+[settings]
+lockfile = true

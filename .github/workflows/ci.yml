@@ -27,15 +27,14 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: 🟢 Setup Node.js
-        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
+      - name: 🛠️ Setup mise
+        uses: jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c # v4.3.0
         with:
-          node-version-file: .node-version
-          # setup-pnpm caches the pnpm store
-          package-manager-cache: false
+          install: true
+          cache: true
 
-      - name: ⌛ Setup pnpm
-        uses: withvariablelab/gh-actions/actions/setup-pnpm@main
+      - name: 📦 Install dependencies
+        run: pnpm install --frozen-lockfile
 
       - name: 💅 Check
         run: pnpm rr check
@@ -70,15 +69,14 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: 🟢 Setup Node.js
-        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
+      - name: 🛠️ Setup mise
+        uses: jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c # v4.3.0
         with:
-          node-version-file: .node-version
-          # setup-pnpm caches the pnpm store
-          package-manager-cache: false
+          install: true
+          cache: true
 
-      - name: ⌛ Setup pnpm
-        uses: withvariablelab/gh-actions/actions/setup-pnpm@main
+      - name: 📦 Install dependencies
+        run: pnpm install --frozen-lockfile
 
       - name: 🧑‍💻 Configure git user
         env:
@@ -89,7 +87,7 @@ jobs:
           git config user.name "${APP_SLUG}[bot]"
           git config user.email "${user_id}+${APP_SLUG}[bot]@users.noreply.github.com"
 
-      # No NPM_TOKEN: npm trusted publishing over OIDC (npm >= 11.5.1, from setup-pnpm).
+      # No NPM_TOKEN: npm trusted publishing over OIDC (npm >= 11.5.1, bundled with mise's node 24).
       - name: 🚀 Release or version PR
         uses: changesets/action@a45c4d594aa4e2c509dc14a9f2b3b67ba3780d0d # v1.9.0
         with:
@@ -120,15 +118,14 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: 🟢 Setup Node.js
-        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
+      - name: 🛠️ Setup mise
+        uses: jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c # v4.3.0
         with:
-          node-version-file: .node-version
-          # setup-pnpm caches the pnpm store
-          package-manager-cache: false
+          install: true
+          cache: true
 
-      - name: ⌛ Setup pnpm
-        uses: withvariablelab/gh-actions/actions/setup-pnpm@main
+      - name: 📦 Install dependencies
+        run: pnpm install --frozen-lockfile
 
       - name: 🚀 Publish preview
         id: preview
