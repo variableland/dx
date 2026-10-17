@@ -11,10 +11,9 @@ dx/
 │   ├── cli/         # @rrlab/cli — the kernel
 │   ├── *-plugin/    # @rrlab/<tool>-plugin — the official plugins, one per wrapped tool
 │   └── *-config/    # @rrlab/<tool>-config — shared presets
-├── vland/           # @variablelab/vland CLI + the scaffolds it emits
-│   ├── cli/         # @variablelab/vland — the `vland init` CLI
-│   └── templates/   # scaffolds emitted by `vland init`
-└── dotfiles/
+└── vland/           # @variablelab/vland CLI + the scaffolds it emits
+    ├── cli/         # @variablelab/vland — the `vland init` CLI
+    └── templates/   # scaffolds emitted by `vland init`
 ```
 
 This repo hosts **two npm orgs** intentionally: `@variablelab/*` (Variableland's utilities + the `vland` CLI) and `@rrlab/*` (the `rr` CLI product). Cross-pollination is fine — clibuddy and loggy are shared utilities both stacks depend on.
@@ -75,7 +74,7 @@ pnpm build && pnpm test && pnpm rr check    # full check
 
 - **`run-run/CLAUDE.md`** — orientation for working on the `@rrlab/*` ecosystem (plugin contract, conventions for adding/modifying plugins).
 - **`run-run/cli/CLAUDE.md`** — kernel internals (commander patterns, context lifecycle, edit-json DSL, KDL spec emission).
-- **`decisions/`** — one file per architectural decision (001-005 today). Read before designing anything that touches plugin lifecycle, dependency model, or templating. Format / template in `decisions/README.md`.
+- **`decisions/`** — one file per architectural decision. Read before designing anything that touches plugin lifecycle, dependency model, or templating. Format / template in `decisions/README.md`.
 
 ## Plugin contract is kernel-internal
 
