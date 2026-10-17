@@ -19,7 +19,7 @@
   },
   "files": ["dist", "src", "!src/**/__tests__", "!src/**/*.test.*", "tsconfig.json"],
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=22.18.0"
   },
   "scripts": {
     "prepublishOnly": "rr pack",

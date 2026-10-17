@@ -138,6 +138,10 @@ describe("vland init (template scaffolding)", () => {
     const projectDir = path.join(fixture.dir, name);
     expect(pathExists(path.join(projectDir, ".node-version"))).toBe(false);
 
+    // rr loads run-run.config.mts with Node's type stripping, unflagged from 22.18.0.
+    const pkg = JSON.parse(await readFile(path.join(projectDir, "package.json"), "utf8"));
+    expect(pkg.engines.node).toBe(">=22.18.0");
+
     const miseToml = await readFile(path.join(projectDir, "mise.toml"), "utf8");
     expect(miseToml).toMatch(/\[settings\]\nlockfile = true/);
 

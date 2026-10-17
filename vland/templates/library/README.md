@@ -18,7 +18,7 @@ greet("vland");
 
 ## Prerequisites
 
-[mise](https://mise.jdx.dev) 2026.9.16 or later. It installs the Node.js and pnpm versions pinned in `mise.toml` and `mise.lock`, the same ones CI uses.
+[mise](https://mise.jdx.dev) 2026.9.16 or later. It installs the Node.js and pnpm versions pinned in `mise.toml` and `mise.lock`, the same ones CI uses. Without mise, you need Node.js 22.18.0 or later, because `rr` loads `run-run.config.mts` with Node's built-in type stripping, and pnpm 10.30.3.
 
 ```sh
 mise install
