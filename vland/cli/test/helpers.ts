@@ -13,6 +13,7 @@ type CliMode = "dev" | "prod";
 
 type CliOptions = {
   cwd?: string;
+  env?: NodeJS.ProcessEnv;
 };
 
 export function createTestCli(mode: CliMode = "prod") {
@@ -22,13 +23,14 @@ export function createTestCli(mode: CliMode = "prod") {
       cwd: opts.cwd,
       env:
         mode === "dev"
-          ? { ...process.env, VLAND_TEMPLATES_DIR: TEMPLATES_DIR }
+          ? { ...process.env, VLAND_TEMPLATES_DIR: TEMPLATES_DIR, ...opts.env }
           : {
               ...process.env,
               NODE_ENV: "production",
               TEST: undefined,
               NO_COLOR: "1",
               VLAND_TEMPLATES_DIR: TEMPLATES_DIR,
+              ...opts.env,
             },
     });
   };

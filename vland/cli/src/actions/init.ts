@@ -45,19 +45,40 @@ async function isDirEmpty(dir: string): Promise<boolean> {
   }
 }
 
-async function readGitAuthor(shell: Context["shell"]): Promise<string | undefined> {
+type GitIdentity = { name: string; email: string };
+
+const FALLBACK_GIT_IDENTITY: GitIdentity = { name: "vland", email: "noreply@variable.land" };
+
+/** The `user.name` and `user.email` git resolves from the shell's cwd. Each is empty when unset. */
+async function readGitIdentity(shell: Context["shell"]): Promise<GitIdentity> {
   try {
     const [name, email] = await Promise.all([
       shell.runCaptured("git", ["config", "--get", "user.name"], { throwOnError: false }),
       shell.runCaptured("git", ["config", "--get", "user.email"], { throwOnError: false }),
     ]);
-    const trimmedName = name.stdout.trim();
-    const trimmedEmail = email.stdout.trim();
-    if (!trimmedName) return undefined;
-    return trimmedEmail ? `${trimmedName} <${trimmedEmail}>` : trimmedName;
+    return { name: name.stdout.trim(), email: email.stdout.trim() };
   } catch {
-    return undefined;
+    return { name: "", email: "" };
   }
+}
+
+async function readGitAuthor(shell: Context["shell"]): Promise<string | undefined> {
+  const { name, email } = await readGitIdentity(shell);
+  if (!name) return undefined;
+  return email ? `${name} <${email}>` : name;
+}
+
+/**
+ * `-c` flags that fill in only the half of the identity git can't resolve. A
+ * configured identity is left alone, so `commit.gpgsign` signs with the user's
+ * own email.
+ */
+async function gitIdentityFallbackArgs(shell: Context["shell"]): Promise<string[]> {
+  const { name, email } = await readGitIdentity(shell);
+  return [
+    ...(name ? [] : ["-c", `user.name=${FALLBACK_GIT_IDENTITY.name}`]),
+    ...(email ? [] : ["-c", `user.email=${FALLBACK_GIT_IDENTITY.email}`]),
+  ];
 }
 
 function abort(message: string): never {
@@ -197,17 +218,12 @@ export async function runInit(ctx: Context, options: InitOptions) {
     const gitSpin = spinner();
     gitSpin.start("Initialising git repository");
     try {
-      const gitShell = shell.at(dir).child({
-        env: {
-          GIT_AUTHOR_NAME: process.env.GIT_AUTHOR_NAME ?? "vland",
-          GIT_AUTHOR_EMAIL: process.env.GIT_AUTHOR_EMAIL ?? "noreply@variable.land",
-          GIT_COMMITTER_NAME: process.env.GIT_COMMITTER_NAME ?? "vland",
-          GIT_COMMITTER_EMAIL: process.env.GIT_COMMITTER_EMAIL ?? "noreply@variable.land",
-        },
-      });
+      const gitShell = shell.at(dir);
       await gitShell.runCaptured("git", ["init"]);
       await gitShell.runCaptured("git", ["add", "-A"]);
-      await gitShell.runCaptured("git", ["commit", "-m", "chore: initial commit from vland"]);
+      // Read after `git init`, so an `includeIf "gitdir:…"` identity for the new repo applies.
+      const identityArgs = await gitIdentityFallbackArgs(gitShell);
+      await gitShell.runCaptured("git", [...identityArgs, "commit", "-m", "chore: initial commit from vland"]);
       gitSpin.stop("Initialised git repository");
     } catch (error) {
       gitSpin.stop("Failed to initialise git", 1);
