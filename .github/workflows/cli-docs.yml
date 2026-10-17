@@ -43,21 +43,15 @@ jobs:
           ref: main
           persist-credentials: false
 
-      - name: 🟢 Setup Node.js
-        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
-        with:
-          node-version-file: .node-version
-          # setup-pnpm caches the pnpm store
-          package-manager-cache: false
-
-      - name: ⌛ Setup pnpm
-        uses: withvariablelab/gh-actions/actions/setup-pnpm@main
-
       - name: 🛠️ Setup mise
-        uses: jdx/mise-action@c37c93293d6b742fc901e1406b8f764f6fb19dac # v2.4.4
+        uses: jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c # v4.3.0
         with:
+          install: true
           # Tag-triggered job: keep mise's cache off (zizmor cache-poisoning).
           cache: false
+
+      - name: 📦 Install dependencies
+        run: pnpm install --frozen-lockfile
 
       - name: 🔨 Build registered CLIs
         run: |
