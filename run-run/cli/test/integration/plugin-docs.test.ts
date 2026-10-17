@@ -35,7 +35,7 @@ function findPluginCounts(markdown: string): string[] {
 /** The body of the `heading` section, up to the next heading of the same level. */
 function section(markdown: string, heading: string): string {
   const start = markdown.indexOf(`\n${heading}\n`);
-  if (start === -1) return "";
+  if (start === -1) throw new Error(`No "${heading}" section: the plugin table moved or the heading was renamed.`);
   const end = markdown.indexOf("\n## ", start + heading.length + 1);
   return markdown.slice(start, end === -1 ? undefined : end);
 }
