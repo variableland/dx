@@ -38,10 +38,10 @@ The contract is **kernel-internal** (see root CLAUDE.md). The official plugins i
 
 **Each plugin owns its tool.** That includes:
 
-- The tool's version pins (install range + peer range) — see `plugin-*/src/tool-versions.ts`.
+- The tool's install range — see `*-plugin/src/tool-versions.ts`. The peer range lives only in the plugin's `package.json#peerDependencies` (see `decisions/010-tool-versions-install-only.md`).
 - The tool's binary name, package name, CLI surface.
 - The tool's config-file shape, install-time scaffolding, uninstall behaviour.
-- The tests that keep the plugin's `TOOL_VERSIONS` in sync with its own `package.json` peerDependencies — they live in the plugin too (`plugin-*/src/__tests__/tool-versions.test.ts`).
+- The test that checks each `TOOL_VERSIONS` install range fits within the plugin's own `package.json` peerDependencies — it lives in the plugin too (`*-plugin/src/__tests__/tool-versions.test.ts`).
 
 **The test before adding anything to `@rrlab/cli`:** "If I add a new plugin tomorrow that wraps prettier (or any new tool), does the kernel need to change?" If yes, you're in the wrong layer — push the concept down to the plugin. The kernel must never change to add a plugin.
 
@@ -134,10 +134,10 @@ For TS modules (`eslint.config.ts` etc. if we ever add them), the escape hatch i
 
 1. `run-run/<tool>-plugin/`: copy the shape of any existing plugin (`biome-plugin` is the most complete reference).
 2. `package.json`: declare the wrapped tool as `peerDependencies` + `devDependencies` (matching version). Add `peerDependenciesMeta` for optional peers. Depends on `@rrlab/cli` as peer + dev. Include a `"test": "vitest run"` script.
-3. `src/tool-versions.ts`: export a `TOOL_VERSIONS` const mapping each wrapped tool to `{ install, peer }` ranges. Re-export from `src/index.ts` so consumers (and the install hook) read from one place. Never put this in the kernel.
+3. `src/tool-versions.ts`: export a `TOOL_VERSIONS` const mapping each wrapped tool to `{ install }`, its install range (the peer range lives only in `package.json#peerDependencies`). Re-export from `src/index.ts` so consumers (and the install hook) read from one place. Never put this in the kernel.
 4. `src/index.ts`: export the `<Tool>Service extends ToolService` class, the `install()` and `uninstall()` hooks (consuming `TOOL_VERSIONS.<name>.install` for dev-dep pinning), and `default = definePlugin({...})` (a plain `PluginDefinition` object with a `services(ctx)` method).
 5. `vitest.config.ts`: a one-liner `export default defineConfig({})`.
-6. `src/__tests__/tool-versions.test.ts`: read this plugin's own `package.json` and assert that every `TOOL_VERSIONS[<name>].peer` matches `peerDependencies[<name>]`. Copy the shape from any sibling plugin's test verbatim — duplication across plugins is cheaper than a kernel-level helper.
+6. `src/__tests__/tool-versions.test.ts`: read this plugin's own `package.json` and assert that every `TOOL_VERSIONS[<name>].install` range fits within `peerDependencies[<name>]` (`semver.subset`). Copy the shape from any sibling plugin's test verbatim — duplication across plugins is cheaper than a kernel-level helper.
 7. `src/__tests__/install.test.ts`: cover install (default preset, declined, per-preset deps), uninstall (delete-vs-edit decision). Use `fs.mkdtemp` + a real tmp dir, not mocks.
 8. Add the alias to `run-run/cli/src/lib/plugin/directory.ts` `PLUGINS_DIRECTORY`, listing every capability it provides in that entry's `capabilities` array (so the `MissingPluginError` hint — derived via `providersOf(capability)` — suggests it).
 9. Add an integration test in `run-run/cli/test/integration/<capability>.test.ts` if the plugin provides a capability that doesn't yet have e2e coverage.
