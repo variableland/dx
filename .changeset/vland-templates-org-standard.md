@@ -13,3 +13,4 @@ Projects from `vland init` follow Variable Lab's current standard:
 - `@rrlab/cli` is `^1.3.4`. The `^0.1.0` the templates asked for doesn't exist, so `pnpm install` failed.
 - The backend's `pnpm dev` runs `node --watch` and loads `.env`, without `tsx`.
 - The library's published `exports` point at what `rr pack` builds (`index.mjs` and `index.d.mts`), and its README at the scoped package name.
+- Every `package.json` comes in the key order and format that both oxfmt and Biome accept, with `private` after `version`, so `rr check` with the oxc plugin doesn't fail on them.

@@ -49,3 +49,8 @@ export function makeTmpDir(name: string): { dir: string; cleanup: () => void } {
 export function gitOutput(cwd: string, args: string[]): string {
   return spawnSync("git", args, { cwd, encoding: "utf8" }).stdout.trim();
 }
+
+/** Runs `oxfmt --check` (the workspace's own oxfmt) on `files`, relative to `cwd`. */
+export function oxfmtCheck(cwd: string, files: string[]) {
+  return spawnSync(path.join(REPO_ROOT, "node_modules", ".bin", "oxfmt"), ["--check", ...files], { cwd, encoding: "utf8" });
+}

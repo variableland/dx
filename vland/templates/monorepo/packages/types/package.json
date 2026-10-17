@@ -3,11 +3,15 @@
   "version": "0.0.0",
   "private": true,
   "license": "MIT",
+  "files": [
+    "src",
+    "!src/**/__tests__",
+    "!src/**/*.test.*"
+  ],
   "type": "module",
   "exports": {
     ".": "./src/index.ts"
   },
-  "files": ["src", "!src/**/__tests__", "!src/**/*.test.*"],
   "dependencies": {
     "zod": "^4.4.3"
   },

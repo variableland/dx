@@ -1,9 +1,11 @@
 import fs from "node:fs";
 import { readdir, readFile, stat, writeFile } from "node:fs/promises";
 import { extname, join } from "node:path";
-import { createPkg } from "@variablelab/clibuddy";
+import { createPkg, type Pkg } from "@variablelab/clibuddy";
 import { logger } from "#src/services/logger.ts";
 import { LIBRARY_SCOPES, type TemplateName, type Visibility } from "./template.ts";
+
+type PackageJson = Pkg["packageJson"];
 
 export type Placeholders = {
   projectName: string;
@@ -133,6 +135,24 @@ export function rootPackageName({ template, projectName, visibility }: ApplyRoot
 }
 
 /**
+ * Sets `private: true` right after `version`, where package.json sorters
+ * (oxfmt's among them) put it, so the file passes their format check as
+ * generated. Mutates in place: a copy would drop the formatting pkg-types
+ * remembers on the object.
+ */
+function setPrivate(packageJson: PackageJson): void {
+  const keys = Object.keys(packageJson);
+  const moved = keys
+    .slice(keys.indexOf("version") + 1)
+    .filter((key) => key !== "private")
+    .map((key) => [key, packageJson[key]] as const);
+  for (const [key] of moved) delete packageJson[key];
+  delete packageJson.private;
+  packageJson.private = true;
+  for (const [key, value] of moved) packageJson[key] = value;
+}
+
+/**
  * Writes the root `package.json`'s `name` ({@link rootPackageName}) and
  * `private` fields based on the chosen template and visibility. Uses
  * `pkg-types` so field ordering and JSON formatting survive. `private: true`
@@ -150,9 +170,7 @@ export async function applyRootPackage(rootDir: string, options: ApplyRootPackag
 
   try {
     pkg.packageJson.name = rootPackageName(options);
-    if (template !== "library" || visibility === "private") {
-      pkg.packageJson.private = true;
-    }
+    if (template !== "library" || visibility === "private") setPrivate(pkg.packageJson);
     await pkg.write(pkg.packageJson);
   } catch (error) {
     debug("skipped %s", error);

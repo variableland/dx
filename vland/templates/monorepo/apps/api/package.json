@@ -14,8 +14,8 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@{{projectName}}/types": "workspace:*",
     "@elysiajs/node": "^1.4.5",
+    "@{{projectName}}/types": "workspace:*",
     "elysia": "^1.4.28",
     "evlog": "^2.17.0",
     "zod": "^4.4.3"

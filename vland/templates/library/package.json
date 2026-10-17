@@ -4,22 +4,25 @@
   "description": "",
   "license": "MIT",
   "author": "{{author}}",
+  "files": [
+    "dist",
+    "src",
+    "!src/**/__tests__",
+    "!src/**/*.test.*",
+    "tsconfig.json"
+  ],
   "type": "module",
   "exports": {
     ".": "./src/index.ts"
   },
   "publishConfig": {
-    "access": "public",
     "exports": {
       ".": {
         "types": "./dist/index.d.mts",
         "default": "./dist/index.mjs"
       }
-    }
-  },
-  "files": ["dist", "src", "!src/**/__tests__", "!src/**/*.test.*", "tsconfig.json"],
-  "engines": {
-    "node": ">=22.18.0"
+    },
+    "access": "public"
   },
   "scripts": {
     "prepublishOnly": "rr pack",
@@ -32,6 +35,9 @@
     "@types/node": "^24.0.0",
     "lefthook": "2.1.1",
     "vitest": "^4.0.0"
+  },
+  "engines": {
+    "node": ">=22.18.0"
   },
   "packageManager": "pnpm@10.30.3"
 }
