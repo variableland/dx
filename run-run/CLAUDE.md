@@ -22,17 +22,19 @@ If you find yourself tempted to add a `pnpm <script>` that exists only to call `
 |---|---|---|
 | `cli/` | `@rrlab/cli` | The kernel. Commander program, plugin registry, `rr` bin. Deep-dive in `cli/CLAUDE.md`. |
 | `biome-plugin/` | `@rrlab/biome-plugin` | `lint` + `format` + `jsc` via Biome. |
-| `oxc-plugin/` | `@rrlab/oxc-plugin` | `lint` (oxlint) + `format` (oxfmt). `jsc` is composed by the kernel. |
+| `oxc-plugin/` | `@rrlab/oxc-plugin` | `lint` (oxlint) + `format` (oxfmt) + `tsc` (oxlint type-aware). `jsc` is composed by the kernel. |
 | `ts-plugin/` | `@rrlab/ts-plugin` | `tsc` (TypeScript). Has `install()` that scaffolds `tsconfig.json` from a preset. |
 | `tsdown-plugin/` | `@rrlab/tsdown-plugin` | `pack` (tsdown). |
+| `vitest-plugin/` | `@rrlab/vitest-plugin` | `test` (vitest), a streaming passthrough — see `decisions/016-vitest-passthrough-plugin.md`. |
 | `ts-config/` | `@rrlab/ts-config` | Shared tsconfig presets: `react`, `dom/app`, `dom/lib`, `no-dom/app`, `no-dom/lib`. |
 | `biome-config/` | `@rrlab/biome-config` | Shared biome preset. |
+| `tsdown-config/` | `@rrlab/tsdown-config` | Shared tsdown configuration helpers. |
 
-The contract is **kernel-internal** (see root CLAUDE.md). The 4 official plugins are the only consumers we commit to. Evolving the contract is fine as long as you propagate to all 4.
+The contract is **kernel-internal** (see root CLAUDE.md). The official plugins in the table above are the only consumers we commit to. Evolving the contract is fine as long as you propagate to every one of them.
 
 ## The kernel is tool-agnostic — non-negotiable
 
-`@rrlab/cli` knows nothing about specific tools (biome, typescript, oxc, tsdown). It only ships **tool-shape-agnostic** things: the plugin contract (`Plugin`, `PluginServices`), capability interfaces (`Linter`, `Formatter`, `TypeChecker`, `Packer`, `StaticChecker`), the file-ops engine (`FileOp`, `JsonEdit`), `ToolService` as a base class, the command tree.
+`@rrlab/cli` knows nothing about specific tools (biome, typescript, oxc, tsdown). It only ships **tool-shape-agnostic** things: the plugin contract (`Plugin`, `PluginServices`), capability interfaces (`Linter`, `Formatter`, `TypeChecker`, `Packer`, `StaticChecker`, `TestRunner`), the file-ops engine (`FileOp`, `JsonEdit`), `ToolService` as a base class, the command tree.
 
 **Each plugin owns its tool.** That includes:
 
@@ -49,7 +51,7 @@ This rules out, for example:
 - Kernel-side coherence tests that walk plugin `package.json` files.
 - Kernel-exported types that name specific tools (`Biome*`, `Tsdown*`, etc.).
 
-Per-plugin duplication of small constants (the `{ install, peer }` shape repeated in 4 plugins) is the right shape — duplication across plugins is cheap; coupling the kernel to tool details is not.
+Per-plugin duplication of small constants (the `TOOL_VERSIONS` shape repeated in every plugin) is the right shape — duplication across plugins is cheap; coupling the kernel to tool details is not.
 
 ## Architecture in one screen
 
@@ -95,7 +97,7 @@ Every official plugin exports `default = definePlugin({...})` — a plain `Plugi
 }
 ```
 
-`services()` is called at runtime — every `rr <cmd>` invocation, so it must be cheap. It returns a `PluginServices` map: the capabilities (`lint`, `format`, `jscheck`, `typecheck`, `pack`) the plugin provides, each mapped to the **service** that implements it. Multiple capabilities can share one service (e.g. `BiomeService` is `Linter`, `Formatter`, `StaticChecker`). `definePlugin` owns the cross-cutting wrapping: it applies the `only` narrowing and the dedup bin-probe before handing the map to the kernel, so the `services` function itself only constructs and returns the impls.
+`services()` is called at runtime — every `rr <cmd>` invocation, so it must be cheap. It returns a `PluginServices` map: the capabilities (`lint`, `format`, `jscheck`, `typecheck`, `pack`, `test`) the plugin provides, each mapped to the **service** that implements it. Multiple capabilities can share one service (e.g. `BiomeService` is `Linter`, `Formatter`, `StaticChecker`). `definePlugin` owns the cross-cutting wrapping: it applies the `only` narrowing and the dedup bin-probe before handing the map to the kernel, so the `services` function itself only constructs and returns the impls.
 
 `install()` / `uninstall()` are called only by `rr plugins add` / `rr plugins remove`. They return declarative `FileOp[]` + `devDependencies` / `removeDependencies`. The kernel applies them.
 
@@ -140,7 +142,8 @@ For TS modules (`eslint.config.ts` etc. if we ever add them), the escape hatch i
 8. Add the alias to `run-run/cli/src/lib/plugin/directory.ts` `PLUGINS_DIRECTORY`, listing every capability it provides in that entry's `capabilities` array (so the `MissingPluginError` hint — derived via `providersOf(capability)` — suggests it).
 9. Add an integration test in `run-run/cli/test/integration/<capability>.test.ts` if the plugin provides a capability that doesn't yet have e2e coverage.
 10. If the plugin needs a shared config, create `run-run/<tool>-config/` alongside (mirror `ts-config` / `biome-config`).
-11. Update the dogfooded `run-run.config.mts` at the repo root if it makes sense (we use biome + ts + tsdown today).
+11. Update the dogfooded `run-run.config.mts` at the repo root if it makes sense (its `plugins` array is what we use today).
+12. Add the plugin's row to the "What's here" table above and to the "Plugins" table in `run-run/cli/README.md`. That README ships to npm, so the change needs a `@rrlab/cli` changeset.
 
 ### Modifying the contract
 
@@ -150,7 +153,7 @@ If you need to evolve `PluginServices`, `FileOp`, `JsonEdit`, `InstallResult`, e
 2. Update re-exports in `run-run/cli/src/lib/plugin/index.ts`.
 3. Update `run-run/cli/src/lib/plugin/registry.ts` if registry semantics change.
 4. Update `run-run/cli/src/services/json-edit.ts` if JsonEdit ops change.
-5. Update each of the 4 plugins' `install()` / `uninstall()` / `services()` as needed — same commit.
+5. Update every official plugin's `install()` / `uninstall()` / `services()` as needed — same commit.
 6. Update tests: `run-run/cli/src/lib/plugin/__tests__/registry.test.ts`, `run-run/cli/src/services/__tests__/json-edit.test.ts`, each plugin's tests.
 7. Don't add deprecation shims. The contract is internal — propagate the breaking change.
 

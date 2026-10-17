@@ -40,6 +40,7 @@ See [`CLI.md`](./CLI.md) for the full reference (auto-generated per release).
 | `oxc`    | [oxlint](https://oxc.rs/docs/guide/usage/linter.html) + [oxfmt](https://oxc.rs/docs/guide/usage/formatter.html) | `rr plugins add oxc`     |
 | `ts`     | [tsc](https://www.typescriptlang.org)                                                                          | `rr plugins add ts`      |
 | `tsdown` | [tsdown](https://tsdown.dev)                                                                                   | `rr plugins add tsdown`  |
+| `vitest` | [vitest](https://vitest.dev)                                                                                   | `rr plugins add vitest`  |
 
 Install one with:
 

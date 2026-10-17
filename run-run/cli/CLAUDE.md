@@ -64,7 +64,7 @@ Commands that don't need plugin services (`clean`, `config`, `completion`) still
 
 ## ctx.plugins (the `PluginServices` facade)
 
-A `PluginCapability` is a key (`lint`, `format`, `jscheck`, `typecheck`, `pack`); a **service** is the impl that satisfies it (a `Linter & Doctor`, etc.). One plugin instance can back several capabilities with the same service object.
+A `PluginCapability` is a key (`lint`, `format`, `jscheck`, `typecheck`, `pack`, `test`); a **service** is the impl that satisfies it (a `Linter & Doctor`, etc.). One plugin instance can back several capabilities with the same service object.
 
 `src/services/plugin-services.ts` defines the `PluginServices` **class** — the only plugin-resolution surface commands and actions touch (`ctx.plugins`). It wraps `PluginRegistry` and exposes:
 

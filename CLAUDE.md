@@ -9,8 +9,8 @@ dx/
 ├── shared/          # @variablelab/* — shared utilities (clibuddy, loggy)
 ├── run-run/         # @rrlab/* — the rrlab product
 │   ├── cli/         # @rrlab/cli — the kernel
-│   ├── *-plugin/    # @rrlab/{biome,oxc,ts,tsdown}-plugin
-│   └── *-config/    # @rrlab/{biome,ts,tsdown}-config — shared presets
+│   ├── *-plugin/    # @rrlab/<tool>-plugin — the official plugins, one per wrapped tool
+│   └── *-config/    # @rrlab/<tool>-config — shared presets
 ├── vland/           # @variablelab/vland CLI + the scaffolds it emits
 │   ├── cli/         # @variablelab/vland — the `vland init` CLI
 │   └── templates/   # scaffolds emitted by `vland init`
@@ -79,9 +79,9 @@ pnpm build && pnpm test && pnpm rr check    # full check
 
 ## Plugin contract is kernel-internal
 
-The plugin API (`@rrlab/cli/plugin`: `Plugin`, `PluginServices`, `InstallResult`, etc.) is treated as **internal to `@rrlab/*`**, not as a public API for third-party plugin authors. The 4 official plugins are the only consumers we commit to. This means:
+The plugin API (`@rrlab/cli/plugin`: `Plugin`, `PluginServices`, `InstallResult`, etc.) is treated as **internal to `@rrlab/*`**, not as a public API for third-party plugin authors. The official plugins (listed in `run-run/CLAUDE.md`) are the only consumers we commit to. This means:
 
-- Breaking changes to the contract are fine as long as all 4 official plugins compile and tests pass.
+- Breaking changes to the contract are fine as long as every official plugin compiles and tests pass.
 - Don't write contract-level documentation for hypothetical third-party authors.
 - Don't preserve backwards-compat shims for the contract.
-- If you need to evolve the contract, propagate the change across all 4 plugins in the same commit.
+- If you need to evolve the contract, propagate the change across every official plugin in the same commit.
