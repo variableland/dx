@@ -23,7 +23,7 @@ jobs:
       contents: read
     steps:
       - name: ⬇️ Checkout repo
-        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 
@@ -65,7 +65,7 @@ jobs:
           permission-pull-requests: write
 
       - name: ⬇️ Checkout repo
-        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 
@@ -89,16 +89,13 @@ jobs:
 
       # No NPM_TOKEN: npm trusted publishing over OIDC (npm >= 11.5.1, bundled with mise's node 24).
       - name: 🚀 Release or version PR
-        uses: changesets/action@a45c4d594aa4e2c509dc14a9f2b3b67ba3780d0d # v1.9.0
+        uses: changesets/action@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
         with:
-          commit: "chore: update versions"
-          title: "chore: update versions"
-          publish: pnpm changeset publish
-          setupGitUser: false
+          commit-message: "chore: update versions"
+          pr-title: "chore: update versions"
+          publish-script: pnpm changeset publish
           github-token: ${{ steps.app-token.outputs.token }}
-          commitMode: github-api
         env:
-          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
           LEFTHOOK: 0
 
   # Runs PR code: never give this job the bot key.
@@ -114,7 +111,7 @@ jobs:
       packages: ${{ steps.preview.outputs.packages }}
     steps:
       - name: ⬇️ Checkout repo
-        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 
