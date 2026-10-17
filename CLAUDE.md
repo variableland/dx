@@ -18,7 +18,7 @@ dx/
 
 This repo hosts **two npm orgs** intentionally: `@variablelab/*` (Variableland's utilities + the `vland` CLI) and `@rrlab/*` (the `rr` CLI product). Cross-pollination is fine — clibuddy and loggy are shared utilities both stacks depend on.
 
-Stack: pnpm workspaces, Turborepo, Changesets, `tsdown` for builds, vitest for tests, Biome for lint/format, TypeScript strict, Node 24 for development (pinned in `mise.toml`, which CI also installs); published packages declare `engines.node` as `>=20.0.0`.
+Stack: pnpm workspaces, Turborepo, Changesets, `tsdown` for builds, vitest for tests, Biome for lint/format, TypeScript strict, Node 24 for development (pinned in `mise.toml`). Published packages declare `engines.node` as `>=22.18.0`, the first Node 22 that strips types by default, which `rr` needs to load `run-run.config.{ts,mts}`. CI runs the full check on both: that floor and Node 24.
 
 ## Build & verify
 
