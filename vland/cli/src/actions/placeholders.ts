@@ -9,6 +9,8 @@ export type Placeholders = {
   projectName: string;
   author: string;
   year: string;
+  packageName: string;
+  githubOwner: string;
 };
 
 const TEXT_EXTENSIONS = new Set([
@@ -86,7 +88,9 @@ function applyPlaceholders(content: string, values: Placeholders) {
   return content
     .replaceAll("{{projectName}}", values.projectName)
     .replaceAll("{{author}}", values.author)
-    .replaceAll("{{year}}", values.year);
+    .replaceAll("{{year}}", values.year)
+    .replaceAll("{{packageName}}", values.packageName)
+    .replaceAll("{{githubOwner}}", values.githubOwner);
 }
 
 export async function replacePlaceholders(rootDir: string, values: Placeholders) {
@@ -119,15 +123,21 @@ export type ApplyRootPackageOptions = {
 };
 
 /**
- * Writes the root `package.json`'s `name` and `private` fields based on the
- * chosen template and visibility. Uses `pkg-types` so field ordering and
- * JSON formatting survive.
- *
- * Naming rules:
- * - `library` private → `@variableland/<projectName>`, `private: true`
+ * The root package's name:
+ * - `library` private → `@variableland/<projectName>`
  * - `library` public  → `@variablelab/<projectName>`
- * - `backend`         → `<projectName>`, `private: true`
- * - `monorepo`        → `<projectName>`, `private: true` (root never publishes)
+ * - `backend`, `monorepo` → `<projectName>`
+ */
+export function rootPackageName({ template, projectName, visibility }: ApplyRootPackageOptions): string {
+  return template === "library" ? `${LIBRARY_SCOPES[visibility ?? "public"]}/${projectName}` : projectName;
+}
+
+/**
+ * Writes the root `package.json`'s `name` ({@link rootPackageName}) and
+ * `private` fields based on the chosen template and visibility. Uses
+ * `pkg-types` so field ordering and JSON formatting survive. `private: true`
+ * goes on a private library and on every backend and monorepo root, which
+ * never publishes.
  */
 export async function applyRootPackage(rootDir: string, options: ApplyRootPackageOptions) {
   const debug = logger.subdebug("apply-root-package");
@@ -136,18 +146,11 @@ export async function applyRootPackage(rootDir: string, options: ApplyRootPackag
   const pkg = await createPkg(rootPath);
   if (!pkg) throw new Error("Could not find package.json");
 
-  const { template, projectName, visibility } = options;
+  const { template, visibility } = options;
 
   try {
-    if (template === "library") {
-      const scope = LIBRARY_SCOPES[visibility ?? "public"];
-      pkg.packageJson.name = `${scope}/${projectName}`;
-      if (visibility === "private") {
-        pkg.packageJson.private = true;
-      }
-    } else {
-      // backend + monorepo: bare project name, private root.
-      pkg.packageJson.name = projectName;
+    pkg.packageJson.name = rootPackageName(options);
+    if (template !== "library" || visibility === "private") {
       pkg.packageJson.private = true;
     }
     await pkg.write(pkg.packageJson);

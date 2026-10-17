@@ -1,9 +1,15 @@
-import { readFile } from "node:fs/promises";
+import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, test } from "vitest";
+import { TEMPLATES } from "#src/actions/template.ts";
 import { createTestCli, makeTmpDir, pathExists } from "#test/helpers.ts";
 
 const cli = createTestCli();
+
+async function readChangelogRepo(projectDir: string): Promise<string> {
+  const config = JSON.parse(await readFile(path.join(projectDir, ".changeset", "config.json"), "utf8"));
+  return config.changelog[1].repo;
+}
 
 describe("vland init (template scaffolding)", () => {
   let fixture: { dir: string; cleanup: () => void };
@@ -29,8 +35,10 @@ describe("vland init (template scaffolding)", () => {
     expect(license).not.toContain("{{");
 
     const readme = await readFile(path.join(projectDir, "README.md"), "utf8");
-    expect(readme).toContain(name);
+    expect(readme).toContain(`pnpm add @variablelab/${name}`);
     expect(readme).not.toContain("{{");
+
+    expect(await readChangelogRepo(projectDir)).toBe(`withvariablelab/${name}`);
   });
 
   test("library: --visibility=private uses @variableland scope and sets private:true", async () => {
@@ -41,6 +49,7 @@ describe("vland init (template scaffolding)", () => {
     const pkg = JSON.parse(await readFile(path.join(fixture.dir, name, "package.json"), "utf8"));
     expect(pkg.name).toBe(`@variableland/${name}`);
     expect(pkg.private).toBe(true);
+    expect(await readChangelogRepo(path.join(fixture.dir, name))).toBe(`variableland/${name}`);
   });
 
   test("library: --visibility=public uses @variablelab scope and no private flag", async () => {
@@ -117,6 +126,48 @@ describe("vland init (template scaffolding)", () => {
 
     const typesPkg = JSON.parse(await readFile(path.join(projectDir, "packages", "types", "package.json"), "utf8"));
     expect(typesPkg.name).toBe(`@${name}/types`);
+
+    expect(await readChangelogRepo(projectDir)).toBe(`variableland/${name}`);
+  });
+
+  test.each(TEMPLATES)("%s: pins node and pnpm with mise and a lockfile", async (template) => {
+    const name = `std-${template}`;
+    const r = cli(`init ${name} -t ${template} --no-install --no-git`, { cwd: fixture.dir });
+    expect(r.status).toBe(0);
+
+    const projectDir = path.join(fixture.dir, name);
+    expect(pathExists(path.join(projectDir, ".node-version"))).toBe(false);
+
+    const miseToml = await readFile(path.join(projectDir, "mise.toml"), "utf8");
+    expect(miseToml).toMatch(/\[settings\]\nlockfile = true/);
+
+    // CI's mise-action runs `mise install --locked`, which needs every tool locked.
+    const miseLock = await readFile(path.join(projectDir, "mise.lock"), "utf8");
+    for (const tool of ["node", "pnpm"]) {
+      expect(miseLock).toContain(`[[tools.${tool}]]`);
+      expect(miseLock).toContain(`[tools.${tool}."platforms.linux-x64"]`);
+    }
+  });
+
+  test.each(TEMPLATES)("%s: pins every workflow action by SHA and checks out without credentials", async (template) => {
+    const name = `ci-${template}`;
+    const r = cli(`init ${name} -t ${template} --no-install --no-git`, { cwd: fixture.dir });
+    expect(r.status).toBe(0);
+
+    const workflowsDir = path.join(fixture.dir, name, ".github", "workflows");
+    const workflows = await readdir(workflowsDir);
+    expect(workflows).toContain("ci.yml");
+    expect(workflows).toContain("workflow-audit.yml");
+
+    for (const file of workflows) {
+      const body = await readFile(path.join(workflowsDir, file), "utf8");
+      const actions = body.match(/(?<=uses: )\S+/g) ?? [];
+      for (const action of actions) {
+        expect(action, `${file}: ${action}`).toMatch(/@[0-9a-f]{40}$/);
+      }
+      const checkouts = actions.filter((action) => action.startsWith("actions/checkout@")).length;
+      expect(body.match(/persist-credentials: false/g)?.length ?? 0, file).toBe(checkouts);
+    }
   });
 
   test("monorepo: ships an empty run-run.config.mts at root and in each workspace", async () => {

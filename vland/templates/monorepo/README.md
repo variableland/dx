@@ -19,12 +19,12 @@ variableland-flavoured Node.js monorepo: pnpm workspaces + Turborepo + Vitest.
 
 ## Prerequisites
 
-- Node.js >= 20 (24 recommended; see `.node-version`)
-- pnpm 10.x
+[mise](https://mise.jdx.dev) 2026.9.16 or later. It installs the Node.js and pnpm versions pinned in `mise.toml` and `mise.lock`, the same ones CI uses.
 
 ## Getting started
 
 ```sh
+mise install
 pnpm install
 pnpm dev
 ```
@@ -33,7 +33,7 @@ pnpm dev
 
 This project uses [`rr`](https://github.com/withvariablelab/dx/tree/main/run-run) (the `@rrlab/cli`) as the single entry point for lint, format, type-check, and build. The pre-configured `mise.toml` puts `./node_modules/.bin` on your `PATH`, so `rr` is invokable directly from anywhere inside the repo.
 
-Add the plugins you want — each one writes its own config file and registers itself in the workspace's `run-run.config.mts`:
+It starts with no plugins. Add the ones you want: each one installs itself, writes its own config file and registers itself in the `run-run.config.mts` of the folder you run it in.
 
 ```sh
 # Workspace-wide formatting + linting (lives at root)
@@ -44,11 +44,15 @@ rr plugins add biome
 # then install it inside each workspace that needs its own tsconfig.
 rr plugins add ts                                                          # at root
 cd apps/api       && pnpm rr plugins add ts && pnpm rr plugins add tsdown && cd ../..
-cd apps/web       && pnpm rr plugins add ts                                && cd ../..
+cd apps/web       && pnpm rr plugins add ts                                && cd ../..   # the "React app" preset
 cd packages/types && pnpm rr plugins add ts && pnpm rr plugins add tsdown && cd ../..
 ```
 
 Inside a workspace folder, prefix with `pnpm` (`pnpm rr <cmd>`) — pnpm resolves `rr` from the workspace root's `node_modules/.bin`.
+
+Each `rr plugins add` asks before writing a config file. `--yes` takes the defaults without asking: use it from an agent or a script. `rr plugins add oxc` swaps `biome` for oxlint and oxfmt, `rr plugins add vitest` runs the tests through `rr test`, and `rr plugins remove <name>` undoes an add.
+
+CI runs `rr check` at the root, then `pnpm test` and `pnpm build` for the workspaces a PR affects.
 
 ## Develop
 
@@ -57,6 +61,6 @@ Inside a workspace folder, prefix with `pnpm` (`pnpm rr <cmd>`) — pnpm resolve
 | `pnpm dev` | `turbo run dev` across every app. |
 | `pnpm build` | `turbo run build`. |
 | `pnpm test` | `turbo run test` across every workspace with tests. |
-| `rr jsc` (root) | Lint + format check on the whole repo. |
-| `rr tsc` (root) | Type-check every workspace that has a `tsconfig.json`. |
+| `rr check` (root) | Lint + format check on the whole repo, then type-check every workspace that has a `tsconfig.json`. |
+| `rr jsc --fix` (root) | Auto-fix lint + format on the whole repo. |
 | `rr pack` (per workspace) | Bundle the workspace's `src/index.ts` via tsdown. |

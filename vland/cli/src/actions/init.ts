@@ -5,8 +5,8 @@ import { hasTTY, palette } from "@variablelab/clibuddy";
 import { installDependencies } from "nypm";
 import type { Context } from "#src/services/ctx.ts";
 import { logger } from "#src/services/logger.ts";
-import { applyRootPackage, replacePlaceholders } from "./placeholders.ts";
-import { fetchTemplate, TEMPLATE_META, TEMPLATES, type TemplateName, type Visibility } from "./template.ts";
+import { applyRootPackage, replacePlaceholders, rootPackageName } from "./placeholders.ts";
+import { fetchTemplate, GITHUB_OWNERS, TEMPLATE_META, TEMPLATES, type TemplateName, type Visibility } from "./template.ts";
 
 export type InitOptions = {
   name?: string;
@@ -188,6 +188,9 @@ export async function runInit(ctx: Context, options: InitOptions) {
     projectName: name,
     author,
     year: new Date().getFullYear().toString(),
+    packageName: rootPackageName({ template, projectName: name, visibility }),
+    // Only a library picks its visibility: backend and monorepo roots are always private.
+    githubOwner: GITHUB_OWNERS[template === "library" ? (visibility ?? "public") : "private"],
   });
   await applyRootPackage(dir, { template, projectName: name, visibility });
   placeholderSpin.stop("Placeholders applied");
