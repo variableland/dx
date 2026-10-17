@@ -1,5 +1,11 @@
 # @rrlab/cli
 
+## 1.3.5
+
+### Patch Changes
+
+- [#264](https://github.com/withvariablelab/dx/pull/264) [`ef63da1`](https://github.com/withvariablelab/dx/commit/ef63da113d1aaa0d79df35811db7f392ec485097) Thanks [@rqbazan](https://github.com/rqbazan)! - Discard stderr in the shell completion rc lines shown by the README and `rr completion --help`, so a mise shim for `rr` with no active version no longer prints `mise ERROR No version is set for shim: rr` on every new shell outside a project.
+
 ## 1.3.4
 
 ### Patch Changes

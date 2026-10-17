@@ -1,5 +1,11 @@
 # @variablelab/vland
 
+## 0.3.7
+
+### Patch Changes
+
+- [#264](https://github.com/withvariablelab/dx/pull/264) [`ef63da1`](https://github.com/withvariablelab/dx/commit/ef63da113d1aaa0d79df35811db7f392ec485097) Thanks [@rqbazan](https://github.com/rqbazan)! - Guard the shell completion rc lines shown by the README and `vland completion --help` with `command -v vland` and discard their stderr, so a shell without `vland`, or with only a mise shim for it, starts without errors.
+
 ## 0.3.6
 
 ### Patch Changes
