@@ -24,12 +24,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # 22.18.0 is the `engines.node` floor: the first Node 22 that strips types by default, which rr
-        # needs to load `run-run.config.{ts,mts}`. 24 is what mise.toml pins.
-        node: ["22.18.0", "24"]
+        include:
+          # The `engines.node` floor, pinned (and locked) in mise.floor.toml.
+          - node: floor
+            mise_env: floor
+          # The version mise.toml pins.
+          - node: default
+            mise_env: ""
     env:
-      # Overrides the node version in mise.toml for every mise-managed command in this job.
-      MISE_NODE_VERSION: ${{ matrix.node }}
+      MISE_ENV: ${{ matrix.mise_env }}
     steps:
       - name: ⬇️ Checkout repo
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -41,7 +44,6 @@ jobs:
         with:
           install: true
           cache: true
-          cache_key_prefix: mise-v1-node-${{ matrix.node }}
 
       - name: 📦 Install dependencies
         run: pnpm install --frozen-lockfile

@@ -1,0 +1,4 @@
+# The oldest Node that `engines.node` allows. `MISE_ENV=floor` runs the repo on it, as CI does.
+# Bump it together with every published package's `engines.node`, then run `MISE_ENV=floor mise lock`.
+[tools]
+node = "22.18.0"
