@@ -1,5 +1,11 @@
 # @rrlab/cli
 
+## 1.3.3
+
+### Patch Changes
+
+- [#256](https://github.com/withvariablelab/dx/pull/256) [`df7a83a`](https://github.com/withvariablelab/dx/commit/df7a83abc60c38a0917c5f6cf2e0d3825abcace3) Thanks [@rqbazan](https://github.com/rqbazan)! - Put the Sign and the Tagline at the top of the README, and set the author to `rcrd <ricardo@variable.land>`.
+
 ## 1.3.2
 
 ### Patch Changes
