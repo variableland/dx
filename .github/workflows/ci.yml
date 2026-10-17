@@ -16,11 +16,23 @@ concurrency:
 permissions: {}
 
 jobs:
-  test:
-    name: Test
+  test-node:
+    name: Test (Node ${{ matrix.node }})
     runs-on: ubuntu-latest
     permissions:
       contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # The `engines.node` floor, pinned (and locked) in mise.floor.toml.
+          - node: floor
+            mise_env: floor
+          # The version mise.toml pins.
+          - node: default
+            mise_env: ""
+    env:
+      MISE_ENV: ${{ matrix.mise_env }}
     steps:
       - name: ⬇️ Checkout repo
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -44,6 +56,19 @@ jobs:
 
       - name: 🔨 Build
         run: pnpm build
+
+  # The ruleset requires a check named "Test": this job reports the whole matrix under that name.
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    needs: test-node
+    if: ${{ always() }}
+    permissions: {}
+    steps:
+      - name: ✅ Every Node version passed
+        env:
+          RESULT: ${{ needs.test-node.result }}
+        run: test "$RESULT" = "success"
 
   release:
     name: Release

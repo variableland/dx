@@ -32,6 +32,8 @@ If you find yourself tempted to add a `pnpm <script>` that exists only to call `
 
 The contract is **kernel-internal** (see root CLAUDE.md). The official plugins in the table above are the only consumers we commit to. Evolving the contract is fine as long as you propagate to every one of them.
 
+Don't write how many official plugins there are anywhere — say "every official plugin". `cli/test/integration/plugin-docs.test.ts` fails when a living doc (any Markdown outside `decisions/`, `.changeset/` and changelogs) counts them, and when this table or the "Plugins" table in `cli/README.md` doesn't list exactly the plugins in `PLUGINS_DIRECTORY`.
+
 ## The kernel is tool-agnostic — non-negotiable
 
 `@rrlab/cli` knows nothing about specific tools (biome, typescript, oxc, tsdown). It only ships **tool-shape-agnostic** things: the plugin contract (`Plugin`, `PluginServices`), capability interfaces (`Linter`, `Formatter`, `TypeChecker`, `Packer`, `StaticChecker`, `TestRunner`), the file-ops engine (`FileOp`, `JsonEdit`), `ToolService` as a base class, the command tree.
@@ -48,8 +50,10 @@ The contract is **kernel-internal** (see root CLAUDE.md). The official plugins i
 This rules out, for example:
 - A `TOOL_VERSIONS` constant in the kernel listing every official tool. (Each plugin has its own.)
 - A `TOOL_PEERS` registry in the kernel mapping plugin alias → peer ranges.
-- Kernel-side coherence tests that walk plugin `package.json` files.
+- Kernel-side coherence tests that read tool details (versions, peer ranges, config shapes) from plugin `package.json` files.
 - Kernel-exported types that name specific tools (`Biome*`, `Tsdown*`, etc.).
+
+The line is tool details, not plugin names: kernel tests may check the *set* of official plugins. `cli/test/integration/plugin-discipline.test.ts` matches the `run-run/*-plugin/` dirs against `PLUGINS_DIRECTORY` and scans their source for SDK discipline; `plugin-docs.test.ts` matches the docs' plugin tables against it. Neither reads anything about a plugin's tool, so adding a plugin still touches the kernel only at its `PLUGINS_DIRECTORY` entry (step 8 of the checklist below).
 
 Per-plugin duplication of small constants (the `TOOL_VERSIONS` shape repeated in every plugin) is the right shape — duplication across plugins is cheap; coupling the kernel to tool details is not.
 
@@ -143,7 +147,7 @@ For TS modules (`eslint.config.ts` etc. if we ever add them), the escape hatch i
 9. Add an integration test in `run-run/cli/test/integration/<capability>.test.ts` if the plugin provides a capability that doesn't yet have e2e coverage.
 10. If the plugin needs a shared config, create `run-run/<tool>-config/` alongside (mirror `ts-config` / `biome-config`).
 11. Update the dogfooded `run-run.config.mts` at the repo root if it makes sense (its `plugins` array is what we use today).
-12. Add the plugin's row to the "What's here" table above and to the "Plugins" table in `run-run/cli/README.md`. That README ships to npm, so the change needs a `@rrlab/cli` changeset.
+12. Add the plugin's row to the "What's here" table above and to the "Plugins" table in `run-run/cli/README.md`. That README ships to npm, so the change needs a `@rrlab/cli` changeset. `plugin-docs.test.ts` fails until both rows exist.
 
 ### Modifying the contract
 
