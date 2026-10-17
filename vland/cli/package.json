@@ -12,7 +12,7 @@
     "directory": "vland/cli"
   },
   "license": "MIT",
-  "author": "rcrd <rcrd@variable.land>",
+  "author": "rcrd <ricardo@variable.land>",
   "type": "module",
   "imports": {
     "#src/*": "./src/*",

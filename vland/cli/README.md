@@ -1,6 +1,10 @@
-# 🦉 vland
+<p align="center">
+  <img src="https://raw.githubusercontent.com/withvariablelab/dx/HEAD/vland/cli/brand/sign-readme.svg" width="64" height="64" alt="">
+</p>
 
-The CLI to init a new project in [Variable Land](https://variable.land)
+<h1 align="center">vland</h1>
+
+<p align="center">Starts a project in Variable Land.</p>
 
 ## Prerequisites
 
