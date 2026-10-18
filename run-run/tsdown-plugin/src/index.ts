@@ -53,6 +53,20 @@ export class TsdownService extends ToolService {
   }
 }
 
+/**
+ * tsdown needs `typescript` installed to write declarations (the `lib`
+ * preset's `dts: true`, or a `types` entry in package.json), but takes it only
+ * as an optional peer. A package that already installs it (`dependencies` or
+ * `devDependencies`; a peer alone isn't installed) keeps the range it has.
+ */
+function toolDependencies(pkg: InstallContext["appPkg"]): Record<string, string> {
+  const { dependencies, devDependencies } = pkg.packageJson;
+  const installsTypescript = [dependencies, devDependencies].some((deps) => !!deps && "typescript" in deps);
+  return installsTypescript
+    ? { tsdown: TOOL_VERSIONS.tsdown.install }
+    : { tsdown: TOOL_VERSIONS.tsdown.install, typescript: TOOL_VERSIONS.typescript.install };
+}
+
 export async function install(ctx: InstallContext): Promise<InstallResult> {
   const existingPath = await findExistingConfig(ctx.appPkg.dirPath);
   const action = await decideScaffold(ctx, {
@@ -63,7 +77,7 @@ export async function install(ctx: InstallContext): Promise<InstallResult> {
   });
 
   if (action === "skip") {
-    return { devDependencies: { tsdown: TOOL_VERSIONS.tsdown.install } };
+    return { devDependencies: toolDependencies(ctx.appPkg) };
   }
 
   const preset = await pickPreset(ctx, {
@@ -74,7 +88,7 @@ export async function install(ctx: InstallContext): Promise<InstallResult> {
   const { factory } = PRESETS[preset];
 
   const devDependencies: Record<string, string> = {
-    tsdown: TOOL_VERSIONS.tsdown.install,
+    ...toolDependencies(ctx.appPkg),
     [CONFIG_PKG]: await ctx.release.resolve(CONFIG_PKG),
   };
 
@@ -108,6 +122,7 @@ export async function install(ctx: InstallContext): Promise<InstallResult> {
 }
 
 export async function uninstall(ctx: UninstallContext): Promise<UninstallResult> {
+  // `typescript` stays: the project or another plugin (ts, astro) may use it.
   const removeDependencies = ["tsdown", CONFIG_PKG];
   const existingPath = await findExistingConfig(ctx.appPkg.dirPath);
   if (!existingPath) return { removeDependencies };
