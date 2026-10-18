@@ -171,6 +171,32 @@ describe("rr plugins", () => {
       expect(jsc.status, jsc.stdout + jsc.stderr).toBe(0);
     });
 
+    test("patches an existing biome.json into one that passes `rr jsc`", () => {
+      fixture = makeFixture("plugins-add-no-tty-patch", {
+        ".gitignore": "node_modules\n.stub-bin\n",
+        "package.json": pnpmPkg(),
+        "biome.json": `{\n  "formatter": { "indentStyle": "space" },\n  "files": { "includes": ["**", "!dist"] }\n}\n`,
+      });
+
+      const r = cli("plugins add biome", { cwd: fixture.dir, env: stubPackageManager(fixture.dir) });
+      expect(r.stdout + r.stderr).toContain("Edited biome.json");
+      expect(r.status).toBe(0);
+
+      expect(readFileSync(path.join(fixture.dir, "biome.json"), "utf8")).toBe(`{
+  "formatter": {
+    "indentStyle": "space"
+  },
+  "files": {
+    "includes": ["**", "!dist"]
+  },
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "extends": ["@rrlab/biome-config"]
+}
+`);
+      const jsc = cli("jsc", { cwd: fixture.dir });
+      expect(jsc.status, jsc.stdout + jsc.stderr).toBe(0);
+    });
+
     test("ts picks the React preset for a package that depends on react", () => {
       fixture = makeFixture("plugins-add-no-tty-react", {
         "package.json": pnpmPkg({ dependencies: { react: "^19.0.0" } }),

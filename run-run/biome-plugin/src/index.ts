@@ -1,4 +1,6 @@
+import { execFileSync } from "node:child_process";
 import fs from "node:fs/promises";
+import { createRequire } from "node:module";
 import path from "node:path";
 import {
   decideScaffold,
@@ -27,6 +29,7 @@ const BIOME_JSON = "biome.json";
 const BIOME_CONFIG_PKG = "@rrlab/biome-config";
 // The installed Biome's own schema: a versioned URL drifts from `^2.0.0` and Biome flags the mismatch.
 const BIOME_SCHEMA = "./node_modules/@biomejs/biome/configuration_schema.json";
+const FORMAT_TIMEOUT_MS = 10_000;
 
 export { TOOL_VERSIONS } from "./tool-versions.ts";
 
@@ -77,25 +80,59 @@ export async function install(ctx: InstallContext): Promise<InstallResult> {
     [BIOME_CONFIG_PKG]: await ctx.release.resolve(BIOME_CONFIG_PKG),
   };
 
-  const file: FileOp =
+  const files: FileOp[] =
     scaffoldDecision === "create" || scaffoldDecision === "overwrite"
-      ? {
-          kind: "create",
-          path: BIOME_JSON,
-          // In Biome's own format, which keeps a short array on one line, so `rr jsc` passes on it.
-          content: `{\n  "$schema": "${BIOME_SCHEMA}",\n  "extends": ["${BIOME_CONFIG_PKG}"]\n}\n`,
-          overwrite: scaffoldDecision === "overwrite" || ctx.flags.force,
-        }
-      : {
-          kind: "edit-json",
-          path: BIOME_JSON,
-          edits: [
-            { op: "set", path: "/$schema", value: BIOME_SCHEMA, mode: "if-missing" },
-            { op: "include", path: "/extends", value: BIOME_CONFIG_PKG, position: "start" },
-          ],
-        };
+      ? [
+          {
+            kind: "create",
+            path: BIOME_JSON,
+            // In Biome's own format, which keeps a short array on one line, so `rr jsc` passes on it.
+            content: `{\n  "$schema": "${BIOME_SCHEMA}",\n  "extends": ["${BIOME_CONFIG_PKG}"]\n}\n`,
+            overwrite: scaffoldDecision === "overwrite" || ctx.flags.force,
+          },
+        ]
+      : [
+          {
+            kind: "edit-json",
+            path: BIOME_JSON,
+            edits: [
+              { op: "set", path: "/$schema", value: BIOME_SCHEMA, mode: "if-missing" },
+              { op: "include", path: "/extends", value: BIOME_CONFIG_PKG, position: "start" },
+            ],
+          },
+          // The edit-json writes one array item per line, which Biome's format check rejects, so Biome formats the
+          // result. It's a step of its own because Biome reads the effective config from disk, and that has to be
+          // the patched biome.json, which extends @rrlab/biome-config and so can change the indent Biome wants.
+          // It relies on `rr plugins add` installing the devDependencies (Biome, the preset) before it applies
+          // the file ops, in order.
+          { kind: "edit-text", path: BIOME_JSON, edit: (source) => formatWithBiome(source, ctx.appPkg.dirPath) },
+        ];
 
-  return { devDependencies, files: [file] };
+  return { devDependencies, files };
+}
+
+/**
+ * Formats a `biome.json` source with the installed Biome, run in `cwd` so it reads that project's config.
+ * Synchronous because `edit-text` is `(source) => string`. Returns `source` as it is when Biome can't be
+ * resolved, fails (invalid JSON, a config it can't load), times out or prints nothing, so it never fails
+ * the add: the worst case is an unformatted file that `rr format --fix` fixes.
+ */
+function formatWithBiome(source: string, cwd: string): string {
+  try {
+    const requireFromPlugin = createRequire(FROM);
+    const pkgJsonPath = requireFromPlugin.resolve("@biomejs/biome/package.json");
+    const { bin } = requireFromPlugin(pkgJsonPath) as { bin?: string | Record<string, string> };
+    const rel = typeof bin === "string" ? bin : bin?.biome;
+    if (!rel) return source;
+    const formatted = execFileSync(
+      process.execPath,
+      [path.join(path.dirname(pkgJsonPath), rel), "format", `--stdin-file-path=${BIOME_JSON}`],
+      { cwd, input: source, encoding: "utf8", stdio: ["pipe", "pipe", "ignore"], timeout: FORMAT_TIMEOUT_MS },
+    );
+    return formatted.trim() === "" ? source : formatted;
+  } catch {
+    return source;
+  }
 }
 
 export async function uninstall(ctx: UninstallContext): Promise<UninstallResult> {
