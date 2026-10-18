@@ -1,5 +1,5 @@
 import { spawnSync } from "node:child_process";
-import { existsSync, mkdtempSync, rmSync } from "node:fs";
+import { existsSync, mkdtempSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 
@@ -50,7 +50,28 @@ export function gitOutput(cwd: string, args: string[]): string {
   return spawnSync("git", args, { cwd, encoding: "utf8" }).stdout.trim();
 }
 
-/** Runs `oxfmt --check` (the workspace's own oxfmt) on `files`, relative to `cwd`. */
-export function oxfmtCheck(cwd: string, files: string[]) {
-  return spawnSync(path.join(REPO_ROOT, "node_modules", ".bin", "oxfmt"), ["--check", ...files], { cwd, encoding: "utf8" });
+const WORKSPACE_BIN = path.join(REPO_ROOT, "node_modules", ".bin");
+
+/** Runs the workspace's `oxfmt --check` over the project in `cwd`. */
+export function oxfmtCheck(cwd: string) {
+  return spawnSync(path.join(WORKSPACE_BIN, "oxfmt"), ["--check"], { cwd, encoding: "utf8" });
+}
+
+/**
+ * Runs the workspace's `biome check` over the project in `cwd`, set up the way
+ * `rr plugins add biome` sets it up: a biome.json that extends
+ * `@rrlab/biome-config`, resolved through a symlink to the workspace's
+ * node_modules.
+ */
+export function biomeCheck(cwd: string) {
+  writeFileSync(
+    path.join(cwd, "biome.json"),
+    `{\n  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",\n  "extends": ["@rrlab/biome-config"]\n}\n`,
+  );
+  symlinkSync(path.join(REPO_ROOT, "node_modules"), path.join(cwd, "node_modules"), "dir");
+  return spawnSync(path.join(WORKSPACE_BIN, "biome"), ["check"], {
+    cwd,
+    encoding: "utf8",
+    env: { ...process.env, NO_COLOR: "1" },
+  });
 }

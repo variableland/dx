@@ -6,15 +6,15 @@ variableland-flavoured Node.js monorepo: pnpm workspaces + Turborepo + Vitest.
 
 ### Apps
 
-| App | Description |
-|-----|-------------|
+| App                      | Description                                   |
+| ------------------------ | --------------------------------------------- |
 | [`apps/api`](./apps/api) | Elysia (`@elysiajs/node`) backend with evlog. |
-| [`apps/web`](./apps/web) | Minimal Vite + React SPA. |
+| [`apps/web`](./apps/web) | Minimal Vite + React SPA.                     |
 
 ### Packages
 
-| Package | Description |
-|---------|-------------|
+| Package                              | Description                                                |
+| ------------------------------------ | ---------------------------------------------------------- |
 | [`packages/types`](./packages/types) | Shared zod schemas, consumed by `apps/api` and `apps/web`. |
 
 ## Prerequisites
@@ -51,17 +51,19 @@ cd packages/types && pnpm rr plugins add ts && pnpm rr plugins add tsdown && cd 
 
 Inside a workspace folder, prefix with `pnpm` (`pnpm rr <cmd>`) — pnpm resolves `rr` from the workspace root's `node_modules/.bin`.
 
-Each `rr plugins add` asks before writing a config file. `--yes` takes the defaults without asking: use it from an agent or a script. `rr plugins add oxc` swaps `biome` for oxlint and oxfmt, `rr plugins add vitest` runs the tests through `rr test`, and `rr plugins remove <name>` undoes an add.
+Each `rr plugins add` asks before writing a config file. `--yes` takes the defaults without asking: use it from an agent or a script. `rr plugins add vitest` runs the tests through `rr test`, and `rr plugins remove <name>` undoes an add.
+
+For oxlint and oxfmt instead of Biome, run `rr plugins add oxc` in place of `biome`, then narrow it to `oxc({ only: ["lint", "format"] })` in `run-run.config.mts`, so that `ts` keeps the type-check.
 
 CI runs `rr check` at the root, then `pnpm test` and `pnpm build` for the workspaces a PR affects.
 
 ## Develop
 
-| Command | Purpose |
-|---------|---------|
-| `pnpm dev` | `turbo run dev` across every app. |
-| `pnpm build` | `turbo run build`. |
-| `pnpm test` | `turbo run test` across every workspace with tests. |
-| `rr check` (root) | Lint + format check on the whole repo, then type-check every workspace that has a `tsconfig.json`. |
-| `rr jsc --fix` (root) | Auto-fix lint + format on the whole repo. |
-| `rr pack` (per workspace) | Bundle the workspace's `src/index.ts` via tsdown. |
+| Command                   | Purpose                                                                                            |
+| ------------------------- | -------------------------------------------------------------------------------------------------- |
+| `pnpm dev`                | `turbo run dev` across every app.                                                                  |
+| `pnpm build`              | `turbo run build`.                                                                                 |
+| `pnpm test`               | `turbo run test` across every workspace with tests.                                                |
+| `rr check` (root)         | Lint + format check on the whole repo, then type-check every workspace that has a `tsconfig.json`. |
+| `rr jsc --fix` (root)     | Auto-fix lint + format on the whole repo.                                                          |
+| `rr pack` (per workspace) | Bundle the workspace's `src/index.ts` via tsdown.                                                  |

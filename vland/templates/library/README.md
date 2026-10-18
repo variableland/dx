@@ -38,7 +38,9 @@ rr plugins add tsdown           # bundle (writes tsdown.config.ts)
 rr plugins add vitest           # tests through `rr test`
 ```
 
-Each `rr plugins add` installs the plugin, records it in `run-run.config.mts` and scaffolds its config file, asking first. `--yes` takes the defaults without asking: use it from an agent or a script. `rr plugins add oxc` swaps `biome` for oxlint and oxfmt, and `rr plugins remove <name>` undoes an add.
+Each `rr plugins add` installs the plugin, records it in `run-run.config.mts` and scaffolds its config file, asking first. `--yes` takes the defaults without asking: use it from an agent or a script. `rr plugins remove <name>` undoes an add.
+
+For oxlint and oxfmt instead of Biome, run `rr plugins add oxc` in place of `biome`, then narrow it to `oxc({ only: ["lint", "format"] })` in `run-run.config.mts`, so that `ts` keeps the type-check.
 
 CI runs `rr check`, `pnpm test` and `rr pack`, so it needs `biome` (or `oxc`), `ts` and `tsdown`.
 

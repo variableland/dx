@@ -2,7 +2,7 @@ import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, test } from "vitest";
 import { TEMPLATES } from "#src/actions/template.ts";
-import { createTestCli, makeTmpDir, oxfmtCheck, pathExists } from "#test/helpers.ts";
+import { biomeCheck, createTestCli, makeTmpDir, oxfmtCheck, pathExists } from "#test/helpers.ts";
 
 const cli = createTestCli();
 
@@ -158,19 +158,18 @@ describe("vland init (template scaffolding)", () => {
     ["library", "--visibility=private"],
     ["backend", ""],
     ["monorepo", ""],
-  ])("%s %s: every package.json is generated in oxfmt's key order and format", (template, flags) => {
+  ])("%s %s: every file passes oxfmt and Biome, so `rr check` starts green with either", (template, flags) => {
     const name = `fmt-${template}`;
     const r = cli(`init ${name} -t ${template} ${flags} --no-install --no-git`, { cwd: fixture.dir });
     expect(r.status).toBe(0);
 
-    // `rr check` with the oxc plugin runs `oxfmt --check`, which sorts package.json keys.
+    // oxfmt (`rr plugins add oxc`) also formats Markdown and sorts package.json keys.
     const projectDir = path.join(fixture.dir, name);
-    const packageJsons = ["package.json", "apps/api/package.json", "apps/web/package.json", "packages/types/package.json"];
-    const fmt = oxfmtCheck(
-      projectDir,
-      packageJsons.filter((file) => pathExists(path.join(projectDir, file))),
-    );
+    const fmt = oxfmtCheck(projectDir);
     expect(fmt.status, fmt.stdout + fmt.stderr).toBe(0);
+
+    const biome = biomeCheck(projectDir);
+    expect(biome.status, biome.stdout + biome.stderr).toBe(0);
   });
 
   test.each(TEMPLATES)("%s: pins every workflow action by SHA and checks out without credentials", async (template) => {
