@@ -165,7 +165,7 @@ describe("vland init (template scaffolding)", () => {
     const miseToml = await readFile(path.join(projectDir, "mise.toml"), "utf8");
     expect(miseToml).toMatch(/\[settings\]\nlockfile = true/);
 
-    // CI's mise-action runs `mise install --locked`, which needs every tool locked.
+    // mise-action runs `mise install --locked` in a project with a mise.lock. init-mise-lock.test.ts checks it in full.
     const miseLock = await readFile(path.join(projectDir, "mise.lock"), "utf8");
     for (const tool of ["node", "pnpm"]) {
       expect(miseLock).toContain(`[[tools.${tool}]]`);
