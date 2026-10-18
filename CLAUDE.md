@@ -4,39 +4,21 @@ You are an agent maintaining this monorepo. The microkernel refactor that produc
 
 ## Layout
 
-```
-dx/
-├── shared/          # @variablelab/* — shared utilities (clibuddy, loggy)
-├── run-run/         # @rrlab/* — the rrlab product
-│   ├── cli/         # @rrlab/cli — the kernel
-│   ├── *-plugin/    # @rrlab/<tool>-plugin — the official plugins, one per wrapped tool
-│   └── *-config/    # @rrlab/<tool>-config — shared presets
-└── vland/           # @variablelab/vland CLI + the scaffolds it emits
-    ├── cli/         # @variablelab/vland — the `vland init` CLI
-    └── templates/   # scaffolds emitted by `vland init`
-```
+The folders and what each holds: [docs/development.md](docs/development.md#layout).
 
 This repo hosts **two npm orgs** intentionally: `@variablelab/*` (Variableland's utilities + the `vland` CLI) and `@rrlab/*` (the `rr` CLI product). Cross-pollination is fine — clibuddy and loggy are shared utilities both stacks depend on.
 
-Stack: pnpm workspaces, Turborepo, Changesets, `tsdown` for builds, vitest for tests, Biome for lint/format, TypeScript strict, Node 24 for development (pinned in `mise.toml`). Published packages declare `engines.node` as `>=22.18.0`, the first Node 22 that strips types by default, which `rr` needs to load `run-run.config.{ts,mts}`. CI runs the full check on both that floor (`mise.floor.toml`; run it locally with `MISE_ENV=floor`) and the `mise.toml` version. Bump the floor in `mise.floor.toml` and every `engines.node` together.
+Stack: pnpm workspaces, Turborepo, Changesets, `tsdown` for builds, vitest for tests, Biome for lint/format, TypeScript strict.
 
 ## Build & verify
 
-```bash
-pnpm --filter @rrlab/cli build     # build a single package
-pnpm --filter @rrlab/cli test      # test a single package
-pnpm test                          # all (turbo handles affected detection)
-pnpm rr check                      # dogfooded lint + format + tsc
-pnpm build && pnpm test && pnpm rr check    # full check
-```
+Setup, the Node floor, the everyday commands and CI are in [docs/development.md](docs/development.md).
 
 `pnpm rr check` must be green before any commit. If `pnpm rr lint --fix` or `pnpm rr format --fix` applies safe fixes, run them and re-verify.
 
 ## Working principles (non-negotiable)
 
-1. **Strict test discipline.** Every feature + bug fix lands with tests:
-   - Features: a happy-path test and at least one failure case (in `test/integration/` or `src/**/__tests__/`).
-   - Fixes: a regression test that would have caught the bug.
+1. **Strict test discipline.** Every feature and fix lands with the tests [docs/contributing.md](docs/contributing.md#pull-requests) asks for, in the folders [docs/development.md](docs/development.md#tasks) names.
    - Refactors with no behaviour change: existing tests must still pass; remove tests only when they were asserting implementation details that no longer exist.
    - If you can't write a meaningful test, the design is probably wrong — stop and report.
 
@@ -46,7 +28,7 @@ pnpm build && pnpm test && pnpm rr check    # full check
    - Pattern drift (e.g., one file uses `for...of`, the neighbour uses `.forEach()`) → align with the closer neighbour's pattern.
    - Don't go on cleanup spelunking expeditions for files unrelated to your task. Stay in the blast radius of what you're already touching.
 
-3. **Atomic commits**, imperative present-tense English: `add PluginRegistry`, `fix tsc cwd handling on monorepos`, `refactor edit-json idempotency`. Use Changesets (`pnpm changeset`) for any change to a publishable package.
+3. **Atomic commits** as [Conventional Commits](docs/contributing.md#pull-requests), such as `feat(cli): add PluginRegistry` or `fix(ts-plugin): handle tsc cwd on monorepos`. A change to what a package ships to npm needs a changeset (`pnpm changeset`). See [docs/contributing.md](docs/contributing.md#changesets) for the bump.
 
 4. **Never publish to npm.** No `pnpm publish`, no `changeset publish`, no `npm publish`. The human handles publication.
 
@@ -54,13 +36,12 @@ pnpm build && pnpm test && pnpm rr check    # full check
 
 ## Coding conventions
 
-- **Imports**: `#src/...` aliases inside a package; `@rrlab/...` / `@variablelab/...` across packages.
+- **Imports**: `#src/...` inside `@rrlab/cli` and `@variablelab/vland`, which map it in `imports`. Relative paths in the other packages. Package names (`@rrlab/...`, `@variablelab/...`) across packages.
 - **Exports**: named exports preferred; default exports only when the consumer needs them (e.g. plugin factories).
 - **Services**: classes ending in `Service`, dependencies via constructor. Only `logger` is a singleton.
-- **Commands**: factory functions named `create<Name>Command(ctx)` returning a configured commander `Command`. A command is a thin wrapper: it resolves its provider (throwing `MissingPluginError` with its `providers` list when absent) and delegates to exactly one action. See `decisions/015-command-action-service-layering.md`.
-- **Actions**: free functions in `src/actions/` taking a **single options object** named `<Name>ActionConfig` — never positional params. Dependencies (`ctx`, the resolved provider) sit at the top level; parsed flags/positional args nest under `options` / `args` (reuse the verb-option types from `src/types/tool.ts`). Actions import only `services`/`render`/`lib` — never the CLI framework.
+- **Commands and actions** (in `@rrlab/cli`): see "Commands are thin wrappers over actions" in [run-run/cli/CLAUDE.md](run-run/cli/CLAUDE.md#commands-are-thin-wrappers-over-actions) and [decisions/015](decisions/015-command-action-service-layering.md).
 - **Errors**: domain errors are classes — kernel-internal ones in `src/errors/` (e.g. `MissingPluginError`), SDK ones in `src/lib/plugin/errors.ts` (`MultipleProvidersError`). Each builds its user-facing message from structured constructor args. Do NOT set `this.name` — keep the plain `Error:` prefix, so output stays clean.
-- **Tests**: vitest. Unit tests in `src/**/__tests__/*.test.ts`. Integration tests in `test/integration/*.test.ts`. Inline snapshots for CLI output assertions.
+- **Tests**: vitest, in the folders [docs/development.md](docs/development.md#tasks) names. Inline snapshots for CLI output assertions.
 - **No `any`.** If TypeScript pushes you there, stop and report — it usually means a design problem.
 - **Match neighbours.** Before introducing a new pattern, scan 2-3 nearby files. If they use a different style, follow theirs.
 
@@ -72,6 +53,7 @@ pnpm build && pnpm test && pnpm rr check    # full check
 
 ## Going deeper
 
+- **[`docs/contributing.md`](docs/contributing.md)** — branches, commits, tests, changesets and releases.
 - **`run-run/CLAUDE.md`** — orientation for working on the `@rrlab/*` ecosystem (plugin contract, conventions for adding/modifying plugins).
 - **`run-run/cli/CLAUDE.md`** — kernel internals (commander patterns, context lifecycle, edit-json DSL, KDL spec emission).
 - **`decisions/`** — one file per architectural decision. Read before designing anything that touches plugin lifecycle, dependency model, or templating. Format / template in `decisions/README.md`.
