@@ -4,7 +4,7 @@ import path from "node:path";
 import { type ClackPrompts, type InstallContext, ReleaseService, type UninstallContext } from "@rrlab/cli/plugin";
 import type { Pkg, ShellService } from "@variablelab/clibuddy";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { install, uninstall } from "../index.ts";
+import { install, TOOL_VERSIONS, uninstall } from "../index.ts";
 
 let tmpDir: string;
 
@@ -16,12 +16,16 @@ afterEach(async () => {
   await fs.rm(tmpDir, { recursive: true, force: true });
 });
 
+function appPkg(packageJson: Pkg["packageJson"] = {}): Pkg {
+  return { dirPath: tmpDir, packageJson } as Pkg;
+}
+
 function installCtx(overrides: Partial<InstallContext> = {}): InstallContext {
   return {
     shell: {} as ShellService,
     // biome-ignore lint/suspicious/noExplicitAny: minimal stub for the test boundary
     logger: {} as any,
-    appPkg: { dirPath: tmpDir } as Pkg,
+    appPkg: appPkg(),
     prompts: stubPrompts(),
     flags: { force: false, yes: true, nonInteractive: true },
     release: new ReleaseService(undefined),
@@ -34,7 +38,7 @@ function uninstallCtx(overrides: Partial<UninstallContext> = {}): UninstallConte
     shell: {} as ShellService,
     // biome-ignore lint/suspicious/noExplicitAny: minimal stub
     logger: {} as any,
-    appPkg: { dirPath: tmpDir } as Pkg,
+    appPkg: appPkg(),
     prompts: stubPrompts(),
     flags: { yes: true, nonInteractive: true },
     ...overrides,
@@ -57,6 +61,7 @@ describe("@rrlab/tsdown-plugin install()", () => {
       const result = await install(installCtx());
       expect(result.devDependencies).toEqual({
         tsdown: expect.stringMatching(/\^?\d/),
+        typescript: TOOL_VERSIONS.typescript.install,
         "@rrlab/tsdown-config": "latest",
       });
       expect(result.files).toHaveLength(1);
@@ -67,14 +72,17 @@ describe("@rrlab/tsdown-plugin install()", () => {
       expect(op.content).toContain("export default defineLibConfig();");
     });
 
-    it("skips (only emits tsdown dep) when a config file already exists", async () => {
+    it("skips (only emits the tool deps) when a config file already exists", async () => {
       // Under --yes, we don't silently rewrite user code.
       await fs.writeFile(
         path.join(tmpDir, "tsdown.config.ts"),
         'import { defineConfig } from "tsdown";\nexport default defineConfig({});\n',
       );
       const result = await install(installCtx());
-      expect(result.devDependencies).toEqual({ tsdown: expect.any(String) });
+      expect(result.devDependencies).toEqual({
+        tsdown: expect.any(String),
+        typescript: TOOL_VERSIONS.typescript.install,
+      });
       expect(result.files).toBeUndefined();
     });
   });
@@ -89,7 +97,10 @@ describe("@rrlab/tsdown-plugin install()", () => {
         }),
       );
       expect(confirm).toHaveBeenCalledOnce();
-      expect(result.devDependencies).toEqual({ tsdown: expect.any(String) });
+      expect(result.devDependencies).toEqual({
+        tsdown: expect.any(String),
+        typescript: TOOL_VERSIONS.typescript.install,
+      });
       expect(result.files).toBeUndefined();
     });
 
@@ -183,7 +194,10 @@ describe("@rrlab/tsdown-plugin install()", () => {
         }),
       );
       expect(result.files).toBeUndefined();
-      expect(result.devDependencies).toEqual({ tsdown: expect.any(String) });
+      expect(result.devDependencies).toEqual({
+        tsdown: expect.any(String),
+        typescript: TOOL_VERSIONS.typescript.install,
+      });
     });
   });
 
@@ -220,6 +234,29 @@ describe("@rrlab/tsdown-plugin install()", () => {
       if (op?.kind !== "edit-text") throw new Error("expected edit-text op");
       const input = await fs.readFile(path.join(tmpDir, "tsdown.config.ts"), "utf8");
       expect(() => op.edit(input)).toThrowError(/someOtherBuilder/);
+    });
+  });
+
+  describe("typescript (the lib preset's declarations need it)", () => {
+    it.each([
+      ["dependencies", { dependencies: { typescript: "^7.0.2" } }],
+      ["devDependencies", { devDependencies: { typescript: "~5.9.0" } }],
+    ])("leaves typescript out when the package already has it in %s", async (_field, packageJson) => {
+      const result = await install(installCtx({ appPkg: appPkg(packageJson) }));
+      expect(result.devDependencies).not.toHaveProperty("typescript");
+      expect(result.devDependencies).toHaveProperty("tsdown");
+    });
+
+    it("leaves typescript out on the skip path when the package already has it", async () => {
+      await fs.writeFile(path.join(tmpDir, "tsdown.config.ts"), "// custom\n");
+      const result = await install(installCtx({ appPkg: appPkg({ devDependencies: { typescript: "~5.9.0" } }) }));
+      expect(result.devDependencies).toEqual({ tsdown: expect.any(String) });
+    });
+
+    it("still adds typescript when the package only declares it as a peer", async () => {
+      // A peer isn't installed locally, and tsdown needs typescript installed to write declarations.
+      const result = await install(installCtx({ appPkg: appPkg({ peerDependencies: { typescript: ">=5.0.0" } }) }));
+      expect(result.devDependencies?.typescript).toBe(TOOL_VERSIONS.typescript.install);
     });
   });
 

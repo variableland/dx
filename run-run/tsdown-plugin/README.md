@@ -8,14 +8,14 @@
 rr plugins add tsdown
 ```
 
-`rr plugins add` installs `@rrlab/tsdown-plugin` and adds `tsdown` as a dev dependency. Once you confirm, it writes a `tsdown.config.ts` that calls a helper from [`@rrlab/tsdown-config`](https://www.npmjs.com/package/@rrlab/tsdown-config), for the kind of build you pick:
+`rr plugins add` installs `@rrlab/tsdown-plugin` and adds `tsdown` as a dev dependency. It adds `typescript` too, which tsdown needs to write declarations, unless the package already has it in `dependencies` or `devDependencies`. Once you confirm, it writes a `tsdown.config.ts` that calls a helper from [`@rrlab/tsdown-config`](https://www.npmjs.com/package/@rrlab/tsdown-config), for the kind of build you pick:
 
 - `lib`: a library, with declarations and the entry `src/index.ts`. It is the default.
 - `bin`: a CLI or Node binary, with the entry `src/run.ts`.
 
 If a `tsdown.config.*` already exists, you choose to patch it, keep it or overwrite it. Patching turns a default export that calls `defineConfig()` from `tsdown`, or either helper, into a call to the helper you picked, and keeps its options. It refuses any other shape.
 
-It needs `@rrlab/cli` and tsdown 0.22 or later.
+It needs `@rrlab/cli`, tsdown 0.22 or later and, to write declarations, TypeScript 5 or later.
 
 ## What it provides
 
@@ -43,7 +43,7 @@ Pass tsdown options to the helper to override its defaults, such as `defineLibCo
 rr plugins remove tsdown
 ```
 
-It removes `tsdown` and `@rrlab/tsdown-config` from `package.json`. If `tsdown.config.*` is the file it wrote, it deletes it; if you passed options to the helper, it rewrites the file to `defineConfig()` from `tsdown` and keeps them; any other config is left alone. Then it drops `tsdown()` from `run-run.config.{ts,mts}`.
+It removes `tsdown` and `@rrlab/tsdown-config` from `package.json`, and keeps `typescript`, which the project or another plugin may use. If `tsdown.config.*` is the file it wrote, it deletes it; if you passed options to the helper, it rewrites the file to `defineConfig()` from `tsdown` and keeps them; any other config is left alone. Then it drops `tsdown()` from `run-run.config.{ts,mts}`.
 
 ## License
 

@@ -281,6 +281,9 @@ importers:
       tsdown:
         specifier: 0.22.0
         version: 0.22.0(typescript@6.0.3)(unrun@0.2.39)
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
 
   run-run/vitest-plugin:
     dependencies:
