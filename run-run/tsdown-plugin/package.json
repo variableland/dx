@@ -1,7 +1,7 @@
 {
   "name": "@rrlab/tsdown-plugin",
   "version": "1.2.1",
-  "description": "tsdown plugin for @rrlab/cli — provides the pack capability for building TS libraries.",
+  "description": "run-run plugin for tsdown: the pack capability, a TypeScript build with tsdown.",
   "homepage": "https://github.com/withvariablelab/dx/tree/main/run-run/tsdown-plugin#readme",
   "bugs": {
     "url": "https://github.com/withvariablelab/dx/issues"

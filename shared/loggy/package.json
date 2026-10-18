@@ -1,7 +1,7 @@
 {
   "name": "@variablelab/loggy",
   "version": "0.3.1",
-  "description": "Console wrapper to make logging fun again",
+  "description": "The logger of run-run and vland: messages through consola, debug output through debug.",
   "homepage": "https://github.com/withvariablelab/dx/tree/main/shared/loggy#readme",
   "bugs": {
     "url": "https://github.com/withvariablelab/dx/issues"

@@ -1,7 +1,7 @@
 {
   "name": "@variablelab/clibuddy",
   "version": "0.8.1",
-  "description": "A helper library to create CLIs in Variable Land",
+  "description": "The helpers that run-run and vland build their CLIs with.",
   "homepage": "https://github.com/withvariablelab/dx/tree/main/shared/clibuddy#readme",
   "bugs": {
     "url": "https://github.com/withvariablelab/dx/issues"
