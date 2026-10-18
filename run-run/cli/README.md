@@ -1,22 +1,20 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/withvariablelab/dx/HEAD/run-run/cli/brand/sign-readme.svg" width="64" height="64" alt="">
+  <img src="https://raw.githubusercontent.com/withvariablelab/dx/HEAD/run-run/cli/brand/sign-readme.svg" width="64" alt="">
 </p>
 
-<h1 align="center">run-run</h1>
+<h1 align="center"><a href="https://lab.variable.land/run-run">run-run</a></h1>
 
 <p align="center">One way to run the scripts in a repo.</p>
 
-## Prerequisites
+`rr` gives a repo one set of commands, such as `rr check`, `rr test` and `rr pack`. Every tool behind them is a plugin you add, so the commands stay the same in every repo.
 
-- Node.js >= 22.18.0
-
-## Installation
+## Install
 
 ```sh
 pnpm add -D @rrlab/cli
 ```
 
-It adds the `rr` command to your project.
+It adds the `rr` command to your project. It needs Node 22.18 or later.
 
 ## Usage
 
@@ -28,7 +26,7 @@ pnpm rr help
 
 > If you have `node_modules/.bin` on your `PATH` (e.g. via `mise` or `direnv` — see [Shell completion](#shell-completion)), you can drop the `pnpm` prefix and invoke `rr` directly.
 
-See [`CLI.md`](./CLI.md) for the full reference (auto-generated per release).
+The [CLI reference](https://github.com/withvariablelab/dx/blob/main/run-run/cli/CLI.md) lists every command and flag. It is generated on each release.
 
 ## Plugins
 
@@ -122,9 +120,9 @@ test -f ~/.cache/rr-completion.fish; and source ~/.cache/rr-completion.fish
 
 Regenerate the cache after upgrading `@rrlab/cli` to pick up new commands.
 
-### Prerequisite
+### The usage CLI
 
-The [`usage`](https://usage.jdx.dev) CLI must be on your `PATH` (it powers completion at runtime). Install via one of:
+Completion runs on the [`usage`](https://usage.jdx.dev) CLI, so it has to be on your `PATH`. Install it with one of:
 
 ```sh
 mise use -g usage
@@ -138,3 +136,11 @@ To enable debug mode, set the `DEBUG` environment variable to `run-run:*` before
 ```sh
 DEBUG=run-run:* pnpm rr <command>
 ```
+
+## License
+
+The code is [MIT](https://github.com/withvariablelab/dx/blob/main/LICENSE). The Sign in `brand/` is not: its use is set by [BRAND-USE.md](https://github.com/withvariablelab/brand/blob/main/BRAND-USE.md).
+
+<p align="center">
+  <a href="https://lab.variable.land"><img src="https://cdn.jsdelivr.net/gh/withvariablelab/brand@v0.3.1/.github/readme/logo.svg" width="24" alt="" align="absmiddle">&nbsp;Variable Land</a>
+</p>

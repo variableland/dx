@@ -1,6 +1,6 @@
-# @rrlab/tsdown-plugin
+# tsdown-plugin
 
-[tsdown](https://tsdown.dev) plugin for [`@rrlab/cli`](https://npmjs.com/package/@rrlab/cli). Provides the `pack` capability for packaging TypeScript libraries for distribution.
+`@rrlab/tsdown-plugin` is a [run-run](https://github.com/withvariablelab/dx/tree/main/run-run/cli) plugin for [tsdown](https://tsdown.dev). It gives `rr` the `pack` capability, which builds a TypeScript package for npm.
 
 ## Install
 
@@ -8,15 +8,34 @@
 rr plugins add tsdown
 ```
 
-Installs `@rrlab/tsdown-plugin` and adds `tsdown` as a `devDependency`. No config file is scaffolded — tsdown reads `tsdown.config.ts` if present, otherwise uses sensible defaults. Add your own when you need to customise.
+`rr plugins add` installs `@rrlab/tsdown-plugin` and adds `tsdown` as a dev dependency. Once you confirm, it writes a `tsdown.config.ts` that calls a helper from [`@rrlab/tsdown-config`](https://www.npmjs.com/package/@rrlab/tsdown-config), for the kind of build you pick:
+
+- `lib`: a library, with declarations and the entry `src/index.ts`. It is the default.
+- `bin`: a CLI or Node binary, with the entry `src/run.ts`.
+
+If a `tsdown.config.*` already exists, you choose to patch it, keep it or overwrite it. Patching turns a default export that calls `defineConfig()` from `tsdown`, or either helper, into a call to the helper you picked, and keeps its options. It refuses any other shape.
+
+It needs `@rrlab/cli` and tsdown 0.22 or later.
 
 ## What it provides
 
-| Capability | Surface |
-|---|---|
+| Capability | Commands |
+| --- | --- |
 | `pack` | `rr pack`, `rr pack doctor` |
 
-`rr pack` builds your library: emits ESM JavaScript + `.d.ts` declarations to `dist/` so consumers can `import` from the published package.
+With the `lib` preset, `rr pack` writes ESM JavaScript and `.d.ts` declarations to `dist/`, so consumers can `import` from the published package.
+
+## Configuration
+
+The `tsdown.config.ts` it writes for the `lib` preset:
+
+```ts
+import { defineLibConfig } from "@rrlab/tsdown-config";
+
+export default defineLibConfig();
+```
+
+Pass tsdown options to the helper to override its defaults, such as `defineLibConfig({ entry: ["src/lib.ts"] })`.
 
 ## Removal
 
@@ -24,4 +43,12 @@ Installs `@rrlab/tsdown-plugin` and adds `tsdown` as a `devDependency`. No confi
 rr plugins remove tsdown
 ```
 
-Removes `tsdown` from `package.json` and drops the `tsdown()` entry from `run-run.config.{ts,mts}`. `tsdown.config.ts` — if you have one — is left alone.
+It removes `tsdown` and `@rrlab/tsdown-config` from `package.json`. If `tsdown.config.*` is the file it wrote, it deletes it; if you passed options to the helper, it rewrites the file to `defineConfig()` from `tsdown` and keeps them; any other config is left alone. Then it drops `tsdown()` from `run-run.config.{ts,mts}`.
+
+## License
+
+[MIT](https://github.com/withvariablelab/dx/blob/main/LICENSE).
+
+<p align="center">
+  <a href="https://lab.variable.land"><img src="https://cdn.jsdelivr.net/gh/withvariablelab/brand@v0.3.1/.github/readme/logo.svg" width="24" alt="" align="absmiddle">&nbsp;Variable Land</a>
+</p>

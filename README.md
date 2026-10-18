@@ -1,84 +1,26 @@
-# DX
+# dx
 
-Monorepo to hold tools made for DX.
+The monorepo of run-run and vland.
 
-## Packages
+## Projects
 
+- <img src="https://raw.githubusercontent.com/withvariablelab/dx/HEAD/run-run/cli/brand/sign-readme.svg" width="24" alt="" align="absmiddle">&nbsp;[run-run](run-run/cli): One way to run the scripts in a repo. [Project page](https://lab.variable.land/run-run).
+- <img src="https://raw.githubusercontent.com/withvariablelab/dx/HEAD/vland/cli/brand/sign-readme.svg" width="24" alt="" align="absmiddle">&nbsp;[vland](vland/cli): Starts a project in Variable Land. [Project page](https://lab.variable.land/vland).
 
-| Name      | Description                                           | Documentation                                                              |
-| --------- | ----------------------------------------------------- | -------------------------------------------------------------------------- |
-| `vland`   | CLI to init a new project in Variable Land            | [vland](./vland/cli/README.md) ([CLI reference](./vland/cli/CLI.md))       |
-| `run-run` | CLI + plugin ecosystem for scripts in Variable Land   | [run-run](./run-run/cli/README.md) ([CLI reference](./run-run/cli/CLI.md)) |
-| `shared`  | Internal utilities shared across both CLIs            | [clibuddy](./shared/clibuddy/README.md), [loggy](./shared/loggy/README.md) |
+## Repository
 
-The `run-run` ecosystem ships as opt-in pieces: the `@rrlab/cli` kernel + its official plugins (`@rrlab/<tool>-plugin`, listed in the [`@rrlab/cli` README](./run-run/cli/README.md#plugins)) + their shared config presets (`@rrlab/<tool>-config`). See [`run-run/CLAUDE.md`](./run-run/CLAUDE.md) for the architecture.
+- [`run-run/`](run-run): run-run. The CLI is in `cli/`, a plugin per tool in `*-plugin/` and the presets in `*-config/`. The [run-run README](run-run/cli/README.md#plugins) lists the plugins.
+- [`vland/`](vland): vland. The CLI is in `cli/`, and the templates it starts a project from are in `templates/`.
+- [`shared/`](shared): `@variablelab/clibuddy` and `@variablelab/loggy`, internal to the two CLIs.
 
+## Contributing
 
-## Usage
+The [contributing guide](docs/contributing.md) covers issues, pull requests and releases, and the [development guide](docs/development.md) covers setting up the repo and running its checks.
 
-To get started with any package, navigate to the respective package directory and follow the installation and usage instructions in its README.
+## License
 
-## Development
+[MIT](LICENSE).
 
-### Requirements
-
-To use this monorepo, you need to have the following tools installed:
-
-- [Node.js](https://nodejs.org) >= 24.0.0
-- [pnpm](https://pnpm.io) >= 10.0.0
-- [mise](https://mise.jdx.dev) >= 2025.3.3 <sup>(optional)</sup>
-
-### Setup
-
-1. Clone the repository:
-
-   ```bash
-   git clone git@github.com:withvariablelab/dx.git
-   ```
-
-2. Install dependencies:
-
-   ```bash
-   pnpm install
-   ```
-
-3. Run tests:
-
-   ```bash
-   pnpm test
-   ```
-
-### Commands
-
-This monorepo uses [Turborepo](https://turbo.build/repo/docs) to manage tasks. Here are some useful commands:
-
-- `pnpm build` - Build all packages
-- `pnpm test` - Run tests for all packages
-
-Additionally, the monorepo itself uses the CLIs [`run-run`](./run-run/cli/README.md) and [`vland`](./vland/cli/README.md):
-
-- `pnpm rr` - Run the `run-run` CLI in development mode
-- `pnpm vland` - Run the `vland` CLI in development mode
-
-If you have [mise](https://mise.jdx.dev) installed, you can use the following commands directly:
-
-- `rr` - Run the `run-run` CLI in development mode
-- `vland` - Run the `vland` CLI in development mode
-
-### Release
-
-This monorepo uses [Changesets](https://github.com/changesets/changesets) to manage releases. The [Changesets bot](https://github.com/changesets/bot) is also installed in the repository.
-
-**Preview Release**:
-
-To preview changes in any package, create a pull request using the branch pattern `feat/*` or `fix/*` or add a label `preview` to the PR. This triggers a special GitHub workflow that publishes the package with the changes to the npm registry under the tag `pr-<PR_NUMBER>`. To preview your changes, install the package with the corresponding tag:
-
-```bash
-pnpm add @variablelab/<package>@pr-123
-```
-
-For `@rrlab/*-plugin` packages, `rr plugins add` accepts the same `@<tag>` suffix and propagates it to the plugin's `@rrlab/*-config` sibling — falling back to `latest` for any sibling the preview didn't publish:
-
-```bash
-rr plugins add biome@pr-123
-```
+<p align="center">
+  <a href="https://lab.variable.land"><img src="https://cdn.jsdelivr.net/gh/withvariablelab/brand@v0.3.1/.github/readme/logo.svg" width="24" alt="" align="absmiddle">&nbsp;Variable Land</a>
+</p>

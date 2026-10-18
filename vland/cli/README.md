@@ -1,28 +1,25 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/withvariablelab/dx/HEAD/vland/cli/brand/sign-readme.svg" width="64" height="64" alt="">
+  <img src="https://raw.githubusercontent.com/withvariablelab/dx/HEAD/vland/cli/brand/sign-readme.svg" width="64" alt="">
 </p>
 
-<h1 align="center">vland</h1>
+<h1 align="center"><a href="https://lab.variable.land/vland">vland</a></h1>
 
 <p align="center">Starts a project in Variable Land.</p>
 
-## Prerequisites
+`vland init` fetches a template from the dx repository and fills in the project's name and author. Then it offers to install the dependencies and to initialise a git repository.
 
-- Node.js >= 22.18.0
-
-## Installation
-
-Run it directly with `npx`:
-
-```sh
-npx @variablelab/vland init
-```
-
-…or install it globally:
+## Install
 
 ```sh
 pnpm add -g @variablelab/vland
-vland init
+```
+
+It needs Node 22.18 or later.
+
+To run it once without installing it, use `npx`:
+
+```sh
+npx @variablelab/vland init
 ```
 
 ## Usage
@@ -33,7 +30,7 @@ vland init my-app -t library      # explicit template
 vland init my-app -t backend --no-install --no-git
 ```
 
-See [`CLI.md`](./CLI.md) for the full reference (auto-generated per release).
+The [CLI reference](https://github.com/withvariablelab/dx/blob/main/vland/cli/CLI.md) lists every command and flag. It is generated on each release.
 
 ### Templates
 
@@ -43,7 +40,7 @@ See [`CLI.md`](./CLI.md) for the full reference (auto-generated per release).
 | `backend`  | An Elysia (`@elysiajs/node`) backend with evlog, Vitest, Dockerfile, CI shape.            |
 | `monorepo` | pnpm + Turbo workspace with an Elysia API, a Vite-React SPA, and a few internal packages. |
 
-All templates target Node.js, pin Node.js and pnpm with [mise](https://mise.jdx.dev) (`mise.toml` and `mise.lock`), run their GitHub Actions on SHA-pinned actions checked by [zizmor](https://docs.zizmor.sh), and ship [`@rrlab/cli`](https://github.com/withvariablelab/dx/tree/main/run-run) (`rr`) as the single entry point for lint, format, type-check, and build. The per-tool config files (`biome.json`, `tsconfig.json`, `tsdown.config.ts`) are not bundled — run `rr plugins add biome ts tsdown` (one at a time) in your new project to opt in. See the scaffolded README for the exact post-install setup.
+All templates target Node.js, pin Node.js and pnpm with [mise](https://mise.jdx.dev) (`mise.toml` and `mise.lock`), run their GitHub Actions on SHA-pinned actions checked by [zizmor](https://docs.zizmor.sh), and ship [`@rrlab/cli`](https://github.com/withvariablelab/dx/tree/main/run-run/cli) (`rr`) as the single entry point for lint, format, type-check, and build. The per-tool config files (`biome.json`, `tsconfig.json`, `tsdown.config.ts`) are not bundled: in your new project, run `rr plugins add` once per tool (`biome`, `ts`, `tsdown`) to opt in. The scaffolded README has the exact post-install setup.
 
 ## Shell completion
 
@@ -62,7 +59,7 @@ command -v vland >/dev/null 2>&1; and vland completion fish 2>/dev/null | source
 
 The `command -v` guard skips the line when no `vland` is on `PATH`. The `2>/dev/null` covers a mise shim with no active version: it passes the guard, then fails on stderr. If completion doesn't load, run `vland completion zsh` by hand to see why.
 
-**Prerequisite:** the [`usage`](https://usage.jdx.dev) CLI must be on your `PATH` (it powers completion at runtime). Install via one of:
+Completion runs on the [`usage`](https://usage.jdx.dev) CLI, so it has to be on your `PATH`. Install it with one of:
 
 ```sh
 mise use -g usage
@@ -84,3 +81,11 @@ To point `init` at local templates instead of fetching from GitHub (useful when 
 ```sh
 VLAND_TEMPLATES_DIR=/absolute/path/to/dx/vland/templates vland init my-app -t library
 ```
+
+## License
+
+The code is [MIT](https://github.com/withvariablelab/dx/blob/main/LICENSE). The Sign in `brand/` is not: its use is set by [BRAND-USE.md](https://github.com/withvariablelab/brand/blob/main/BRAND-USE.md).
+
+<p align="center">
+  <a href="https://lab.variable.land"><img src="https://cdn.jsdelivr.net/gh/withvariablelab/brand@v0.3.1/.github/readme/logo.svg" width="24" alt="" align="absmiddle">&nbsp;Variable Land</a>
+</p>

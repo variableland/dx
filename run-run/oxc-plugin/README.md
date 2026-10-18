@@ -1,6 +1,6 @@
-# @rrlab/oxc-plugin
+# oxc-plugin
 
-[oxc](https://oxc.rs) plugin for [`@rrlab/cli`](https://npmjs.com/package/@rrlab/cli). Provides `lint` (oxlint), `format` (oxfmt), and `tsc` (oxlint type-aware) capabilities.
+`@rrlab/oxc-plugin` is a [run-run](https://github.com/withvariablelab/dx/tree/main/run-run/cli) plugin for [oxc](https://oxc.rs). It gives `rr` the `lint` (oxlint), `format` (oxfmt) and `typecheck` (oxlint type-aware) capabilities.
 
 ## Install
 
@@ -8,22 +8,25 @@
 rr plugins add oxc
 ```
 
-Installs `@rrlab/oxc-plugin` and adds `oxlint`, `oxfmt`, and `oxlint-tsgolint` as `devDependencies`. No config file is scaffolded — oxlint and oxfmt work with sensible defaults and the projects that need to customise add their own `oxlintrc.json` / `.oxfmtrc` on demand.
+`rr plugins add` installs `@rrlab/oxc-plugin` and adds `oxlint`, `oxfmt` and `oxlint-tsgolint` as dev dependencies. It writes no config file: oxlint and oxfmt run with their defaults, and a project that needs to change them adds its own `oxlintrc.json` or `.oxfmtrc`.
 
-For `rr jsc` (lint + format together), the kernel composes oxlint + oxfmt automatically when both capabilities are present and no plugin provides `jsc` directly.
+It needs `@rrlab/cli`, oxlint 1 or later and oxfmt 0.67 or later. The type check also needs `oxlint-tsgolint` 0.24 or later, an optional peer.
 
 ## What it provides
 
-| Capability | Surface | Underlying command |
-|---|---|---|
-| `lint` | `rr lint`, `rr lint doctor` | `oxlint --check` / `--fix` |
-| `format` | `rr format`, `rr format doctor` | `oxfmt --check` / `--fix` |
-| `typecheck` | `rr tsc`, `rr tsc doctor` | `oxlint --type-aware --type-check` (via `oxlint-tsgolint`) |
-| `jsc` (composed) | `rr jsc` (synthesised lint + format) | |
+| Capability | Commands | Underlying command |
+| --- | --- | --- |
+| `lint` | `rr lint`, `rr lint doctor` | `oxlint`, `oxlint --fix` |
+| `format` | `rr format`, `rr format doctor` | `oxfmt --check`, `oxfmt --write` |
+| `typecheck` | `rr tsc`, `rr tsc doctor` | `oxlint --type-aware --type-check` |
+
+The type check runs through `oxlint-tsgolint`.
+
+`rr jsc` runs lint and format together. When no plugin provides `jscheck`, `rr` composes it from the `lint` and `format` providers, so with oxc alone it runs oxlint and oxfmt.
 
 ## Picking only some capabilities
 
-Pass `only` to mix oxc with another plugin. Example: biome for lint+format, oxc just for the type-aware checks:
+Pass `only` to mix oxc with another plugin, such as Biome for lint and format and oxc for the type-aware checks:
 
 ```ts
 import biome from "@rrlab/biome-plugin";
@@ -38,7 +41,7 @@ export default defineConfig({
 });
 ```
 
-The `only` array is typed against the kinds *this* plugin provides (`"lint" | "format" | "typecheck"` for oxc), so typos like `oxc({ only: ["pack"] })` are caught at compile time.
+The `only` array is typed against the capabilities *this* plugin provides (`"lint" | "format" | "typecheck"` for oxc), so a typo like `oxc({ only: ["pack"] })` fails at compile time.
 
 ## Removal
 
@@ -46,4 +49,12 @@ The `only` array is typed against the kinds *this* plugin provides (`"lint" | "f
 rr plugins remove oxc
 ```
 
-Removes `oxlint`, `oxfmt`, and `oxlint-tsgolint` from `package.json` and drops the `oxc()` entry from `run-run.config.{ts,mts}`. Tool config files (`oxlintrc.json`, `.oxfmtrc`) — if any — are left alone, they belong to the user.
+It removes `oxlint`, `oxfmt` and `oxlint-tsgolint` from `package.json`, and drops `oxc()` from `run-run.config.{ts,mts}`. It leaves `oxlintrc.json` and `.oxfmtrc` alone, if you have them: they belong to you.
+
+## License
+
+[MIT](https://github.com/withvariablelab/dx/blob/main/LICENSE).
+
+<p align="center">
+  <a href="https://lab.variable.land"><img src="https://cdn.jsdelivr.net/gh/withvariablelab/brand@v0.3.1/.github/readme/logo.svg" width="24" alt="" align="absmiddle">&nbsp;Variable Land</a>
+</p>
