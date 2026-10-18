@@ -36,11 +36,10 @@ const PLAIN_TSCONFIG = `${JSON.stringify({
   include: ["src"],
 })}\n`;
 
-let tmpDir: string | undefined;
+const tmpDirs: string[] = [];
 
 afterEach(async () => {
-  if (tmpDir) await fs.rm(tmpDir, { recursive: true, force: true });
-  tmpDir = undefined;
+  await Promise.all(tmpDirs.splice(0).map((dir) => fs.rm(dir, { recursive: true, force: true })));
 });
 
 /**
@@ -67,7 +66,8 @@ function makePackage(files: Record<string, string>, deps = ["typescript"]) {
 }
 
 async function makeDir(files: Record<string, string>, deps: string[] = []) {
-  tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "rr-astro-plugin-"));
+  const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "rr-astro-plugin-"));
+  tmpDirs.push(tmpDir);
   for (const [rel, content] of Object.entries(files)) {
     const abs = path.join(tmpDir, rel);
     await fs.mkdir(path.dirname(abs), { recursive: true });
@@ -263,5 +263,22 @@ describe("AstroCheckService.doctor()", () => {
     expect(report.ok).toBe(false);
     expect(report.output).toContain("requires typescript to be installed");
     expect(report.output).not.toContain("@astrojs/check");
+  });
+
+  it("checks the package it's given, not the one rr runs in", async () => {
+    // `rr tsc doctor` at a workspace root hands it each package `rr tsc` checks.
+    const root = await makeProject({}, ["astro"]);
+    const pkg = await makePackage({});
+    const report = await service(root).doctor({ cwd: pkg });
+    expect(report.ok, report.output).toBe(true);
+    expect(report.output).toContain("$ tsc --help");
+  });
+
+  it("fails for a package it's given that can't run its checker, wherever rr runs", async () => {
+    const root = await makeProject({});
+    const pkg = await makeProject({}, ["astro"]);
+    const report = await service(root).doctor({ cwd: pkg });
+    expect(report.ok).toBe(false);
+    expect(report.output).toContain("requires @astrojs/check, typescript to be installed");
   });
 });

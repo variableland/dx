@@ -1,4 +1,12 @@
-import type { Doctor, Formatter, Linter, RunReport, StaticChecker, StaticCheckerOptions } from "#src/types/tool.ts";
+import type {
+  Doctor,
+  DoctorOptions,
+  Formatter,
+  Linter,
+  RunReport,
+  StaticChecker,
+  StaticCheckerOptions,
+} from "#src/types/tool.ts";
 
 export class StaticCheckService implements StaticChecker, Doctor {
   #linter: Linter & Doctor;
@@ -23,8 +31,8 @@ export class StaticCheckService implements StaticChecker, Doctor {
     ]);
   }
 
-  async doctor(): Promise<RunReport> {
-    const [lintRes, fmtRes] = await Promise.all([this.#linter.doctor(), this.#formatter.doctor()]);
+  async doctor(options: DoctorOptions = {}): Promise<RunReport> {
+    const [lintRes, fmtRes] = await Promise.all([this.#linter.doctor(options), this.#formatter.doctor(options)]);
 
     return this.#mergeReports([
       { ui: this.#linter.ui, report: lintRes },

@@ -24,7 +24,9 @@ In a monorepo, `rr tsc` checks each package with a `tsconfig.json`. It runs `ast
 
 `astro check` also checks your `.ts` files, so in an Astro project it replaces `ts`. Configure one `typecheck` provider. If another plugin also provides one, such as `ts` or `oxc`, narrow it: `oxc({ only: ["lint", "format"] })`.
 
-If `@astrojs/check` or `typescript` is missing, `rr tsc` fails and names it. Left alone, `astro check` would prompt to install them instead of checking anything. A package that isn't an Astro package needs only `typescript`, and there `rr tsc doctor` checks `tsc` instead of `astro`.
+If `@astrojs/check` or `typescript` is missing, `rr tsc` fails and names it. Left alone, `astro check` would prompt to install them instead of checking anything. A package that isn't an Astro package needs only `typescript`.
+
+`rr tsc doctor` checks the packages `rr tsc` checks, each for the checker `rr tsc` runs there: `astro` and what `astro check` needs in an Astro package, `tsc` in the others.
 
 ## Removal
 

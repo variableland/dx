@@ -1,3 +1,4 @@
+import type { Pkg } from "@variablelab/clibuddy";
 import { type BoardTask, reportTask, runBoard } from "#src/render/board.ts";
 import { fanoutTitle, targetLabel } from "#src/render/labels.ts";
 import type { ContextValue } from "#src/services/context.ts";
@@ -9,14 +10,25 @@ export type TscActionConfig = {
   tsc: TypeChecker & Doctor;
 };
 
+export type TscDoctorActionConfig = {
+  ctx: ContextValue;
+  tsc: TypeChecker & Doctor;
+};
+
 type Scripts = Record<string, string | undefined> | undefined;
 
 const getPreScript = (scripts: Scripts) => scripts?.pretscheck ?? scripts?.pretsc ?? scripts?.pretypecheck;
 
+const isTsProject = (appPkg: Pkg, dir: string) => appPkg.hasFile("tsconfig.json", dir);
+
+/** The packages a monorepo's `rr tsc` checks: each workspace package with a `tsconfig.json`, never the root. */
+async function getTsProjects(appPkg: Pkg) {
+  const projects = await appPkg.getWorkspaceProjects();
+  return projects.filter((project) => isTsProject(appPkg, project.rootDir));
+}
+
 export async function tscAction({ ctx, tsc }: TscActionConfig): Promise<void> {
   const { appPkg, shell } = ctx;
-
-  const isTsProject = (dir: string) => appPkg.hasFile("tsconfig.json", dir);
 
   // A package's `pretscheck`/`pretsc`/`pretypecheck` runs captured, inside the task, so its
   // output stays grouped with that package. It may use shell features, so it
@@ -38,7 +50,7 @@ export async function tscAction({ ctx, tsc }: TscActionConfig): Promise<void> {
     });
 
   if (!appPkg.isMonorepo()) {
-    if (!isTsProject(appPkg.dirPath)) {
+    if (!isTsProject(appPkg, appPkg.dirPath)) {
       logger.info("No tsconfig.json found, skipping typecheck");
       return;
     }
@@ -51,8 +63,7 @@ export async function tscAction({ ctx, tsc }: TscActionConfig): Promise<void> {
     return;
   }
 
-  const projects = await appPkg.getWorkspaceProjects();
-  const tsProjects = projects.filter((project) => isTsProject(project.rootDir));
+  const tsProjects = await getTsProjects(appPkg);
 
   if (!tsProjects.length) {
     logger.warn("No ts projects found in the monorepo, skipping typecheck");
@@ -61,5 +72,28 @@ export async function tscAction({ ctx, tsc }: TscActionConfig): Promise<void> {
 
   const tasks = tsProjects.map((p) => typecheckTask(p.manifest.name ?? p.rootDir, p.rootDir, p.manifest.scripts));
   const result = await runBoard(tasks, { title: fanoutTitle("tsc", tsc, tsProjects.length, "packages") });
+  if (!result.ok) process.exitCode = 1;
+}
+
+/**
+ * `rr tsc doctor` — the typecheck provider's `doctor`, run in the packages
+ * `rr tsc` checks: in a monorepo, one row per workspace package with a
+ * `tsconfig.json`; otherwise the single `doctor (<tool>) · <pkg>` row. Where
+ * `rr tsc` would skip (no `tsconfig.json`), it still checks the current
+ * package, since the tool can be broken there all the same.
+ */
+export async function tscDoctorAction({ ctx, tsc }: TscDoctorActionConfig): Promise<void> {
+  const { appPkg } = ctx;
+  const tsProjects = appPkg.isMonorepo() ? await getTsProjects(appPkg) : [];
+
+  if (!tsProjects.length) {
+    const label = targetLabel("doctor", tsc, appPkg);
+    const result = await runBoard([reportTask(label, () => tsc.doctor({ cwd: appPkg.dirPath }))]);
+    if (!result.ok) process.exitCode = 1;
+    return;
+  }
+
+  const tasks = tsProjects.map((p) => reportTask(p.manifest.name ?? p.rootDir, () => tsc.doctor({ cwd: p.rootDir })));
+  const result = await runBoard(tasks, { title: fanoutTitle("doctor", tsc, tsProjects.length, "packages") });
   if (!result.ok) process.exitCode = 1;
 }

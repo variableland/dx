@@ -1,5 +1,4 @@
-import { doctorOneAction } from "#src/actions/doctor.ts";
-import { tscAction } from "#src/actions/tsc.ts";
+import { tscAction, tscDoctorAction } from "#src/actions/tsc.ts";
 import type { ContextValue } from "#src/services/context.ts";
 import { createCommand } from "../base.ts";
 
@@ -18,6 +17,6 @@ export function createTsCheckCommand(ctx: ContextValue) {
     .addHelpTextAfter(ctx)
     .addDoctorCommand(async () => {
       const tsc = ctx.plugins.getServiceOrThrow("typecheck");
-      await doctorOneAction({ ctx, service: tsc });
+      await tscDoctorAction({ ctx, tsc });
     });
 }

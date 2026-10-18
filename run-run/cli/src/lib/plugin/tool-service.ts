@@ -1,5 +1,5 @@
 import { palette, resolvePackageBin, type ShellService } from "@variablelab/clibuddy";
-import type { RunReport } from "#src/types/tool.ts";
+import type { DoctorOptions, RunReport } from "#src/types/tool.ts";
 
 export type ToolServiceOptions = {
   pkg?: string;
@@ -58,8 +58,7 @@ export class ToolService {
    * and the caller can aggregate. See `decisions/013-check-stream-to-capture-contract.md`.
    */
   async runReport(args: string[] = [], options: RunReportOptions = {}): Promise<RunReport> {
-    const sh = options.cwd ? this.#shellService.at(options.cwd) : this.#shellService;
-    const output = await sh.runCaptured(await this.getBinDir(), args, { throwOnError: false });
+    const output = await this.#shellAt(options.cwd).runCaptured(await this.getBinDir(), args, { throwOnError: false });
     // Lead the captured output with the command line that ran — the same
     // `$ <cmd>` the streaming path prints via `printCmdLine`, so it stays
     // visible even when captured. It's dim so it reads as context, not result.
@@ -83,13 +82,14 @@ export class ToolService {
    * mirroring `runReport`'s strict `=== 0`.
    */
   async runStreamed(command: string, args: string[] = [], options: RunReportOptions = {}): Promise<number> {
-    const sh = options.cwd ? this.#shellService.at(options.cwd) : this.#shellService;
-    const result = await sh.run(command, args, { throwOnError: false, verbose: false });
+    const result = await this.#shellAt(options.cwd).run(command, args, { throwOnError: false, verbose: false });
     return result.exitCode ?? 1;
   }
 
-  async doctor(): Promise<RunReport> {
-    const output = await this.#shellService.runCaptured(await this.getBinDir(), ["--help"], { throwOnError: false });
+  async doctor(options: DoctorOptions = {}): Promise<RunReport> {
+    const output = await this.#shellAt(options.cwd).runCaptured(await this.getBinDir(), ["--help"], {
+      throwOnError: false,
+    });
     const ok = output.exitCode === 0;
     // Same shape as the other verbs: lead with the `$ <bin> --help` liveness
     // command (the tool's full help text is noise on success, so it's dropped);
@@ -99,6 +99,11 @@ export class ToolService {
     if (ok) return { ok, output: command };
     const detail = combine(output.stdout, output.stderr);
     return { ok, output: detail ? `${command}\n${detail}` : command };
+  }
+
+  /** The shell to spawn in: at `cwd` when given, else where `rr` runs. */
+  #shellAt(cwd: string | undefined): ShellService {
+    return cwd ? this.#shellService.at(cwd) : this.#shellService;
   }
 }
 

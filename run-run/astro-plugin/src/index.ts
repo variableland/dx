@@ -2,6 +2,7 @@ import fs from "node:fs/promises";
 import { createRequire } from "node:module";
 import path from "node:path";
 import {
+  type DoctorOptions,
   definePlugin,
   type InstallContext,
   type InstallResult,
@@ -57,10 +58,11 @@ export class AstroCheckService extends ToolService implements TypeChecker {
     return this.runReport(["check"], { cwd });
   }
 
-  override async doctor(): Promise<RunReport> {
-    const { astro, missing } = await checkerAt(this.#cwd);
+  override async doctor(options: DoctorOptions = {}): Promise<RunReport> {
+    const cwd = options.cwd ?? this.#cwd;
+    const { astro, missing } = await checkerAt(cwd);
     if (missing.length > 0) return missingDepsReport(missing);
-    return astro ? super.doctor() : this.#tsc.doctor();
+    return astro ? super.doctor({ cwd }) : this.#tsc.doctor({ cwd });
   }
 }
 
