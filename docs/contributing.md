@@ -9,7 +9,7 @@ dx takes bug reports, fixes and small features for run-run, vland and their pack
 
 ## Pull requests
 
-1. Branch from `main` with a prefix: `feat/`, `fix/`, `docs/`, `chore/` or `test/`.
+1. Branch from `main` with a prefix: `feat/`, `fix/`, `docs/`, `ci/`, `chore/` or `test/`.
 2. Write commits as [Conventional Commits](https://www.conventionalcommits.org), such as `fix(oxc-plugin): stop installing a flaky oxlint-tsgolint`. The pull request title takes the same form, because it becomes the squash commit.
 3. A feature lands with a test of the happy path and at least one failure case, and a fix with a regression test.
 4. Run `pnpm rr check` and `pnpm test` before you push.
@@ -29,4 +29,4 @@ Nobody edits versions or `CHANGELOG.md` by hand, and nobody publishes from a clo
 
 When changesets land on `main`, the Release job opens or updates a "chore: update versions" pull request as `vland-bot`. A maintainer merges it, and the next run on `main` publishes each new version to npm, with npm trusted publishing, and tags it.
 
-A new tag of `@rrlab/cli` or `@variablelab/vland` regenerates the `CLI.md` of both CLIs in a "chore: regenerate CLI docs" pull request, which a maintainer merges too.
+A new tag of a CLI regenerates the `CLI.md` of every CLI in the cli docs workflow, in a "chore: regenerate CLI docs" pull request, which a maintainer merges too.
