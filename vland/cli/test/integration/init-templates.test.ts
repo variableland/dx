@@ -126,8 +126,28 @@ describe("vland init (template scaffolding)", () => {
 
     const typesPkg = JSON.parse(await readFile(path.join(projectDir, "packages", "types", "package.json"), "utf8"));
     expect(typesPkg.name).toBe(`@${name}/types`);
+  });
 
-    expect(await readChangelogRepo(projectDir)).toBe(`variableland/${name}`);
+  test("monorepo: ships no Changesets, since every package is private and nothing publishes", async () => {
+    const name = "no-release";
+    const r = cli(`init ${name} -t monorepo --no-install --no-git`, { cwd: fixture.dir });
+    expect(r.status).toBe(0);
+
+    // Changesets skips private packages, so a release setup here would have nothing to version or publish.
+    const projectDir = path.join(fixture.dir, name);
+    for (const dir of ["", "apps/api", "apps/web", "packages/types"]) {
+      const pkg = JSON.parse(await readFile(path.join(projectDir, dir, "package.json"), "utf8"));
+      expect(pkg.private, `${dir || "root"} package.json`).toBe(true);
+    }
+
+    const mentions: string[] = [];
+    for (const entry of await readdir(projectDir, { recursive: true, withFileTypes: true })) {
+      if (!entry.isFile()) continue;
+      const file = path.join(entry.parentPath, entry.name);
+      const relative = path.relative(projectDir, file);
+      if (/changeset/i.test(relative) || /changeset/i.test(await readFile(file, "utf8"))) mentions.push(relative);
+    }
+    expect(mentions).toEqual([]);
   });
 
   test.each(TEMPLATES)("%s: pins node and pnpm with mise and a lockfile", async (template) => {
@@ -151,6 +171,20 @@ describe("vland init (template scaffolding)", () => {
       expect(miseLock).toContain(`[[tools.${tool}]]`);
       expect(miseLock).toContain(`[tools.${tool}."platforms.linux-x64"]`);
     }
+  });
+
+  test.each(TEMPLATES)("%s: lets lefthook's postinstall run with allowBuilds, which pnpm 11 still reads", async (template) => {
+    const name = `builds-${template}`;
+    const r = cli(`init ${name} -t ${template} --no-install --no-git`, { cwd: fixture.dir });
+    expect(r.status).toBe(0);
+
+    // pnpm 11 drops onlyBuiltDependencies, then fails the install on lefthook's unapproved build script.
+    const workspace = await readFile(path.join(fixture.dir, name, "pnpm-workspace.yaml"), "utf8");
+    expect(workspace).toMatch(/^allowBuilds:\n {2}lefthook: true$/m);
+    expect(workspace).not.toContain("onlyBuiltDependencies");
+    expect(workspace).not.toContain("@biomejs/biome");
+    // A lefthook restored from the side-effects cache skips its postinstall, so no git hooks get installed.
+    expect(workspace).toMatch(/^sideEffectsCache: false$/m);
   });
 
   test.each([

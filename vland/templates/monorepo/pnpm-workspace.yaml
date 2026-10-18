@@ -1,9 +1,10 @@
 packages:
   - apps/*
   - packages/*
-onlyBuiltDependencies:
-  - "@biomejs/biome"
-  - lefthook
+
+# Dependencies whose build scripts pnpm runs on install; allowBuilds needs pnpm >= 10.26.
+allowBuilds:
+  lefthook: true
 
 # lefthook's postinstall installs the git hooks, so it has to run on every install:
 # with the side-effects cache on, a lefthook already built for another project skips it.
