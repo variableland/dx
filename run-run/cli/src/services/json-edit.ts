@@ -9,6 +9,10 @@ import type { JsonEdit } from "#src/lib/plugin/types.ts";
  * Paths follow JSON Pointer (RFC 6901): `"/extends"`,
  * `"/compilerOptions/strict"`. Indices are valid path segments for arrays
  * (`"/extends/0"`).
+ *
+ * When the edits leave the document as it was, returns `source` verbatim:
+ * re-stringifying would still reflow the file (2-space indent, one array
+ * item per line), so a no-op edit leaves it byte-identical.
  */
 export function applyJsonEdits(source: string, edits: JsonEdit[]): string {
   // biome-ignore lint/suspicious/noExplicitAny: cjson exposes the parsed tree as a structurally-typed JS object/array
@@ -16,9 +20,13 @@ export function applyJsonEdits(source: string, edits: JsonEdit[]): string {
   if (root == null || typeof root !== "object") {
     throw new Error(`applyJsonEdits: expected a JSON object/array at the top level, got ${typeof root}.`);
   }
+  // A snapshot, not a reference: the edits mutate `root` in place. Comments live in
+  // symbol keys, which `JSON.stringify` skips, and no edit touches them.
+  const before = JSON.stringify(root);
   for (const edit of edits) {
     root = applyOne(root, edit);
   }
+  if (JSON.stringify(root) === before) return source;
   return `${cjson.stringify(root, null, 2)}\n`;
 }
 

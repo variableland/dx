@@ -58,13 +58,25 @@ describe("applyFileOp — edit-json", () => {
     expect(JSON.parse(await read("b.json"))).toEqual({ extends: "new" });
   });
 
-  it("reports unchanged when re-applying the same edit (already canonical)", async () => {
+  it("reports unchanged when re-applying the same edit", async () => {
     await write("b.json", `{ "extends": "old" }`);
     const edit = { kind: "edit-json", path: "b.json", edits: [{ op: "set", path: "/extends", value: "new" }] } satisfies FileOp;
-    // First application normalises the file to the engine's canonical output;
-    // the second is a genuine no-op (same value, already-canonical text).
+    // The second application changes nothing in the document, so the engine
+    // returns the file's text as it is.
     expect((await applyFileOp(dir, edit, false)).status).toBe("edited");
     expect((await applyFileOp(dir, edit, false)).status).toBe("unchanged");
+  });
+
+  it("leaves a file byte-identical when no edit changes it", async () => {
+    const source = `{\n\t"extends": ["a", "b"],\n\t"include": ["src"]\n}\n`;
+    await write("b.json", source);
+    const outcome = await applyFileOp(
+      dir,
+      { kind: "edit-json", path: "b.json", edits: [{ op: "include", path: "/extends", value: "a", position: "start" }] },
+      false,
+    );
+    expect(outcome.status).toBe("unchanged");
+    expect(await read("b.json")).toBe(source);
   });
 
   it("reports missing when the target file is absent", async () => {

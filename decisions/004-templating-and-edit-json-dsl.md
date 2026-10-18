@@ -1,6 +1,7 @@
 # 004: Templating strategy + JSON edit DSL for install/uninstall hooks
 
 - **Date**: 2026-05-19
+- **Amended**: 2026-10-18 — an edit that changes nothing leaves the file byte-identical, and biome-plugin formats the `biome.json` it patches with Biome, because the user's formatter no longer re-applies their style before `rr check` runs (see 017)
 - **Status**: Applied
 - **Files affected**: `run-run/cli/src/plugin/types.ts`, `run-run/cli/src/services/json-edit.ts`, `run-run/cli/src/program/commands/plugins.ts`, each plugin's `install()` / `uninstall()` hook, `run-run/ts-config/`, `run-run/biome-config/`.
 
@@ -36,7 +37,7 @@ The second question matters specifically for migration agents — running `rr pl
 
 - Lighter than `jsonc-parser` for the same outcome we actually care about (comments survive).
 - Familiar mental model: `parse` → mutate → `stringify`, same as `JSON`. The only difference is that comments come along for the ride.
-- Quote style and indent get normalised on re-write — acceptable cosmetic loss; the user's formatter (biome, prettier) re-applies their style on next run.
+- Quote style and indent get normalised on re-write — acceptable cosmetic loss; the user's formatter (biome, prettier) re-applies their style on next run. **No longer holds** (amended by 017): `rr check` reports formatting without fixing it, so a reflowed file fails it right after `rr plugins add`. An edit that changes nothing now leaves the file byte-identical, and biome-plugin formats the `biome.json` it patches. Any other real change is still normalised.
 
 ## Edit DSL
 

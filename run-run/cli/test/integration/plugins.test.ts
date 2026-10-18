@@ -171,6 +171,32 @@ describe("rr plugins", () => {
       expect(jsc.status, jsc.stdout + jsc.stderr).toBe(0);
     });
 
+    test("patches an existing biome.json into one that passes `rr jsc`", () => {
+      fixture = makeFixture("plugins-add-no-tty-patch", {
+        ".gitignore": "node_modules\n.stub-bin\n",
+        "package.json": pnpmPkg(),
+        "biome.json": `{\n  "formatter": { "indentStyle": "space" },\n  "files": { "includes": ["**", "!dist"] }\n}\n`,
+      });
+
+      const r = cli("plugins add biome", { cwd: fixture.dir, env: stubPackageManager(fixture.dir) });
+      expect(r.stdout + r.stderr).toContain("Edited biome.json");
+      expect(r.status).toBe(0);
+
+      expect(readFileSync(path.join(fixture.dir, "biome.json"), "utf8")).toBe(`{
+  "formatter": {
+    "indentStyle": "space"
+  },
+  "files": {
+    "includes": ["**", "!dist"]
+  },
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "extends": ["@rrlab/biome-config"]
+}
+`);
+      const jsc = cli("jsc", { cwd: fixture.dir });
+      expect(jsc.status, jsc.stdout + jsc.stderr).toBe(0);
+    });
+
     test("ts picks the React preset for a package that depends on react", () => {
       fixture = makeFixture("plugins-add-no-tty-react", {
         "package.json": pnpmPkg({ dependencies: { react: "^19.0.0" } }),
@@ -181,6 +207,43 @@ describe("rr plugins", () => {
 
       const tsconfig = JSON.parse(readFileSync(path.join(fixture.dir, "tsconfig.json"), "utf8"));
       expect(tsconfig.extends).toBe("@rrlab/ts-config/react");
+    });
+
+    test("biome again with --force leaves biome.json byte-identical", () => {
+      fixture = makeFixture("plugins-add-no-tty-force", {
+        ".gitignore": "node_modules\n.stub-bin\n",
+        "package.json": pnpmPkg(),
+      });
+      const env = stubPackageManager(fixture.dir);
+      expect(cli("plugins add biome", { cwd: fixture.dir, env }).status).toBe(0);
+      const biomeJson = readFileSync(path.join(fixture.dir, "biome.json"), "utf8");
+
+      const r = cli("plugins add biome --force", { cwd: fixture.dir, env });
+      expect(r.stdout + r.stderr).toContain("No changes for biome.json");
+      expect(r.status).toBe(0);
+
+      expect(readFileSync(path.join(fixture.dir, "biome.json"), "utf8")).toBe(biomeJson);
+      const jsc = cli("jsc", { cwd: fixture.dir });
+      expect(jsc.status, jsc.stdout + jsc.stderr).toBe(0);
+    });
+
+    test("ts with --force leaves a tsconfig.json that already extends the preset byte-identical", () => {
+      const tsconfig = `{\n  "extends": "@rrlab/ts-config/no-dom/app",\n  "compilerOptions": { "lib": ["ES2022"] },\n  "include": ["src"]\n}\n`;
+      fixture = makeFixture("plugins-add-no-tty-ts-force", {
+        ".gitignore": "node_modules\n.stub-bin\n",
+        "package.json": pnpmPkg(),
+        "tsconfig.json": tsconfig,
+      });
+      const env = stubPackageManager(fixture.dir);
+      expect(cli("plugins add biome", { cwd: fixture.dir, env }).status).toBe(0);
+
+      const r = cli("plugins add ts --force", { cwd: fixture.dir, env });
+      expect(r.stdout + r.stderr).toContain("No changes for tsconfig.json");
+      expect(r.status).toBe(0);
+
+      expect(readFileSync(path.join(fixture.dir, "tsconfig.json"), "utf8")).toBe(tsconfig);
+      const jsc = cli("jsc", { cwd: fixture.dir });
+      expect(jsc.status, jsc.stdout + jsc.stderr).toBe(0);
     });
   });
 

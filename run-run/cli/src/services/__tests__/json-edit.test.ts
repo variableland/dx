@@ -91,6 +91,24 @@ describe("applyJsonEdits", () => {
     });
   });
 
+  describe("no-op edits", () => {
+    it("return the source unchanged when no edit changes the document", () => {
+      const source = `{\n\t// keep me\n\t"$schema": "./schema.json",\n\t"extends": ["@rrlab/biome-config", "./base.json"],\n\t"files": { "includes": ["**", "!dist"] }\n}\n`;
+      const out = applyJsonEdits(source, [
+        { op: "include", path: "/extends", value: "@rrlab/biome-config", position: "start" },
+        { op: "set", path: "/$schema", value: "./other.json", mode: "if-missing" },
+        { op: "set", path: "/files/includes", value: ["**", "!dist"], mode: "replace" },
+        { op: "exclude", path: "/extends", value: "./absent.json" },
+        { op: "unset", path: "/linter" },
+      ]);
+      expect(out).toBe(source);
+    });
+
+    it("leave an empty source empty", () => {
+      expect(applyJsonEdits("", [{ op: "unset", path: "/extends" }])).toBe("");
+    });
+  });
+
   describe("composition", () => {
     it("applies a biome-config-style patch (set $schema if missing + include extends at start)", () => {
       const source = `{ "extends": ["existing"], "files": { "includes": ["**"] } }`;

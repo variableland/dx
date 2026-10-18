@@ -130,6 +130,8 @@ Paths are JSON Pointer (RFC 6901). Ops are NOT strict RFC 6902 — see `decision
 
 For TS modules, such as the `tsdown.config.ts` that tsdown-plugin patches, the escape hatch is `{ kind: "edit-text", path, edit: (src) => string }`: the plugin parses the module with `magicast`, from its own `dependencies`, and returns the new text.
 
+An `edit-json` patch re-stringifies the file with a 2-space indent and one array item per line, which the project's formatter may reject. biome-plugin follows its `biome.json` patch with an `edit-text` that runs the installed Biome over the patched file; ops apply in order, after the `devDependencies` are installed. That fixes only the file a plugin's own tool formats: see `decisions/017-plugin-owned-format-of-patched-config.md` before copying the pattern.
+
 ### Adding a new plugin (checklist)
 
 1. `run-run/<tool>-plugin/`: copy the shape of any existing plugin (`biome-plugin` is the most complete reference).
