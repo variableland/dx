@@ -1,5 +1,19 @@
 # @rrlab/biome-plugin
 
+## 1.2.0
+
+### Minor Changes
+
+- [#272](https://github.com/withvariablelab/dx/pull/272) [`3e70f16`](https://github.com/withvariablelab/dx/commit/3e70f16a1f822e9e3648c1a50ed3cc80a915a9ef) Thanks [@rqbazan](https://github.com/rqbazan)! - Require Node.js 22.18.0 or newer (`engines.node` was `>=20.0.0`).
+  
+  `rr` loads `run-run.config.{ts,mts}` with Node's native type stripping, which is on by default only from Node 22.18.0. Without it `rr` stops with `ERR_UNKNOWN_FILE_EXTENSION` as soon as it reads the config: Node 20 has no type stripping at all, and 22.6 to 22.17 only behind `--experimental-strip-types`. So the old `>=20.0.0` was never true for `rr`. CI now tests 22.18.0 and Node 24.
+
+### Patch Changes
+
+- [#276](https://github.com/withvariablelab/dx/pull/276) [`db8398e`](https://github.com/withvariablelab/dx/commit/db8398e99372b4a1bfab6a80d786321e17e49837) Thanks [@rqbazan](https://github.com/rqbazan)! - `rr plugins add biome` scaffolds a `biome.json` that passes `rr jsc`: in Biome's own format, with `$schema` pointing at the installed Biome's schema (`./node_modules/@biomejs/biome/configuration_schema.json`). It used to fail the format check, and its pinned 2.4.4 schema URL drew a version-mismatch note against the `^2.0.0` it installs.
+- Updated dependencies [[`3e70f16`](https://github.com/withvariablelab/dx/commit/3e70f16a1f822e9e3648c1a50ed3cc80a915a9ef)]:
+  - @variablelab/clibuddy@0.8.0
+
 ## 1.1.4
 
 ### Patch Changes
