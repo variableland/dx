@@ -1,14 +1,24 @@
+import { readFileSync } from "node:fs";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { createShellService } from "@variablelab/clibuddy";
+import { satisfies } from "semver";
 import { afterEach, describe, expect, it } from "vitest";
 import { AstroCheckService } from "../index.ts";
 
 // These run the real `astro check` against a tmp Astro project, so they are slow.
 const TIMEOUT = 60_000;
 const PLUGIN_NODE_MODULES = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../node_modules");
+
+// astro refuses to start on a Node older than its own `engines.node` (astro 7 needs a
+// newer one than this repo's floor), so the tests that run it are skipped there. The
+// missing-dependency tests never start astro, so they run everywhere.
+const astroPkg = JSON.parse(readFileSync(path.join(PLUGIN_NODE_MODULES, "astro/package.json"), "utf8")) as {
+  engines: { node: string };
+};
+const ASTRO_RUNS = satisfies(process.versions.node, astroPkg.engines.node);
 
 const CLEAN_PAGE = `---\nconst answer: number = 42;\n---\n<p>{answer}</p>\n`;
 const BROKEN_PAGE = `---\nconst answer: number = "forty-two";\n---\n<p>{answer}</p>\n`;
@@ -53,7 +63,7 @@ function service(cwd: string) {
 }
 
 describe("AstroCheckService.check()", () => {
-  it(
+  it.runIf(ASTRO_RUNS)(
     "passes on a project without type errors",
     async () => {
       const cwd = await makeProject({ "src/pages/index.astro": CLEAN_PAGE, "src/lib/ok.ts": CLEAN_TS });
@@ -64,7 +74,7 @@ describe("AstroCheckService.check()", () => {
     TIMEOUT,
   );
 
-  it(
+  it.runIf(ASTRO_RUNS)(
     "fails with astro check's diagnostic for a type error in a .astro file",
     async () => {
       const cwd = await makeProject({ "src/pages/index.astro": BROKEN_PAGE, "src/lib/ok.ts": CLEAN_TS });
@@ -76,7 +86,7 @@ describe("AstroCheckService.check()", () => {
     TIMEOUT,
   );
 
-  it(
+  it.runIf(ASTRO_RUNS)(
     "fails for a type error in a plain .ts file too",
     async () => {
       const cwd = await makeProject({ "src/pages/index.astro": CLEAN_PAGE, "src/lib/bad.ts": BROKEN_TS });
@@ -101,7 +111,7 @@ describe("AstroCheckService.check()", () => {
 });
 
 describe("AstroCheckService.doctor()", () => {
-  it("reports healthy when astro check's dependencies resolve", async () => {
+  it.runIf(ASTRO_RUNS)("reports healthy when astro check's dependencies resolve", async () => {
     const cwd = await makeProject({});
     const report = await service(cwd).doctor();
     expect(report.ok, report.output).toBe(true);
