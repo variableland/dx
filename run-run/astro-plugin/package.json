@@ -1,6 +1,6 @@
 {
   "name": "@rrlab/astro-plugin",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Astro plugin for @rrlab/cli — provides the typecheck capability via astro check.",
   "homepage": "https://github.com/withvariablelab/dx/tree/main/run-run/astro-plugin#readme",
   "bugs": {
