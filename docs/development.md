@@ -25,14 +25,14 @@ pnpm install
 
 `pnpm install` also installs the git hooks, through lefthook.
 
-The published packages declare `engines.node` as `>=22.18.0`. `mise.floor.toml` pins that floor, and `MISE_ENV=floor` runs the repo on it, as CI does:
+The published packages declare `engines.node` as `>=22.18.0`, except `@rrlab/biome-config` and `@rrlab/ts-config`, which hold only JSON presets and declare none. `mise.floor.toml` pins that floor, and `MISE_ENV=floor` runs the repo on it, as CI does:
 
 ```sh
 MISE_ENV=floor mise install
 MISE_ENV=floor mise exec -- pnpm test
 ```
 
-To raise the floor, change `mise.floor.toml` and every published package's `engines.node` together, then run `MISE_ENV=floor mise lock`.
+To raise the floor, change `mise.floor.toml` and every `engines.node` together, then run `MISE_ENV=floor mise lock`.
 
 ## Tasks
 

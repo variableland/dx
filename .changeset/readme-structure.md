@@ -14,4 +14,4 @@
 "@variablelab/loggy": patch
 ---
 
-The README follows the Variable Lab README structure and ends with the license, and the tarball now includes the MIT `LICENSE`.
+The README follows the Variable Lab README structure, and the tarball now includes the MIT `LICENSE`.
