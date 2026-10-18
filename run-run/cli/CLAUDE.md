@@ -123,7 +123,7 @@ It renders via the `Lines` builder and returns `""` (nothing appended) when both
 `src/services/file-ops.ts`. `applyFileOp` performs the filesystem work and returns a `FileOpOutcome` — it never writes to the terminal; the `plugins add/remove` actions map the outcome to clack log lines (`reportFileOp`), and `describeFileOp` renders a side-effect-free one-liner for the remove plan. It handles every `FileOp` kind in `src/lib/plugin/types.ts`:
 
 - `create` — writes content; respects `overwrite` flag.
-- `edit-json` — reads, applies `JsonEdit[]` via `applyJsonEdits` (in `src/services/json-edit.ts`), writes back. Uses `comment-json` so user comments + key positions survive.
+- `edit-json` — reads, applies `JsonEdit[]` via `applyJsonEdits` (in `src/services/json-edit.ts`), writes back. Uses `comment-json` so user comments + key positions survive. A real change re-stringifies the whole file (2-space indent, one array item per line); an edit that changes nothing leaves the file byte-identical and reports `unchanged`.
 - `edit-text` — reads, calls `op.edit(source)`, writes back. Escape hatch for TS modules etc.
 - `delete` — `fs.unlink`. Idempotent (skips if file doesn't exist).
 
