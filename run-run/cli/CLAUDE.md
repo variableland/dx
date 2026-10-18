@@ -14,7 +14,7 @@ bin                                    (bash dispatcher — entry point)
          │   └─ for each config.plugins: plugin.services(ctx) → registry.register(...)
          │
          └─ commands                   (src/program/commands/*.ts — thin wrappers, built on src/program/base.ts)
-             ├─ lint / format / jsc / tsc / pack
+             ├─ lint / format / jsc / tsc / test / pack
              │   ├─ ctx.plugins.getServiceOrThrow(capability)
              │   └─ delegate to one action (src/actions/*.ts)
              ├─ check                  (action calls jscAction + tscAction in-process)
@@ -28,9 +28,9 @@ bin                                    (bash dispatcher — entry point)
 
 ### Commands are thin wrappers over actions
 
-Each `create<Name>Command(ctx)` resolves its service inside its `.action(...)` via `ctx.plugins.getServiceOrThrow(capability)` (which raises `MissingPluginError` when absent), then delegates to exactly one free-function action in `src/actions/`. Actions never import commander — they take a single `<Name>ActionConfig` object and depend only on `services`/`render`/`lib`. See `decisions/015-command-action-service-layering.md`.
+Each `create<Name>Command(ctx)` resolves its service inside its `.action(...)` via `ctx.plugins.getServiceOrThrow(capability)` (which raises `MissingPluginError` when absent), then delegates to exactly one free-function action in `src/actions/`. Actions never import commander or `src/program/`. They take a single `<Name>ActionConfig` object: dependencies (`ctx`, the resolved service) at the top level, parsed flags and positional args under `options` and `args` (reuse the verb-option types from `src/types/tool.ts`). See `decisions/015-command-action-service-layering.md`.
 
-Commands are built with `createCommand(name)` from `src/program/base.ts` (a `Cmd extends Command` subclass), **not** commander's own `createCommand`. `Cmd` adds three chainable methods:
+Commands are built with `createCommand(name)` from `src/program/base.ts` (a `Cmd extends Command` subclass), **not** commander's own `createCommand`. `Cmd` adds these chainable methods:
 
 - `.addCapabilities([...capabilities])` — declares which `PluginCapability`s the command exercises.
 - `.addHelpTextAfter(ctx)` — appends the `See also:` / `Powered by:` block, both **auto-derived** from those capabilities (see below). No command hand-writes its cross-references anymore.
@@ -38,7 +38,7 @@ Commands are built with `createCommand(name)` from `src/program/base.ts` (a `Cmd
 
 ### The root is a `RunRunCmd` subclass
 
-`src/program/root.ts` defines `RunRunCmd extends Command`. It groups commands (`.commandsGroup("Code quality:")` etc.), registers `-v/--version` (plain version string), `--about` (credits) and `--usage` (KDL spec) as options with `option:*` listeners, and attaches the banner + installed/available plugins footer via `addHelpText`.
+`src/program/root.ts` defines `RunRunCmd extends Command`. It registers `-v/--version` (plain version string), `--about` (credits) and `--usage` (KDL spec) as options with `option:*` listeners, and attaches the banner + installed/available plugins footer via `addHelpText`. `createProgram` in `src/program/index.ts` groups the commands (`.commandsGroup("Code quality:")` etc.).
 
 ### `--usage` emits a stable KDL spec
 
@@ -46,7 +46,7 @@ Commands are built with `createCommand(name)` from `src/program/base.ts` (a `Cmd
 
 ## Context lifecycle
 
-`ContextService` (`src/services/context.ts`) builds — once per `rr <cmd>` invocation, memoised via `getContext()` — a fresh `ContextValue`:
+`createProgram` calls `ContextService.getContext()` (`src/services/context.ts`) once per `rr <cmd>` invocation. Each call builds a fresh `ContextValue`:
 
 ```ts
 type ContextValue = {
@@ -60,11 +60,11 @@ type ContextValue = {
 
 The registry is populated immediately: for each `plugin` in `config.plugins ?? []`, the kernel calls `plugin.services(pluginContext)` and registers what it returns. If `apiVersion` doesn't match `1`, it throws `PluginApiVersionError`. The populated `PluginRegistry` is then wrapped in a `PluginServices` facade and exposed as `ctx.plugins`.
 
-Commands that don't need plugin services (`clean`, `config`, `completion`) still get the full context; they just ignore `ctx.plugins`. Don't try to lazy-load it; the cost is small (a plugin's `services()` is meant to be cheap) and the simplicity is worth more than the savings.
+`clean` and `completion` take no context, and `config` reads it without resolving a service. The context is still built on every invocation that reaches Node (all but the `rr completion <shell>` fast path in `bin`). Don't try to lazy-load it; the cost is small (a plugin's `services()` is meant to be cheap) and the simplicity is worth more than the savings.
 
 ## ctx.plugins (the `PluginServices` facade)
 
-A `PluginCapability` is a key (`lint`, `format`, `jscheck`, `typecheck`, `pack`, `test`); a **service** is the impl that satisfies it (a `Linter & Doctor`, etc.). One plugin instance can back several capabilities with the same service object.
+A `PluginCapability` is a key of the `PluginServices` type in `src/lib/plugin/types.ts`. A **service** is the impl that satisfies it (a `Linter & Doctor`, etc.). One plugin instance can back several capabilities with the same service object.
 
 `src/services/plugin-services.ts` defines the `PluginServices` **class** — the only plugin-resolution surface commands and actions touch (`ctx.plugins`). It wraps `PluginRegistry` and exposes:
 
@@ -84,9 +84,10 @@ A `PluginCapability` is a key (`lint`, `format`, `jscheck`, `typecheck`, `pack`,
 Every plugin-backed command file follows the same shape:
 
 ```ts
+import type { ContextValue } from "#src/services/context.ts";
 import { createCommand } from "../base.ts";
 
-export function create<Name>Command(ctx: Context) {
+export function create<Name>Command(ctx: ContextValue) {
   return createCommand("<name>")
     .addCapabilities(["<kind>"])
     .summary("<summary>")
@@ -119,14 +120,14 @@ It renders via the `Lines` builder and returns `""` (nothing appended) when both
 
 ## File ops engine (`applyFileOp`)
 
-`src/services/file-ops.ts`. `applyFileOp` performs the filesystem work and returns a `FileOpOutcome` — it never writes to the terminal; the `plugins add/remove` actions map the outcome to clack log lines (`reportFileOp`), and `describeFileOp` renders a side-effect-free one-liner for the remove plan. Four `FileOp` kinds:
+`src/services/file-ops.ts`. `applyFileOp` performs the filesystem work and returns a `FileOpOutcome` — it never writes to the terminal; the `plugins add/remove` actions map the outcome to clack log lines (`reportFileOp`), and `describeFileOp` renders a side-effect-free one-liner for the remove plan. It handles every `FileOp` kind in `src/lib/plugin/types.ts`:
 
 - `create` — writes content; respects `overwrite` flag.
 - `edit-json` — reads, applies `JsonEdit[]` via `applyJsonEdits` (in `src/services/json-edit.ts`), writes back. Uses `comment-json` so user comments + key positions survive.
 - `edit-text` — reads, calls `op.edit(source)`, writes back. Escape hatch for TS modules etc.
 - `delete` — `fs.unlink`. Idempotent (skips if file doesn't exist).
 
-`applyJsonEdits` implements the 4 ops (`set`, `unset`, `include`, `exclude`) over JSON-Pointer paths. Tested in `src/services/__tests__/json-edit.test.ts`. The dedup in `include`/`exclude` uses `JSON.stringify` deep-equality — fine for the value shapes we use today (strings, plain objects).
+`applyJsonEdits` implements the `JsonEdit` ops in `src/lib/plugin/types.ts` over JSON-Pointer paths. Tested in `src/services/__tests__/json-edit.test.ts`. The dedup in `include`/`exclude` uses `JSON.stringify` deep-equality — fine for the value shapes we use today (strings, plain objects).
 
 ## `rr plugins` lifecycle (add / remove)
 
@@ -155,7 +156,7 @@ Both support `--dry-run` (print plan, no side effects) and `--yes` (skip prompts
 
 ## Tests
 
-- `src/**/__tests__/*.test.ts` — unit tests (no fs, no spawn).
+- `src/**/__tests__/*.test.ts` — unit tests: no spawn, and fs only in a temp dir.
 - `test/integration/*.test.ts` — spawn `rr` against a real fixture in `os.tmpdir()`. The fixture symlinks the workspace `node_modules` so the fixture's `run-run.config.mts` can import `@rrlab/*-plugin`.
 
 When the integration test asserts on the doctor or output of a plugin-backed command, configure the fixture's `run-run.config.mts` with `fixtures.config([...aliases])`. See `test/integration/check.test.ts` for the canonical multi-plugin shape (biome + ts).
@@ -163,7 +164,7 @@ When the integration test asserts on the doctor or output of a plugin-backed com
 ## What to keep an eye on
 
 - `dist/cli.usage.kdl` is regenerated by the `build:kdl` script. If a command's summary, description, or option set changes, `pnpm --filter @rrlab/cli build` should be run and the KDL diff inspected before committing.
-- `CLI.md` is generated from the KDL via `usage generate markdown` in CI (after a release tag). Locally, regenerate via `usage generate markdown --file dist/cli.usage.kdl --out-file CLI.md --replace-pre-with-code-fences` if you want to see the diff in dev.
+- `CLI.md` is generated: see [docs/development.md](../../docs/development.md#generated-files) to regenerate it locally.
 - `bin` is a bash dispatcher with a fast path for `rr completion <shell>` (skips Node startup). Keep it minimal — anything new goes in `src/`, not `bin`.
 
 ## Anti-patterns we already paid for

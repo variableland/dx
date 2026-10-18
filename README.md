@@ -11,7 +11,7 @@ The monorepo of run-run and vland.
 
 - [`run-run/`](run-run): run-run. The CLI is in `cli/`, a plugin per tool in `*-plugin/` and the presets in `*-config/`. The [run-run README](run-run/cli/README.md#plugins) lists the plugins.
 - [`vland/`](vland): vland. The CLI is in `cli/`, and the templates it starts a project from are in `templates/`.
-- [`shared/`](shared): `@variablelab/clibuddy` and `@variablelab/loggy`, internal to the two CLIs.
+- [`shared/`](shared): the internal packages the CLIs depend on.
 
 ## Contributing
 

@@ -6,7 +6,7 @@ How to work on dx in a clone. The [contributing guide](contributing.md) covers h
 
 - [`run-run/`](../run-run): run-run. `cli/` is `@rrlab/cli`, the kernel and the `rr` command. Each `*-plugin/` wraps one tool, and each `*-config/` is a preset that a plugin installs. [`run-run/CLAUDE.md`](../run-run/CLAUDE.md) covers the architecture: the plugin contract and how to add or change a plugin.
 - [`vland/`](../vland): vland. `cli/` is `@variablelab/vland`, and `templates/` holds the projects `vland init` starts from.
-- [`shared/`](../shared): `@variablelab/clibuddy` and `@variablelab/loggy`, the internal packages both CLIs depend on.
+- [`shared/`](../shared): `@variablelab/clibuddy` and `@variablelab/loggy`, the internal packages the CLIs depend on.
 - [`decisions/`](../decisions): the architecture decisions, one file each.
 - `docs/`: this guide and the [contributing guide](contributing.md).
 

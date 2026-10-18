@@ -34,13 +34,13 @@ The [CLI reference](https://github.com/withvariablelab/dx/blob/main/vland/cli/CL
 
 ### Templates
 
-| Template   | What you get                                                                              |
-| ---------- | ----------------------------------------------------------------------------------------- |
-| `library`  | A standalone TypeScript library with Vitest + Changesets release workflow.                |
-| `backend`  | An Elysia (`@elysiajs/node`) backend with evlog, Vitest, Dockerfile, CI shape.            |
-| `monorepo` | pnpm + Turbo workspace with an Elysia API, a Vite-React SPA, and a few internal packages. |
+| Template   | What you get                                                                                                       |
+| ---------- | ------------------------------------------------------------------------------------------------------------------ |
+| `library`  | A standalone TypeScript library with Vitest + Changesets release workflow.                                         |
+| `backend`  | An Elysia (`@elysiajs/node`) backend with evlog, Vitest, Dockerfile, CI shape.                                     |
+| `monorepo` | pnpm + Turbo workspace with an Elysia API, a Vite-React SPA, and `packages/types`, the zod schemas the apps share. |
 
-All templates target Node.js, pin Node.js and pnpm with [mise](https://mise.jdx.dev) (`mise.toml` and `mise.lock`), run their GitHub Actions on SHA-pinned actions checked by [zizmor](https://docs.zizmor.sh), and ship [`@rrlab/cli`](https://github.com/withvariablelab/dx/tree/main/run-run/cli) (`rr`) as the single entry point for lint, format, type-check, and build. The per-tool config files (`biome.json`, `tsconfig.json`, `tsdown.config.ts`) are not bundled: in your new project, run `rr plugins add` once per tool (`biome`, `ts`, `tsdown`) to opt in. The scaffolded README has the exact post-install setup.
+All templates target Node.js, pin Node.js and pnpm with [mise](https://mise.jdx.dev) (`mise.toml` and `mise.lock`), run their GitHub Actions on SHA-pinned actions checked by [zizmor](https://docs.zizmor.sh), and ship [`@rrlab/cli`](https://github.com/withvariablelab/dx/tree/main/run-run/cli) (`rr`) as the single entry point for lint, format, type-check, test and build. No plugin is configured: the scaffolded README lists the `rr plugins add` commands to run.
 
 ## Shell completion
 

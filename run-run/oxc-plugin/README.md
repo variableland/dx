@@ -8,7 +8,7 @@
 rr plugins add oxc
 ```
 
-`rr plugins add` installs `@rrlab/oxc-plugin` and adds `oxlint`, `oxfmt` and `oxlint-tsgolint` as dev dependencies. It writes no config file: oxlint and oxfmt run with their defaults, and a project that needs to change them adds its own `oxlintrc.json` or `.oxfmtrc`.
+`rr plugins add` installs `@rrlab/oxc-plugin` and adds `oxlint`, `oxfmt` and `oxlint-tsgolint` as dev dependencies. It writes no config file: oxlint and oxfmt run with their defaults, and a project that needs to change them adds its own `.oxlintrc.json` or `.oxfmtrc.json`.
 
 It needs `@rrlab/cli`, oxlint 1 or later and oxfmt 0.67 or later. The type check also needs `oxlint-tsgolint` 0.24 or later, an optional peer.
 
@@ -49,7 +49,7 @@ The `only` array is typed against the capabilities *this* plugin provides (`"lin
 rr plugins remove oxc
 ```
 
-It removes `oxlint`, `oxfmt` and `oxlint-tsgolint` from `package.json`, and drops `oxc()` from `run-run.config.{ts,mts}`. It leaves `oxlintrc.json` and `.oxfmtrc` alone, if you have them: they belong to you.
+It removes `oxlint`, `oxfmt` and `oxlint-tsgolint` from `package.json`, and drops `oxc()` from `run-run.config.{ts,mts}`. It leaves `.oxlintrc.json` and `.oxfmtrc.json` alone, if you have them: they belong to you.
 
 ## License
 

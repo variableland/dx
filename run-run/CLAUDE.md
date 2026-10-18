@@ -1,6 +1,6 @@
 # CLAUDE.md — `run-run/` (the `@rrlab/*` ecosystem)
 
-Orientation for working on the `@rrlab/*` packages. Prerequisite reading: the repo-root `CLAUDE.md` (working principles, build commands, coding conventions).
+Orientation for working on the `@rrlab/*` packages. Prerequisite reading: the repo-root `CLAUDE.md` (working principles, coding conventions).
 
 ## Why `rr` exists — and how it's meant to be invoked
 
@@ -10,7 +10,7 @@ This means:
 
 - **Do not wrap `rr` in `package.json` scripts.** Aliases like `"lint": "rr lint"`, `"format": "rr format --fix"`, `"tscheck": "rr tsc"`, `"check": "rr check"` re-introduce the very indirection rr was created to remove (`pnpm lint` → `rr lint` → `biome check` is three layers for what should be one). The user types `rr lint`, not `pnpm lint`.
 - **The expected setup**: `node_modules/.bin` on `PATH` — typically via mise (`[env] _.path = ["{{config_root}}/node_modules/.bin"]`) — so `rr` is directly invokable from the project root without a package-manager hop. Templates ship a `mise.toml` that wires this for new projects.
-- **`package.json scripts` may still exist** — but only for things `rr` does NOT cover (`vitest run`, `tsx watch`, `node dist/...`, `vite dev`, `turbo run dev`, `changeset publish`). These are not single-command aliases; they're either different tools or multi-step compositions.
+- **`package.json scripts` may still exist** — but only for things `rr` does NOT cover (`tsx watch`, `node dist/...`, `vite dev`, `turbo run dev`, `changeset publish`). These are not single-command aliases; they're either different tools or multi-step compositions.
 - **Lifecycle / orchestration hooks MAY call `rr` directly.** lefthook git hooks, `prepublishOnly`, GitHub Actions workflows — those are triggered by other systems, not typed by the developer, so they don't fight the "one entry point" goal. A `pre-commit: rr jsc --fix-staged` lefthook job is exactly right.
 - **READMEs teach `rr <cmd>`, not `pnpm <cmd>`.** Mention the mise PATH note once; from then on every developer-facing instruction is `rr <cmd>`.
 
@@ -27,7 +27,7 @@ If you find yourself tempted to add a `pnpm <script>` that exists only to call `
 | `ts-plugin/` | `@rrlab/ts-plugin` | `tsc` (TypeScript). Has `install()` that scaffolds `tsconfig.json` from a preset. |
 | `tsdown-plugin/` | `@rrlab/tsdown-plugin` | `pack` (tsdown). |
 | `vitest-plugin/` | `@rrlab/vitest-plugin` | `test` (vitest), a streaming passthrough — see `decisions/016-vitest-passthrough-plugin.md`. |
-| `ts-config/` | `@rrlab/ts-config` | Shared tsconfig presets: `react`, `dom/app`, `dom/lib`, `no-dom/app`, `no-dom/lib`. |
+| `ts-config/` | `@rrlab/ts-config` | Shared tsconfig presets, listed in [its README](ts-config/README.md#presets). |
 | `biome-config/` | `@rrlab/biome-config` | Shared biome preset. |
 | `tsdown-config/` | `@rrlab/tsdown-config` | Shared tsdown configuration helpers. |
 
@@ -78,12 +78,7 @@ Every plugin's host-side tool (`@biomejs/biome`, `typescript`, etc.) is a `peerD
 
 ## Required reading order before changing anything in here
 
-1. The `decisions/` folder at the repo root. Five load-bearing decisions today:
-   - **001** all-peer dependencies.
-   - **002** no `bin` shims.
-   - **003** wire plugins via the registry (`ctx.plugins`) + drop of `future.oxc`.
-   - **004** templating strategy + edit-json DSL.
-   - **005** `@rrlab/tsdown-plugin` scaffolding + `@rrlab/tsdown-config` shape.
+1. The [`decisions/`](../decisions) folder at the repo root, one file per decision. Read the ones on the area you're changing.
 2. `run-run/cli/CLAUDE.md` if you're going to touch the kernel.
 3. The `*.test.ts` files of the area you're modifying. Tests are the executable spec for the existing behaviour.
 
@@ -108,7 +103,7 @@ Every official plugin exports `default = definePlugin({...})` — a plain `Plugi
 
 ### Templating: code-as-template + edit-json DSL
 
-The local config files plugins scaffold are **thin wrappers** pointing at the shared `@rrlab/*-config` package via `extends`. Two flavours of `FileOp`:
+The local config files plugins scaffold are **thin wrappers** pointing at the shared `@rrlab/*-config` package via `extends`. The `FileOp` kinds are the union in `run-run/cli/src/lib/plugin/types.ts`. Config scaffolding uses these:
 
 ```ts
 // new file: full content as a string (constructed in code, no template engine)
@@ -133,7 +128,7 @@ The local config files plugins scaffold are **thin wrappers** pointing at the sh
 
 Paths are JSON Pointer (RFC 6901). Ops are NOT strict RFC 6902 — see `decisions/004-templating-and-edit-json-dsl.md` for why.
 
-For TS modules (`eslint.config.ts` etc. if we ever add them), the escape hatch is `{ kind: "edit-text", path, edit: (src) => string }` — the plugin does AST surgery in-process via `magicast` (already a kernel dep) and returns the new text.
+For TS modules, such as the `tsdown.config.ts` that tsdown-plugin patches, the escape hatch is `{ kind: "edit-text", path, edit: (src) => string }`: the plugin parses the module with `magicast`, from its own `dependencies`, and returns the new text.
 
 ### Adding a new plugin (checklist)
 
@@ -145,7 +140,7 @@ For TS modules (`eslint.config.ts` etc. if we ever add them), the escape hatch i
 6. `src/__tests__/tool-versions.test.ts`: read this plugin's own `package.json` and assert that every `TOOL_VERSIONS[<name>].install` range fits within `peerDependencies[<name>]` (`semver.subset`). Copy the shape from any sibling plugin's test verbatim — duplication across plugins is cheaper than a kernel-level helper.
 7. `src/__tests__/install.test.ts`: cover install (default preset, declined, per-preset deps), uninstall (delete-vs-edit decision). Use `fs.mkdtemp` + a real tmp dir, not mocks.
 8. Add the alias to `run-run/cli/src/lib/plugin/directory.ts` `PLUGINS_DIRECTORY`, listing every capability it provides in that entry's `capabilities` array (so the `MissingPluginError` hint — derived via `providersOf(capability)` — suggests it).
-9. Add an integration test in `run-run/cli/test/integration/<capability>.test.ts` if the plugin provides a capability that doesn't yet have e2e coverage.
+9. Add an integration test in `run-run/cli/test/integration/<command>.test.ts` (such as `tsc.test.ts` for `typecheck`) if the plugin provides a capability that doesn't have one yet.
 10. If the plugin needs a shared config, create `run-run/<tool>-config/` alongside (mirror `ts-config` / `biome-config`).
 11. Update the dogfooded `run-run.config.mts` at the repo root if it makes sense (its `plugins` array is what we use today).
 12. Add the plugin's row to the "What's here" table above and to the "Plugins" table in `run-run/cli/README.md`. That README ships to npm, so the change needs a `@rrlab/cli` changeset. `plugin-docs.test.ts` fails until both rows exist.
