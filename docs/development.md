@@ -1,0 +1,79 @@
+# Development
+
+How to work on dx in a clone. The [contributing guide](contributing.md) covers how a change gets in.
+
+## Layout
+
+- [`run-run/`](../run-run): run-run. `cli/` is `@rrlab/cli`, the kernel and the `rr` command. Each `*-plugin/` wraps one tool, and each `*-config/` is a preset that a plugin installs. [`run-run/CLAUDE.md`](../run-run/CLAUDE.md) covers the architecture: the plugin contract and how to add or change a plugin.
+- [`vland/`](../vland): vland. `cli/` is `@variablelab/vland`, and `templates/` holds the projects `vland init` starts from.
+- [`shared/`](../shared): `@variablelab/clibuddy` and `@variablelab/loggy`, the internal packages both CLIs depend on.
+- [`decisions/`](../decisions): the architecture decisions, one file each.
+- `docs/`: this guide and the [contributing guide](contributing.md).
+
+The workspace is pnpm, the tasks run through [Turborepo](https://turborepo.com), and tsdown builds each package that has a build step.
+
+## Setup
+
+[mise](https://mise.jdx.dev) pins Node 24, pnpm and [usage](https://usage.jdx.dev) in `mise.toml`, locked in `mise.lock`. It also puts `node_modules/.bin` on the `PATH`, so `rr` and `vland` run by name.
+
+```sh
+git clone git@github.com:withvariablelab/dx.git
+cd dx
+mise install
+pnpm install
+```
+
+`pnpm install` also installs the git hooks, through lefthook.
+
+The published packages declare `engines.node` as `>=22.18.0`. `mise.floor.toml` pins that floor, and `MISE_ENV=floor` runs the repo on it, as CI does:
+
+```sh
+MISE_ENV=floor mise install
+MISE_ENV=floor mise exec -- pnpm test
+```
+
+To raise the floor, change `mise.floor.toml` and every published package's `engines.node` together, then run `MISE_ENV=floor mise lock`.
+
+## Tasks
+
+```sh
+pnpm build                       # build every package
+pnpm test                        # build, then run every package's tests
+pnpm rr check                    # format, lint and type check, with the repo's own rr
+pnpm rr jsc --fix                # apply Biome's fixes
+pnpm tscheck                     # rr tsc in each package with a tscheck script
+pnpm --filter @rrlab/cli test    # one package's tests
+```
+
+`pnpm test:unit` and `pnpm test:integration` run one kind of test. Unit tests live in `src/**/__tests__/`, and integration tests in `test/integration/`.
+
+In the repo, `pnpm rr` and `pnpm vland`, or `rr` and `vland` with mise, run each CLI from its `src/`, so an edit shows up without a build.
+
+## CI
+
+- **On each pull request to `main`:** CI runs `pnpm install --frozen-lockfile`, `pnpm rr check`, `pnpm test` and `pnpm build`, once on the Node floor in `mise.floor.toml` and once on the version in `mise.toml`. The required `Test` check passes when both do. Workflow audit runs [zizmor](https://docs.zizmor.sh) on every workflow in the repo, including those the vland templates generate.
+- **Git hooks** ([lefthook](https://lefthook.dev), in `lefthook/turborepo.yml`): on commit, `rr jscheck --fix-staged` on the staged files and, when TypeScript changed, `tscheck` on the changed packages and their dependents; on push, the tests of the affected packages.
+- **Every Monday:** `pnpm audit` on the lockfile, which keeps an issue labeled `dependency-audit` open while it finds known vulnerabilities (Dependency audit).
+
+## Preview releases
+
+A pull request from a `feat/*` or `fix/*` branch, or with the `preview` label, publishes each package it changes, and the packages that depend on them, to npm under the `pr-<number>` tag, once the tests pass. `vland-bot` comments the published versions on the pull request. To try a preview, install the package with that tag:
+
+```sh
+pnpm add -D @rrlab/cli@pr-123
+```
+
+For a `@rrlab/*-plugin` package, `rr plugins add` takes the same `@<tag>` suffix and passes it on to the plugin's `@rrlab/*-config` sibling, falling back to `latest` for a sibling the preview didn't publish:
+
+```sh
+rr plugins add biome@pr-123
+```
+
+## Generated files
+
+`run-run/cli/CLI.md` and `vland/cli/CLI.md` are generated, so don't edit them by hand. The cli docs workflow builds each CLI, which writes `dist/cli.usage.kdl`, and runs `usage generate markdown` on it. To see the result locally:
+
+```sh
+pnpm --filter ./run-run/cli build
+usage generate markdown --file run-run/cli/dist/cli.usage.kdl --out-file run-run/cli/CLI.md --replace-pre-with-code-fences
+```

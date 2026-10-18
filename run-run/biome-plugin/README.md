@@ -1,6 +1,6 @@
-# @rrlab/biome-plugin
+# biome-plugin
 
-Biome plugin for [`@rrlab/cli`](https://npmjs.com/package/@rrlab/cli). Provides `lint`, `format`, and `jsc` capabilities backed by [Biome](https://biomejs.dev).
+`@rrlab/biome-plugin` is a [run-run](https://github.com/withvariablelab/dx/tree/main/run-run/cli) plugin for [Biome](https://biomejs.dev). It gives `rr` the `lint`, `format` and `jscheck` capabilities.
 
 ## Install
 
@@ -8,28 +8,30 @@ Biome plugin for [`@rrlab/cli`](https://npmjs.com/package/@rrlab/cli). Provides 
 rr plugins add biome
 ```
 
-`rr plugins add` installs `@rrlab/biome-plugin`, adds `@biomejs/biome` as a `devDependency`, and (with your confirmation) scaffolds a `biome.json` extending [`@rrlab/biome-config`](https://npmjs.com/package/@rrlab/biome-config). When `biome.json` already exists you can choose to patch it, leave it alone, or overwrite it.
+`rr plugins add` installs `@rrlab/biome-plugin` and adds `@biomejs/biome` as a dev dependency. Once you confirm, it writes a `biome.json` that extends [`@rrlab/biome-config`](https://www.npmjs.com/package/@rrlab/biome-config). If `biome.json` already exists, you choose to patch it, keep it or overwrite it.
+
+It needs `@rrlab/cli` and Biome 2 or later.
 
 ## What it provides
 
-| Capability | Surface |
-|---|---|
+| Capability | Commands |
+| --- | --- |
 | `lint` | `rr lint`, `rr lint doctor` |
 | `format` | `rr format`, `rr format doctor` |
-| `jsc` | `rr jsc` (lint + format together), `rr jsc doctor` |
+| `jscheck` | `rr jsc` (lint and format together), `rr jsc doctor` |
 
 ## Configuration
 
-The scaffolded `biome.json` is a thin wrapper:
+The `biome.json` it writes only extends the preset:
 
 ```json
 {
-  "$schema": "https://biomejs.dev/schemas/2.4.4/schema.json",
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "extends": ["@rrlab/biome-config"]
 }
 ```
 
-Override any biome setting by adding it to your local `biome.json`. The preset lives in [`@rrlab/biome-config`](https://npmjs.com/package/@rrlab/biome-config) — bump the package to get updated defaults.
+Any Biome setting in your `biome.json` overrides the preset. The preset lives in `@rrlab/biome-config`: update that package to get new defaults.
 
 ## Removal
 
@@ -37,4 +39,12 @@ Override any biome setting by adding it to your local `biome.json`. The preset l
 rr plugins remove biome
 ```
 
-Removes `@biomejs/biome` + `@rrlab/biome-config` from `package.json`, edits or deletes `biome.json` (depending on whether you have other settings in it), and drops the `biome()` entry from `run-run.config.{ts,mts}`.
+It removes `@biomejs/biome` and `@rrlab/biome-config` from `package.json`, and edits or deletes `biome.json`, depending on whether it holds other settings. Then it drops `biome()` from `run-run.config.{ts,mts}`.
+
+## License
+
+[MIT](https://github.com/withvariablelab/dx/blob/main/LICENSE).
+
+<p align="center">
+  <a href="https://lab.variable.land"><img src="https://cdn.jsdelivr.net/gh/withvariablelab/brand@v0.3.1/.github/readme/logo.svg" width="24" alt="" align="absmiddle">&nbsp;Variable Land</a>
+</p>

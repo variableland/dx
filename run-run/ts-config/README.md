@@ -1,38 +1,38 @@
-# @rrlab/ts-config
+# ts-config
 
-Shared TypeScript presets for projects using [`@rrlab/ts-plugin`](https://npmjs.com/package/@rrlab/ts-plugin). Built on top of [`@total-typescript/tsconfig`](https://github.com/total-typescript/tsconfig).
+`@rrlab/ts-config` holds the TypeScript presets of [run-run](https://github.com/withvariablelab/dx/tree/main/run-run/cli), built on [`@total-typescript/tsconfig`](https://github.com/total-typescript/tsconfig). The `tsconfig.json` that [`@rrlab/ts-plugin`](https://www.npmjs.com/package/@rrlab/ts-plugin) writes extends one of them.
 
 ## Install
 
-If you use [`@rrlab/cli`](https://npmjs.com/package/@rrlab/cli):
+If you use run-run:
 
 ```sh
 rr plugins add ts
 ```
 
-Picks a preset interactively and scaffolds your `tsconfig.json`.
+It asks for a preset and writes your `tsconfig.json`.
 
-If you don't, install manually:
+Without run-run, install it by hand:
 
 ```sh
 pnpm add -D @rrlab/ts-config typescript @types/node
 ```
 
-…and point your `tsconfig.json` at one of the entries below.
+Then point your `tsconfig.json` at one of the presets below.
+
+It needs TypeScript 5 or later: the presets use compiler options that are stable since TypeScript 5. The `no-dom` presets also need `@types/node` 20 or later, an optional peer.
 
 ## Presets
 
-| Entry | Use when |
-|---|---|
-| `@rrlab/ts-config/react` | React app (browser DOM + JSX). |
-| `@rrlab/ts-config/dom/app` | Web app, DOM available, no React. |
-| `@rrlab/ts-config/dom/lib` | Browser library (DOM lib in scope). |
-| `@rrlab/ts-config/no-dom/app` | Node.js app / CLI. Requires `@types/node`. |
-| `@rrlab/ts-config/no-dom/lib` | Node.js library. Requires `@types/node`. |
+- `@rrlab/ts-config/react`: a React app, with the browser DOM and JSX.
+- `@rrlab/ts-config/dom/app`: a web app, with the DOM and no React.
+- `@rrlab/ts-config/dom/lib`: a browser library, with the DOM lib in scope.
+- `@rrlab/ts-config/no-dom/app`: a Node.js app or CLI. It needs `@types/node`.
+- `@rrlab/ts-config/no-dom/lib`: a Node.js library. It needs `@types/node`.
 
 ## Usage
 
-A typical `tsconfig.json` is a 3-line wrapper:
+A typical `tsconfig.json` only extends a preset:
 
 ```json
 {
@@ -40,9 +40,12 @@ A typical `tsconfig.json` is a 3-line wrapper:
 }
 ```
 
-Override compiler options or add `include`/`exclude` by setting them in your local file — local keys win over the preset.
+Set compiler options, `include` or `exclude` in your `tsconfig.json`: your keys win over the preset.
 
-## Peer dependencies
+## License
 
-- `typescript >= 5.0` — the presets use compiler options stable since TS 5.
-- `@types/node >= 20` — only required by the `no-dom-*` presets (declared as optional peer).
+[MIT](https://github.com/withvariablelab/dx/blob/main/LICENSE).
+
+<p align="center">
+  <a href="https://lab.variable.land"><img src="https://cdn.jsdelivr.net/gh/withvariablelab/brand@v0.3.1/.github/readme/logo.svg" width="24" alt="" align="absmiddle">&nbsp;Variable Land</a>
+</p>
