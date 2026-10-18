@@ -1,5 +1,11 @@
 # @rrlab/ts-config
 
+## 0.0.5
+
+### Patch Changes
+
+- [#278](https://github.com/withvariablelab/dx/pull/278) [`b463230`](https://github.com/withvariablelab/dx/commit/b463230abf9ead24c3c5a5a89c1f94647df64d00) Thanks [@rqbazan](https://github.com/rqbazan)! - The README follows the Variable Lab README structure, and the tarball now includes the MIT `LICENSE`.
+
 ## 0.0.4
 
 ### Patch Changes
