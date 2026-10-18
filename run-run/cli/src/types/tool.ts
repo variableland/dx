@@ -20,8 +20,13 @@ export type TypeCheckOptions = {
   cwd?: string;
 };
 
+export type DoctorOptions = {
+  /** The package to check the tool from. Defaults to where `rr` runs. */
+  cwd?: string;
+};
+
 export type Doctor = {
-  doctor: () => Promise<RunReport>;
+  doctor: (options?: DoctorOptions) => Promise<RunReport>;
 };
 
 export type Formatter = {

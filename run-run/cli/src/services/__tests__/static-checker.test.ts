@@ -93,6 +93,14 @@ describe("StaticCheckService", () => {
       expect(res.output).toContain("boom");
     });
 
+    it("runs both providers' doctors with the options it was given", async () => {
+      const linter = makeLinter();
+      const formatter = makeFormatter();
+      await new StaticCheckService(linter, formatter).doctor({ cwd: "/repo/packages/a" });
+      expect(linter.doctor).toHaveBeenCalledWith({ cwd: "/repo/packages/a" });
+      expect(formatter.doctor).toHaveBeenCalledWith({ cwd: "/repo/packages/a" });
+    });
+
     it("returns ok=false when only the formatter doctor fails", async () => {
       const formatter = makeFormatter({ doctor: vi.fn(async () => ({ ok: false, output: "kaput" })) });
       const res = await new StaticCheckService(makeLinter(), formatter).doctor();

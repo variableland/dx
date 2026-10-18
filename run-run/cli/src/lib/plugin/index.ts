@@ -7,6 +7,7 @@ export type {
   ClackPrompts,
   ClackPromptsSelectOption,
   Doctor,
+  DoctorOptions,
   FileOp,
   FormatOptions,
   Formatter,
