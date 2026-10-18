@@ -1,5 +1,35 @@
 # @variablelab/vland
 
+## 0.4.0
+
+### Minor Changes
+
+- [#272](https://github.com/withvariablelab/dx/pull/272) [`3e70f16`](https://github.com/withvariablelab/dx/commit/3e70f16a1f822e9e3648c1a50ed3cc80a915a9ef) Thanks [@rqbazan](https://github.com/rqbazan)! - Require Node.js 22.18.0 or newer (`engines.node` was `>=20.0.0`).
+  
+  `rr` loads `run-run.config.{ts,mts}` with Node's native type stripping, which is on by default only from Node 22.18.0. Without it `rr` stops with `ERR_UNKNOWN_FILE_EXTENSION` as soon as it reads the config: Node 20 has no type stripping at all, and 22.6 to 22.17 only behind `--experimental-strip-types`. So the old `>=20.0.0` was never true for `rr`. CI now tests 22.18.0 and Node 24.
+
+- [#271](https://github.com/withvariablelab/dx/pull/271) [`03b1373`](https://github.com/withvariablelab/dx/commit/03b1373e8e8db5160da6b245632fe4e3f5e1d9d6) Thanks [@rqbazan](https://github.com/rqbazan)! - Projects from `vland init` follow Variable Lab's current standard:
+  
+  - mise pins Node.js 24 and pnpm 10.30.3, with a `mise.lock` that needs mise 2026.9.16 or later. `.node-version` is gone.
+  - `engines.node` is `>=22.18.0`, the first Node.js that strips types without a flag, which `rr` needs to load `run-run.config.mts`.
+  - CI sets up with `jdx/mise-action` and runs `rr check`. Every action is pinned by SHA, checkout keeps no credentials, and a new `workflow-audit.yml` runs zizmor. The monorepo gets a CI workflow, which tests and builds only what a PR affects.
+  - Changesets 3, with `commit: true` and `format: false`. The library's release workflow runs `changesets/action` v2 as vland-bot, so its repo needs the `VLAND_BOT_CLIENT_ID` variable and the `VLAND_BOT_PRIVATE_KEY` secret.
+  - The changelog links to `withvariablelab/<name>` for a public library and `variableland/<name>` otherwise, not `<name>/<name>`.
+  - pnpm waits a day before installing a new release, and runs lefthook's postinstall on every install, so the git hooks get installed.
+  - `@rrlab/cli` is `^1.3.4`. The `^0.1.0` the templates asked for doesn't exist, so `pnpm install` failed.
+  - The backend's `pnpm dev` runs `node --watch` and loads `.env`, without `tsx`.
+  - The library's published `exports` point at what `rr pack` builds (`index.mjs` and `index.d.mts`), and its README at the scoped package name.
+  - Every generated file passes both oxfmt and Biome (with `@rrlab/biome-config`), including `package.json` key order with `private` after `version`, so `rr check` starts green with either. The READMEs explain how to pair the oxc plugin with `ts`.
+
+### Patch Changes
+
+- [#271](https://github.com/withvariablelab/dx/pull/271) [`03b1373`](https://github.com/withvariablelab/dx/commit/03b1373e8e8db5160da6b245632fe4e3f5e1d9d6) Thanks [@rqbazan](https://github.com/rqbazan)! - `vland init` runs `git init` before installing dependencies, so the git hooks a dependency sets up on install (the templates' lefthook ones) land in the new repo. Before, the install ran first, found no repo and skipped them, so a generated project's `lefthook.yml` never ran until a manual `lefthook install`. The first commit skips those hooks, because it's the template as generated.
+
+- [#271](https://github.com/withvariablelab/dx/pull/271) [`03b1373`](https://github.com/withvariablelab/dx/commit/03b1373e8e8db5160da6b245632fe4e3f5e1d9d6) Thanks [@rqbazan](https://github.com/rqbazan)! - `vland init` makes the first commit as your own git identity, the `user.name` and `user.email` git resolves for the new repo. Before, it always committed as `vland <noreply@variable.land>`, so the commit wasn't yours and a signed one showed as "Unverified" on GitHub. It still falls back to `vland` and `noreply@variable.land` for whichever of the two git has no value for.
+- Updated dependencies [[`3e70f16`](https://github.com/withvariablelab/dx/commit/3e70f16a1f822e9e3648c1a50ed3cc80a915a9ef)]:
+  - @variablelab/clibuddy@0.8.0
+  - @variablelab/loggy@0.3.0
+
 ## 0.3.7
 
 ### Patch Changes

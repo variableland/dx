@@ -1,5 +1,25 @@
 # @rrlab/oxc-plugin
 
+## 1.2.0
+
+### Minor Changes
+
+- [#272](https://github.com/withvariablelab/dx/pull/272) [`3e70f16`](https://github.com/withvariablelab/dx/commit/3e70f16a1f822e9e3648c1a50ed3cc80a915a9ef) Thanks [@rqbazan](https://github.com/rqbazan)! - Require Node.js 22.18.0 or newer (`engines.node` was `>=20.0.0`).
+  
+  `rr` loads `run-run.config.{ts,mts}` with Node's native type stripping, which is on by default only from Node 22.18.0. Without it `rr` stops with `ERR_UNKNOWN_FILE_EXTENSION` as soon as it reads the config: Node 20 has no type stripping at all, and 22.6 to 22.17 only behind `--experimental-strip-types`. So the old `>=20.0.0` was never true for `rr`. CI now tests 22.18.0 and Node 24.
+
+### Patch Changes
+
+- [#276](https://github.com/withvariablelab/dx/pull/276) [`db8398e`](https://github.com/withvariablelab/dx/commit/db8398e99372b4a1bfab6a80d786321e17e49837) Thanks [@rqbazan](https://github.com/rqbazan)! - `rr lint`, `rr jsc` and `rr check` run `oxlint` without `--check`, a flag it doesn't have, so they failed wherever oxc provides `lint`. `rr format --fix` runs `oxfmt --write`, since `oxfmt` has no `--fix` either.
+
+- [#269](https://github.com/withvariablelab/dx/pull/269) [`cdb7137`](https://github.com/withvariablelab/dx/commit/cdb7137741972eed3d6d36fcf1aaa74d06c2d8fe) Thanks [@rqbazan](https://github.com/rqbazan)! - `rr plugins add oxc` installs `oxlint-tsgolint@^7.0.2004`, and the peer range now starts at `>=0.24.0`. `oxlint-tsgolint@0.23.0` bundles a typescript-go whose macOS `realpath` can fail under concurrency, so `rr tsc` reports random `TS2307` on installed modules ([microsoft/typescript-go#4060](https://github.com/microsoft/typescript-go/issues/4060)). The new install range also matches the `>=7.0.2003` peer that current `oxlint` requires.
+  
+  `rr plugins add oxc` installs `oxfmt@^0.73.0`, and the peer range now starts at `>=0.67.0`. `oxfmt` up to 0.66.0 pins `tinypool@2.1.0`, which has two critical advisories ([GHSA-5gmw-xhrv-c9v3](https://github.com/advisories/GHSA-5gmw-xhrv-c9v3), [GHSA-85c8-ppgw-ccpr](https://github.com/advisories/GHSA-85c8-ppgw-ccpr)).
+  
+  Both new peer floors exist only to warn about broken or vulnerable versions: if a project is still on `oxlint-tsgolint@0.23.0` or `oxfmt` below 0.67.0, pnpm warns about it when `@rrlab/oxc-plugin` is updated.
+- Updated dependencies [[`3e70f16`](https://github.com/withvariablelab/dx/commit/3e70f16a1f822e9e3648c1a50ed3cc80a915a9ef)]:
+  - @variablelab/clibuddy@0.8.0
+
 ## 1.1.4
 
 ### Patch Changes
