@@ -173,6 +173,20 @@ describe("vland init (template scaffolding)", () => {
     }
   });
 
+  test.each(TEMPLATES)("%s: lets lefthook's postinstall run with allowBuilds, which pnpm 11 still reads", async (template) => {
+    const name = `builds-${template}`;
+    const r = cli(`init ${name} -t ${template} --no-install --no-git`, { cwd: fixture.dir });
+    expect(r.status).toBe(0);
+
+    // pnpm 11 drops onlyBuiltDependencies, then fails the install on lefthook's unapproved build script.
+    const workspace = await readFile(path.join(fixture.dir, name, "pnpm-workspace.yaml"), "utf8");
+    expect(workspace).toMatch(/^allowBuilds:\n {2}lefthook: true$/m);
+    expect(workspace).not.toContain("onlyBuiltDependencies");
+    expect(workspace).not.toContain("@biomejs/biome");
+    // A lefthook restored from the side-effects cache skips its postinstall, so no git hooks get installed.
+    expect(workspace).toMatch(/^sideEffectsCache: false$/m);
+  });
+
   test.each([
     ["library", ""],
     ["library", "--visibility=private"],
