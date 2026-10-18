@@ -6,7 +6,7 @@ import path from "node:path";
 export { existsSync as pathExists };
 
 const REPO_ROOT = path.resolve(import.meta.dirname, "..", "..", "..");
-const TEMPLATES_DIR = path.join(REPO_ROOT, "vland", "templates");
+export const TEMPLATES_DIR = path.join(REPO_ROOT, "vland", "templates");
 const VLAND_BIN = path.join(REPO_ROOT, "vland", "cli", "bin");
 
 type CliMode = "dev" | "prod";
@@ -74,4 +74,37 @@ export function biomeCheck(cwd: string) {
     encoding: "utf8",
     env: { ...process.env, NO_COLOR: "1" },
   });
+}
+
+/**
+ * Runs `mise install --locked --dry-run` in the project in `cwd`: the install
+ * the generated CI's mise-action runs when the project has a mise.lock. mise
+ * runs offline, with empty data, cache and state dirs, and without the
+ * machine's global config, system config, MISE_ENV or any config above `cwd`,
+ * so it reads only the project's mise.toml and mise.lock.
+ */
+export function miseLockedCheck(cwd: string) {
+  const home = mkdtempSync(path.join(tmpdir(), "vland-mise-"));
+  const env = Object.fromEntries(Object.entries(process.env).filter(([key]) => !/^_*MISE_/.test(key)));
+  try {
+    return spawnSync("mise", ["install", "--locked", "--dry-run"], {
+      cwd,
+      encoding: "utf8",
+      env: {
+        ...env,
+        NO_COLOR: "1",
+        MISE_OFFLINE: "1",
+        MISE_DATA_DIR: path.join(home, "data"),
+        MISE_CACHE_DIR: path.join(home, "cache"),
+        MISE_STATE_DIR: path.join(home, "state"),
+        MISE_CONFIG_DIR: path.join(home, "config"),
+        MISE_GLOBAL_CONFIG_FILE: path.join(home, "config", "config.toml"),
+        MISE_SYSTEM_CONFIG_FILE: path.join(home, "system", "config.toml"),
+        MISE_CEILING_PATHS: path.dirname(cwd),
+        MISE_TRUSTED_CONFIG_PATHS: cwd,
+      },
+    });
+  } finally {
+    rmSync(home, { recursive: true, force: true });
+  }
 }
